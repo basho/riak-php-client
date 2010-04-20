@@ -269,8 +269,8 @@ function testErlangMapReduce() {
     add("bucket", "foo")->
     add("bucket", "bar")->
     add("bucket", "baz")->
-    map(array("riak_mapreduce", "map_object_value")) ->
-    reduce(array("riak_mapreduce", "reduce_set_union"))->
+    map(array("riak_kv_mapreduce", "map_object_value")) ->
+    reduce(array("riak_kv_mapreduce", "reduce_set_union"))->
     run();
   test_assert(count($result) == 2);
 }
