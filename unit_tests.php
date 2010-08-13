@@ -9,29 +9,39 @@ define('PORT', 8098);
 define('VERBOSE', true);
 
 
-print("Starting Unit Tests\n---\n");
+/* print("Starting Unit Tests\n---\n"); */
 
-test("testIsAlive");
-test("testStoreAndGet");
-test("testBinaryStoreAndGet");
-test("testMissingObject");
-test("testDelete");
-test("testSetBucketProperties");
-test("testSiblings");
+# Create the object...
+$client = new RiakClient(HOST, PORT);
+$result = $client->
+  search("test", "one OR two OR three") ->
+  map(array("riak_kv_mapreduce", "map_object_value"))->
+  reduce(array("riak_kv_mapreduce", "reduce_set_union"))->
+  run();
+print "Result: ";
+print json_encode($result);
 
-test("testJavascriptSourceMap");
-test("testJavascriptNamedMap");
-test("testJavascriptSourceMapReduce");
-test("testJavascriptNamedMapReduce");
-test("testJavascriptArgMapReduce");
+/* test("testIsAlive"); */
+/* test("testStoreAndGet"); */
+/* test("testBinaryStoreAndGet"); */
+/* test("testMissingObject"); */
+/* test("testDelete"); */
+/* test("testSetBucketProperties"); */
+/* test("testSiblings"); */
 
-test("testErlangMapReduce");
-test("testMapReduceFromObject");
+/* test("testJavascriptSourceMap"); */
+/* test("testJavascriptNamedMap"); */
+/* test("testJavascriptSourceMapReduce"); */
+/* test("testJavascriptNamedMapReduce"); */
+/* test("testJavascriptArgMapReduce"); */
 
-test("testStoreAndGetLinks");
-test("testLinkWalking");
+/* test("testErlangMapReduce"); */
+/* test("testMapReduceFromObject"); */
 
-test_summary();
+/* test("testStoreAndGetLinks"); */
+/* test("testLinkWalking"); */
+
+/* test_summary(); */
 
 
 /* BEGIN UNIT TESTS */

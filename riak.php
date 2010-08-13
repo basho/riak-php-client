@@ -168,6 +168,17 @@ class RiakClient {
 
   /**
    * Start assembling a Map/Reduce operation.
+   * @see RiakMapReduce::search()
+   * @return RiakMapReduce
+   */
+  function search($params) {
+    $mr = new RiakMapReduce($this);
+    $args = func_get_args();
+    return call_user_func_array(array(&$mr, "search"), $args);
+  }
+
+  /**
+   * Start assembling a Map/Reduce operation.
    * @see RiakMapReduce::link()
    */
   function link($params) {
@@ -261,6 +272,19 @@ class RiakMapReduce {
   private function add_bucket($bucket) {
     $this->input_mode = "bucket";
     $this->inputs = $bucket;
+    return $this;
+  }
+
+  /**
+   * Begin a map/reduce operation using a Search. (For this to work,
+   * Riak Search must be installed, and the bucket must have the Riak
+   * Search post-commit hook set.)
+   * @param string $bucket - The Bucket to search.
+   * @param string query - The Query to execute. (Lucene syntax.)
+   * @return RiakMapReduce
+   */
+  function search($bucket, $query) {
+    $this->inputs = array("modfun", riak_search, mapred_search, array($bucket, $query));
     return $this;
   }
 
