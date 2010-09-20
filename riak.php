@@ -284,7 +284,7 @@ class RiakMapReduce {
    * @return RiakMapReduce
    */
   function search($bucket, $query) {
-    $this->inputs = array("modfun", riak_search, mapred_search, array($bucket, $query));
+    $this->inputs = array("module"=>"riak_search", "function"=>"mapred_search", "arg"=>array($bucket, $query));
     return $this;
   }
 
@@ -350,10 +350,18 @@ class RiakMapReduce {
    * @return array()
    */
   function run($timeout=NULL) {
+    $num_phases = count($this->phases);
+
+    # If there are no phases, then just echo the inputs back to the user.
+    if ($num_phases == 0) {
+      $this->reduce(array("riak_kv_mapreduce", "reduce_identity"));
+      $num_phases = 1;
+      $linkResultsFlag = TRUE;
+    }
+
     # Convert all phases to associative arrays. Also,
     # if none of the phases are accumulating, then set the last one to
     # accumulate.
-    $num_phases = count($this->phases);
     $keep_flag = FALSE;
     $query = array();
     for ($i = 0; $i < $num_phases; $i++) {
@@ -375,8 +383,10 @@ class RiakMapReduce {
     $result = json_decode($response[1]);
 
     # If the last phase is NOT a link phase, then return the result.
-    $lastIsLink = (end($this->phases) instanceof RiakLinkPhase);
-    if (!$lastIsLink) return $result;
+    $linkResultsFlag |= (end($this->phases) instanceof RiakLinkPhase);
+
+    # If we don't need to link results, then just return.
+    if (!$linkResultsFlag) return $result;
 
     # Otherwise, if the last phase IS a link phase, then convert the
     # results to RiakLink objects.

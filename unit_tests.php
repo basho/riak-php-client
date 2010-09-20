@@ -9,39 +9,31 @@ define('PORT', 8098);
 define('VERBOSE', true);
 
 
-/* print("Starting Unit Tests\n---\n"); */
+print("Starting Unit Tests\n---\n");
 
-# Create the object...
-$client = new RiakClient(HOST, PORT);
-$result = $client->
-  search("test", "one OR two OR three") ->
-  map(array("riak_kv_mapreduce", "map_object_value"))->
-  reduce(array("riak_kv_mapreduce", "reduce_set_union"))->
-  run();
-print "Result: ";
-print json_encode($result);
+test("testIsAlive");
+test("testStoreAndGet");
+test("testBinaryStoreAndGet");
+test("testMissingObject");
+test("testDelete");
+test("testSetBucketProperties");
+test("testSiblings");
 
-/* test("testIsAlive"); */
-/* test("testStoreAndGet"); */
-/* test("testBinaryStoreAndGet"); */
-/* test("testMissingObject"); */
-/* test("testDelete"); */
-/* test("testSetBucketProperties"); */
-/* test("testSiblings"); */
+test("testJavascriptSourceMap");
+test("testJavascriptNamedMap");
+test("testJavascriptSourceMapReduce");
+test("testJavascriptNamedMapReduce");
+test("testJavascriptArgMapReduce");
 
-/* test("testJavascriptSourceMap"); */
-/* test("testJavascriptNamedMap"); */
-/* test("testJavascriptSourceMapReduce"); */
-/* test("testJavascriptNamedMapReduce"); */
-/* test("testJavascriptArgMapReduce"); */
+test("testErlangMapReduce");
+test("testMapReduceFromObject");
 
-/* test("testErlangMapReduce"); */
-/* test("testMapReduceFromObject"); */
+test("testStoreAndGetLinks");
+test("testLinkWalking");
 
-/* test("testStoreAndGetLinks"); */
-/* test("testLinkWalking"); */
+test("testSearchIntegration");
 
-/* test_summary(); */
+test_summary();
 
 
 /* BEGIN UNIT TESTS */
@@ -206,9 +198,9 @@ function testJavascriptSourceMapReduce() {
     add("bucket", "bar")->
     add("bucket", "baz")->
     map("function (v) { return [1]; }") ->
-    reduce("function (v) { return v.length; }")->
+    reduce("function (v) { return [v.length]; }")->
     run();
-  test_assert($result == 3);
+  test_assert($result[0] == 3);
 }
 
 function testJavascriptNamedMapReduce() {
@@ -330,6 +322,28 @@ function testLinkWalking() {
   test_assert(count($results) == 1);
 }
 
+function testSearchIntegration() {
+  # Create some objects to search across...
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket("searchbucket");
+  $bucket->newObject("one", array("foo"=>"one", "bar"=>"red"))->store();
+  $bucket->newObject("two", array("foo"=>"two", "bar"=>"green"))->store();
+  $bucket->newObject("three", array("foo"=>"three", "bar"=>"blue"))->store();
+  $bucket->newObject("four", array("foo"=>"four", "bar"=>"orange"))->store();
+  $bucket->newObject("five", array("foo"=>"five", "bar"=>"yellow"))->store();
+
+  # Run some operations...
+  $results = $client->search("searchbucket", "foo:one OR foo:two")->run();
+  if (count($results) == 0) {
+    print "\n\nNot running test \"testSearchIntegration()\".\n";
+    print "Please ensure that you have installed the Riak Search hook on bucket \"searchbucket\" by running \"bin/search-cmd install searchbucket\".\n\n";
+    return;
+  }
+  test_assert(count($results) == 2);
+
+  $results = $client->search("searchbucket", "(foo:one OR foo:two OR foo:three OR foo:four) AND (NOT bar:green)")->run();
+  test_assert(count($results) == 3);
+}
 
 /* BEGIN UNIT TEST FRAMEWORK */
 $test_pass = 0; $test_fail = 0;
