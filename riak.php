@@ -276,12 +276,10 @@ class RiakMapReduce {
   }
 
   /**
-   * Begin a map/reduce operation using a Search. (For this to work,
-   * Riak Search must be installed, and the bucket must have the Riak
-   * Search post-commit hook set.)
-   * @param string $bucket - The Bucket to search.
-   * @param string query - The Query to execute. (Lucene syntax.)
-   * @return RiakMapReduce
+   * Begin a map/reduce operation using a Search.
+   * @param string $bucket - The Bucket to search.  @param string
+   * query - The Query to execute. (Lucene syntax.)  @return
+   * RiakMapReduce
    */
   function search($bucket, $query) {
     $this->inputs = array("module"=>"riak_search", "function"=>"mapred_search", "arg"=>array($bucket, $query));
