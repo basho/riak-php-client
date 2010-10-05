@@ -167,7 +167,8 @@ class RiakClient {
   }
 
   /**
-   * Start assembling a Map/Reduce operation.
+   * Start assembling a Map/Reduce operation. This command will 
+   * return an error unless executed against a Riak Search cluster.
    * @see RiakMapReduce::search()
    * @return RiakMapReduce
    */
@@ -276,7 +277,8 @@ class RiakMapReduce {
   }
 
   /**
-   * Begin a map/reduce operation using a Search.
+   * Begin a map/reduce operation using a Search. This command will 
+   * return an error unless executed against a Riak Search cluster.
    * @param string $bucket - The Bucket to search.  @param string
    * query - The Query to execute. (Lucene syntax.)  @return
    * RiakMapReduce
