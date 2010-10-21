@@ -8,4 +8,4 @@ docs:
 	${PHPDOCTOR}/phpdoc.php docs.ini
 
 test:
-	php unit_tests.py
+	php unit_tests.php
