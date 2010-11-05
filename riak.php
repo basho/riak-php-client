@@ -242,7 +242,7 @@ class RiakMapReduce {
   function add($arg1, $arg2=NULL, $arg3=NULL) {
     if (func_num_args() == 1) {
       if ($arg1 instanceof RiakObject) 
-        return add_object($arg1);
+        return $this->add_object($arg1);
       else
         return $this->add_bucket($arg1);
     }
