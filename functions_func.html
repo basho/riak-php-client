@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>Riak PHP API Documenation: Data Fields - Functions</title>
+<title>Riak PHP Client API: Data Fields - Functions</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -14,6 +14,7 @@
       <li><a href="main.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
     </ul>
   </div>
   <div class="tabs2">
@@ -33,6 +34,7 @@
     <ul class="tablist">
       <li><a href="#index_a"><span>a</span></a></li>
       <li><a href="#index_b"><span>b</span></a></li>
+      <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_d"><span>d</span></a></li>
       <li><a href="#index_e"><span>e</span></a></li>
       <li><a href="#index_g"><span>g</span></a></li>
@@ -45,6 +47,7 @@
       <li><a href="#index_r"><span>r</span></a></li>
       <li><a href="#index_s"><span>s</span></a></li>
       <li><a href="#index_t"><span>t</span></a></li>
+      <li><a href="#index_w"><span>w</span></a></li>
     </ul>
   </div>
 </div>
@@ -73,6 +76,13 @@
 </ul>
 
 
+<h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
+<li>contents()
+: <a class="el" href="class_riak_string_i_o.html#a3c3eeaf9ed289e55cd34926feb82eabf">RiakStringIO</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
 <li>delete()
 : <a class="el" href="class_riak_object.html#aa627d912f640dc1a6687cd1681903096">RiakObject</a>
@@ -92,6 +102,9 @@
 : <a class="el" href="class_riak_link.html#a2e9efbd8172d1b000fa7cb948bdfcae0">RiakLink</a>
 , <a class="el" href="class_riak_bucket.html#a2c30370ed8737bc62593cc7781e2bb65">RiakBucket</a>
 </li>
+<li>get_value()
+: <a class="el" href="class_riak_utils.html#a22d93efc46b49f365f185a5c15712894">RiakUtils</a>
+</li>
 <li>getAllowMultiples()
 : <a class="el" href="class_riak_bucket.html#a10441ea148f8a5a170211c6e8c4dd806">RiakBucket</a>
 </li>
@@ -100,8 +113,8 @@
 , <a class="el" href="class_riak_bucket.html#a87937322316ff74bb178cd8a5256409f">RiakBucket</a>
 </li>
 <li>getBucket()
-: <a class="el" href="class_riak_link.html#ac5cec5907faffc9a5cfef628baf26db1">RiakLink</a>
-, <a class="el" href="class_riak_object.html#ac5cec5907faffc9a5cfef628baf26db1">RiakObject</a>
+: <a class="el" href="class_riak_object.html#ac5cec5907faffc9a5cfef628baf26db1">RiakObject</a>
+, <a class="el" href="class_riak_link.html#ac5cec5907faffc9a5cfef628baf26db1">RiakLink</a>
 </li>
 <li>getClientID()
 : <a class="el" href="class_riak_client.html#aea74aba16cfb2c99af92c0fc39deb514">RiakClient</a>
@@ -136,8 +149,8 @@
 : <a class="el" href="class_riak_bucket.html#af183efd1b70fe670b7f5d58171e5df84">RiakBucket</a>
 </li>
 <li>getR()
-: <a class="el" href="class_riak_bucket.html#adec95d5597dd11ee7c8e781d5b99ba80">RiakBucket</a>
-, <a class="el" href="class_riak_client.html#ae4958049717c0d0ae305a9fc8161b446">RiakClient</a>
+: <a class="el" href="class_riak_client.html#ae4958049717c0d0ae305a9fc8161b446">RiakClient</a>
+, <a class="el" href="class_riak_bucket.html#adec95d5597dd11ee7c8e781d5b99ba80">RiakBucket</a>
 </li>
 <li>getSibling()
 : <a class="el" href="class_riak_object.html#a075ffe0111394f63789a142a3eeb509b">RiakObject</a>
@@ -152,8 +165,8 @@
 : <a class="el" href="class_riak_link.html#ab86ba36154b20e6bbfa3ba705f12f9d6">RiakLink</a>
 </li>
 <li>getW()
-: <a class="el" href="class_riak_client.html#adffa3e221af180e2c411ec2275635286">RiakClient</a>
-, <a class="el" href="class_riak_bucket.html#a1abb7e7c727a17b99faac74f7432d4e3">RiakBucket</a>
+: <a class="el" href="class_riak_bucket.html#a1abb7e7c727a17b99faac74f7432d4e3">RiakBucket</a>
+, <a class="el" href="class_riak_client.html#adffa3e221af180e2c411ec2275635286">RiakClient</a>
 </li>
 </ul>
 
@@ -228,6 +241,9 @@
 <li>removeLink()
 : <a class="el" href="class_riak_object.html#abe6f8b6e573b41062b0f2db0e70f1690">RiakObject</a>
 </li>
+<li>RiakBucket()
+: <a class="el" href="class_riak_bucket.html#ab34f3184ea1e73e3d95ace6346f8b56e">RiakBucket</a>
+</li>
 <li>RiakClient()
 : <a class="el" href="class_riak_client.html#af6122eb14faef12f41469e0bf91ad424">RiakClient</a>
 </li>
@@ -245,6 +261,9 @@
 </li>
 <li>RiakObject()
 : <a class="el" href="class_riak_object.html#ae6df232bb23407c970828429fefbb133">RiakObject</a>
+</li>
+<li>RiakStringIO()
+: <a class="el" href="class_riak_string_i_o.html#a1b24c7cbcfba6feda465e57f7dda9082">RiakStringIO</a>
 </li>
 <li>run()
 : <a class="el" href="class_riak_map_reduce.html#abd241f06a2b2b1072b50cbc26c977c21">RiakMapReduce</a>
@@ -317,8 +336,15 @@
 : <a class="el" href="class_riak_link.html#a8c016d42ce4a60a1121418ca1ab20c9a">RiakLink</a>
 </li>
 </ul>
+
+
+<h3><a class="anchor" id="index_w"></a>- w -</h3><ul>
+<li>write()
+: <a class="el" href="class_riak_string_i_o.html#a5e4d7e9f078dedfea27ec1316ef58456">RiakStringIO</a>
+</li>
+</ul>
 </div>
-<hr class="footer"/><address class="footer"><small>Generated on Wed Dec 29 2010 16:41:24 for Riak PHP API Documenation by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Dec 30 2010 09:29:52 for Riak PHP Client API by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.2 </small></address>
 </body>
