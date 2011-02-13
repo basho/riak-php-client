@@ -1352,12 +1352,16 @@ class RiakUtils {
    * Given a RiakClient, RiakBucket, Key, LinkSpec, and Params,
    * construct and return a URL.
    */
-  public static function buildRestPath($client, $bucket, $key=NULL, $spec=NULL, $params=NULL) {
+  public static function buildRestPath($client, $bucket=NULL, $key=NULL, $spec=NULL, $params=NULL) {
     # Build 'http://hostname:port/prefix/bucket'
     $path = 'http://';
     $path.= $client->host . ':' . $client->port;
     $path.= '/' . $client->prefix;
-    $path.= '/' . urlencode($bucket->name);
+    
+    # Add '.../bucket'
+    if (!is_null($bucket) && $bucket instanceof RiakBucket) {
+      $path .= '/' . urlencode($bucket->name);
+    }
     
     # Add '.../key'
     if (!is_null($key)) {
