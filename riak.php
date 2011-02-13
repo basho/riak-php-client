@@ -140,11 +140,11 @@ class RiakClient {
   function allBuckets() {
     $url = RiakUtils::buildRestPath($this);
     $response = RiakUtils::httpRequest('GET', $url.'?buckets=true');
-	$response_obj = json_decode($response[1]);
-	$buckets = array();
-	foreach($response_obj->buckets as $name) {
-		$buckets[] = $this->bucket($name);
-	}
+    $response_obj = json_decode($response[1]);
+    $buckets = array();
+    foreach($response_obj->buckets as $name) {
+        $buckets[] = $this->bucket($name);
+    }
     return $buckets;
   }
 
