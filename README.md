@@ -4,21 +4,21 @@
 This is the official PHP client for Riak.
 
 ## Documentation ##
-Documentation for this PHP library can be found in this repository's docs subdirectory.
+Documentation for this PHP library can be found in this repository's docs subdirectory.<br/>
 <http://basho.github.com/riak-php-client/>
 
-Documentation for use of Riak clients in general can be found at
+Documentation for use of Riak clients in general can be found at<br/>
 <https://wiki.basho.com/display/RIAK/Client+Libraries>
 
 ## Repositories ##
 
-The official source code for this client can be retrieved from
+The official source code for this client can be retrieved from<br/>
 <http://github.com/basho/riak-php-client/>
 
-Riak can be obtained pre-built from
+Riak can be obtained pre-built from<br/>
 <http://downloads.basho.com/riak/>
 
-or as source from
+or as source from<br/>
 <http://github.com/basho/riak/>
 
 ## Installation ##
@@ -234,5 +234,5 @@ This method will return null unless executed against a Riak Search cluster.
 
 ## Additional Resources ##
 
-See unit_tests.php for more examples.
+See unit_tests.php for more examples.<br/>
 <https://github.com/PharkMillups/riak-php-client/blob/master/unit_tests.php>
