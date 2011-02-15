@@ -235,4 +235,4 @@ This method will return null unless executed against a Riak Search cluster.
 ## Additional Resources ##
 
 See unit_tests.php for more examples.<br/>
-<https://github.com/PharkMillups/riak-php-client/blob/master/unit_tests.php>
+<https://github.com/basho/riak-php-client/blob/master/unit_tests.php>
