@@ -5,21 +5,21 @@ This is the official PHP client for Riak.
 
 ## Documentation ##
 Documentation for this PHP library can be found in this repository's docs subdirectory.
-[http://basho.github.com/riak-php-client/](http://basho.github.com/riak-php-client/)
+<http://basho.github.com/riak-php-client/>
 
 Documentation for use of Riak clients in general can be found at
-[https://wiki.basho.com/display/RIAK/Client+Libraries](https://wiki.basho.com/display/RIAK/Client+Libraries)
+<https://wiki.basho.com/display/RIAK/Client+Libraries>
 
 ## Repositories ##
 
 The official source code for this client can be retrieved from
-[http://github.com/basho/riak-php-client/](http://github.com/basho/riak-php-client/)
+<http://github.com/basho/riak-php-client/>
 
 Riak can be obtained pre-built from
-[http://downloads.basho.com/riak/](http://downloads.basho.com/riak/)
+<http://downloads.basho.com/riak/>
 
 or as source from
-[http://github.com/basho/riak/](http://github.com/basho/riak/)
+<http://github.com/basho/riak/>
 
 ## Installation ##
 Clone this repository to fetch the latest version of this client 
@@ -235,4 +235,4 @@ This method will return null unless executed against a Riak Search cluster.
 ## Additional Resources ##
 
 See unit_tests.php for more examples.
-[https://github.com/PharkMillups/riak-php-client/blob/master/unit_tests.php](https://github.com/PharkMillups/riak-php-client/blob/master/unit_tests.php)
+<https://github.com/PharkMillups/riak-php-client/blob/master/unit_tests.php>
