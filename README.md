@@ -260,7 +260,7 @@ Currently the docs are generated using a tool called [Doxygen](http://www.stack.
 		$ mv docs /tmp/riak-php-docs
 		$ git checkout gh-pages
 		$ git rm -rf *
-		$ mv /tmp/riak-php-docs/* .
+		$ mv /tmp/riak-php-docs/* . && rm -rf /tmp/riak-php-docs
 
 5. Add, commit and push everything:
 
