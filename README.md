@@ -4,7 +4,7 @@
 This is the official PHP client for Riak.
 
 ## Documentation ##
-Documentation for this PHP library can be found in this repository's docs subdirectory.<br/>
+API documentation for this library can be found at<br/>
 <http://basho.github.com/riak-php-client/>
 
 (See **Documentation Maintenance** at the bottom of the README for instructions on updating the docs.)
@@ -24,7 +24,7 @@ or as source from<br/>
 <http://github.com/basho/riak/>
 
 ## Installation ##
-Clone this repository to fetch the latest version of this client 
+Clone this repository to fetch the latest version of this client
 
     git clone git://github.com/basho/riak-php-client.git
 
@@ -45,23 +45,23 @@ This quick example assumes that you have a local riak cluster running on port 80
         'age' => 28,
         'company' => "Facebook"
     ));
-    
+
     # Save the object to Riak
     $person->store();
-    
+
     # Fetch the object
     $person = $bucket->get('riak_developer_1');
-    
+
     # Update the object
     $person->data['company'] = "Google";
     $person->store();
 
 ## Connecting ##
 Connect to a Riak server by specifying the address or hostname and port:
-    
+
     # Connect to Riak
     $client = new RiakClient('127.0.0.1', 8098);
-    
+
 This method returns a [RiakClient](http://basho.github.com/riak-php-client/class_riak_client.html)
 
 ## Using Buckets ##
@@ -193,7 +193,7 @@ Linkwalking can be done using the RiakObject::link() method
     # Retrieve all of John's friends
     $john = $bucket->get('riak_developer_1');
     $friends = $john->link($bucket->name, "friend")->run();
-    
+
 This method returns an array of [RiakLink](http://basho.github.com/riak-php-client/class_riak_link.html)s
 
 ## Dereferencing Links ##
@@ -228,7 +228,7 @@ Searches can be executed using the RiakClient::search() method
     $bucket = $client->bucket("searchbucket");
     $bucket->newObject("one", array("foo"=>"one", "bar"=>"red"))->store();
     $bucket->newObject("two", array("foo"=>"two", "bar"=>"green"))->store();
-    
+
     # Execute a search for all objects with matching properties
     $results = $client->search("searchbucket", "foo:one OR foo:two")->run();
 
@@ -241,51 +241,42 @@ See unit_tests.php for more examples.<br/>
 
 ## Documentation Maintenance
 
-The PHP API documentation should be regenerated upon each new client release or each new non-trivial API change. 
+The PHP API documentation should be regenerated upon each new client release or each new non-trivial API change.
 
 Currently the docs are generated using a tool called [Doxygen](http://www.stack.nl/~dimitri/doxygen/index.html), stored in the gh-pages branch of this repo, and are hosted at [http://basho.github.com/riak-php-client/](basho.github.com/riak-php-client/). (Basho is open to suggestions for changing how we generate and manage the API docs.)
 
 ### Generating the PHP Documentation
 
-1. Make sure your local copy of this repository is up to date with the latest release/changes. 
+1. Make sure your local copy of this repository is up to date with the latest release/changes.
 
-2. Download and Install Doxygen. This should only take you a few minutes. Simple instructions [are here](http://www.stack.nl/~dimitri/doxygen/download.html). You want the "Doxygen SVN repository" instructions.
-	
-3. Now that you've got Doxygen installed, generating the new documentation is easy. The configuration is already specified in a file called "php-doxyfile" that is in the riak-php-client repo. Simply tell Doxygen to generate the docs using that configuration: 
-	
-		$ doxygen php-doxyfile ./
+2. Download and install Doxygen. This should only take you a few minutes. Simple instructions [are here](http://www.stack.nl/~dimitri/doxygen/download.html). You want the "Doxygen SVN repository" instructions.
 
-5. This should have produced a new "docs" directory packed with all sorts of goodness. The next step is to make a copy of these files locally and then delete them from the master branch (as we will be storing them in the "gh-pages" branch):
+3. Now that you've got Doxygen installed, generating the new documentation is easy. The configuration is specified in the file "php-doxyfile". Simply tell Doxygen to generate the docs using that configuration:
 
-		$ cp ./docs ~/../..
-		$ rm -r docs/
-		
+		$ doxygen php-doxyfile .
 
-6. You know have a copy of the docs locally and have removed them from master. The next step is to sync them to the GitHub pages repo where they are stored and from where they are served. But first we need to delete what's already in this branch. Checkout the "gh-pages" branch, delete its contents, and tell git you blew away the files:
+4. This should produce a new "docs" directory packed with all sorts of goodness. The next step is to update the "gh-pages" branch:
 
+		$ mv docs /tmp/riak-php-docs
 		$ git checkout gh-pages
-		$ rm * 
-		$ git rm -r .
+		$ git rm -rf *
+		$ mv /tmp/riak-php-docs/* .
 
-7. This branch is now empty and ready for the new docs that you just generated. Go ahead and copy the contents of the docs directory into the repo:
-	
-		$ cp ~/../docs/* . 
-		
-8. Add, commit and push everything:
+5. Add, commit and push everything:
 
-		$ git add . 
-		$ git commit -m "new docs"
+		$ git add .
+		$ git commit -m "updated docs"
 		$ git push origin gh-pages
-	
+
 Once you push your changes to the gh-pages branch they will be synced to [http://basho.github.com/riak-php-client/](basho.github.com/riak-php-client/)
-	
 
 
 
 
-	
 
 
 
 
-	
+
+
+
