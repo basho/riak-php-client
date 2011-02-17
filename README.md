@@ -268,15 +268,4 @@ Currently the docs are generated using a tool called [Doxygen](http://www.stack.
 		$ git commit -m "updated docs"
 		$ git push origin gh-pages
 
-Once you push your changes to the gh-pages branch they will be synced to [http://basho.github.com/riak-php-client/](basho.github.com/riak-php-client/)
-
-
-
-
-
-
-
-
-
-
-
+Once you push your changes to the gh-pages branch they will be synced to [http://basho.github.com/riak-php-client/](http://basho.github.com/riak-php-client/)
