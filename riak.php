@@ -854,6 +854,26 @@ class RiakBucket {
 
     return $props;
   }
+
+  /**
+   * Retrieve an array of all keys in this bucket.
+   * Note: this operation is pretty slow.
+   * @return Array
+   */
+  function getKeys() {
+    $params = array('props'=>'false','keys'=>'true');
+    $url = RiakUtils::buildRestPath($this->client, $this, NULL, NULL, $params);
+    $response = RiakUtils::httpRequest('GET', $url);
+
+    # Use a RiakObject to interpret the response, we are just interested in the value.
+    $obj = new RiakObject($this->client, $this, NULL);
+    $obj->populate($response, array(200));
+    if (!$obj->exists()) {
+      throw Exception("Error getting bucket properties.");
+    }
+    $keys = $obj->getData();
+    return array_map("urldecode",$keys["keys"]);
+  }
 }
 
 
@@ -1011,6 +1031,7 @@ class RiakObject {
     }
     return $this->links;
   }
+  
 
   /**
    * Store the object in Riak. When this operation completes, the
