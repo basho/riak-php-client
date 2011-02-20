@@ -1187,9 +1187,14 @@ class RiakObject {
       $this->exists = TRUE;
       return $this;
     }
+  
+    if ($status == 201) {
+      $path_parts = explode('/', $this->headers['location']);
+      $this->key = array_pop($path_parts);
+    }
 
     # Possibly json_decode...
-    if ($status == 200 && $this->jsonize) {
+    if (($status == 200 || $status == 201) && $this->jsonize) {
       $this->data = json_decode($this->data, true);
     }
 
