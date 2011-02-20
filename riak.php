@@ -1052,10 +1052,12 @@ class RiakObject {
     } else {
       $content = $this->getData();
     }
+  
+    $method = $this->key ? 'PUT' : 'POST';
 
     # Run the operation.
-    $response = RiakUtils::httpRequest('PUT', $url, $headers, $content);
-    $this->populate($response, array(200, 300));
+    $response = RiakUtils::httpRequest($method, $url, $headers, $content);
+    $this->populate($response, array(200, 201, 300));
     return $this;
   }
  
