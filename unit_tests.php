@@ -13,6 +13,7 @@ print("Starting Unit Tests\n---\n");
 
 test("testIsAlive");
 test("testStoreAndGet");
+test("testStoreAndGetWithoutKey");
 test("testBinaryStoreAndGet");
 test("testMissingObject");
 test("testDelete");
@@ -55,6 +56,23 @@ function testStoreAndGet() {
   test_assert($obj->exists());
   test_assert($obj->getBucket()->getName() == 'bucket');
   test_assert($obj->getKey() == 'foo');
+  test_assert($obj->getData() == $rand);
+}
+
+function testStoreAndGetWithoutKey() {
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket('bucket');
+  
+  $rand = rand();
+  $obj = $bucket->newObject(null, $rand);
+  $obj->store();
+  
+  $key = $obj->key;
+
+  $obj = $bucket->get($key);
+  test_assert($obj->exists());
+  test_assert($obj->getBucket()->getName() == 'bucket');
+  test_assert($obj->getKey() == $key);
   test_assert($obj->getData() == $rand);
 }
 
