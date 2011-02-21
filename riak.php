@@ -392,7 +392,8 @@ class RiakMapReduce {
     # results to RiakLink objects.
     $a = array();
     foreach ($result as $r) {
-      $link = new RiakLink($r[0], $r[1], $r[2]);
+      $tag = isset($r[2]) ? $r[2] : null;
+      $link = new RiakLink($r[0], $r[1], $tag);
       $link->client = $this->client;
       $a[] = $link;
     }
