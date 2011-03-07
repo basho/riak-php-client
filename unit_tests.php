@@ -198,7 +198,7 @@ function testJavascriptSourceMapReduce() {
     add("bucket", "bar")->
     add("bucket", "baz")->
     map("function (v) { return [1]; }") ->
-    reduce("function (v) { return [v.length]; }")->
+    reduce("Riak.reduceSum")->
     run();
   test_assert($result[0] == 3);
 }
