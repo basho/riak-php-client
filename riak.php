@@ -143,6 +143,21 @@ class RiakClient {
   }
 
   /**
+   * Get all buckets.
+   * @return array() of RiakBucket objects
+   */
+  function buckets() {
+    $url = RiakUtils::buildRestPath($this);
+    $response = RiakUtils::httpRequest('GET', $url.'?buckets=true');
+    $response_obj = json_decode($response[1]);
+    $buckets = array();
+    foreach($response_obj->buckets as $name) {
+        $buckets[] = $this->bucket($name);
+    }
+    return $buckets;
+  }
+
+  /**
    * Check if the Riak server for this RiakClient is alive.
    * @return boolean
    */
@@ -392,7 +407,8 @@ class RiakMapReduce {
     # results to RiakLink objects.
     $a = array();
     foreach ($result as $r) {
-      $link = new RiakLink($r[0], $r[1], $r[2]);
+      $tag = isset($r[2]) ? $r[2] : null;
+      $link = new RiakLink($r[0], $r[1], $tag);
       $link->client = $this->client;
       $a[] = $link;
     }
@@ -854,6 +870,26 @@ class RiakBucket {
 
     return $props;
   }
+
+  /**
+   * Retrieve an array of all keys in this bucket.
+   * Note: this operation is pretty slow.
+   * @return Array
+   */
+  function getKeys() {
+    $params = array('props'=>'false','keys'=>'true');
+    $url = RiakUtils::buildRestPath($this->client, $this, NULL, NULL, $params);
+    $response = RiakUtils::httpRequest('GET', $url);
+
+    # Use a RiakObject to interpret the response, we are just interested in the value.
+    $obj = new RiakObject($this->client, $this, NULL);
+    $obj->populate($response, array(200));
+    if (!$obj->exists()) {
+      throw Exception("Error getting bucket properties.");
+    }
+    $keys = $obj->getData();
+    return array_map("urldecode",$keys["keys"]);
+  }
 }
 
 
@@ -1011,6 +1047,7 @@ class RiakObject {
     }
     return $this->links;
   }
+  
 
   /**
    * Store the object in Riak. When this operation completes, the
@@ -1052,10 +1089,12 @@ class RiakObject {
     } else {
       $content = $this->getData();
     }
+  
+    $method = $this->key ? 'PUT' : 'POST';
 
     # Run the operation.
-    $response = RiakUtils::httpRequest('PUT', $url, $headers, $content);
-    $this->populate($response, array(200, 300));
+    $response = RiakUtils::httpRequest($method, $url, $headers, $content);
+    $this->populate($response, array(200, 201, 300));
     return $this;
   }
  
@@ -1185,9 +1224,14 @@ class RiakObject {
       $this->exists = TRUE;
       return $this;
     }
+  
+    if ($status == 201) {
+      $path_parts = explode('/', $this->headers['location']);
+      $this->key = array_pop($path_parts);
+    }
 
     # Possibly json_decode...
-    if ($status == 200 && $this->jsonize) {
+    if (($status == 200 || $status == 201) && $this->jsonize) {
       $this->data = json_decode($this->data, true);
     }
 
@@ -1352,12 +1396,16 @@ class RiakUtils {
    * Given a RiakClient, RiakBucket, Key, LinkSpec, and Params,
    * construct and return a URL.
    */
-  public static function buildRestPath($client, $bucket, $key=NULL, $spec=NULL, $params=NULL) {
+  public static function buildRestPath($client, $bucket=NULL, $key=NULL, $spec=NULL, $params=NULL) {
     # Build 'http://hostname:port/prefix/bucket'
     $path = 'http://';
     $path.= $client->host . ':' . $client->port;
     $path.= '/' . $client->prefix;
-    $path.= '/' . urlencode($bucket->name);
+    
+    # Add '.../bucket'
+    if (!is_null($bucket) && $bucket instanceof RiakBucket) {
+      $path .= '/' . urlencode($bucket->name);
+    }
     
     # Add '.../key'
     if (!is_null($key)) {
