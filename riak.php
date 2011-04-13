@@ -712,7 +712,7 @@ class RiakBucket {
   function newBinary($key, $data, $content_type='text/json') {
     $obj = new RiakObject($this->client, $this, $key);
     $obj->setData($data);
-    $obj->setContentType('text/json');
+    $obj->setContentType($content_type);
     $obj->jsonize = FALSE;
     return $obj;
   }
