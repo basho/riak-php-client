@@ -367,6 +367,8 @@ class RiakMapReduce {
   function run($timeout=NULL) {
     $num_phases = count($this->phases);
 
+    $linkResultsFlag = FALSE;
+
     # If there are no phases, then just echo the inputs back to the user.
     if ($num_phases == 0) {
       $this->reduce(array("riak_kv_mapreduce", "reduce_identity"));
