@@ -261,7 +261,7 @@ class RiakMapReduce {
       else
         return $this->add_bucket($arg1);
     }
-    return $this->add_bucket_key_data($arg1, $arg2, $arg3);
+    return $this->add_bucket_key_data($arg1, (string) $arg2, $arg3);
   }
 
   /**
