@@ -29,6 +29,9 @@ test("testJavascriptArgMapReduce");
 test("testErlangMapReduce");
 test("testMapReduceFromObject");
 
+test("testKeyFilter");
+test("testKeyFilterOperator");
+
 test("testStoreAndGetLinks");
 test("testLinkWalking");
 
@@ -304,6 +307,43 @@ function testMapReduceFromObject() {
   $obj = $bucket->get("foo");
   $result = $obj->map("Riak.mapValuesJson")->run();
   test_assert($result = array(2));
+}
+
+function testKeyFilter() {
+  # Create the object...
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket("filter_bucket");
+  $bucket->newObject("foo_one",   array("foo"=>"one"  ))->store();
+  $bucket->newObject("foo_two",   array("foo"=>"two"  ))->store();
+  $bucket->newObject("foo_three", array("foo"=>"three"))->store();
+  $bucket->newObject("foo_four",  array("foo"=>"four" ))->store();
+  $bucket->newObject("moo_five",  array("foo"=>"five" ))->store();
+  
+  $mapred = $client
+  	->add($bucket->name)
+  	->key_filter(array('tokenize', '_', 1), array('eq', 'foo'));
+  $results = $mapred->run();
+  test_assert(count($results) == 4);
+}
+
+function testKeyFilterOperator() {
+  # Create the object...
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket("filter_bucket");
+  $bucket->newObject("foo_one",   array("foo"=>"one"  ))->store();
+  $bucket->newObject("foo_two",   array("foo"=>"two"  ))->store();
+  $bucket->newObject("foo_three", array("foo"=>"three"))->store();
+  $bucket->newObject("foo_four",  array("foo"=>"four" ))->store();
+  $bucket->newObject("moo_five",  array("foo"=>"five" ))->store();
+  
+  $mapred = $client
+  	->add($bucket->name)
+  	->key_filter(array('starts_with', 'foo'))
+  	->key_filter_or(array('ends_with', 'five'))
+  	;
+  $results = $mapred->run();
+  echo "<pre>".print_r($results,true).'</pre>';
+  test_assert(count($results) == 5);
 }
 
 

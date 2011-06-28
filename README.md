@@ -221,6 +221,19 @@ This method returns an array of data representing the result of the Map/Reduce f
 
 *More examples of Map/Reduce can be found in unit_tests.php*
 
+## Using Key Filters With Map/Reduce ##
+When using Map/Reduce on a bucket, you can use key filters to determine the applicable key set using the RiakMapReduce::key_filter(), RiakMapReduce::key_filter_and(), and RiakMapReduce::key_filter_or() methods.
+
+    # Retrieve the keys of all invoices from May 30, 2010
+    $result = $client->add($bucket->name)
+        ->key_filter(array('tokenize', '.', 1), array('eq', 'invoice'))
+        ->key_filter_and(array('tokenize', '.', 2), array('ends_with', '20100530'))
+    	->map("function (v) { return [v.key]; }")
+    	->reduce("Riak.reduceSort")
+        ->run();
+
+This method returns an array of data representing the result of the Map/Reduce functions.
+
 ## Using Search ##
 Searches can be executed using the RiakClient::search() method
 

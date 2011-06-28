@@ -242,6 +242,7 @@ class RiakMapReduce {
     $this->phases = array();
     $this->inputs = array();
     $this->input_mode = NULL;
+    $this->key_filters = array();
   }
 
   /**
@@ -261,7 +262,7 @@ class RiakMapReduce {
       else
         return $this->add_bucket($arg1);
     }
-    return $this->add_bucket_key_data($arg1, $arg2, $arg3);
+    return $this->add_bucket_key_data($arg1, (string) $arg2, $arg3);
   }
 
   /**
@@ -357,7 +358,79 @@ class RiakMapReduce {
                                              RiakUtils::get_value("arg", $options, NULL));
     return $this;
   }
-
+  
+  /**
+   * Add a key filter to the map/reduce operation.  If there are already
+   * existing filters, an "and" condition will be used to combine them.
+   * Alias for key_filter_and
+   * @param array $filter - a key filter (ie: 
+   * ->key_filter(
+   * 	array("tokenize", "-", 2), 
+   * 	array("between", "20110601", "20110630")
+   * )
+   * @return $this
+   */
+  function key_filter(array $filter /*. ,$filter .*/) {
+    $args = func_get_args();
+    array_unshift($args, 'and');
+    return call_user_func_array(array($this, 'key_filter_operator'), $args);
+  }
+  
+  /**
+   * Add a key filter to the map/reduce operation.  If there are already
+   * existing filters, an "and" condition will be used to combine them.
+   * @param array $filter - a key filter (ie: 
+   * ->key_filter(
+   * 	array("tokenize", "-", 2), 
+   * 	array("between", "20110601", "20110630")
+   * )
+   * @return $this
+   */
+  function key_filter_and(array $filter) {
+    $args = func_get_args();
+    array_unshift($args, 'and');
+    return call_user_func_array(array($this, 'key_filter_operator'), $args);
+  }
+  
+  /**
+   * Adds a key filter to the map/reduce operation.  If there are already
+   * existing filters, an "or" condition will be used to combine with the
+   * existing filters.
+   * @param array $filter
+   * @return $this
+   */
+  function key_filter_or(array $filter /*. ,$filter .*/) {
+    $args = func_get_args();
+    array_unshift($args, 'or');
+    return call_user_func_array(array($this, 'key_filter_operator'), $args);
+  }
+  
+  /**
+   * Adds a key filter to the map/reduce operation.  If there are already
+   * existing filters, the provided conditional operator will be used
+   * to combine with the existing filters.
+   * @param string $operator - Operator (usually "and" or "or")
+   * @param array $filter
+   * @return $this
+   */
+  function key_filter_operator($operator,  $filter /*. ,$filter .*/) {
+    $filters = func_get_args();
+    array_shift($filters);
+    if ($this->input_mode != 'bucket') 
+  	  throw new Exception("Key filters can only be used in bucket mode");
+    
+  	if (count($this->key_filters) > 0) {
+  	  $this->key_filters = array(array(
+  	    $operator,
+  	    $this->key_filters,
+  	    $filters
+  	  ));
+  	} else {
+  		$this->key_filters = $filters;
+  	}
+  	return $this;
+  }
+  
   /**
    * Run the map/reduce operation. Returns an array of results, or an
    * array of RiakLink objects if the last phase is a link phase. 
@@ -366,6 +439,8 @@ class RiakMapReduce {
    */
   function run($timeout=NULL) {
     $num_phases = count($this->phases);
+
+    $linkResultsFlag = FALSE;
 
     # If there are no phases, then just echo the inputs back to the user.
     if ($num_phases == 0) {
@@ -386,12 +461,20 @@ class RiakMapReduce {
       if ($phase->keep) $keep_flag = TRUE;
       $query[] = $phase->to_array();
     }
+    
+    # Add key filters if applicable
+   	if ($this->input_mode == 'bucket' && count($this->key_filters) > 0) {
+   		$this->inputs = array(
+   			'bucket' => $this->inputs,
+   			'key_filters' => $this->key_filters
+   		);
+   	}
 
     # Construct the job, optionally set the timeout...
     $job = array("inputs"=>$this->inputs, "query"=>$query);
     if ($timeout != NULL) $job["timeout"] = $timeout;
-    $content = json_encode($job);    
-
+    $content = json_encode($job); 
+    
     # Do the request...
     $url = "http://" . $this->client->host . ":" . $this->client->port . "/" . $this->client->mapred_prefix;
     $response = RiakUtils::httpRequest('POST', $url, array(), $content);
@@ -1513,4 +1596,4 @@ class RiakUtils {
   }
 }
 
-?>
+
