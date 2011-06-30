@@ -339,10 +339,8 @@ function testKeyFilterOperator() {
   $mapred = $client
   	->add($bucket->name)
   	->key_filter(array('starts_with', 'foo'))
-  	->key_filter_or(array('ends_with', 'five'))
-  	;
+  	->key_filter_or(array('ends_with', 'five'));
   $results = $mapred->run();
-  echo "<pre>".print_r($results,true).'</pre>';
   test_assert(count($results) == 5);
 }
 
