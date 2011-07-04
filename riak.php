@@ -49,7 +49,7 @@ class RiakClient {
     $this->port = $port;
     $this->prefix = $prefix;    
     $this->mapred_prefix = $mapred_prefix;
-    $this->clientid = 'php_' . base64_encode(rand(1, 1073741824));
+    $this->clientid = 'php_' . base_convert(mt_rand(), 10, 36);
     $this->r = 2;
     $this->w = 2;
     $this->dw = 2;
@@ -1332,7 +1332,7 @@ class RiakObject {
       $matches = array();
       $result = preg_match("/\<\/([^\/]+)\/([^\/]+)\/([^\/]+)\>; ?riaktag=\"([^\"]+)\"/", $linkHeader, $matches);
       if ($result == 1) {
-        $this->links[] = new RiakLink($matches[2], $matches[3], $matches[4]);
+        $this->links[] = new RiakLink(urldecode($matches[2]), urldecode($matches[3]), urldecode($matches[4]));
       }
     }
     
