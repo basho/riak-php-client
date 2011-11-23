@@ -985,7 +985,7 @@ class RiakBucket {
    * @param bool $dedupe - whether to eliminate duplicate entries if any
    * @return array of RiakLinks
    */
-  function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=true) {
+  function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
     $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
     $response = RiakUtils::httpRequest('GET', $url);
     
