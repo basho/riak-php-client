@@ -247,6 +247,26 @@ Searches can be executed using the RiakClient::search() method
 
 This method will return null unless executed against a Riak Search cluster.
 
+## Meta Data ##
+You can provide meta data on objects using RiakObject::getMeta() and RiakObject::setMeta()
+
+    # Set some new meta data
+    $object->setMeta("some-meta", "some-value");
+    
+    # Get some meta data (returns null if not found)
+    $object->getMeta("some-meta");
+    
+    # Get all meta data (an array keyed by meta name)
+    $object->getAllMeta()
+
+Remove existing metadata
+
+    # Remove a single value
+    $object->removeMeta("some-meta");
+    
+    # Remove all meta data
+    $object->removeAllMeta();
+
 ## Adding Secondary Indexes ##
 Secondary indexes can be added using the RiakObject::addIndex() and RiakObject::addAutoIndex() methods.  
 
