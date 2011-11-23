@@ -37,6 +37,8 @@ test("testLinkWalking");
 
 test("testSearchIntegration");
 
+test("testSecondaryIndexes");
+
 test_summary();
 
 
@@ -399,6 +401,116 @@ function testSearchIntegration() {
 
   $results = $client->search("searchbucket", "(foo:one OR foo:two OR foo:three OR foo:four) AND (NOT bar:green)")->run();
   test_assert(count($results) == 3);
+}
+
+function testSecondaryIndexes() {
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket("indextest");
+  $bucket
+    ->newObject("one", array("foo"=>1, "bar"=>"red"))
+    ->addIndex("number", "int", 1)
+    ->addIndex("text", "bin", "apple")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("two", array("foo"=>2, "bar"=>"green"))
+    ->addIndex("number", "int", 2)
+    ->addIndex("text", "bin", "avocado")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("three", array("foo"=>3, "bar"=>"blue"))
+    ->addIndex("number", "int", 3)
+    ->addIndex("text", "bin", "blueberry")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("four", array("foo"=>4, "bar"=>"orange"))
+    ->addIndex("number", "int", 4)
+    ->addIndex("text", "bin", "citrus")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("five", array("foo"=>5, "bar"=>"yellow"))
+    ->addIndex("number", "int", 5)
+    ->addIndex("text", "bin", "banana")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  
+  $bucket
+    ->newObject("six", array("foo"=>6, "bar"=>"purple"))
+    ->addIndex("number", "int", 6)
+    ->addIndex("number", "int", 7)
+    ->addIndex("number", "int", 8)
+    ->setIndex("text", "bin", array("x","y","z"))
+    ->store();
+  
+  # Exact matches
+  $results = $bucket->indexSearch("number", "int", 5);
+  test_assert(count($results) == 1);
+  
+  $results = $bucket->indexSearch("text", "bin", "apple");
+  test_assert(count($results) == 1);
+  
+  # Range searches 
+  $results = $bucket->indexSearch("foo", "int", 1, 3);
+  test_assert(count($results) == 3);
+  
+  $results = $bucket->indexSearch("bar", "bin", "blue", "orange");
+  test_assert(count($results) == 3);
+  
+  # Test duplicate key de-duping
+  $results = $bucket->indexSearch("number", "int", 6, 8, true);
+  test_assert(count($results) == 1);
+  
+  $results = $bucket->indexSearch("text", "bin", "x", "z", true);
+  test_assert(count($results) == 1);
+  
+  # Test auto indexes don't leave cruft indexes behind, and regular
+  # indexes are preserved
+  $object = $bucket->get("one");
+  $object->setData(array("foo"=>9, "bar"=>"plaid"));
+  $object->store();
+  
+  # Auto index updates
+  $results = $bucket->indexSearch("foo", "int", 9);
+  test_assert(count($results) == 1);
+  
+  # Auto index leaves no cruft
+  $results = $bucket->indexSearch("foo", "int", 1);
+  test_assert(count($results) == 0);
+  
+  # Normal index is preserved
+  $results = $bucket->indexSearch("number", "int", 1);
+  test_assert(count($results) == 1);
+  
+  
+  # Test proper collision handling on autoIndex and regular index on same field
+  $bucket
+    ->newObject("seven", array("foo"=>7))
+    ->addAutoIndex("foo", "int")
+    ->addIndex("foo", "int", 7)
+    ->store();
+  
+  $results = $bucket->indexSearch("foo", "int", 7);
+  test_assert(count($results) == 1);
+  
+  $object = $bucket->get("seven");
+  $object->setData(array("foo"=>8));
+  $object->store();
+  
+  $results = $bucket->indexSearch("foo", "int", 8);
+  test_assert(count($results) == 1);
+  
+  $results = $bucket->indexSearch("foo", "int", 7);
+  test_assert(count($results) == 1);
+  
+  
 }
 
 /* BEGIN UNIT TEST FRAMEWORK */
