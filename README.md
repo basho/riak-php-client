@@ -247,6 +247,69 @@ Searches can be executed using the RiakClient::search() method
 
 This method will return null unless executed against a Riak Search cluster.
 
+## Adding Secondary Indexes ##
+Secondary indexes can be added using the RiakObject::addIndex() and RiakObject::addAutoIndex() methods.  
+
+Auto indexes are kept fresh with the associated field automatically, so if you read an object, modify its data, and write it back, the auto index will reflect the new value from the object.  Traditional indexes are fixed and must be manually managed.  *NOTE* that auto indexes are a function of the Riak PHP client, and are not part of native Riak functionality.  Other clients writing the same object must manage the index manually.
+
+    # Create some test data
+    $bucket = $client->bucket("indextest");
+    $bucket
+      ->newObject("one", array("some_field"=>1, "bar"=>"red"))
+      ->addIndex("index_name", "int", 1)
+      ->addIndex("index_name", "int", 2)
+      ->addIndex("text_index", "bin", "apple")
+      ->addAutoIndex("some_field", "int")
+      ->addAutoIndex("bar", "bin")
+      ->store();
+
+You can remove a specific value from an index, all values from an index, or all indexes:
+
+    # Remove just a single value
+    $object->removeIndex("index_name", "int", 2);
+    
+    # Remove all values from an index
+    $object->removeAllIndexes("index_name", "int");
+    
+    # Remove all index types for a given index name
+    $object->removeAllIndexes("index_name");
+    
+    # Remove all indexes
+    $object->removeAllIndexes();
+
+Likewise you can remove auto indexes:
+
+    # Just the "foo" index
+    $object->removeAutoIndex("foo", "int");
+    
+    # All auto indexes
+    $object->removeAllAutoIndexes("foo", "int");
+    
+    # All auto indexes
+    $object->removeAllAutoIndexes();
+
+Mass load indexes, or just replace an existing index:
+
+    $object->setIndex("index_name", "int", array(1, 2, 3));
+    $object->setIndex("text_index", "bin", "foo");
+
+## Querying Secondary Indexes ##
+Secondary indexes can be queried using the RiakBucket::indexSearch() method.  This returns an array of RiakLink objects.
+
+    # Exact Match
+    $results = $bucket->indexSearch("index_name", "int", 1);
+    foreach ($results as $link) {
+        echo "Key: {$link->getKey()}<br/>";
+        $object = $link->get();
+    }
+    
+    # Range Search
+    $results = $bucket->indexSearch("index_name", "int", 1, 10);
+
+Duplicate entries may be found in a ranged index search if a given index has multiple values that fall within the range.  You can request that these duplicates be eliminated in the result.
+
+    $results = $bucket->indexSearch("index_name", "int", 1, 10, true);
+
 ## Additional Resources ##
 
 See unit_tests.php for more examples.<br/>
