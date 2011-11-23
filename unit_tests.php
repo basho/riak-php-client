@@ -39,6 +39,8 @@ test("testSearchIntegration");
 
 test("testSecondaryIndexes");
 
+test("testMetaData");
+
 test_summary();
 
 
@@ -341,10 +343,8 @@ function testKeyFilterOperator() {
   $mapred = $client
   	->add($bucket->name)
   	->key_filter(array('starts_with', 'foo'))
-  	->key_filter_or(array('ends_with', 'five'))
-  	;
+  	->key_filter_or(array('ends_with', 'five'));
   $results = $mapred->run();
-  echo "<pre>".print_r($results,true).'</pre>';
   test_assert(count($results) == 5);
 }
 
@@ -512,7 +512,29 @@ function testSecondaryIndexes() {
   $results = $bucket->indexSearch("foo", "int", 7);
   test_assert(count($results) == 1);
   
+}
+
+function testMetaData() {
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket("metatest");
+
+  # Set some meta
+  $bucket->newObject("metatest", array("foo"=>'bar'))
+    ->setMeta("foo", "bar")->store();
   
+  # Test that we load the meta back
+  $object = $bucket->get("metatest");
+  test_assert($object->getMeta("foo") == "bar");
+  
+  # Test that the meta is preserved when we rewrite the object
+  $bucket->get("metatest")->store();
+  $object = $bucket->get("metatest");
+  test_assert($object->getMeta("foo") == "bar");
+  
+  # Test that we remove meta
+  $object->removeMeta("foo")->store();
+  $anotherObject = $bucket->get("metatest");
+  test_assert($anotherObject->getMeta("foo") === null);
 }
 
 /* BEGIN UNIT TEST FRAMEWORK */
