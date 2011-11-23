@@ -49,6 +49,7 @@ class RiakClient {
     $this->port = $port;
     $this->prefix = $prefix;    
     $this->mapred_prefix = $mapred_prefix;
+    $this->indexPrefix='buckets';
     $this->clientid = 'php_' . base_convert(mt_rand(), 10, 36);
     $this->r = 2;
     $this->w = 2;
@@ -973,6 +974,44 @@ class RiakBucket {
     $keys = $obj->getData();
     return array_map("urldecode",$keys["keys"]);
   }
+  
+  /**
+   * Search a secondary index
+   * @author Eric Stevens <estevens@taglabsinc.com>
+   * @param string $indexName - The name of the index to search
+   * @param string $indexType - The type of index ('int' or 'bin')
+   * @param string|int $startOrExact
+   * @param string|int optional $end
+   * @param bool $dedupe - whether to eliminate duplicate entries if any
+   * @return array of RiakLinks
+   */
+  function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=true) {
+    $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
+    $response = RiakUtils::httpRequest('GET', $url);
+    
+    $obj = new RiakObject($this->client, $this, NULL);
+    $obj->populate($response, array(200));
+    if (!$obj->exists()) {
+      throw Exception("Error searching index.");
+    }
+    $data = $obj->getData();
+    $keys = array_map("urldecode",$data["keys"]);
+    
+    $seenKeys = array();
+    foreach($keys as $id=>&$key) {
+      if ($dedupe) {
+        if (isset($seenKeys[$key])) {
+          unset($keys[$id]);
+          continue;
+        }
+        $seenKeys[$key] = true;
+      }
+      $key = new RiakLink($this->name, $key);
+      $key->client = $this->client;
+    }
+    return $keys;
+  }
+
 }
 
 
@@ -982,6 +1021,10 @@ class RiakBucket {
  * @package RiakObject
  */
 class RiakObject {
+
+  protected $meta = array();
+  protected $indexes = array();
+  protected $autoIndexes = array();
 
   /**
    * Construct a new RiakObject.
@@ -1131,6 +1174,271 @@ class RiakObject {
     return $this->links;
   }
   
+  /** @section Indexes */
+  
+  /**
+   * Adds a secondary index to the object
+   * This will create the index if it does not exist, or will
+   * append an additional value if the index already exists and
+   * does not contain the provided value.
+   * @param string $indexName
+   * @param string $indexType - Must be one of 'int' or 'bin' - the
+   * only two index types supported by Riak
+   * @param string|int optional $explicitValue - If provided, uses this
+   * value explicitly.  If not provided, this will search the object's
+   * data for a field with the name $indexName, and use that value.
+   * @return $this
+   */
+  function addIndex($indexName, $indexType=null, $explicitValue = null) {
+    if ($explicitValue === null) {
+      $this->addAutoIndex($indexName, $indexType);
+      return;
+    }
+    
+    if ($indexType !== null) {
+      $index = strtolower("{$indexName}_{$indexType}");
+    } else {
+      $index = strtolower($indexName);
+    }
+    if (!isset($this->indexes[$index])) $this->indexes[$index] = array();
+    
+    if (false === array_search($explicitValue, $this->indexes[$index])) {
+      $this->indexes[$index][] = $explicitValue;
+    }
+    return $this;
+  }
+  
+  /**
+   * Sets a given index to a specific value or set of values
+   * @param string $indexName
+   * @param string $indexType - must be 'bin' or 'int'
+   * @param array|string|int $values
+   * @return $this
+   */
+  function setIndex($indexName, $indexType=null, $values) {
+    if ($indexType !== null) {
+      $index = strtolower("{$indexName}_{$indexType}");
+    } else {
+      $index = strtolower($indexName);
+    }
+    
+    $this->indexes[$index] = $values;
+    
+    return $this;
+  }
+  
+  /**
+   * Gets the current values for the identified index
+   * Note, the NULL value has special meaning - when the object is
+   * ->store()d, this value will be replaced with the current value
+   * the value of the field matching $indexName from the object's data
+   * @param string $indexName
+   * @param string $indexType
+   */
+  function getIndex($indexName, $indexType=null) {
+    if ($indexType !== null) {
+      $index = strtolower("{$indexName}_{$indexType}");
+    } else {
+      $index = strtolower($indexName);
+    }
+    if (!isset($this->indexes[$index])) return array();
+    
+    return $this->indexes[$index];
+  }
+  
+  /**
+   * Removes a specific value from a given index
+   * @param string $indexName
+   * @param string $indexType - must be 'bin' or 'int'
+   * @param string|int optional $explicitValue
+   * @return $this
+   */
+  function removeIndex($indexName, $indexType=null, $explicitValue = null) {
+    if ($explicitValue === null) {
+      $this->removeAutoIndex($indexName, $indexType);
+      return;
+    }
+    if ($indexType !== null) {
+      $index = strtolower("{$indexName}_{$indexType}");
+    } else {
+      $index = strtolower($indexName);
+    }
+    
+    if (!isset($this->indexes[$index])) return;
+    
+    if (false !== ($position = array_search($explicitValue, $this->indexes[$index]))) {
+      unset($this->indexes[$index][$position]);
+    }
+    
+    return $this;
+  }
+  
+  /**
+   * Bulk index removal
+   * If $indexName and $indexType are provided, all values for the
+   * identified index are removed.
+   * If just $indexName is provided, all values for all types of
+   * the identified index are removed
+   * If neither is provided, all indexes are removed from the object
+   *
+   * Note that this function will NOT affect auto indexes
+   *
+   * @param string optional $indexName
+   * @param string optional $indexType
+   *
+   * @return $this
+   */
+  function removeAllIndexes($indexName=null, $indexType=null) {
+    if ($indexName === null) {
+      $this->indexes = array();
+    } else if ($indexType === null) {
+      $indexName = strtolower($indexName);
+      unset($this->indexes["{$indexName}_int"]);
+      unset($this->indexes["{$indexName}_bin"]);
+    } else {
+      unset($this->indexes[strtolower("{$indexName}_{$indexType}")]);
+    }
+    
+    return $this;
+  }
+
+  /** @section Auto Indexes */
+  
+  /**
+   * Adds an automatic secondary index to the object
+   * The value of an automatic secondary index is determined at
+   * time of ->store() by looking for an $fieldName key
+   * in the object's data.
+   *
+   * @param string $fieldName
+   * @param string $indexType Must be one of 'int' or 'bin'
+   *
+   * @return $this
+   */
+  function addAutoIndex($fieldName, $indexType=null) {
+    if ($indexType !== null) {
+      $index = strtolower("{$fieldName}_{$indexType}");
+    } else {
+      $index = strtolower($fieldName);
+    }
+    $this->autoIndexes[$index] = $fieldName;
+    
+    return $this;
+  }
+  
+  /**
+   * Returns whether the object has a given auto index
+   * @param string $fieldName
+   * @param string $indexType - must be one of 'int' or 'bin'
+   *
+   * @return boolean
+   */
+  function hasAutoIndex($fieldName, $indexType=null) {
+    if ($indexType !== null) {
+      $index = strtolower("{$fieldName}_{$indexType}");
+    } else {
+      $index = strtolower($fieldName);
+    }
+    return isset($this->autoIndexes[$index]);
+  }
+  
+  /**
+   * Removes a given auto index from the object
+   *
+   * @param string $fieldName
+   * @param string $indexType
+   *
+   * @return $this
+   */
+  function removeAutoIndex($fieldName, $indexType=null) {
+    if ($indexType !== null) {
+      $index = strtolower("{$fieldName}_{$indexType}");
+    } else {
+      $index = strtolower($fieldName);
+    }
+    unset($this->autoIndexes[$index]);
+    return $this;
+  }
+  
+  /**
+   * Removes all auto indexes
+   * If $fieldName is not provided, all auto indexes on the
+   * object are stripped, otherwise just indexes on the given field
+   * are stripped.
+   * If $indexType is not provided, all types of index for the
+   * given field are stripped, otherwise just a given type is stripped.
+   *
+   * @param string $fieldName
+   * @param string $indexType
+   *
+   * @return $this
+   */
+  function removeAllAutoIndexes($fieldName = null, $indexType = null) {
+    if ($fieldName === null) {
+      $this->autoIndexes = array();
+    } else if ($indexType === null) {
+      $fieldName = strtolower($fieldName);
+      unset($this->autoIndexes["{$fieldName}_bin"]);
+      unset($this->autoIndexes["{$fieldName}_int"]);
+    } else {
+      unset($this->autoIndexes[strtolower("{$fieldName}_{$indexType}")]);
+    }
+  }
+  
+  /** @section Meta Data */
+  
+  /**
+   * Gets a given metadata value
+   * Returns null if no metadata value with the given name exists
+   *
+   * @param string $metaName
+   *
+   * @return string|null
+   */
+  function getMeta($metaName) {
+    $metaName = strtolower($metaName);
+    if (isset($this->meta[$metaName])) return $this->meta[$metaName];
+    return null;
+  }
+  
+  /**
+   * Sets a given metadata value, overwriting an existing
+   * value with the same name if it exists.
+   * @param string $metaName
+   * @param string $value
+   * @return $this
+   */
+  function setMeta($metaName, $value) {
+    $this->meta[strtolower($metaName)] = $value;
+    return $this;
+  }
+  
+  /**
+   * Removes a given metadata value
+   * @param string $metaName
+   * @return $this
+   */
+  function removeMeta($metaName) {
+    unset ($this->meta[strtolower($metaName)]);
+    return $this;
+  }
+  
+  /**
+   * Gets all metadata values
+   * @return array<string>=string
+   */
+  function getAllMeta() {
+    return $this->meta;
+  }
+  
+  /**
+   * Strips all metadata values
+   * @return $this;
+   */
+  function removeAllMeta() {
+    $this->meta = array();
+    return $this;
+  }
 
   /**
    * Store the object in Riak. When this operation completes, the
@@ -1165,6 +1473,41 @@ class RiakObject {
     # Add the Links...
     foreach ($this->links as $link) {
       $headers[] = 'Link: ' . $link->toLinkHeader($this->client);
+    }
+
+    # Add the auto indexes...
+    $collisions = array();
+    foreach($this->autoIndexes as $index=>$fieldName) {
+      $value = null;
+      // look up the value
+      if (isset($this->data[$fieldName])) {
+        $value = $this->data[$fieldName];
+        $headers[] = "x-riak-index-$index: ".urlencode($value);
+        
+        // look for value collisions with normal indexes
+        if (isset($this->indexes[$index])) {
+          if (false !== array_search($value, $this->indexes[$index])) {
+            $collisions[$index] = $value;
+          }
+        }
+      }
+    }
+    count($this->autoIndexes) > 0
+      ? $this->meta['x-rc-autoindex'] = json_encode($this->autoIndexes)
+      : $this->meta['x-rc-autoindex'] = null;
+    count($collisions) > 0
+      ? $this->meta['x-rc-autoindexcollision'] = json_encode($collisions)
+      : $this->meta['x-rc-autoindexcollision'] = null;
+    
+    # Add the indexes
+    foreach ($this->indexes as $index=>$values) {
+      $headers[] = "x-riak-index-$index: " . join(', ', array_map('urlencode', $values));
+    }
+    
+    
+    # Add the metadata...
+    foreach($this->meta as $metaName=>$metaValue) {
+      if ($metaValue !== null) $headers[] = "X-Riak-Meta-$metaName: $metaValue";
     }
 
     if ($this->jsonize) {
@@ -1238,6 +1581,9 @@ class RiakObject {
       $this->data = NULL;
       $this->exists = FALSE;
       $this->siblings = NULL;
+      $this->indexes = array();
+      $this->autoIndexes = array();
+      $this->meta = array();
       return $this;
   }
 
@@ -1298,6 +1644,25 @@ class RiakObject {
       $this->populateLinks($this->headers["link"]);
     }
 
+    # Parse the index and metadata headers
+    $this->indexes = array();
+    $this->autoIndexes = array();
+    $this->meta = array();
+    foreach($this->headers as $key=>$val) {
+      if (preg_match('~^x-riak-([^-]+)-(.+)$~', $key, $matches)) {
+        switch($matches[1]) {
+          case 'index':
+            $index = substr($matches[2], 0, strrpos($matches[2], '_'));
+            $type = substr($matches[2], strlen($index)+1);
+            $this->setIndex($index, $type, array_map('urldecode', explode(', ', $val)));
+            break;
+          case 'meta':
+            $this->meta[$matches[2]] = $val;
+            break;
+        }
+      }
+    }
+
     # If 300 (Siblings), then load the first sibling, and
     # store the rest.
     if ($status == 300) {
@@ -1316,6 +1681,29 @@ class RiakObject {
     # Possibly json_decode...
     if (($status == 200 || $status == 201) && $this->jsonize) {
       $this->data = json_decode($this->data, true);
+    }
+    
+    # Look for auto indexes and deindex explicit values if appropriate
+    if (isset($this->meta['x-rc-autoindex'])) {
+      # dereference the autoindexes
+      $this->autoIndexes = json_decode($this->meta['x-rc-autoindex'], true);
+      $collisions = isset($this->meta['x-rc-autoindexcollision']) ? json_decode($this->meta['x-rc-autoindexcollision'], true) : array();
+      
+      foreach($this->autoIndexes as $index=>$fieldName) {
+        $value = null;
+        if (isset($this->data[$fieldName])) {
+          $value = $this->data[$fieldName];
+          if (isset($collisions[$index]) && $collisions[$index] === $value) {
+            // Don't strip this value, it's an explicit index.
+          } else {
+            if ($value !== null) $this->removeIndex($index, null, $value);
+          }
+        }
+        
+        if (!isset($collisions[$index])) {
+          // Do not delete this value if
+        }
+      }
     }
 
     return $this;
@@ -1514,6 +1902,60 @@ class RiakUtils {
       }
 
       $path .= '?' . $s;
+    }
+
+    return $path;
+  }
+
+  /**
+   * Given a RiakClient, RiakBucket, Key, LinkSpec, and Params,
+   * construct and return a URL for searching secondary indexes.
+   * @author Eric Stevens <estevens@taglabsinc.com>
+   * @param RiakClient $client
+   * @param RiakBucket $bucket
+   * @param string $index - Index Name & type (eg, "indexName_bin")
+   * @param string|int $start - Starting value or exact match if no ending value
+   * @param string|int $end - Ending value for range search
+   * @param array $params - Any extra query parameters to pass on the URL
+   * @return string URL
+   */
+  public static function buildIndexPath(RiakClient $client, RiakBucket $bucket, $index, $start, $end=NULL, array $params=NULL) {
+    # Build 'http://hostname:port/prefix/bucket'
+    $path = array('http:/',$client->host.':'.$client->port,$client->indexPrefix);
+
+    # Add '.../bucket'
+    $path[] = urlencode($bucket->name);
+    
+    # Add '.../index'
+    $path[] = 'index';
+    
+    # Add '.../index_type'
+    $path[] = urlencode($index);
+    
+    # Add .../(start|exact)
+    $path[] = urlencode($start);
+    
+    if (!is_null($end)) {
+      $path[] = urlencode($end);
+    }
+    
+    // faster than repeated string concatenations
+    $path = join('/', $path);
+
+    # Add query parameters.
+    if (!is_null($params)) {
+      // Most users will have the http PECL extension
+      if (func_exists('http_build_query')) {
+        $path .= '?' . http_build_query($params, '', '&');
+      } else {
+        // In case they don't have the http PECL extension
+        $s = array();
+        foreach ($params as $key => $value) {
+          $s[] = urlencode($key) . '=' . urlencode($value);
+        }
+
+        $path .= '?' . join('&', $s);
+      }
     }
 
     return $path;
