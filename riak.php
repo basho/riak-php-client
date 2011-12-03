@@ -148,14 +148,24 @@ class RiakClient {
    * @return array() of RiakBucket objects
    */
   function buckets() {
+    return $this->prepare_buckets()->send()->result;
+  }
+  
+  function prepare_buckets(){
     $url = RiakUtils::buildRestPath($this);
-    $response = RiakUtils::httpRequest('GET', $url.'?buckets=true');
-    $response_obj = json_decode($response[1]);
-    $buckets = array();
-    foreach($response_obj->buckets as $name) {
-        $buckets[] = $this->bucket($name);
-    }
-    return $buckets;
+    $request = RiakUtils::buildHttpRequest('GET', $url.'?buckets=true');
+    $handle = $request->handle;
+    $client = $this;
+    $request->handle = function( $response ) use( $handle, $client ){
+        $handle( $response );
+        $obj = json_decode($res->body);
+        $buckets = array();
+        foreach($obj->buckets as $name) {
+            $buckets[] = $client->bucket($name);
+        }
+        $response->result = $buckets;
+    };
+    return $request;
   }
 
   /**
@@ -163,9 +173,18 @@ class RiakClient {
    * @return boolean
    */
   function isAlive() {
+    return $this->prepare_isAlive()->send()->result;
+  }
+  
+  function prepare_isAlive(){
     $url = 'http://' . $this->host . ':' . $this->port . '/ping';
-    $response = RiakUtils::httpRequest('GET', $url);
-    return ($response != NULL) && ($response[1] == 'OK');
+    $request = RiakUtils::BuildHttpRequest('GET', $url);
+    $handle = $request->handle;
+    $request->handle = function( $response ) use( $handle ){
+        $handle( $response );
+        $response->result = ($response->body == 'OK') ? TRUE : FALSE;
+    };
+    return $request;
   }
 
 
@@ -222,6 +241,10 @@ class RiakClient {
     $mr = new RiakMapReduce($this);
     $args = func_get_args();
     return call_user_func_array(array(&$mr, "reduce"), $args);
+  }
+  
+  function pool(){
+    return new RiakHttpPool();
   }
 }
 
@@ -438,7 +461,11 @@ class RiakMapReduce {
    * @param integer $timeout - Timeout in seconds.
    * @return array()
    */
-  function run($timeout=NULL) {
+   function run( $timeout=NULL ){
+    return $this->prepare_run( $timeout )->send()->result;
+   }
+   
+  function prepare_run($timeout=NULL) {
     $num_phases = count($this->phases);
 
     $linkResultsFlag = FALSE;
@@ -478,25 +505,37 @@ class RiakMapReduce {
     
     # Do the request...
     $url = "http://" . $this->client->host . ":" . $this->client->port . "/" . $this->client->mapred_prefix;
-    $response = RiakUtils::httpRequest('POST', $url, array(), $content);
-    $result = json_decode($response[1]);
-
-    # If the last phase is NOT a link phase, then return the result.
-    $linkResultsFlag |= (end($this->phases) instanceof RiakLinkPhase);
-
-    # If we don't need to link results, then just return.
-    if (!$linkResultsFlag) return $result;
-
-    # Otherwise, if the last phase IS a link phase, then convert the
-    # results to RiakLink objects.
-    $a = array();
-    foreach ($result as $r) {
-      $tag = isset($r[2]) ? $r[2] : null;
-      $link = new RiakLink($r[0], $r[1], $tag);
-      $link->client = $this->client;
-      $a[] = $link;
-    }
-    return $a;
+    
+    $request = RiakUtils::buildHttpRequest('POST', $url, array(), $content);
+    $handle = $request->handle;
+    $mapreduce = $this;
+    $request->handle = function( $response ) use ( $handle, $mapreduce, $linkResultsFlag ) {
+        $handle( $response );
+        $result = json_decode($response->body);
+    
+        # If the last phase is NOT a link phase, then return the result.
+        $linkResultsFlag |= (end($mapreduce->phases) instanceof RiakLinkPhase);
+    
+        # If we don't need to link results, then just return.
+        if (!$linkResultsFlag) {
+            $response->result = $result;
+            return;
+        }
+    
+        # Otherwise, if the last phase IS a link phase, then convert the
+        # results to RiakLink objects.
+        $a = array();
+        foreach ($result as $r) {
+          $tag = isset($r[2]) ? $r[2] : null;
+          $link = new RiakLink($r[0], $r[1], $tag);
+          $link->client = $mapreduce->client;
+          $a[] = $link;
+        }
+        $response->result = $a;
+    };
+    
+    
+    return $request;
   }
 }
 
@@ -795,6 +834,10 @@ class RiakBucket {
    * @return RiakObject
    */
   function newObject($key, $data=NULL) {
+    return $this->object( $key, $data );
+  }
+  
+  public function object( $key, $data = NULL ){
     $obj = new RiakObject($this->client, $this, $key);
     $obj->setData($data);
     $obj->setContentType('text/json');
@@ -809,7 +852,11 @@ class RiakBucket {
    * @param  string $content_type - The content type of the object. (default 'text/json')
    * @return RiakObject
    */
-  function newBinary($key, $data, $content_type='text/json') {
+  function newBinary( $key, $data = NULL, $content_type = 'text/json') {
+    return $this->binary( $key, $data, $content_type );
+  }
+  
+  function binary($key, $data = NULL, $content_type='text/json') {
     $obj = new RiakObject($this->client, $this, $key);
     $obj->setData($data);
     $obj->setContentType($content_type);
@@ -912,24 +959,28 @@ class RiakBucket {
    * @param  array $props - An associative array of $key=>$value.
    */
   function setProperties($props) {
+    return $this->prepare_setProperties( $props )->send();
+  }
+   
+  function prepare_setProperties($props) {
     # Construct the URL, Headers, and Content...
     $url = RiakUtils::buildRestPath($this->client, $this);
     $headers = array('Content-Type: application/json');
     $content = json_encode(array("props"=>$props));
     
-    # Run the request...
-    $response = RiakUtils::httpRequest('PUT', $url, $headers, $content);
-
-    # Handle the response...
-    if ($response == NULL) {
-      throw Exception("Error setting bucket properties.");
-    }
+    # build the request...
+    $request = RiakUtils::buildHttpRequest('PUT', $url, $headers, $content);
     
-    # Check the response value...
-    $status = $response[0]['http_code'];
-    if ($status != 204) {
-      throw Exception("Error setting bucket properties.");
-    }
+    $handle = $request->handle;
+    $request->handle = function( $response ) use( $handle ){
+        $handle( $response );
+        $status = $response->http_code;
+        if ($status != 204) {
+          throw Exception("Error setting bucket properties.");
+        }
+    };
+    
+    return $request;
   }
 
   /**
@@ -937,42 +988,110 @@ class RiakBucket {
    * @return Array
    */
   function getProperties() {
+    return $this->prepare_getProperties()->send()->result;
+  }
+   
+  function prepare_getProperties() {
     # Run the request...
     $params = array('props' => 'true', 'keys' => 'false');
     $url = RiakUtils::buildRestPath($this->client, $this, NULL, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
-
-    # Use a RiakObject to interpret the response, we are just interested in the value.
-    $obj = new RiakObject($this->client, $this, NULL);
-    $obj->populate($response, array(200));
-    if (!$obj->exists()) {
-      throw Exception("Error getting bucket properties.");
-    }
+    $request = RiakUtils::buildHttpRequest('GET', $url);
+    $handle = $request->handle;
+    $bucket = $this;
+    $request->handle = function( $res ) use( $handle, $bucket ){
+        $handle( $res );
+        
+         # Use a RiakObject to interpret the response, we are just interested in the value.
+        $obj = new RiakObject($bucket->client, $bucket, NULL);
+        $obj->populate(array($res->response_headers, $res->body), array(200));
+        if (!$obj->exists()) {
+          throw Exception("Error getting bucket properties.");
+        }
+        
+        $props = $obj->getData();
+        $props = $props["props"];
+        $res->result = $props;
+    };
     
-    $props = $obj->getData();
-    $props = $props["props"];
-
-    return $props;
+    return $request;
   }
 
   /**
    * Retrieve an array of all keys in this bucket.
    * Note: this operation is pretty slow.
+   * you can now pass in a callback handler. if you do, we pass each key to the callback
+   * as it comes in, so that the results can be processed in the stream instead of
+   * having to wait for all million keys to come back. can break out of the loop any time 
+   * by returning FALSE from the callback handler (void or null won't do it checks strict type).
    * @return Array
    */
-  function getKeys() {
+  function getKeys( $callback = NULL ) {
+    return $this->prepare_getKeys( $callback )->send()->result;
+  }
+  
+  function prepare_getKeys($callback = NULL) {
     $params = array('props'=>'false','keys'=>'true');
     $url = RiakUtils::buildRestPath($this->client, $this, NULL, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
-
-    # Use a RiakObject to interpret the response, we are just interested in the value.
-    $obj = new RiakObject($this->client, $this, NULL);
-    $obj->populate($response, array(200));
-    if (!$obj->exists()) {
-      throw Exception("Error getting bucket properties.");
+    $request = RiakUtils::buildHttpRequest('GET', $url);
+    $handle = $request->handle;
+    $bucket = $this;
+    if( is_callable( $callback ) ){
+        // attach a special callback to handle the streaming results key by key.
+        // this will work more like a while next loop, and php doesn't have to keep 
+        // an array of a million keys or more in memory.
+        $request->build = function ( $request, array & $opts ) use ( $callback ){
+            $r = $request->response;
+            $regex = '#'.preg_quote('{"keys":[').'(.+?)\]\}#';
+            $opts[CURLOPT_WRITEFUNCTION] = function ( $ch, $data ) use( $r, $callback, $regex ) {
+                static $ok;                
+                if( ! isset( $ok )){
+                    $top_header = trim($r->response_header );
+                    $top_header = substr( $top_header, 0, strpos( $top_header, "\n"));
+                    $ok = preg_match("#200 OK#i", $top_header );                    
+                }
+                $r->body .= $data;
+                if( $ok ) {
+                    while (preg_match($regex, $r->body, $matches)) {
+                    // remove the keys we've just processed from the block
+                    $r->body = substr($r->body, strlen($matches[0]));
+                        
+                        // decode
+                        $result = json_decode($matches[0], TRUE);
+                        foreach( $result['keys'] as $key ){
+                            $key = urldecode( $key );
+                            $res = call_user_func($callback, $key);
+                            // if the callback returns false, we're all done.
+                            // tell curl to break out of reading from the handle.
+                            if( $res === FALSE ) {
+                                $ok = FALSE;
+                                return FALSE;
+                            }
+                        }                       
+                    }
+                }
+                return strlen( $data );
+            };
+        };
+        
+        $request->handle = function( $response ) use ( $handle, $bucket ) {
+            $handle( $response );
+            $response->result = array();
+        };
+        
+    } else {
+        $request->handle = function( $response ) use ( $handle, $bucket ) {
+            $handle( $response );
+            # Use a RiakObject to interpret the response, we are just interested in the value.
+            $obj = new RiakObject($bucket->client, $bucket, NULL);
+            $obj->populate(array( $response->response_headers, $response->body), array(200));
+            if (!$obj->exists()) {
+              throw Exception("Error getting bucket properties.");
+            }
+            $keys = $obj->getData();
+            $response->result = array_map("urldecode",$keys["keys"]);
+        };
     }
-    $keys = $obj->getData();
-    return array_map("urldecode",$keys["keys"]);
+    return $request;
   }
   
   /**
@@ -986,30 +1105,40 @@ class RiakBucket {
    * @return array of RiakLinks
    */
   function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
+    return $this->prepare_indexSearch($indexName, $indexType, $startOrExact, $end, $dedupe)->send()->result;
+  }
+  
+  function prepare_indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
     $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
-    $response = RiakUtils::httpRequest('GET', $url);
-    
-    $obj = new RiakObject($this->client, $this, NULL);
-    $obj->populate($response, array(200));
-    if (!$obj->exists()) {
-      throw Exception("Error searching index.");
-    }
-    $data = $obj->getData();
-    $keys = array_map("urldecode",$data["keys"]);
-    
-    $seenKeys = array();
-    foreach($keys as $id=>&$key) {
-      if ($dedupe) {
-        if (isset($seenKeys[$key])) {
-          unset($keys[$id]);
-          continue;
+    $request = RiakUtils::buildHttpRequest('GET', $url);
+    $handle = $request->handle;
+    $bucket = $this;
+    $request->handle = function( $response ) use( $handle, $bucket, $dedupe ){
+        $handle( $response );
+        $obj = new RiakObject($bucket->client, $bucket, NULL);
+        $obj->populate(array($response->response_headers, $response->body), array(200));
+        if (!$obj->exists()) {
+          throw Exception("Error searching index.");
         }
-        $seenKeys[$key] = true;
-      }
-      $key = new RiakLink($this->name, $key);
-      $key->client = $this->client;
-    }
-    return $keys;
+        $data = $obj->getData();
+        $keys = array_map("urldecode",$data["keys"]);
+        
+        $seenKeys = array();
+        foreach($keys as $id=>&$key) {
+          if ($dedupe) {
+            if (isset($seenKeys[$key])) {
+              unset($keys[$id]);
+              continue;
+            }
+            $seenKeys[$key] = true;
+          }
+          $key = new RiakLink($bucket->name, $key);
+          $key->client = $bucket->client;
+        }
+        $response->result = $keys;
+    };
+    
+    return $request;
   }
 
 }
@@ -1452,6 +1581,11 @@ class RiakObject {
    * @return $this
    */
   function store($w=NULL, $dw=NULL) {
+    return $this->prepare_store( $w, $dw )->send()->result;
+  }
+
+   
+  function prepare_store($w=NULL, $dw=NULL) {
     # Use defaults if not specified...
     $w = $this->bucket->getW($w);
     $dw = $this->bucket->getDW($w);
@@ -1518,10 +1652,17 @@ class RiakObject {
   
     $method = $this->key ? 'PUT' : 'POST';
 
-    # Run the operation.
-    $response = RiakUtils::httpRequest($method, $url, $headers, $content);
-    $this->populate($response, array(200, 201, 300));
-    return $this;
+    # prepare the operation.
+    $request = RiakUtils::buildHttpRequest($method, $url, $headers, $content);
+    $handle = $request->handle;
+    $object = $this;
+    $request->handle = function( $response ) use( $handle, $object ){
+        $handle( $response );
+        $object->populate( array( $response->response_headers, $response->body ), array(200, 201, 300));
+        $response->result = $object;
+    };
+    
+    return $request;
   }
  
   /**
@@ -1533,20 +1674,30 @@ class RiakObject {
    * @return $this
    */
   function reload($r=NULL) {
+    return $this->prepare_reload( $r )->send()->result;
+  }
+
+  function prepare_reload($r=NULL) {
     # Do the request...
     $r = $this->bucket->getR($r);
     $params = array('r' => $r);
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
-    $this->populate($response, array(200, 300, 404));
+    $request = RiakUtils::buildHttpRequest('GET', $url);
+    $handle = $request->handle;
+    $object = $this;
+    $request->handle = function( $response ) use ( $handle, $object ){
+        $handle( $response );
+        $object->populate(array( $response->response_headers, $response->body ), array(200, 300, 404));
     
-    # If there are siblings, load the data for the first one by default...
-    if ($this->hasSiblings()) {
-      $obj = $this->getSibling(0);
-      $this->setData($obj->getData());
-    }
-
-    return $this;
+        # If there are siblings, load the data for the first one by default...
+        if ($object->hasSiblings()) {
+          $obj = $object->getSibling(0);
+          $object->setData($obj->getData());
+        }
+        $response->result = $object;
+    };
+    
+    return $request;
   }
 
   /**
@@ -1556,6 +1707,11 @@ class RiakObject {
    * @return $this
    */
   function delete($dw=NULL) {
+    return $this->prepare_delete( $dw )->send()->result;
+  }
+
+
+  function prepare_delete($dw=NULL) {
     # Use defaults if not specified...
     $dw = $this->bucket->getDW($dw);
 
@@ -1563,11 +1719,19 @@ class RiakObject {
     $params = array('dw' => $dw);
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
 
-    # Run the operation...
-    $response = RiakUtils::httpRequest('DELETE', $url);    
-    $this->populate($response, array(204, 404));
+    # prepare the operation...
+    $request = RiakUtils::buildHttpRequest('DELETE', $url);
+    $handle = $request->handle;
+    $object = $this;
+    $request->handle = function( $response ) use ( $handle, $object ){
+        $handle( $response );
+        $object->populate(array( $response->response_headers, $response->body ), array(204, 404));
 
-    return $this;
+        $response->result = $object;
+    };
+    
+    return $request;
+    
   }
 
 
@@ -1751,6 +1915,11 @@ class RiakObject {
    * @return RiakObject.
    */
   function getSibling($i, $r=NULL) {
+    return $this->prepare_getSibling( $i, $r )->send()->result;
+  }
+
+
+  function prepare_getSibling($i, $r=NULL) {
     # Use defaults if not specified.
     $r = $this->bucket->getR($r);
 
@@ -1758,13 +1927,19 @@ class RiakObject {
     $vtag = $this->siblings[$i];
     $params = array('r' => $r, 'vtag' => $vtag);
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
+    $request = RiakUtils::buildHttpRequest('GET', $url);
+    $handle = $request->handle;
+    $object = $this;
+    $request->handle = function( $response ) use ( $handle, $object ){
+        $handle( $response );
+        # Respond with a new object...
+        $obj = new RiakObject($object->client, $object->bucket, $object->key);
+        $obj->jsonize = $object->jsonize;
+        $obj->populate(array($response->response_headers, $response->body), array(200));
+        $response->result = $obj;
+    };
     
-    # Respond with a new object...
-    $obj = new RiakObject($this->client, $this->bucket, $this->key);
-    $obj->jsonize = $this->jsonize;
-    $obj->populate($response, array(200));
-    return $obj;
+    return $request;
   }
 
   /**
@@ -1774,11 +1949,18 @@ class RiakObject {
    * @return array of RiakObject
    */
   function getSiblings($r=NULL) {
-    $a = array();
+    $requests = array();
+    $pool = new RiakHttpPool();
     for ($i = 0; $i<$this->getSiblingCount(); $i++) {
-      $a[] = $this->getSibling($i, $r);
+      $requests[] = $request = $this->prepare_getSibling($i, $r);
+      $pool->add( $request );
     }
-    return $a;
+    $pool->finish();
+    $res = array();
+    foreach( $requests as $request ){
+        $res[] = $request->response->result;
+    }
+    return $res;
   }
 
   /**
@@ -1944,22 +2126,54 @@ class RiakUtils {
 
     # Add query parameters.
     if (!is_null($params)) {
-      // Most users will have the http PECL extension
-      if (func_exists('http_build_query')) {
-        $path .= '?' . http_build_query($params, '', '&');
-      } else {
-        // In case they don't have the http PECL extension
-        $s = array();
-        foreach ($params as $key => $value) {
-          $s[] = urlencode($key) . '=' . urlencode($value);
-        }
-
-        $path .= '?' . join('&', $s);
-      }
+        $path .= '?' . self::buildQuery($params);
     }
 
     return $path;
   }
+    
+    public static function buildQuery($params, $name=null) {
+        if( is_object( $params ) ) $params = json_decode( json_encode( $params ), TRUE);
+        if( ! is_array( $params ) ) return rawurlencode($params);
+        $ret = "";
+        foreach($params as $key=>$val) {
+            $key = rawurlencode( $key );
+            if(is_array($val)) {
+                if($name==null) $ret .= self::buildQuery($val, $key);
+                else $ret .= self::buildQuery($val, $name."[$key]");   
+            } else {
+                $val=rawurlencode($val);
+                if($name!=null)
+                $ret.=$name."[$key]"."=$val&";
+                else $ret.= "$key=$val&";
+            }
+        }
+        if( $name == null ) $ret = trim( $ret, '&');
+        return $ret;   
+    }
+
+
+  /**
+   * Given a Method, URL, Headers, and Body, perform and HTTP request,
+   * and return an array of arity 2 containing an associative array of
+   * response headers and the response body.
+   */
+  public static function buildHttpRequest($method, $url, $request_headers = array(), $obj = '') {
+    $request = new RiakHttpRequest( $url );
+    $request->method = $method;
+    $request->headers = $request_headers;
+    if( $obj ) $request->post = $obj;
+    $request->handle = function ( $res ) use ($request) {
+        $parsed_headers = RiakUtils::parseHttpHeaders($res->response_header);
+        $response_headers = array("http_code"=>$res->http_code);
+        foreach ($parsed_headers as $key=>$value) {
+            $response_headers[strtolower($key)] = $value;
+        }
+        $res->response_headers = $response_headers;
+    };
+    return $request;
+  }
+
 
   /**
    * Given a Method, URL, Headers, and Body, perform and HTTP request,
@@ -1967,54 +2181,8 @@ class RiakUtils {
    * response headers and the response body.
    */
   public static function httpRequest($method, $url, $request_headers = array(), $obj = '') {
-    # Set up curl
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
-
-    if ($method == 'GET') {
-      curl_setopt($ch, CURLOPT_HTTPGET, 1);
-    } else if ($method == 'POST') {
-      curl_setopt($ch, CURLOPT_POST, 1);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-    } else if ($method == 'PUT') {
-      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-    } else if ($method == 'DELETE') {
-      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-    }
-
-    # Capture the response headers...
-    $response_headers_io = new RiakStringIO();
-    curl_setopt($ch, CURLOPT_HEADERFUNCTION, array(&$response_headers_io, 'write'));
-
-    # Capture the response body...
-    $response_body_io = new RiakStringIO();
-    curl_setopt($ch, CURLOPT_WRITEFUNCTION, array(&$response_body_io, 'write'));
-
-    try {
-      # Run the request.
-      curl_exec($ch);
-      $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-      curl_close($ch);
-
-      # Get the headers...
-      $parsed_headers = RiakUtils::parseHttpHeaders($response_headers_io->contents());
-      $response_headers = array("http_code"=>$http_code);
-      foreach ($parsed_headers as $key=>$value) {
-        $response_headers[strtolower($key)] = $value;
-      }
-      
-      # Get the body...
-      $response_body = $response_body_io->contents();
-
-      # Return a new RiakResponse object.
-      return array($response_headers, $response_body);
-    } catch (Exception $e) {
-      curl_close($ch);
-      error_log('Error: ' . $e->getMessage());
-      return NULL;
-    } 
+    $res = self::buildHttpRequest( $method, $url, $request_headers, $obj )->send();
+    return array($res->response_headers, $res->body);
   }
 
   /**
@@ -2039,3 +2207,271 @@ class RiakUtils {
 }
 
 
+/*
+* Use this class to run curl calls easily.
+*/
+class RiakHttpRequest extends \StdClass {
+
+    public $url;
+    public $post;
+    public $method;
+    public $headers = array();
+    public $resource;
+    public $build;
+    public $handle;
+    public $response;
+
+
+
+   /**
+    * import data from a different http class into this one.
+    * @param mixed      either an array or http object
+    * @return void
+    */
+    public function __construct( $data ){
+        if(is_resource( $data ) && get_resource_type($data) == 'curl'){
+            $this->resource = $data;
+            if( ! isset( $this->url) ) $this->url = curl_getinfo($this->resource, CURLINFO_EFFECTIVE_URL);
+        } elseif( is_string( $data ) ){
+            $this->url = $data;
+        } elseif( is_array( $data ) || $data instanceof Iterator ) {
+            foreach( $data as $k=>$v ) $this->$k = $v;
+        }
+    }
+    
+   /**
+    * try to run the request right away.
+    * @return Data of the response.
+    * Usually this is the only method you need to know if you are using this object on its own.
+    * Allows you to run a curl call and get response back.
+    * If you need to do multiple calls in parallel, look at the pool class.
+    */
+    public function send( array $opts = array() ){
+        $this->build( $opts );
+        curl_exec( $this->resource );
+        return $this->handle();
+    }
+        
+   /**
+    * utility method. send the Http request out through a stream and return the stream object
+    * @param array    curl opts.
+    */
+    public function build( array $opts = array() ){
+        if( isset( $this->resource ) && get_resource_type($this->resource) == 'curl' ){
+            $ch = $this->resource;
+            if( ! $this->url ) $this->url = curl_getinfo($this->resource, CURLINFO_EFFECTIVE_URL);
+            curl_setopt($this->resource, CURLOPT_HTTPGET, 1);
+            curl_setopt( $this->resource, CURLOPT_HEADER, FALSE);
+        } else {
+            $ch = $this->resource = curl_init();
+        }
+                
+        if( ! isset($opts[CURLOPT_HTTPHEADER]) )$opts[CURLOPT_HTTPHEADER] = array();
+        
+        foreach( $this->headers as $k => $v ){
+            if( is_int( $k ) ){
+                $opts[CURLOPT_HTTPHEADER][] = $v;
+            } else {
+                $opts[CURLOPT_HTTPHEADER][] = $k . ': ' . $v;
+            }
+        }   
+        
+        $opts[ CURLOPT_URL ] = $this->url;
+        if( isset( $this->post ) ) {
+            $opts[CURLOPT_POST] = 1;
+            $post = $this->post;
+            $opts[CURLOPT_POSTFIELDS] =  is_array( $this->post ) ? RiakUtils::buildQuery( $this->post ) : $this->post;
+        } 
+        
+        if ( isset( $this->method ) ){
+            if( isset( $opts[CURLOPT_POST]) ) unset( $opts[CURLOPT_POST] );
+            $opts[CURLOPT_CUSTOMREQUEST] = strtoupper( $this->method );
+        }
+        $opts[CURLINFO_HEADER_OUT] = 1;
+        $this->response = $r = (object) array('request_header'=>'', 'response_header'=>'', 'body'=> '', 'http_code'=>0);
+        
+        if( ! isset( $opts[CURLOPT_WRITEFUNCTION] ) ) {
+            $opts[CURLOPT_WRITEFUNCTION ] = function ( $ch, $data ) use( $r ) {
+                $r->body .= $data;
+                return strlen( $data );
+            };
+        }
+        
+        if( ! isset( $opts[CURLOPT_HEADERFUNCTION] ) ) {
+            $opts[CURLOPT_HEADERFUNCTION] = function ( $ch, $data ) use( $r ) {
+                $r->response_header .= $data;
+                return strlen( $data );
+            };
+        }
+        
+        if( isset( $this->build ) && $this->build instanceof \Closure ){
+            $cb = $this->build;
+            $cb( $this, $opts );
+        }
+        curl_setopt_array( $ch, $opts );
+
+        return $ch;
+    }
+    
+   /**
+    * Handle the response ... internal method only. Used by the Pool class.
+    */
+    public function handle(){  
+        $response = $this->response;
+        if( $info = $this->getInfo() ){
+            foreach( $info as $k => $v ) $response->$k = $v;
+        }
+        if( isset( $this->handle) && $this->handle instanceof \Closure ) {
+            $cb = $this->handle;
+            $cb( $this->response );
+        }
+        return $this->response;
+    }
+    
+    /**
+    * get info about the resource.
+    * returns false if no resource.
+    */
+    public function getinfo(){
+         if( ! $this->resource ) return FALSE;
+         if( get_resource_type($this->resource) != 'curl' ) return false;
+         return curl_getinfo( $this->resource );
+    }
+    
+    /*
+    * close the curl handle.
+    */
+    public function close(){
+        if( $this->resource && get_resource_type($this->resource) == 'curl' ) curl_close( $this->resource );
+        unset( $this->resource );
+    }
+    
+    public function __destruct( ){
+        $this->close();
+    }
+}
+
+
+/**
+ * Allows us to run curl calls in a non-blocking fashion.
+ */
+class RiakHttpPool {
+    
+   /**
+    * @type array   list of running http requests
+    */
+    protected $requests = array();
+    
+  /**
+    * callback triggers for handling the http response
+    */
+    protected $handlers = array();
+    
+    /**
+	 * The curl multi handle.
+	 */
+	protected $resource = NULL;
+
+	/**
+	 * Initializes the curl multi request.
+	 */
+	public function __construct(){
+		$this->resource = curl_multi_init();
+	}
+	
+	/**
+	* clean up the pool, removing any attached curl resources and close the multi.
+	*/
+	public function __destruct(){
+		foreach ($this->requests as $i => $http){
+			unset( $this->requests[ $i ] );
+		    if( ! $http->resource ) continue;
+			curl_multi_remove_handle($this->resource, $http->resource);
+		}
+        curl_multi_close($this->resource);
+	}
+
+    public function attach( \Closure $handler ){
+        $this->handlers[] = $handler;
+    }
+    
+    /**
+    * when an http request is done, trigger any attached handlers.
+    * if you want customized callbacks per request, you can attach a callback
+    * to examine a local variable in the http object and perform a callback on that.
+    */
+    public function handle( RiakHttpRequest $request ){
+        foreach( $this->handlers as $handler ) $handler( $request );
+    }
+    
+    /**
+    * add a new request to the pool.
+    */
+    public function add( RiakHttpRequest $request, array $opts = array() ){
+        $ch = $request->build($opts);
+        $this->requests[(int)$request->resource] = $request;
+        curl_multi_add_handle($this->resource, $request->resource);
+        return $request;
+    }
+    
+    /**
+    * get a list of all the requests in the pool.
+    */
+    public function requests(){
+        return $this->requests;
+    }
+
+   /**
+    * wait for the specified timeout for data to come back on the socket.
+    */
+	public function select($timeout = 1.0){
+	    if( ! $this->poll() ) return FALSE;
+        curl_multi_select($this->resource, $timeout);
+		return $this->poll();
+	}
+	
+	/**
+	* process all of the requests in the pool.
+	*/
+	public function finish(){
+		while ($this->select(1) === TRUE) { /* no op */ }
+		return TRUE;
+	}
+
+	/**
+	 * Polls (non-blocking) the curl requests for additional data.
+	 *
+	 * This function must be called periodically while processing other data.  This function is non-blocking
+	 * and will return if there is no data ready for processing on any of the internal curl handles.
+	 *
+	 * @return boolean TRUE if there are transfers still running or FALSE if there is nothing left to do.
+	 */
+	public function poll(){
+		$still_running = 0; // number of requests still running.
+		do {
+			$result = curl_multi_exec($this->resource, $still_running);
+			if ($result != CURLM_OK) continue;
+            do {
+                $messages_in_queue = 0;
+                $info = curl_multi_info_read($this->resource, $messages_in_queue);
+                if( ! $info ) continue;
+                if( !  isset($info['handle']) ) continue;
+                if( ! isset($this->requests[(int)$info['handle']]) ) continue;
+                curl_multi_remove_handle($this->resource, $info['handle']);
+                $request = $this->requests[ (int) $info['handle'] ];
+                unset( $this->requests[ (int) $info['handle'] ] );
+                $request->handle();
+                $this->handle( $request );
+            }
+            while($messages_in_queue > 0);
+			
+		}
+		while ($result == CURLM_CALL_MULTI_PERFORM && $still_running > 0);
+
+		// don't trust $still_running, as user may have added more urls
+		// in callbacks
+		return (boolean)$this->requests;
+	}
+    
+}
+// EOC
