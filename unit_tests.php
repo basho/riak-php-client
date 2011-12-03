@@ -25,6 +25,7 @@ test("testDelete");
 test("testPrepareDelete");
 test("testSetBucketProperties");
 test("testPrepareSetBucketProperties");
+test("testBucketKeysWithCallback");
 test("testSiblings");
 test("testPrepareSiblings");
 
@@ -272,6 +273,20 @@ function testPrepareSetBucketProperties() {
   
   test_assert( $props['allow_mult'] == FALSE );
   test_assert( $props['n_val'] == 2 );
+}
+
+function testBucketKeysWithCallback() {
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket('bucket');
+  $ct = 0;
+  $callback = function( $key ) use ( & $ct ){
+    $ct++;
+    if( $ct > 1 ) return FALSE;
+  };
+  
+  $bucket->getKeys( $callback );
+  
+  test_assert( $ct > 0 );
 }
 
 

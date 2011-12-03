@@ -1019,28 +1019,78 @@ class RiakBucket {
   /**
    * Retrieve an array of all keys in this bucket.
    * Note: this operation is pretty slow.
+   * you can now pass in a callback handler. if you do, we pass each key to the callback
+   * as it comes in, so that the results can be processed in the stream instead of
+   * having to wait for all million keys to come back. can break out of the loop any time 
+   * by returning FALSE from the callback handler (void or null won't do it checks strict type).
    * @return Array
    */
-  function getKeys() {
-    return $this->prepare_getKeys()->send()->result;
+  function getKeys( $callback = NULL ) {
+    return $this->prepare_getKeys( $callback )->send()->result;
   }
   
-  function prepare_getKeys() {
+  function prepare_getKeys($callback = NULL) {
     $params = array('props'=>'false','keys'=>'true');
     $url = RiakUtils::buildRestPath($this->client, $this, NULL, NULL, $params);
     $request = RiakUtils::buildHttpRequest('GET', $url);
     $handle = $request->handle;
     $bucket = $this;
-    $request->handle = function( $response ) use ( $handle, $bucket ) {
-        # Use a RiakObject to interpret the response, we are just interested in the value.
-        $obj = new RiakObject($bucket->client, $bucket, NULL);
-        $obj->populate(array( $response->response_headers, $response->body), array(200));
-        if (!$obj->exists()) {
-          throw Exception("Error getting bucket properties.");
-        }
-        $keys = $obj->getData();
-        $response->result = array_map("urldecode",$keys["keys"]);
-    };
+    if( is_callable( $callback ) ){
+        // attach a special callback to handle the streaming results key by key.
+        // this will work more like a while next loop, and php doesn't have to keep 
+        // an array of a million keys or more in memory.
+        $request->build = function ( $request, array & $opts ) use ( $callback ){
+            $r = $request->response;
+            $regex = '#'.preg_quote('{"keys":[').'(.+?)\]\}#';
+            $opts[CURLOPT_WRITEFUNCTION] = function ( $ch, $data ) use( $r, $callback, $regex ) {
+                static $ok;                
+                if( ! isset( $ok )){
+                    $top_header = trim($r->response_header );
+                    $top_header = substr( $top_header, 0, strpos( $top_header, "\n"));
+                    $ok = preg_match("#200 OK#i", $top_header );                    
+                }
+                $r->body .= $data;
+                if( $ok ) {
+                    while (preg_match($regex, $r->body, $matches)) {
+                    // remove the keys we've just processed from the block
+                    $r->body = substr($r->body, strlen($matches[0]));
+                        
+                        // decode
+                        $result = json_decode($matches[0], TRUE);
+                        foreach( $result['keys'] as $key ){
+                            $key = urldecode( $key );
+                            $res = call_user_func($callback, $key);
+                            // if the callback returns false, we're all done.
+                            // tell curl to break out of reading from the handle.
+                            if( $res === FALSE ) {
+                                $ok = FALSE;
+                                return FALSE;
+                            }
+                        }                       
+                    }
+                }
+                return strlen( $data );
+            };
+        };
+        
+        $request->handle = function( $response ) use ( $handle, $bucket ) {
+            $handle( $response );
+            $response->result = array();
+        };
+        
+    } else {
+        $request->handle = function( $response ) use ( $handle, $bucket ) {
+            $handle( $response );
+            # Use a RiakObject to interpret the response, we are just interested in the value.
+            $obj = new RiakObject($bucket->client, $bucket, NULL);
+            $obj->populate(array( $response->response_headers, $response->body), array(200));
+            if (!$obj->exists()) {
+              throw Exception("Error getting bucket properties.");
+            }
+            $keys = $obj->getData();
+            $response->result = array_map("urldecode",$keys["keys"]);
+        };
+    }
     return $request;
   }
   
