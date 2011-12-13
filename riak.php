@@ -244,6 +244,7 @@ class RiakMapReduce {
     $this->inputs = array();
     $this->input_mode = NULL;
     $this->key_filters = array();
+    $this->index = array();
   }
 
   /**
@@ -417,21 +418,60 @@ class RiakMapReduce {
   function key_filter_operator($operator,  $filter /*. ,$filter .*/) {
     $filters = func_get_args();
     array_shift($filters);
-    if ($this->input_mode != 'bucket') 
-  	  throw new Exception("Key filters can only be used in bucket mode");
+    if ($this->input_mode != 'bucket')
+      throw new Exception("Key filters can only be used in bucket mode");
+    if (count($this->index))
+      throw new Exception("You cannot use index search and key filters on the same operation");
     
-  	if (count($this->key_filters) > 0) {
-  	  $this->key_filters = array(array(
-  	    $operator,
-  	    $this->key_filters,
-  	    $filters
-  	  ));
-  	} else {
-  		$this->key_filters = $filters;
-  	}
-  	return $this;
+    if (count($this->key_filters) > 0) {
+      $this->key_filters = array(array(
+        $operator,
+        $this->key_filters,
+        $filters
+      ));
+    } else {
+      $this->key_filters = $filters;
+    }
+    return $this;
   }
   
+  /**
+   * Performs an index search as part of a Map/Reduce operation
+   * Note that you can only do index searches on a bucket, so
+   * this is incompatible with object or key operations, as well
+   * as key filter operations.
+   * @param string $indexName The name of the index to search. 
+   * @param string $indexType The index type ('bin' or 'int')
+   * @param string|int $startOrExact Start value to search for, or
+   * exact value if no end value specified.
+   * @param string|int optional $end End value to search for during
+   * a range search
+   * @return $this 
+   */
+  function indexSearch($indexName, $indexType, $startOrExact, $end=NULL) {
+    // Check prerequisites
+    if (count($this->key_filters))
+      throw new Exception("You cannot use index search and key filters on the same operation");
+    if ($this->input_mode != 'bucket')
+      throw new Exception("Key filters can only be used in bucket mode");
+    
+    if ($end === NULL) {
+      $this->index = array(
+        'index' => "{$indexName}_{$indexType}",
+        'key' => urlencode($startOrExact)
+      );
+    } else {
+      $this->index = array(
+        'index' => "{$indexName}_{$indexType}",
+        'start' => urlencode($startOrExact),
+        'end' => urlencode($end)
+      );
+    }
+    return $this;
+    
+  }
+  
+
   /**
    * Run the map/reduce operation. Returns an array of results, or an
    * array of RiakLink objects if the last phase is a link phase. 
@@ -464,12 +504,17 @@ class RiakMapReduce {
     }
     
     # Add key filters if applicable
-   	if ($this->input_mode == 'bucket' && count($this->key_filters) > 0) {
-   		$this->inputs = array(
-   			'bucket' => $this->inputs,
-   			'key_filters' => $this->key_filters
-   		);
-   	}
+    if ($this->input_mode == 'bucket' && count($this->key_filters) > 0) {
+      $this->inputs = array(
+        'bucket' => $this->inputs,
+        'key_filters' => $this->key_filters
+      );
+    }
+    
+    # Add index search if applicable
+    if ($this->input_mode == 'bucket' && count($this->index) > 0) {
+      $this->inputs = array_merge(array('bucket'=>$this->inputs), $this->index);
+    }
 
     # Construct the job, optionally set the timeout...
     $job = array("inputs"=>$this->inputs, "query"=>$query);
