@@ -228,8 +228,8 @@ When using Map/Reduce on a bucket, you can use key filters to determine the appl
     $result = $client->add($bucket->name)
         ->key_filter(array('tokenize', '.', 1), array('eq', 'invoice'))
         ->key_filter_and(array('tokenize', '.', 2), array('ends_with', '20100530'))
-    	->map("function (v) { return [v.key]; }")
-    	->reduce("Riak.reduceSort")
+        ->map("function (v) { return [v.key]; }")
+        ->reduce("Riak.reduceSort")
         ->run();
 
 This method returns an array of data representing the result of the Map/Reduce functions.
@@ -267,7 +267,9 @@ Remove existing metadata
     # Remove all meta data
     $object->removeAllMeta();
 
-## Adding Secondary Indexes ##
+## Secondary Indexes ##
+
+### Adding Secondary Indexes ###
 Secondary indexes can be added using the RiakObject::addIndex() and RiakObject::addAutoIndex() methods.  
 
 Auto indexes are kept fresh with the associated field automatically, so if you read an object, modify its data, and write it back, the auto index will reflect the new value from the object.  Traditional indexes are fixed and must be manually managed.  *NOTE* that auto indexes are a function of the Riak PHP client, and are not part of native Riak functionality.  Other clients writing the same object must manage the index manually.
@@ -313,7 +315,7 @@ Mass load indexes, or just replace an existing index:
     $object->setIndex("index_name", "int", array(1, 2, 3));
     $object->setIndex("text_index", "bin", "foo");
 
-## Querying Secondary Indexes ##
+### Querying a Bucket's secondary index ###
 Secondary indexes can be queried using the RiakBucket::indexSearch() method.  This returns an array of RiakLink objects.
 
     # Exact Match
@@ -329,6 +331,17 @@ Secondary indexes can be queried using the RiakBucket::indexSearch() method.  Th
 Duplicate entries may be found in a ranged index search if a given index has multiple values that fall within the range.  You can request that these duplicates be eliminated in the result.
 
     $results = $bucket->indexSearch("index_name", "int", 1, 10, true);
+
+### Secondary Indexes in Map/Reduce ###
+The same search format used for RiakBucket::indexSearch() may be used during Map/Reduce operations during the input phase.  This is only valid for bucket-level operations, and cannot be combined with other filtration methods such as key filters.
+
+    # Use secondary indexes to speed up our Map/Reduce operation
+    $result = $client
+        ->add("bucket_name") // Begin Map/Reduce
+        ->indexSearch("index_name", "int", 1)
+        ->map("function (v) { return [v.key]; }")
+        ->reduce("Riak.reduceSort")
+        ->run();
 
 ## Additional Resources ##
 
