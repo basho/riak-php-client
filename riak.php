@@ -1027,17 +1027,17 @@ class RiakBucket {
    * @param string $indexType - The type of index ('int' or 'bin')
    * @param string|int $startOrExact
    * @param string|int optional $end
-   * @param bool $dedupe - whether to eliminate duplicate entries if any
+   * @param bool optional $dedupe - whether to eliminate duplicate entries if any
    * @return array of RiakLinks
    */
   function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
-    $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
+    $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end);
     $response = RiakUtils::httpRequest('GET', $url);
     
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
     if (!$obj->exists()) {
-      throw Exception("Error searching index.");
+      throw new Exception("Error searching index.");
     }
     $data = $obj->getData();
     $keys = array_map("urldecode",$data["keys"]);
@@ -1428,6 +1428,7 @@ class RiakObject {
     } else {
       unset($this->autoIndexes[strtolower("{$fieldName}_{$indexType}")]);
     }
+    return $this;
   }
   
   /** @section Meta Data */
@@ -1522,6 +1523,9 @@ class RiakObject {
 
     # Add the auto indexes...
     $collisions = array();
+    if(!empty($this->autoIndexes) && !is_array($this->data)) {
+      throw new Exception('Unsupported data type for auto indexing feature.  Object must be an array to use auto indexes.');
+    }
     foreach($this->autoIndexes as $index=>$fieldName) {
       $value = null;
       // look up the value
@@ -1744,10 +1748,6 @@ class RiakObject {
             if ($value !== null) $this->removeIndex($index, null, $value);
           }
         }
-        
-        if (!isset($collisions[$index])) {
-          // Do not delete this value if
-        }
       }
     }
 
@@ -1961,10 +1961,9 @@ class RiakUtils {
    * @param string $index - Index Name & type (eg, "indexName_bin")
    * @param string|int $start - Starting value or exact match if no ending value
    * @param string|int $end - Ending value for range search
-   * @param array $params - Any extra query parameters to pass on the URL
    * @return string URL
    */
-  public static function buildIndexPath(RiakClient $client, RiakBucket $bucket, $index, $start, $end=NULL, array $params=NULL) {
+  public static function buildIndexPath(RiakClient $client, RiakBucket $bucket, $index, $start, $end=NULL) {
     # Build 'http://hostname:port/prefix/bucket'
     $path = array('http:/',$client->host.':'.$client->port,$client->indexPrefix);
 
@@ -1986,22 +1985,6 @@ class RiakUtils {
     
     // faster than repeated string concatenations
     $path = join('/', $path);
-
-    # Add query parameters.
-    if (!is_null($params)) {
-      // Most users will have the http PECL extension
-      if (func_exists('http_build_query')) {
-        $path .= '?' . http_build_query($params, '', '&');
-      } else {
-        // In case they don't have the http PECL extension
-        $s = array();
-        foreach ($params as $key => $value) {
-          $s[] = urlencode($key) . '=' . urlencode($value);
-        }
-
-        $path .= '?' . join('&', $s);
-      }
-    }
 
     return $path;
   }
