@@ -967,13 +967,13 @@ class RiakBucket {
 
     # Handle the response...
     if ($response == NULL) {
-      throw Exception("Error setting bucket properties.");
+      throw new Exception("Error setting bucket properties.");
     }
     
     # Check the response value...
     $status = $response[0]['http_code'];
     if ($status != 204) {
-      throw Exception("Error setting bucket properties.");
+      throw new Exception("Error setting bucket properties.");
     }
   }
 
@@ -991,7 +991,7 @@ class RiakBucket {
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
     if (!$obj->exists()) {
-      throw Exception("Error getting bucket properties.");
+      throw new Exception("Error getting bucket properties.");
     }
     
     $props = $obj->getData();
@@ -1014,7 +1014,7 @@ class RiakBucket {
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
     if (!$obj->exists()) {
-      throw Exception("Error getting bucket properties.");
+      throw new Exception("Error getting bucket properties.");
     }
     $keys = $obj->getData();
     return array_map("urldecode",$keys["keys"]);
