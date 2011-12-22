@@ -5,5 +5,4 @@
 *.swp
 *.out
 .*
-riak.phar*
 docs
