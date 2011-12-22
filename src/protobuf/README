@@ -1,0 +1,8 @@
+These classes were Generated using protoc-gen-php: https://github.com/bramp/protoc-gen-php/
+
+Only change made was to break up the classes into individual files and placed them into a namespace.
+
+follow the installation instructions at https://github.com/bramp/protoc-gen-php/blob/master/README
+
+
+protoc -I. -I/usr/include --php_out . --plugin=protoc-gen-php=./protoc-gen-php riakclient.proto
