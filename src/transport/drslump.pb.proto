@@ -94,7 +94,6 @@ package Riak;
 
 message Transport {
 message DrSLump {
-
 message PingReq {
 
 }
