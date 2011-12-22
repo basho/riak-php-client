@@ -51,10 +51,6 @@ class HttpRequest extends \StdClass {
         return $this->handle();
     }
     
-    public function exec( array $opts = array() ){
-        return $this->send( $opts );
-    }
-        
    /**
     * utility method. send the Http request out through a stream and return the stream object
     * @param array    curl opts.

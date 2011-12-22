@@ -252,7 +252,7 @@ class Bucket {
     $obj = new Object($this, NULL);
     $obj->populate($response);
     if (!$obj->exists()) {
-      throw Exception("Error getting bucket properties.");
+      throw new Exception("Error getting bucket properties.");
     }
     $keys = $obj->getData();
     return array_map("urldecode",$keys["keys"]);

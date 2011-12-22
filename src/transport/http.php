@@ -29,24 +29,33 @@ class Http implements Iface {
     *    @return boolean
     */
     public function ping(){
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . '/ping' );
-        $response = $request->send();
+        $response = $this->http( '/ping', array(200) )->send();
         return ($response->body == 'OK');
     }
 
    /**
     * Serialize get request and deserialize response
     * @return (vclock=null, [(metadata, value)]=null)
-    */   
+    */
     public function get($object, $r = null, $vtag = null){
+        return $this->prepare_get( $object, $r, $vtag )->send()->result;
+    }
+    
+    public function prepare_get($object, $r = null, $vtag = null){
         $params = array();
         if( $r != NULL ) $params['r'] = $r;
         if( $vtag != NULL ) $params['vtag'] = $vtag;
         $uri = $this->buildRestPath($object->bucket->getName(), $object->key, NULL, $params);
-        $request =  new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
-        $response = $request->send();
-        $res = $this->parseObjectResponse($response, array(200, 300, 404));
-        return $res;
+        $http = $this->http( $uri, array(200, 300, 404));
+
+        # prepare the http request 
+        $handle = $http->handle;
+        $transport = $this;
+        $http->handle = function( $response ) use ( $handle, $transport ){
+            $handle( $response );
+            $transport->parseObjectResponse( $response );
+        };
+        return $http;
     }
        
    /**
@@ -55,6 +64,10 @@ class Http implements Iface {
     * @return (vclock=null, [(metadata, value)]=null)
     */
     public function put($object, $w = null, $dw = null){
+        return $this->prepare_put( $object, $w, $dw )->send()->result;
+    }
+    
+    public function prepare_put( $object, $w = null, $dw = NULL ){
         
         # Construct the headers...
         $headers = array('Accept: text/plain, */*; q=0.5',
@@ -112,16 +125,20 @@ class Http implements Iface {
         $uri = $this->buildRestPath($object->bucket->getName(), $object->key, NULL, $params);
         
         # create the request
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
-        $request->headers = $headers;
-        $request->method = $object->key ? 'PUT' : 'POST';
-        $request->post = $object->jsonize ? json_encode($object->getData()) : $object->getData();
+        $http = $this->http( $uri, array(200, 201, 300) );
+        $http->headers = $headers;
+        $http->method = $object->key ? 'PUT' : 'POST';
+        $http->post = $object->jsonize ? json_encode($object->getData()) : $object->getData();
         
-        # run the http request 
-        $response = $request->send();
+        # prepare the http request 
+        $handle = $http->handle;
+        $transport = $this;
+        $http->handle = function( $response ) use ( $handle, $transport ){
+            $handle( $response );
+            $transport->parseObjectResponse( $response );
+        };
         
-        # validate and format the response
-        return $this->parseObjectResponse($response, array(200, 201, 300));
+        return $http;
     
     }
 
@@ -130,17 +147,26 @@ class Http implements Iface {
     * @return true
     */
     public function delete($object, $dw = null){
+        return $this->prepare_delete( $object, $dw )->send()->result;
+    }
+    
+    public function prepare_delete($object, $dw = null){
         # Construct the URL...
         $params = array('dw' => $dw);
         $uri = $this->buildRestPath($object->bucket->getName(), $object->key, NULL, $params);
 
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
-        $request->method = 'DELETE';
+        $http = $this->http( $uri, array(204, 404));
+        $http->method = 'DELETE';
 
-        # Run the operation...
-        $response = $request->send();
+        # prepare the http request 
+        $handle = $http->handle;
+        $transport = $this;
+        $http->handle = function( $response ) use ( $handle, $transport ){
+            $handle( $response );
+            $transport->parseObjectResponse( $response );
+        };
         
-        return $this->parseObjectResponse($response, array(204, 404));
+        return $http;
     }
 
    /**
@@ -149,9 +175,8 @@ class Http implements Iface {
     */
     public function getBuckets(){
         $uri = $this->buildRestPath() .'?buckets=true';
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
+        $request = $this->http( $uri, array(200) );
         $response = $request->send();
-        if( $response->http_code != 200 ) throw new Exception('invalid response', $response);
         $data = json_decode($response->body, true);
         if( ! is_array( $data ) || ! isset( $data['buckets'] ) ) throw new Exception('invalid response', $response);
         return $data['buckets'];
@@ -162,12 +187,24 @@ class Http implements Iface {
     * @return hash table of properties
     */
     public function getBucketProps($bucket){
+        return $this->prepare_getBucketProps( $bucket )->send()->result;
+    }
+    
+    public function prepare_getBucketProps($bucket){
         # Run the request...
         $params = array('props' => 'true', 'keys' => 'false');
         $uri = $this->buildRestPath($bucket, NULL, NULL, $params);
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
-        $response = $request->send();
-        return $this->parseObjectResponse($response, array(200));
+        $http = $this->http( $uri, array(200) );
+        
+        # prepare the http request 
+        $handle = $http->handle;
+        $transport = $this;
+        $http->handle = function( $response ) use ( $handle, $transport ){
+            $handle( $response );
+            $transport->parseObjectResponse( $response );
+        };
+        
+        return $http;
     }
 
    /**
@@ -177,53 +214,76 @@ class Http implements Iface {
     * @return boolean
     */
     public function setBucketProps($bucket, $props){
+        $this->prepare_setBucketProps( $bucket, $props )->send();
+    }
+    
+    public function prepare_setBucketProps($bucket, $props){
         # Construct the URL, Headers, and Content...
         $uri = $this->buildRestPath($bucket);
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
+        $request = $this->http( $uri, array(204) );
         $request->method = 'PUT';
         $request->headers = array('Content-Type: application/json');
         $request->post = json_encode(array("props"=>$props));
-        
-        # Run the request...
-        $response = $request->send();
-    
-        # Check the response value...
-        if ($response->http_code != 204) {
-          throw Exception("Error setting bucket properties.");
-        }
-    
+        return $request;
     }
     
     public function getBucketKeys( $bucket, $cb = NULL ){
-        $params = array('props'=>'false','keys'=>'true');
-        $uri = $this->buildRestPath( $bucket, NULL, NULL, $params);
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
-        $response = $request->send();
-        return $this->parseObjectResponse($response, array(200));
+        return $this->prepare_getBucketKeys( $bucket, $cb )->send()->result;
     }
     
+    public function prepare_getBucketKeys( $bucket, $cb = NULL ){
+        $params = array('props'=>'false','keys'=>'true');
+        $uri = $this->buildRestPath( $bucket, NULL, NULL, $params);
+        $http = $this->http( $uri, array(200) );
+        # prepare the http request 
+        $handle = $http->handle;
+        $transport = $this;
+        $http->handle = function( $response ) use ( $handle, $transport ){
+            $handle( $response );
+            $transport->parseObjectResponse( $response );
+        };
+        
+        return $http;
+    }
+
     public function indexSearch($bucket, $indexName, $indexType, $startOrExact = null, $end=NULL, $dedupe=false) {
+        return  $this->prepare_indexSearch($bucket, $indexName, $indexType, $startOrExact, $end, $dedupe)->send()->result;
+    }
+    
+    public function prepare_indexSearch($bucket, $indexName, $indexType, $startOrExact = null, $end=NULL, $dedupe=false) {
         $uri = $this->buildIndexPath($bucket, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
-        $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
-        $response = $request->send();
-        return $this->parseObjectResponse($response, array(200));
+        $http = $this->http( $uri, array(200) );
+        $handle = $http->handle;
+        $transport = $this;
+        $http->handle = function( $response ) use ( $handle, $transport ){
+            $handle( $response );
+            $transport->parseObjectResponse( $response );
+        };
+        
+        return $http;
     }
 
    /**
     * Serialize map/reduce request
     */
     public function mapred($inputs, $query, $timeout = null){
+        return $this->prepare_mapred($inputs, $query, $timeout)->send()->result;
+    }
+    
+    public function prepare_mapred($inputs, $query, $timeout = null){
         # Construct the job, optionally set the timeout...
         $job = array("inputs"=>$inputs, "query"=>$query);
         if ($timeout != NULL) $job["timeout"] = $timeout;
-        $request = new HttpRequest( "http://" . $this->host . ":" . $this->port . "/" . $this->mapred_prefix );
-        $request->post = json_encode($job);
-        $response = $request->send();
-        $result = json_decode($response->body);
-        if( isset( $result->error ) ) {
-            throw new Exception( $result->error );
-        }
-        return $result;
+        $http = $this->http("/" . $this->mapred_prefix, array(200) );
+        $http->post = json_encode($job);
+        $http->handle = function( $response ) {
+            $result = json_decode($response->body);
+            if( isset( $result->error ) ) {
+                throw new Exception( $result->error );
+            }
+            $response->result = $result;
+        };
+        return $http;
     }
 
    /**
@@ -255,37 +315,29 @@ class Http implements Iface {
         }
         return $links;
       }
+      
+    function resultObject(){
+        return (object) array(
+            'vclock'=>null,
+            'content_type'=>null,
+            'key'=>null,
+            'links'=> array(),
+            'meta'=>array(),
+            'indexes'=>array(),
+            'data'=>null,
+            'siblings'=>null,
+            );
+    }
     
-    function parseObjectResponse($response, $expected_statuses) {
+    function parseObjectResponse($response) {
         
         $status = $response->http_code;
-      
-        # Check if the server is down (status==0)
-        if ($status == 0) {
-          throw new Exception('Could not contact Riak Server!', $response);
-        }
-    
-        # Verify that we got one of the expected statuses. Otherwise, throw an exception.
-        if (!in_array($status, $expected_statuses)) {
-          $m = 'Expected status ' . implode(' or ', $expected_statuses) . ', received ' . $status;
-          throw new Exception($m, $response);
-        }
-    
-        # If 404 (Not Found), then clear the object.
-        if ($status == 404) {
-            return NULL;
+        
+        if( $status == 404 ){
+            return $response->result = NULL;
         }
         
-        $result = new \stdclass;
-        $result->vclock = NULL;
-        $result->content_type = NULL;
-        $result->key = NULL;
-        $result->links = array();
-        $result->meta = array();
-        $result->indexes = array();
-        $result->data = NULL;
-        $result->siblings = NULL;
-        
+        $result = $response->result;
         $headers = array();
         foreach (self::parseHttpHeaders($response->response_header) as $key=>$value) {
             $headers[strtolower($key)] = $value;
@@ -400,6 +452,31 @@ class Http implements Iface {
 
     return $path;
   }
+  
+  protected function http( $uri, array $expected_statuses = NULL ){
+    $http = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
+    $result = $this->resultObject();
+    $http->build = function( $http ) use ( $result ){
+        $http->response->result = $result;
+    };
+    
+    $http->handle = function( $response ) use ( $expected_statuses ) {
+        $status = $response->http_code;
+        # Check if the server is down (status==0)
+        if ($status == 0) {
+          throw new Exception('Could not contact Riak Server!', $response);
+        }
+        
+        # Verify that we got one of the expected statuses. Otherwise, throw an exception.
+        if ($expected_statuses && !in_array($status, $expected_statuses)) {
+          $m = 'Expected status ' . implode(' or ', $expected_statuses) . ', received ' . $status;
+          throw new Exception($m, $response);
+        }
+
+    };
+    return $http;
+    
+  }
 
   /**
    * Given a Riak\Client, Riak\Bucket, Key, LinkSpec, and Params,
@@ -443,26 +520,6 @@ class Http implements Iface {
     }
 
     return '/' . $path;
-  }
-
-  /**
-   * Given a Method, URL, Headers, and Body, perform and HTTP request,
-   * and return an array of arity 2 containing an associative array of
-   * response headers and the response body.
-   */
-  protected function httpRequest($method, $uri, $request_headers = array(), $obj = '') {
-    
-    $request = new HttpRequest( 'http://' . $this->host . ':' . $this->port . $uri );
-    $request->headers = $request_headers;
-    $request->method = $method;
-    $request->post = $obj;
-    $request->handle = function( $response ){
-        $response->response_headers = array();
-        foreach (Http::parseHttpHeaders($response->response_header) as $key=>$value) {
-            $response->response_headers[strtolower($key)] = $value;
-          }
-    };
-    return $request->send();
   }
 
   /**
