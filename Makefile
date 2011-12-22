@@ -1,13 +1,13 @@
 .PHONY: build all test clean
 
 build:
-	phar-build --src=./src/ -nq --phar=./riak.phar
+	./build_phar.sh
 
 docs:
 	doxygen php-doxyfile ./
 
 test:
-	sh ./test/run.sh
+	./test/run.sh
 
 clean:
-	rm -rf docs/ ./riak.phar
+	rm -rf docs/ ./riak.phar*

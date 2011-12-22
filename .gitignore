@@ -5,5 +5,5 @@
 *.swp
 *.out
 .*
-riak.phar
+riak.phar*
 docs
