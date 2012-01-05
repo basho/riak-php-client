@@ -987,7 +987,7 @@ class RiakBucket {
    */
   function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
     $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
-    list ($response,$body) = RiakUtils::httpRequest('GET', $url);
+    $response = RiakUtils::httpRequest('GET', $url);
     
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
@@ -1626,7 +1626,7 @@ class RiakObject {
 
     # Verify that we got one of the expected statuses. Otherwise, throw an exception.
     if (!in_array($status, $expected_statuses)) {
-      $m = 'Expected status ' . implode(' or ', $expected_statuses) . ', received ' . $status;
+      $m = 'Expected status ' . implode(' or ', $expected_statuses) . ', received ' . $status . ' with body: ' . $this->data;
       throw new Exception($m);
     }
 
