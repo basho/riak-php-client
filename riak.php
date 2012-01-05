@@ -987,13 +987,12 @@ class RiakBucket {
    */
   function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
     $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
-    $response = RiakUtils::httpRequest('GET', $url);
+    list ($response,$body) = RiakUtils::httpRequest('GET', $url);
     
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
-    echo $response;
     if (!$obj->exists()) {
-      throw Exception("Error searching index.");
+      throw Exception("Error searching index: " . $body);
     }
     $data = $obj->getData();
     $keys = array_map("urldecode",$data["keys"]);
