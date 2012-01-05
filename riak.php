@@ -992,7 +992,7 @@ class RiakBucket {
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
     if (!$obj->exists()) {
-      throw Exception("Error searching index");
+      throw Exception("Error searching index.");
     }
     $data = $obj->getData();
     $keys = array_map("urldecode",$data["keys"]);
