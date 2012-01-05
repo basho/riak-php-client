@@ -408,6 +408,18 @@ function testSearchIntegration() {
 function testSecondaryIndexes() {
   $client = new RiakClient(HOST, PORT);
   $bucket = $client->bucket("indextest");
+  
+  # Immediate test to see if 2i is even supported w/ the backend
+  try {
+    $bucket->indexSearch("foo", "bar_bin", "baz");
+  }
+  catch (Exception $e) {
+    if stristr($e->getMessage(), "indexes_not_supported") {
+        return
+    }
+  }
+  
+  # Okay, continue with the rest of the test
   $bucket
     ->newObject("one", array("foo"=>1, "bar"=>"red"))
     ->addIndex("number", "int", 1)
