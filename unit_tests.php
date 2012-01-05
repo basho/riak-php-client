@@ -414,12 +414,15 @@ function testSecondaryIndexes() {
     $bucket->indexSearch("foo", "bar_bin", "baz");
   }
   catch (Exception $e) {
+    echo $e;
     if (strpos($e->__toString(), "indexes_not_supported") !== FALSE) {
       return true;
     } else {
       throw $e;
     }
   }
+  
+  echo "here";
   
   # Okay, continue with the rest of the test
   $bucket
