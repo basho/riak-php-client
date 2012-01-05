@@ -991,6 +991,7 @@ class RiakBucket {
     
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
+    echo $response;
     if (!$obj->exists()) {
       throw Exception("Error searching index.");
     }
