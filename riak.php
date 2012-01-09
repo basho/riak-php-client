@@ -1626,7 +1626,7 @@ class RiakObject {
 
     # Verify that we got one of the expected statuses. Otherwise, throw an exception.
     if (!in_array($status, $expected_statuses)) {
-      $m = 'Expected status ' . implode(' or ', $expected_statuses) . ', received ' . $status;
+      $m = 'Expected status ' . implode(' or ', $expected_statuses) . ', received ' . $status . ' with body: ' . $this->data;
       throw new Exception($m);
     }
 

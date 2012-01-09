@@ -54,7 +54,7 @@ function testIsAlive() {
 function testStoreAndGet() {
   $client = new RiakClient(HOST, PORT);
   $bucket = $client->bucket('bucket');
-  
+
   $rand = rand();
   $obj = $bucket->newObject('foo', $rand);
   $obj->store();
@@ -69,11 +69,11 @@ function testStoreAndGet() {
 function testStoreAndGetWithoutKey() {
   $client = new RiakClient(HOST, PORT);
   $bucket = $client->bucket('bucket');
-  
+
   $rand = rand();
   $obj = $bucket->newObject(null, $rand);
   $obj->store();
-  
+
   $key = $obj->key;
 
   $obj = $bucket->get($key);
@@ -114,7 +114,7 @@ function testMissingObject() {
 function testDelete() {
   $client = new RiakClient(HOST, PORT);
   $bucket = $client->bucket('bucket');
-  
+
   $rand = rand();
   $obj = $bucket->newObject('foo', $rand);
   $obj->store();
@@ -173,10 +173,10 @@ function testSiblings() {
   # Resolve the conflict, and then do a get...
   $obj3 = $obj->getSibling(3);
   $obj3->store();
-  
+
   $obj->reload();
   test_assert($obj->getData() == $obj3->getData());
-  
+
   # Clean up for next test...
   $obj->delete();
 }
@@ -277,7 +277,7 @@ function testJavascriptArgMapReduce() {
     add("bucket", "foo", 15)->
     add("bucket", "foo", -15)->
     add("bucket", "foo", -5)->
-    map("function(v, arg) { return [arg]; }")-> 
+    map("function(v, arg) { return [arg]; }")->
     reduce("Riak.reduceSum")->
     run();
   test_assert($result == array(10));
@@ -307,7 +307,7 @@ function testMapReduceFromObject() {
   $client = new RiakClient(HOST, PORT);
   $bucket = $client->bucket("bucket");
   $bucket->newObject("foo", 2)->store();
- 
+
   $obj = $bucket->get("foo");
   $result = $obj->map("Riak.mapValuesJson")->run();
   test_assert($result = array(2));
@@ -322,10 +322,10 @@ function testKeyFilter() {
   $bucket->newObject("foo_three", array("foo"=>"three"))->store();
   $bucket->newObject("foo_four",  array("foo"=>"four" ))->store();
   $bucket->newObject("moo_five",  array("foo"=>"five" ))->store();
-  
+
   $mapred = $client
-  	->add($bucket->name)
-  	->key_filter(array('tokenize', '_', 1), array('eq', 'foo'));
+        ->add($bucket->name)
+        ->key_filter(array('tokenize', '_', 1), array('eq', 'foo'));
   $results = $mapred->run();
   test_assert(count($results) == 4);
 }
@@ -339,11 +339,11 @@ function testKeyFilterOperator() {
   $bucket->newObject("foo_three", array("foo"=>"three"))->store();
   $bucket->newObject("foo_four",  array("foo"=>"four" ))->store();
   $bucket->newObject("moo_five",  array("foo"=>"five" ))->store();
-  
+
   $mapred = $client
-  	->add($bucket->name)
-  	->key_filter(array('starts_with', 'foo'))
-  	->key_filter_or(array('ends_with', 'five'));
+        ->add($bucket->name)
+        ->key_filter(array('starts_with', 'foo'))
+        ->key_filter_or(array('ends_with', 'five'));
   $results = $mapred->run();
   test_assert(count($results) == 5);
 }
@@ -373,7 +373,7 @@ function testLinkWalking() {
     addLink($bucket->newObject("foo2", "test2")->store(), "tag")->
     addLink($bucket->newObject("foo3", "test3")->store(), "tag2!@#$%^&*")->
     store();
-  
+
   $obj = $bucket->get("foo");
   $results = $obj->link("bucket")->run();
   test_assert(count($results) == 3);
@@ -408,6 +408,20 @@ function testSearchIntegration() {
 function testSecondaryIndexes() {
   $client = new RiakClient(HOST, PORT);
   $bucket = $client->bucket("indextest");
+
+  # Immediate test to see if 2i is even supported w/ the backend
+  try {
+    $bucket->indexSearch("foo", "bar_bin", "baz");
+  }
+  catch (Exception $e) {
+    if (strpos($e->__toString(), "indexes_not_supported") !== FALSE) {
+      return true;
+    } else {
+      throw $e;
+    }
+  }
+
+  # Okay, continue with the rest of the test
   $bucket
     ->newObject("one", array("foo"=>1, "bar"=>"red"))
     ->addIndex("number", "int", 1)
@@ -443,7 +457,7 @@ function testSecondaryIndexes() {
     ->addAutoIndex("foo", "int")
     ->addAutoIndex("bar", "bin")
     ->store();
-  
+
   $bucket
     ->newObject("six", array("foo"=>6, "bar"=>"purple"))
     ->addIndex("number", "int", 6)
@@ -451,67 +465,67 @@ function testSecondaryIndexes() {
     ->addIndex("number", "int", 8)
     ->setIndex("text", "bin", array("x","y","z"))
     ->store();
-  
+
   # Exact matches
   $results = $bucket->indexSearch("number", "int", 5);
   test_assert(count($results) == 1);
-  
+
   $results = $bucket->indexSearch("text", "bin", "apple");
   test_assert(count($results) == 1);
-  
-  # Range searches 
+
+  # Range searches
   $results = $bucket->indexSearch("foo", "int", 1, 3);
   test_assert(count($results) == 3);
-  
+
   $results = $bucket->indexSearch("bar", "bin", "blue", "orange");
   test_assert(count($results) == 3);
-  
+
   # Test duplicate key de-duping
   $results = $bucket->indexSearch("number", "int", 6, 8, true);
   test_assert(count($results) == 1);
-  
+
   $results = $bucket->indexSearch("text", "bin", "x", "z", true);
   test_assert(count($results) == 1);
-  
+
   # Test auto indexes don't leave cruft indexes behind, and regular
   # indexes are preserved
   $object = $bucket->get("one");
   $object->setData(array("foo"=>9, "bar"=>"plaid"));
   $object->store();
-  
+
   # Auto index updates
   $results = $bucket->indexSearch("foo", "int", 9);
   test_assert(count($results) == 1);
-  
+
   # Auto index leaves no cruft
   $results = $bucket->indexSearch("foo", "int", 1);
   test_assert(count($results) == 0);
-  
+
   # Normal index is preserved
   $results = $bucket->indexSearch("number", "int", 1);
   test_assert(count($results) == 1);
-  
-  
+
+
   # Test proper collision handling on autoIndex and regular index on same field
   $bucket
     ->newObject("seven", array("foo"=>7))
     ->addAutoIndex("foo", "int")
     ->addIndex("foo", "int", 7)
     ->store();
-  
+
   $results = $bucket->indexSearch("foo", "int", 7);
   test_assert(count($results) == 1);
-  
+
   $object = $bucket->get("seven");
   $object->setData(array("foo"=>8));
   $object->store();
-  
+
   $results = $bucket->indexSearch("foo", "int", 8);
   test_assert(count($results) == 1);
-  
+
   $results = $bucket->indexSearch("foo", "int", 7);
   test_assert(count($results) == 1);
-  
+
 }
 
 function testMetaData() {
@@ -521,16 +535,16 @@ function testMetaData() {
   # Set some meta
   $bucket->newObject("metatest", array("foo"=>'bar'))
     ->setMeta("foo", "bar")->store();
-  
+
   # Test that we load the meta back
   $object = $bucket->get("metatest");
   test_assert($object->getMeta("foo") == "bar");
-  
+
   # Test that the meta is preserved when we rewrite the object
   $bucket->get("metatest")->store();
   $object = $bucket->get("metatest");
   test_assert($object->getMeta("foo") == "bar");
-  
+
   # Test that we remove meta
   $object->removeMeta("foo")->store();
   $anotherObject = $bucket->get("metatest");
@@ -543,7 +557,7 @@ $test_pass = 0; $test_fail = 0;
 function test($method) {
   global $test_pass, $test_fail;
   try {
-    $method(); 
+    $method();
     $test_pass++;
     print "  [.] TEST PASSED: $method\n";
   } catch (Exception $e) {
