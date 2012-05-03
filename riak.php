@@ -135,6 +135,21 @@ class RiakClient {
   }
 
   /**
+   * Get all buckets.
+   * @return array() of RiakBucket objects
+   */
+  function allBuckets() {
+    $url = RiakUtils::buildRestPath($this);
+    $response = RiakUtils::httpRequest('GET', $url.'?buckets=true');
+    $response_obj = json_decode($response[1]);
+    $buckets = array();
+    foreach($response_obj->buckets as $name) {
+        $buckets[] = $this->bucket($name);
+    }
+    return $buckets;
+  }
+
+  /**
    * Get the bucket by the specified name. Since buckets always exist,
    * this will always return a RiakBucket.
    * @return RiakBucket
