@@ -797,7 +797,7 @@ class RiakBucket {
   function newObject($key, $data=NULL) {
     $obj = new RiakObject($this->client, $this, $key);
     $obj->setData($data);
-    $obj->setContentType('text/json');
+    $obj->setContentType('application/json');
     $obj->jsonize = TRUE;
     return $obj;
   }
@@ -806,10 +806,10 @@ class RiakBucket {
    * Create a new Riak object that will be stored as plain text/binary.
    * @param  string $key - Name of the key.
    * @param  object $data - The data to store.
-   * @param  string $content_type - The content type of the object. (default 'text/json')
+   * @param  string $content_type - The content type of the object. (default 'application/json')
    * @return RiakObject
    */
-  function newBinary($key, $data, $content_type='text/json') {
+  function newBinary($key, $data, $content_type='application/json') {
     $obj = new RiakObject($this->client, $this, $key);
     $obj->setData($data);
     $obj->setContentType($content_type);
@@ -1100,7 +1100,7 @@ class RiakObject {
   }
 
   /**
-   * Get the content type of this object. This is either text/json, or
+   * Get the content type of this object. This is either application/json, or
    * the provided content type if the object was created via newBinary(...).
    * @return string
    */
