@@ -1921,7 +1921,7 @@ class RiakUtils {
    */
   public static function buildIndexPath(RiakClient $client, RiakBucket $bucket, $index, $start, $end=NULL, array $params=NULL) {
     # Build 'http://hostname:port/prefix/bucket'
-    $path = array('http:/',$client->host.':'.$client->port,$client->indexPrefix);
+    $path = array('http://',$client->host.':'.$client->port,$client->indexPrefix);
 
     # Add '.../bucket'
     $path[] = urlencode($bucket->name);
