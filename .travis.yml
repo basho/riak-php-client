@@ -1,5 +1,7 @@
 language: php
 script: make test
+notifications:
+  email: eng@basho.com
 php:
   - 5.3
   - 5.4
