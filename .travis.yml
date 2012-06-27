@@ -1,0 +1,5 @@
+language: php
+script: make test
+php:
+  - 5.3
+  - 5.4

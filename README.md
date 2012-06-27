@@ -3,6 +3,8 @@
 # Riak PHP Client #
 This is the official PHP client for Riak.
 
+[![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
+
 ## Documentation ##
 API documentation for this library can be found at<br/>
 <http://basho.github.com/riak-php-client/>
