@@ -478,7 +478,7 @@ class RiakMapReduce {
     
     # Do the request...
     $url = "http://" . $this->client->host . ":" . $this->client->port . "/" . $this->client->mapred_prefix;
-    $response = RiakUtils::httpRequest('POST', $url, array(), $content);
+    $response = RiakUtils::httpRequest('POST', $url, array('Content-type: application/json'), $content);
     $result = json_decode($response[1]);
 
     # If the last phase is NOT a link phase, then return the result.
