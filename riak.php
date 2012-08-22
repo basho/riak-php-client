@@ -1958,7 +1958,7 @@ class RiakUtils {
     # Add query parameters.
     if (!is_null($params)) {
       // Most users will have the http PECL extension
-      if (func_exists('http_build_query')) {
+      if (function_exists('http_build_query')) {
         $path .= '?' . http_build_query($params, '', '&');
       } else {
         // In case they don't have the http PECL extension
