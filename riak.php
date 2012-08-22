@@ -1119,6 +1119,19 @@ class RiakObject {
   }
 
   /**
+   * Get last-modified from the object.
+   * @return DateTime
+   */
+  function getLastModified() {
+    if (array_key_exists('last-modified', $this->headers)) {
+        return new DateTime($this->headers['last-modified']);
+    } else {
+      return NULL;
+    }
+  }
+
+
+  /**
    * Add a link to a RiakObject.
    * @param mixed $obj - Either a RiakObject or a RiakLink object.
    * @param string $tag - Optional link tag. (default is bucket name,
