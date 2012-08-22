@@ -244,6 +244,7 @@ class RiakMapReduce {
     $this->inputs = array();
     $this->input_mode = NULL;
     $this->key_filters = array();
+    $this->index = array();
   }
 
   /**
@@ -417,21 +418,60 @@ class RiakMapReduce {
   function key_filter_operator($operator,  $filter /*. ,$filter .*/) {
     $filters = func_get_args();
     array_shift($filters);
-    if ($this->input_mode != 'bucket') 
-  	  throw new Exception("Key filters can only be used in bucket mode");
+    if ($this->input_mode != 'bucket')
+      throw new Exception("Key filters can only be used in bucket mode");
+    if (count($this->index))
+      throw new Exception("You cannot use index search and key filters on the same operation");
     
-  	if (count($this->key_filters) > 0) {
-  	  $this->key_filters = array(array(
-  	    $operator,
-  	    $this->key_filters,
-  	    $filters
-  	  ));
-  	} else {
-  		$this->key_filters = $filters;
-  	}
-  	return $this;
+    if (count($this->key_filters) > 0) {
+      $this->key_filters = array(array(
+        $operator,
+        $this->key_filters,
+        $filters
+      ));
+    } else {
+      $this->key_filters = $filters;
+    }
+    return $this;
   }
   
+  /**
+   * Performs an index search as part of a Map/Reduce operation
+   * Note that you can only do index searches on a bucket, so
+   * this is incompatible with object or key operations, as well
+   * as key filter operations.
+   * @param string $indexName The name of the index to search. 
+   * @param string $indexType The index type ('bin' or 'int')
+   * @param string|int $startOrExact Start value to search for, or
+   * exact value if no end value specified.
+   * @param string|int optional $end End value to search for during
+   * a range search
+   * @return $this 
+   */
+  function indexSearch($indexName, $indexType, $startOrExact, $end=NULL) {
+    // Check prerequisites
+    if (count($this->key_filters))
+      throw new Exception("You cannot use index search and key filters on the same operation");
+    if ($this->input_mode != 'bucket')
+      throw new Exception("Key filters can only be used in bucket mode");
+    
+    if ($end === NULL) {
+      $this->index = array(
+        'index' => "{$indexName}_{$indexType}",
+        'key' => urlencode($startOrExact)
+      );
+    } else {
+      $this->index = array(
+        'index' => "{$indexName}_{$indexType}",
+        'start' => urlencode($startOrExact),
+        'end' => urlencode($end)
+      );
+    }
+    return $this;
+    
+  }
+  
+
   /**
    * Run the map/reduce operation. Returns an array of results, or an
    * array of RiakLink objects if the last phase is a link phase. 
@@ -464,12 +504,17 @@ class RiakMapReduce {
     }
     
     # Add key filters if applicable
-   	if ($this->input_mode == 'bucket' && count($this->key_filters) > 0) {
-   		$this->inputs = array(
-   			'bucket' => $this->inputs,
-   			'key_filters' => $this->key_filters
-   		);
-   	}
+    if ($this->input_mode == 'bucket' && count($this->key_filters) > 0) {
+      $this->inputs = array(
+        'bucket' => $this->inputs,
+        'key_filters' => $this->key_filters
+      );
+    }
+    
+    # Add index search if applicable
+    if ($this->input_mode == 'bucket' && count($this->index) > 0) {
+      $this->inputs = array_merge(array('bucket'=>$this->inputs), $this->index);
+    }
 
     # Construct the job, optionally set the timeout...
     $job = array("inputs"=>$this->inputs, "query"=>$query);
@@ -922,13 +967,13 @@ class RiakBucket {
 
     # Handle the response...
     if ($response == NULL) {
-      throw Exception("Error setting bucket properties.");
+      throw new Exception("Error setting bucket properties.");
     }
     
     # Check the response value...
     $status = $response[0]['http_code'];
     if ($status != 204) {
-      throw Exception("Error setting bucket properties.");
+      throw new Exception("Error setting bucket properties.");
     }
   }
 
@@ -946,7 +991,7 @@ class RiakBucket {
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
     if (!$obj->exists()) {
-      throw Exception("Error getting bucket properties.");
+      throw new Exception("Error getting bucket properties.");
     }
     
     $props = $obj->getData();
@@ -969,7 +1014,7 @@ class RiakBucket {
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
     if (!$obj->exists()) {
-      throw Exception("Error getting bucket properties.");
+      throw new Exception("Error getting bucket properties.");
     }
     $keys = $obj->getData();
     return array_map("urldecode",$keys["keys"]);
@@ -982,17 +1027,17 @@ class RiakBucket {
    * @param string $indexType - The type of index ('int' or 'bin')
    * @param string|int $startOrExact
    * @param string|int optional $end
-   * @param bool $dedupe - whether to eliminate duplicate entries if any
+   * @param bool optional $dedupe - whether to eliminate duplicate entries if any
    * @return array of RiakLinks
    */
   function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
-    $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, NULL);
+    $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end);
     $response = RiakUtils::httpRequest('GET', $url);
     
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
     if (!$obj->exists()) {
-      throw Exception("Error searching index.");
+      throw new Exception("Error searching index.");
     }
     $data = $obj->getData();
     $keys = array_map("urldecode",$data["keys"]);
@@ -1396,6 +1441,7 @@ class RiakObject {
     } else {
       unset($this->autoIndexes[strtolower("{$fieldName}_{$indexType}")]);
     }
+    return $this;
   }
   
   /** @section Meta Data */
@@ -1490,6 +1536,9 @@ class RiakObject {
 
     # Add the auto indexes...
     $collisions = array();
+    if(!empty($this->autoIndexes) && !is_array($this->data)) {
+      throw new Exception('Unsupported data type for auto indexing feature.  Object must be an array to use auto indexes.');
+    }
     foreach($this->autoIndexes as $index=>$fieldName) {
       $value = null;
       // look up the value
@@ -1712,10 +1761,6 @@ class RiakObject {
             if ($value !== null) $this->removeIndex($index, null, $value);
           }
         }
-        
-        if (!isset($collisions[$index])) {
-          // Do not delete this value if
-        }
       }
     }
 
@@ -1929,10 +1974,9 @@ class RiakUtils {
    * @param string $index - Index Name & type (eg, "indexName_bin")
    * @param string|int $start - Starting value or exact match if no ending value
    * @param string|int $end - Ending value for range search
-   * @param array $params - Any extra query parameters to pass on the URL
    * @return string URL
    */
-  public static function buildIndexPath(RiakClient $client, RiakBucket $bucket, $index, $start, $end=NULL, array $params=NULL) {
+  public static function buildIndexPath(RiakClient $client, RiakBucket $bucket, $index, $start, $end=NULL) {
     # Build 'http://hostname:port/prefix/bucket'
     $path = array('http:/',$client->host.':'.$client->port,$client->indexPrefix);
 
@@ -1954,22 +1998,6 @@ class RiakUtils {
     
     // faster than repeated string concatenations
     $path = join('/', $path);
-
-    # Add query parameters.
-    if (!is_null($params)) {
-      // Most users will have the http PECL extension
-      if (func_exists('http_build_query')) {
-        $path .= '?' . http_build_query($params, '', '&');
-      } else {
-        // In case they don't have the http PECL extension
-        $s = array();
-        foreach ($params as $key => $value) {
-          $s[] = urlencode($key) . '=' . urlencode($value);
-        }
-
-        $path .= '?' . join('&', $s);
-      }
-    }
 
     return $path;
   }

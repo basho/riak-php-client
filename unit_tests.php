@@ -38,6 +38,7 @@ test("testLinkWalking");
 test("testSearchIntegration");
 
 test("testSecondaryIndexes");
+test("testSecondaryIndexMapReduce");
 
 test("testMetaData");
 
@@ -531,6 +532,94 @@ function testSecondaryIndexes() {
   $results = $bucket->indexSearch("foo", "int", 7);
   test_assert(count($results) == 1);
 
+}
+
+function testSecondaryIndexMapReduce() {
+  $client = new RiakClient(HOST, PORT);
+  $bucket = $client->bucket("index-mapred-test");
+  # Setup
+  $bucket
+    ->newObject("one", array("foo"=>1, "bar"=>"red"))
+    ->addIndex("number", "int", 1)
+    ->addIndex("text", "bin", "apple")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("two", array("foo"=>2, "bar"=>"green"))
+    ->addIndex("number", "int", 2)
+    ->addIndex("text", "bin", "avocado")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("three", array("foo"=>3, "bar"=>"blue"))
+    ->addIndex("number", "int", 3)
+    ->addIndex("text", "bin", "blueberry")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("four", array("foo"=>4, "bar"=>"orange"))
+    ->addIndex("number", "int", 4)
+    ->addIndex("text", "bin", "citrus")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  $bucket
+    ->newObject("five", array("foo"=>5, "bar"=>"yellow"))
+    ->addIndex("number", "int", 5)
+    ->addIndex("text", "bin", "banana")
+    ->addAutoIndex("foo", "int")
+    ->addAutoIndex("bar", "bin")
+    ->store();
+  
+  $bucket
+    ->newObject("six", array("foo"=>6, "bar"=>"purple"))
+    ->addIndex("number", "int", 6)
+    ->addIndex("number", "int", 7)
+    ->addIndex("number", "int", 8)
+    ->setIndex("text", "bin", array("x","y","z"))
+    ->store();
+  
+  # Test
+  $result = $client
+    ->add($bucket->getName())
+    ->indexSearch('number', 'int', 6)
+    ->run();
+  test_assert(count($result) == 1);
+  
+  $result = $client
+    ->add($bucket->getName())
+    ->indexSearch('number', 'int', 9)
+    ->run();
+  test_assert(count($result) == 0);
+  
+  $result = $client
+    ->add($bucket->getName())
+    ->indexSearch('text', 'bin', 'banana')
+    ->run();
+  test_assert(count($result) == 1);
+  
+  # Test ranges
+  $result = $client
+    ->add($bucket->getName())
+    ->indexSearch('number', 'int', 1, 4)
+    ->run();
+  test_assert(count($result) == 4);
+  
+  $result = $client
+    ->add($bucket->getName())
+    ->indexSearch('number', 'int', 6, 8)
+    ->run();
+  # I'm not convinced this result is correct, a range
+  # search matching multiple values of the same index
+  # on the same document should return that document
+  # multiple times?  Nonetheless it's consistent with
+  # direct index search against the bucket, and the 
+  # problem would come out of the way Riak does index 
+  # searches on the server.
+  test_assert(count($result) == 3);
 }
 
 function testMetaData() {
