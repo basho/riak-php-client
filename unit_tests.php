@@ -8,6 +8,7 @@ define('HOST', 'localhost');
 define('PORT', 8098);
 define('VERBOSE', true);
 
+date_default_timezone_set("UTC");
 
 print("Starting Unit Tests\n---\n");
 
