@@ -57,19 +57,15 @@ function testStoreAndGet() {
   $bucket = $client->bucket('bucket');
 
   $rand = rand();
-  $now = new DateTime();
   $obj = $bucket->newObject('foo', $rand);
   $obj->store();
 
   $obj = $bucket->get('foo');
-  $changed = $obj->getLastModified();
-  $diff = $changed->diff($now);
 
   test_assert($obj->exists());
   test_assert($obj->getBucket()->getName() == 'bucket');
   test_assert($obj->getKey() == 'foo');
   test_assert($obj->getData() == $rand);
-  test_assert($diff->format('%s') == '0'); /* difference should be less than a second */
 }
 
 function testStoreAndGetWithoutKey() {
