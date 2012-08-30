@@ -1,9 +1,12 @@
-language: php
-before_script: sudo search-cmd install searchbucket
-script: make test
+language: "php"
+
+script: "php -q unit_tests.php"
+
 notifications:
-  webhooks: http://basho-engbot.herokuapp.com/travis?key=8d594c660ec46f616e37e24fd941c0ea1fc67963
-  email: eng@basho.com
+  irc: "irc.freenode.org#riak-php-client"
+  email: "marco.debo.debortoli@gmail.com"
+
 php:
-  - 5.3
-  - 5.4
+  - "5.2"
+  - "5.3"
+  - "5.4"
