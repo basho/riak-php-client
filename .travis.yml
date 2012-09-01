@@ -1,12 +1,11 @@
 language: "php"
 
-script: "php -q unit_tests.php"
+script: "php -q tests/Integration/test.php"
 
 notifications:
   irc: "irc.freenode.org#riak-php-client"
   email: "marco.debo.debortoli@gmail.com"
 
 php:
-  - "5.2"
   - "5.3"
   - "5.4"
