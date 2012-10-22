@@ -12,7 +12,7 @@ API documentation for this library can be found at<br/>
 (See **Documentation Maintenance** at the bottom of the README for instructions on updating the docs.)
 
 Documentation for use of Riak clients in general can be found at<br/>
-<https://wiki.basho.com/display/RIAK/Client+Libraries>
+<http://docs.basho.com/riak/1.2.0/references/Client-Libraries/>
 
 ## Repositories ##
 
@@ -20,7 +20,7 @@ The official source code for this client can be retrieved from<br/>
 <http://github.com/basho/riak-php-client/>
 
 Riak can be obtained pre-built from<br/>
-<http://downloads.basho.com/riak/>
+<http://basho.com/resources/downloads/>
 
 or as source from<br/>
 <http://github.com/basho/riak/>
