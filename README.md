@@ -1,4 +1,4 @@
-<img src="http://www.basho.com/images/riaklogo.png">
+<img src="http://docs.basho.com/shared/1.2.1/images/riak-logo.png">
 
 # Riak PHP Client #
 This is the official PHP client for Riak.
@@ -12,7 +12,7 @@ API documentation for this library can be found at<br/>
 (See **Documentation Maintenance** at the bottom of the README for instructions on updating the docs.)
 
 Documentation for use of Riak clients in general can be found at<br/>
-<http://docs.basho.com/riak/1.2.0/references/Client-Libraries/>
+<http://docs.basho.com/riak/latest/references/Client-Libraries/>
 
 ## Repositories ##
 
