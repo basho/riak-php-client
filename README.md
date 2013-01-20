@@ -31,6 +31,14 @@ Clone this repository to fetch the latest version of this client
     git clone git://github.com/basho/riak-php-client.git
 
 ## Quick start ##
+PHP should be configured with curl enabled
+
+    ./configure --with-curl
+
+Confirm your PHP installation has curl enabled
+
+    php -m | grep curl
+
 This quick example assumes that you have a local riak cluster running on port 8098
 
     require_once('riak-php-client/riak.php');
