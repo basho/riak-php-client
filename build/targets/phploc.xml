@@ -1,0 +1,54 @@
+<project>
+	<!-- Comma separated list of folders to include -->
+	<property name="phploc.include" value="${basedir}/src" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phploc.exclude" value="" />
+
+	<!-- ================================= target: phploc-clean ================================== -->
+	<target name="phploc-clean" depends=""
+		description="Remove any previously generated report">
+		<delete dir="${target.dir}/phploc" />
+	</target>
+
+	<!-- ================================= target: phploc-init ================================== -->
+	<target name="phploc-init" depends=""
+		description="Create required folders for report">
+		<mkdir dir="${target.dir}/phploc" />
+	</target>
+
+	<!-- ================================= target: phploc ================================= -->
+	<target name="phploc" depends="phploc-clean, phploc-init" description="Generate phploc.xml and phploc.csv">
+		<if>
+			<equals arg1="${phploc.exclude}" arg2="" />
+			<then>
+				<exec executable="phploc">
+					<arg line="--log-xml ${target.dir}/phploc/phploc.xml" />
+					<arg line="${phploc.include}" />
+				</exec>
+			</then>
+			<else>
+				<exec executable="phploc">
+					<arg line="--log-xml ${target.dir}/phploc/phploc.xml" />
+					<arg line="--exclude ${phploc.exclude}" />
+					<arg line="${phploc.include}" />
+				</exec>
+			</else>
+		</if>
+		<if>
+			<equals arg1="${phploc.exclude}" arg2="" />
+			<then>
+				<exec executable="phploc">
+					<arg line="--log-csv ${target.dir}/phploc/phploc.csv" />
+					<arg line="${phploc.include}" />
+				</exec>
+			</then>
+			<else>
+				<exec executable="phploc">
+					<arg line="--log-csv ${target.dir}/phploc/phploc.csv" />
+					<arg line="--exclude ${phploc.exclude}" />
+					<arg line="${phploc.include}" />
+				</exec>
+			</else>
+		</if>
+	</target>
+</project>

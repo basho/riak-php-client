@@ -1,0 +1,77 @@
+<project>
+	<!-- Comma separated list of folders to include -->
+	<property name="phpdoc.include.dir" value="${basedir}/src" />
+	<!-- Comma separated list of files to include -->
+	<property name="phpdoc.include.file" value="" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phpdoc.exclude" value="" />
+	<!-- Default package name -->
+	<property name="phpdoc.defaultpackagename" value="Riak" />
+
+
+	<target name="phpdoc-clean" depends=""
+		description="Remove any previously generated report">
+		<delete dir="${target.dir}/phpdoc" />
+	</target>
+
+	<target name="phpdoc-init" depends=""
+		description="Create required folders for report">
+		<mkdir dir="${target.dir}/phpdoc" />
+	</target>
+
+	<target name="phpdoc" depends="phpdoc-clean, phpdoc-init" description="Phpdoc utility">
+		<if>
+			<equals arg1="${phpdoc.exclude}" arg2="" />
+			<then>
+				<if>
+					<equals arg1="${phpdoc.include.file}" arg2="" />
+					<then>
+						<exec dir="${basedir}" executable="phpdoc" failonerror="true">
+							<arg line="--directory ${phpdoc.include.dir}" />
+							<arg line="--sourcecode" />
+							<arg line="--defaultpackagename ${phpdoc.defaultpackagename}" />
+							<arg line="--title 'Phpdoc for ${phpdoc.defaultpackagename}'" />
+							<arg line="--target ${target.dir}/phpdoc" />
+						</exec>
+					</then>
+					<else>
+						<exec dir="${basedir}" executable="phpdoc" failonerror="true">
+							<arg line="--directory ${phpdoc.include.dir}" />
+							<arg line="--sourcecode" />
+							<arg line="--title 'Phpdoc for ${phpdoc.defaultpackagename}'" />
+							<arg line="--defaultpackagename ${phpdoc.defaultpackagename}" />
+							<arg line="--target ${target.dir}/phpdoc" />
+							<arg line="--filename ${phpdoc.include.file}" />
+						</exec>
+					</else>
+				</if>
+			</then>
+			<else>
+				<if>
+					<equals arg1="${phpdoc.include.file}" arg2="" />
+					<then>
+						<exec dir="${basedir}" executable="phpdoc" failonerror="true">
+							<arg line="--directory ${phpdoc.include.dir}" />
+							<arg line="--sourcecode" />
+							<arg line="--title 'Phpdoc for ${phpdoc.defaultpackagename}'" />
+							<arg line="--defaultpackagename ${phpdoc.defaultpackagename}" />
+							<arg line="--target ${target.dir}/phpdoc" />
+							<arg line="--ignore ${phpdoc.exclude}" />
+						</exec>
+					</then>
+					<else>
+						<exec dir="${basedir}" executable="phpdoc" failonerror="true">
+							<arg line="--directory ${phpdoc.include.dir}" />
+							<arg line="--sourcecode" />
+							<arg line="--title 'Phpdoc for ${phpdoc.defaultpackagename}'" />
+							<arg line="--defaultpackagename ${phpdoc.defaultpackagename}" />
+							<arg line="--target ${target.dir}/phpdoc" />
+							<arg line="--filename ${phpdoc.include.file}" />
+							<arg line="--ignore ${phpdoc.exclude}" />
+						</exec>
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+</project>

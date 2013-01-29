@@ -1,0 +1,72 @@
+<project>
+	<!-- Comma separated list of folders to include -->
+	<property name="phpmd.include" value="${basedir}/src" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phpmd.exclude" value="" />
+	<!-- Path to rules file -->
+	<property name="phpmd.rules" value="${basedir}/build/rules/pmd.xml" />
+	<!-- Should we fail the build if pmd violations are detected? -->
+	<property name="phpmd.failonerror" value="false" />
+	
+	<!-- ================================= target: phpmd-clean ================================== -->
+	<target name="phpmd-clean" depends="" description="Remove any previously generated report">
+		<delete dir="${target.dir}/phpmd" />
+	</target>
+	
+     <!-- ================================= target: phpmd-init ================================== -->
+	<target name="phpmd-init" depends="" description="Create required folders for report">
+		<mkdir dir="${target.dir}/phpmd" />
+	</target>
+	
+	<!-- ================================= target: phpmd ================================= -->
+	<target name="phpmd" depends="phpmd-clean, phpmd-init" description="Php mess detector">
+		<if>
+			<equals arg1="${phpmd.exclude}" arg2="" />
+			<then>
+				<exec executable="phpmd" dir="${basedir}">
+					<arg line="${phpmd.include} html ${phpmd.rules}" />
+					<arg line="--reportfile ${target.dir}/phpmd/pmd.html" />
+					<arg line="--suffixes php" />
+				</exec>
+				<exec executable="phpmd" dir="${basedir}">
+					<arg line="${phpmd.include} xml ${phpmd.rules}" />
+					<arg line="--reportfile ${target.dir}/phpmd/pmd.xml" />
+					<arg line="--suffixes php" />
+				</exec>
+			</then>
+			<else>
+				<exec executable="phpmd" dir="${basedir}">
+					<arg line="${phpmd.include} html ${phpmd.rules}" />
+					<arg line="--reportfile ${target.dir}/phpmd/pmd.html" />
+					<arg line="--suffixes php" />
+					<arg line="--exclude ${phpmd.exclude}" />
+				</exec>
+				<exec executable="phpmd" dir="${basedir}">
+					<arg line="${phpmd.include} xml ${phpmd.rules}" />
+					<arg line="--reportfile ${target.dir}/phpmd/pmd.xml" />
+					<arg line="--suffixes php" />
+					<arg line="--exclude ${phpmd.exclude}" />
+				</exec>
+			</else>
+		</if>
+		<exec executable="grep" outputproperty="phpmd.result">
+			<arg line="--max-count=1" />
+			<arg line="'file'" />
+			<arg line="${target.dir}/phpmd/pmd.xml" />
+		</exec>
+		<if>
+			<equals arg1="${phpmd.result}" arg2="" />
+			<then>
+				<echo>PHPMD reported no violations</echo>
+			</then>
+			<else>
+				<if>
+					<equals arg1="${phpmd.failonerror}" arg2="true" />
+					<then>
+						<fail message="PHPMD reported violations" />
+					</then>
+				</if>
+			</else>
+		</if>
+	</target>
+</project>

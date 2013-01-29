@@ -1,0 +1,38 @@
+<project>
+	<!-- Comma separated list of folders to include -->
+	<property name="phpdcd.include" value="${basedir}/src" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phpdcd.exclude" value="" />
+
+	<!-- ================================= target: phploc-clean ================================== -->
+	<target name="phpdcd-clean" depends=""
+		description="Remove any previously generated report">
+		<delete dir="${target.dir}/phpdcd" />
+	</target>
+
+	<!-- ================================= target: phploc-init ================================== -->
+	<target name="phpdcd-init" depends=""
+		description="Create required folders for report">
+		<mkdir dir="${target.dir}/phpdcd" />
+	</target>
+
+	<!-- ================================= target: phploc ================================= -->
+	<target name="phpdcd" depends="phpdcd-clean, phpdcd-init" description="Check for dead code">
+		<if>
+			<equals arg1="${phpdcd.exclude}" arg2="" />
+			<then>
+				<exec executable="phpdcd">
+					<arg line="--recursive" />
+					<arg line="${phpdcd.include}" />
+				</exec>
+			</then>
+			<else>
+				<exec executable="phpdcd">
+					<arg line="--recursive" />
+					<arg line="--exclude ${phpdcd.exclude}" />
+					<arg line="${phpdcd.include}" />
+				</exec>
+			</else>
+		</if>
+	</target>
+</project>

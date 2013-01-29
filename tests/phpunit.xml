@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="bootstrap.php" backupGlobals="false"
+	backupStaticAttributes="true" colors="true" convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true" convertWarningsToExceptions="true"
+	processIsolation="false" stopOnFailure="false" syntaxCheck="true">
+
+	<testsuites>
+		<testsuite name="Php-Riak-client test suite">
+			<directory>./</directory>
+		</testsuite>
+	</testsuites>
+
+	<logging>
+		<log type="coverage-html" target="../build/coverage" title="Riak"
+			charset="UTF-8" yui="true" highlight="true" lowUpperBound="35"
+			highLowerBound="70" />
+		<log type="coverage-xml" target="../build/logs/coverage.xml" />
+		<log type="coverage-clover" target="../build/logs/clover.xml" />
+		<log type="junit" target="../build/logs/junit.xml"
+			logIncompleteSkipped="false" />
+	</logging>
+	<filter>
+		<whitelist>
+			<directory suffix=".php">./</directory>
+			<exclude>
+				<directory suffix=".php">../</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+</phpunit>

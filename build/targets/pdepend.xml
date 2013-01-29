@@ -1,0 +1,41 @@
+<project>
+	<!-- Comma separated list of folders to include -->
+	<property name="phpdepend.include" value="${basedir}/src" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phpdepend.exclude" value="" />
+
+	<!-- ================================= target: pdepend-clean ================================== -->
+	<target name="pdepend-clean" depends=""
+		description="Remove any previously generated report">
+		<delete dir="${target.dir}/pdepend" />
+	</target>
+
+	<!-- ================================= target: pdepend-init ================================== -->
+	<target name="pdepend-init" depends=""
+		description="Create required folders for report">
+		<mkdir dir="${target.dir}/pdepend" />
+	</target>
+	<!-- ================================= target: pdepend =============================== -->
+	<target name="pdepend" depends="pdepend-clean, pdepend-init" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
+		<if>
+			<equals arg1="${phpdepend.exclude}" arg2="" />
+			<then>
+				<exec executable="pdepend">
+					<arg line="--jdepend-xml=${target.dir}/pdepend/jdepend.xml" />
+					<arg line="--jdepend-chart=${target.dir}/pdepend/10-dependencies.svg" />
+					<arg line="--overview-pyramid=${target.dir}/pdepend/11-overview-pyramid.svg" />
+					<arg line="${phpdepend.include}" />
+				</exec>
+			</then>
+			<else>
+				<exec executable="pdepend">
+					<arg line="--jdepend-xml=${target.dir}/pdepend/jdepend.xml" />
+					<arg line="--jdepend-chart=${target.dir}/pdepend/10-dependencies.svg" />
+					<arg line="--overview-pyramid=${target.dir}/pdepend/11-overview-pyramid.svg" />
+					<arg line="--ignore=${phpdepend.exclude}" />
+					<arg line="${phpdepend.include}" />
+				</exec>
+			</else>
+		</if>
+	</target>
+</project>

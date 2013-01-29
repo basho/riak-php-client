@@ -1,0 +1,71 @@
+<project>
+	<!-- Space separated list of folders to include -->
+	<property name="phpcs.include" value="${basedir}/src" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phpcs.exclude" value="" />
+	<!-- Coding standard to use -->
+	<property name="phpcs.standard" value="${basedir}/build/rules/codingstandard/PSR" />
+	<!-- Report schema to use -->
+	<property name="phpcs.report" value="${basedir}/build/rules/checkstylereport/" />
+	<!-- Should we fail the build if coding standart violations are detected? -->
+	<property name="phpcs.failonerror" value="false" />
+	
+     <!-- ================================= target: phpcs-clean ================================== -->
+	<target name="phpcs-clean" depends="" description="Remove any previously generated report">
+		<delete dir="${target.dir}/phpcs" />
+	</target>
+	
+     <!-- ================================= target: phpcs-init ================================== -->
+	<target name="phpcs-init" depends="" description="Create required folders for report">
+		<mkdir dir="${target.dir}/phpcs" />
+	</target>
+     
+    <!-- ================================= target: phpcs ================================== -->
+	<target name="phpcs" depends="phpcs-clean, phpcs-init" description="Php codesniffer utility">
+		<if>
+			<equals arg1="${phpcs.exclude}" arg2="" />
+			<then>
+				<exec dir="${basedir}" executable="phpcs" output="/${target.dir}/phpcs/checkstyle.xml">
+					<arg line="--report=checkstyle" />
+					<arg line="--standard=${phpcs.standard}" />
+					<arg line="--extensions=php" />
+					<arg line="-n" />
+					<arg line="${phpcs.include}" />
+				</exec>
+			</then>
+			<else>
+				<exec dir="${basedir}" executable="phpcs" output="${target.dir}/phpcs/checkstyle.xml">
+					<arg line="--report=checkstyle" />
+					<arg line="--standard=${phpcs.standard}" />
+					<arg line="--extensions=php" />
+					<arg line="--ignore=${phpcs.exclude}" />
+					<arg line="-n" />
+					<arg line="${phpcs.include}" />
+				</exec>
+			</else>
+		</if>
+		<xslt in="${target.dir}/phpcs/checkstyle.xml" out="${target.dir}/phpcs/checkstyle.html"
+			style="${phpcs.report}/codestyle.xsl">
+		</xslt>
+		<copy file="${phpcs.report}/cs.css" tofile="${target.dir}/phpcs/cs.css" />
+		<exec executable="grep" outputproperty="phpcs.result">
+			<arg line="--max-count=1" />
+			<arg line="'error'" />
+			<arg line="${target.dir}/phpcs/checkstyle.xml" />
+		</exec>
+		<if>
+			<equals arg1="${phpcs.result}" arg2="" />
+			<then>
+				<echo>PHPCS reported no violations</echo>
+			</then>
+			<else>
+				<if>
+					<equals arg1="${phpcs.failonerror}" arg2="true" />
+					<then>
+						<fail message="PHPCS reported violations" />
+					</then>
+				</if>
+			</else>
+		</if>
+	</target>
+</project>

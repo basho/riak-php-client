@@ -1,0 +1,16 @@
+<project>
+	<path id="checkphp.fileset">
+		<fileset dir="${basedir}/src">
+			<include name="**/*.php" />
+		</fileset>
+	</path>
+
+	<!-- ================================= target: checkphp ============================== -->
+	<target name="phplint" description="Check php syntax">
+		<apply executable="php" failonerror="true">
+			<arg value="-l" />
+			<path refid="checkphp.fileset" />
+		</apply>
+	</target>
+</project>
+

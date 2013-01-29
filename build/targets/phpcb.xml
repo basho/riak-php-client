@@ -1,0 +1,53 @@
+<project>
+	<!-- Comma separated list of folders to include -->
+	<property name="phpcb.include" value="${basedir}/src" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phpcb.exclude" value="" />
+
+	<!-- ================================= target: phploc-clean ================================== -->
+	<target name="phpcb-clean" depends=""
+		description="Remove any previously generated report">
+		<delete dir="${target.dir}/phpcb" />
+	</target>
+
+	<!-- ================================= target: phploc-init ================================== -->
+	<target name="phpcb-init" depends=""
+		description="Create required folders for report">
+		<mkdir dir="${target.dir}/phpcb" />
+		<mkdir dir="${target.dir}/combined" />
+	</target>
+
+	<!-- ================================= target: phpcodebrowser =============================== -->
+	<target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser" depends="phpcb-clean,phpcb-init,phplint,pdepend,phpcpd,phpcs,phploc,phpmd,phpunit">
+	<copy file="${target.dir}/pdepend/jdepend.xml" tofile="${target.dir}/combined/jdepend.xml"/>
+	<copy file="${target.dir}/phpcpd/pmd-cpd.xml" tofile="${target.dir}/combined/pmd-cpd.xml"/>
+	<copy file="${target.dir}/phpcs/checkstyle.xml" tofile="${target.dir}/combined/checkstyle.xml"/>
+	<copy file="${target.dir}/phploc/phploc.xml" tofile="${target.dir}/combined/phploc.xml"/>
+	<copy file="${target.dir}/phpmd/pmd.xml" tofile="${target.dir}/combined/pmd.xml"/>
+	<copy file="${target.dir}/phpunit/junit.xml" tofile="${target.dir}/phpunit/junit.xml"/>
+		<if>
+			<equals arg1="${phpcb.exclude}" arg2="" />
+			<then>
+				<exec executable="phpcb" dir="${basedir}/edu">
+					<arg
+						line="
+			--source ${phpcb.include}
+			--log=${target.dir}/combined
+			--output ${target.dir}/phpcb"
+			 />
+				</exec>
+			</then>
+			<else>
+				<exec executable="phpcb" dir="${basedir}/edu">
+					<arg
+						line="
+			--source ${phpcb.include}
+			--log=${target.dir}/combined
+			--exclude ${phpcb.exclude}
+			--output ${target.dir}/phpcb" />
+				</exec>
+			</else>
+		</if>
+		<delete dir="${target.dir}/combined" />
+	</target>
+</project>

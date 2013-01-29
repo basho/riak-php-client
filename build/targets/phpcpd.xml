@@ -1,0 +1,42 @@
+<project>
+	<!-- You should probably set you memory_limit to 1024M in php.ini -->
+	<!-- Comma separated list of folders to include -->
+	<property name="phpcpd.include" value="${basedir}/src" />
+	<!-- Comma separated list of files to exclude -->
+	<property name="phpcpd.exclude" value="" />
+	<!-- Should we fail the build if copy past violations are detected? -->
+	<property name="phpcpd.failonerror" value="false" />
+
+	<!-- ================================= target: phploc-clean ================================== -->
+	<target name="phpcpd-clean" depends=""
+		description="Remove any previously generated report">
+		<delete dir="${target.dir}/phpcpd" />
+	</target>
+
+	<!-- ================================= target: phploc-init ================================== -->
+	<target name="phpcpd-init" depends=""
+		description="Create required folders for report">
+		<mkdir dir="${target.dir}/phpcpd" />
+	</target>
+
+	<!-- ================================= target: phpcpd ================================ -->
+	<target name="phpcpd" depends="phpcpd-clean, phpcpd-init"
+		description="Php copy-paste detection">
+		<if>
+			<equals arg1="${phpcpd.exclude}" arg2="" />
+			<then>
+				<exec executable="phpcpd" failonerror="${phpcpd.failonerror}">
+					<arg line="--log-pmd ${target.dir}/phpcpd/pmd-cpd.xml" />
+					<arg line="${phpcpd.include}" />
+				</exec>
+			</then>
+			<else>
+				<exec executable="phpcpd" failonerror="${phpcpd.failonerror}">
+					<arg line="--log-pmd ${target.dir}/phpcpd/pmd-cpd.xml" />
+					<arg line="--exclude ${phpcpd.exclude}" />
+					<arg line="${phpcpd.include}" />
+				</exec>
+			</else>
+		</if>
+	</target>
+</project>
