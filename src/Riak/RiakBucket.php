@@ -14,13 +14,27 @@ class RiakBucket
 	/** @var string */
 	private $name;
 	
-	/** @var integer|null */
+	/** 
+	 * How many replicas need to agree when retrieving an existing object 
+	 * before the write.
+	 * 
+	 * @var integer|null
+	 */
 	private $r;
 	
-	/** @var integer|null */
+	/** 
+	 * How many replicas to write to before returning a successful response
+	 * 
+	 * @var integer|null
+	 */
 	private $w;
 	
-	/** @var integer|null */
+	/** 
+	 * How many replicas to commit to durable storage before returning a 
+	 * successful response
+	 * 
+	 * @var integer|null
+	 */
 	private $dw;
 	
 	/**
@@ -37,7 +51,7 @@ class RiakBucket
         $this->w = null;
         $this->dw = null;
     }
-
+    
     /**
      * Get the bucket name.
      * 
@@ -171,15 +185,15 @@ class RiakBucket
      * 
      * @param  string     $key          Name of the key.
      * @param  object     $data         The data to store.
-     * @param  string     $content_type The content type of the object. 
+     * @param  string     $contentType  The content type of the object. 
      *                                  (default 'application/json')
      * @return RiakObject
      */
-    public function newBinary($key, $data, $content_type = 'application/json')
+    public function newBinary($key, $data, $contentType = 'application/json')
     {
         $obj = new RiakObject($this->client, $this, $key);
         $obj->setData($data);
-        $obj->setContentType($content_type);
+        $obj->setContentType($contentType);
         $obj->jsonize = false;
 
         return $obj;

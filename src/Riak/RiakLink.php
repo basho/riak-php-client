@@ -79,7 +79,7 @@ class RiakLink
      */
     public function setBucket($name)
     {
-        $this->bucket = $bucket;
+        $this->bucket = $name;
 
         return $this;
     }
@@ -161,10 +161,8 @@ class RiakLink
      */
     public function isEqual($link)
     {
-        $is_equal = ($this->bucket == $link->bucket)
+        return ($this->bucket == $link->bucket)
         && ($this->key == $link->key)
         && ($this->getTag() == $link->getTag());
-
-        return $is_equal;
     }
 }

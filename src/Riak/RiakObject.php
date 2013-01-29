@@ -148,13 +148,14 @@ class RiakObject
 
     /**
      * Set the content type of this object.
-     * @param string $content_type - The new content type.
+     * 
+     * @param string $contentType The new content type.
      * 
      * @return RiakObject
      */
-    public function setContentType($content_type)
+    public function setContentType($contentType)
     {
-        $this->headers['content-type'] = $content_type;
+        $this->headers['content-type'] = $contentType;
 
         return $this;
     }
@@ -738,14 +739,19 @@ class RiakObject
         }
     }
 
+
     /**
      * Given the output of RiakUtils::httpRequest and a list of
      * statuses, populate the object. Only for use by the Riak client
      * library.
      * 
+     * @param array|null $response         Response
+     * @param array      $expectedStatuses Expected statuses
+     * 
      * @return RiakObject
+     * @throws Exception if we don't get an expcted status
      */
-    public function populate($response, $expected_statuses)
+    public function populate($response, array $expectedStatuses)
     {
         $this->clear();
 
@@ -767,8 +773,8 @@ class RiakObject
         }
 
         # Verify that we got one of the expected statuses. Otherwise, throw an exception.
-        if (!in_array($status, $expected_statuses)) {
-            $m = 'Expected status ' . implode(' or ', $expected_statuses)
+        if (!in_array($status, $expectedStatuses)) {
+            $m = 'Expected status ' . implode(' or ', $expectedStatuses)
             . ', received ' . $status . ' with body: ' . $this->data;
             throw new Exception($m);
         }
@@ -821,8 +827,8 @@ class RiakObject
         }
 
         if ($status == 201) {
-            $path_parts = explode('/', $this->headers['location']);
-            $this->key = array_pop($path_parts);
+            $pathParts = explode('/', $this->headers['location']);
+            $this->key = array_pop($pathParts);
         }
 
         # Possibly json_decode...

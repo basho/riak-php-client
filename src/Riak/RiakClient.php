@@ -18,21 +18,35 @@ class RiakClient
 	private $prefix;
 	
 	/** @var string */
-	private $mapred_prefix;
+	private $mapredPrefix;
 	
 	/** @var string */
 	private $indexPrefix;
 	
 	/** @var string */
-	private $clientid;
+	private $clientId;
 	
-	/** @var integer|null */
+	/** 
+	 * How many replicas need to agree when retrieving an existing object 
+	 * before the write.
+	 * 
+	 * @var integer|null
+	 */
 	private $r;
 	
-	/** @var integer|null */
+	/** 
+	 * How many replicas to write to before returning a successful response
+	 * 
+	 * @var integer|null
+	 */
 	private $w;
 	
-	/** @var integer|null */
+	/** 
+	 * How many replicas to commit to durable storage before returning a 
+	 * successful response
+	 * 
+	 * @var integer|null
+	 */
 	private $dw;
 	
     /**
@@ -52,9 +66,9 @@ class RiakClient
         $this->host = $host;
         $this->port = $port;
         $this->prefix = $prefix;
-        $this->mapred_prefix = $mapredPrefix;
+        $this->mapredPrefix = $mapredPrefix;
         $this->indexPrefix = 'buckets';
-        $this->clientid = 'php_' . base_convert(mt_rand(), 10, 36);
+        $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
         $this->r = 2;
         $this->w = 2;
         $this->dw = 2;
@@ -144,20 +158,20 @@ class RiakClient
      */
     public function getClientID()
     {
-        return $this->clientid;
+        return $this->clientId;
     }
 
     /**
      * Set the clientID for this RiakClient. Should not be called
      * unless you know what you are doing.
      * 
-     * @param string $clientID The new clientID.
+     * @param string $clientId The new clientId.
      * 
      * @return RiakClient
      */
-    public function setClientID($clientid)
+    public function setClientID($clientId)
     {
-        $this->clientid = $clientid;
+        $this->clientId = $clientId;
 
         return $this;
     }
@@ -184,9 +198,9 @@ class RiakClient
     {
         $url = RiakUtils::buildRestPath($this);
         $response = RiakUtils::httpRequest('GET', $url . '?buckets=true');
-        $response_obj = json_decode($response[1]);
+        $responseObj = json_decode($response[1]);
         $buckets = array();
-        foreach ($response_obj->buckets as $name) {
+        foreach ($responseObj->buckets as $name) {
             $buckets[] = $this->bucket($name);
         }
 
@@ -218,10 +232,10 @@ class RiakClient
      */
     public function add($params)
     {
-        $mr = new RiakMapReduce($this);
+        $mapReduce = new RiakMapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "add"), $args);
+        return call_user_func_array(array(&$mapReduce, "add"), $args);
     }
 
     /**
@@ -235,10 +249,10 @@ class RiakClient
      */
     public function search($params)
     {
-        $mr = new RiakMapReduce($this);
+        $mapReduce = new RiakMapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "search"), $args);
+        return call_user_func_array(array(&$mapReduce, "search"), $args);
     }
 
     /**
@@ -251,10 +265,10 @@ class RiakClient
      */
     public function link($params)
     {
-        $mr = new RiakMapReduce($this);
+        $mapReduce = new RiakMapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "link"), $args);
+        return call_user_func_array(array(&$mapReduce, "link"), $args);
     }
 
     /**
@@ -267,10 +281,10 @@ class RiakClient
      */
     public function map($params)
     {
-        $mr = new RiakMapReduce($this);
+        $mapReduce = new RiakMapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "map"), $args);
+        return call_user_func_array(array(&$mapReduce, "map"), $args);
     }
 
     /**
@@ -283,9 +297,9 @@ class RiakClient
      */
     public function reduce($params)
     {
-        $mr = new RiakMapReduce($this);
+        $mapReduce = new RiakMapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "reduce"), $args);
+        return call_user_func_array(array(&$mapReduce, "reduce"), $args);
     }
 }

@@ -17,10 +17,10 @@ class RiakMapReduce
 	private $inputs;
 	
 	/** @var string|null */
-	private $input_mode;
+	private $inputMode;
 	
 	/** @var array */
-	private $key_filters;
+	private $keyFilters;
 	
 	/** @var array */
 	private $index;
@@ -37,8 +37,8 @@ class RiakMapReduce
         $this->client = $client;
         $this->phases = array();
         $this->inputs = array();
-        $this->input_mode = null;
-        $this->key_filters = array();
+        $this->inputMode = null;
+        $this->keyFilters = array();
         $this->index = array();
     }
 
@@ -109,7 +109,7 @@ class RiakMapReduce
      */
     private function addBucketKeyData($bucket, $key, $data)
     {
-        if ($this->input_mode == "bucket") {
+        if ($this->inputMode == "bucket") {
             throw new Exception("Already added a bucket, can't add an object.");
         }
         $this->inputs[] = array($bucket, $key, $data);
@@ -124,7 +124,7 @@ class RiakMapReduce
      */
     private function addBucket($bucket)
     {
-        $this->input_mode = "bucket";
+        $this->inputMode = "bucket";
         $this->inputs = $bucket;
 
         return $this;
@@ -275,7 +275,7 @@ class RiakMapReduce
     {
         $filters = func_get_args();
         array_shift($filters);
-        if ($this->input_mode != 'bucket') {
+        if ($this->inputMode != 'bucket') {
             throw new Exception("Key filters can only be used in bucket mode");
         }
         if (count($this->index)) {
@@ -284,11 +284,11 @@ class RiakMapReduce
             );
         }
 
-        if (count($this->key_filters) > 0) {
-            $this->key_filters = array(
-                    array($operator, $this->key_filters, $filters));
+        if (count($this->keyFilters) > 0) {
+            $this->keyFilters = array(
+                    array($operator, $this->keyFilters, $filters));
         } else {
-            $this->key_filters = $filters;
+            $this->keyFilters = $filters;
         }
 
         return $this;
@@ -313,12 +313,12 @@ class RiakMapReduce
     		$end = null)
     {
         // Check prerequisites
-        if (count($this->key_filters)) {
+        if (count($this->keyFilters)) {
             throw new Exception(
             "You cannot use index search and key filters on the same operation"
             );
         }
-        if ($this->input_mode != 'bucket') {
+        if ($this->inputMode != 'bucket') {
             throw new Exception("Key filters can only be used in bucket mode");
         }
 
@@ -345,41 +345,41 @@ class RiakMapReduce
      */
     public function run($timeout = null)
     {
-        $num_phases = count($this->phases);
+        $numPhases = count($this->phases);
 
         $linkResultsFlag = false;
 
         # If there are no phases, then just echo the inputs back to the user.
-        if ($num_phases == 0) {
+        if ($numPhases == 0) {
             $this->reduce(array("riak_kv_mapreduce", "reduce_identity"));
-            $num_phases = 1;
+            $numPhases = 1;
             $linkResultsFlag = true;
         }
 
         # Convert all phases to associative arrays. Also,
         # if none of the phases are accumulating, then set the last one to
         # accumulate.
-        $keep_flag = false;
+        $keepFlag = false;
         $query = array();
-        for ($i = 0; $i < $num_phases; $i++) {
+        for ($i = 0; $i < $numPhases; $i++) {
             $phase = $this->phases[$i];
-            if ($i == ($num_phases - 1) && !$keep_flag) {
+            if ($i == ($numPhases - 1) && !$keepFlag) {
                 $phase->keep = true;
             }
             if ($phase->keep) {
-                $keep_flag = true;
+                $keepFlag = true;
             }
             $query[] = $phase->toArray();
         }
 
         # Add key filters if applicable
-        if ($this->input_mode == 'bucket' && count($this->key_filters) > 0) {
+        if ($this->inputMode == 'bucket' && count($this->keyFilters) > 0) {
             $this->inputs = array('bucket' => $this->inputs,
-                    'key_filters' => $this->key_filters);
+                    'keyFilters' => $this->keyFilters);
         }
 
         # Add index search if applicable
-        if ($this->input_mode == 'bucket' && count($this->index) > 0) {
+        if ($this->inputMode == 'bucket' && count($this->index) > 0) {
             $this->inputs = array_merge(array('bucket' => $this->inputs),
                     $this->index);
         }

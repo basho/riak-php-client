@@ -148,15 +148,20 @@ class RiakUtils
 	 * and return an array of arity 2 containing an associative array of
 	 * response headers and the response body.
 	 * 
+	 * @param string $method         Http method
+	 * @param string $url            Url
+	 * @param array  $requestHeaders Request headers
+	 * @param string $obj            Object
+	 * 
 	 * @return array
 	 */
 	public static function httpRequest($method, $url,
-			$request_headers = array(), $obj = '') 
+			$requestHeaders = array(), $obj = '') 
 	{
 		# Set up curl
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $requestHeaders);
 
 		if ($method == 'GET') {
 			curl_setopt($ch, CURLOPT_HTTPGET, 1);
@@ -171,35 +176,35 @@ class RiakUtils
 		}
 
 		# Capture the response headers...
-		$response_headers_io = new RiakStringIO();
+		$responseHeadersIO = new RiakStringIO();
 		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
-				array(&$response_headers_io, 'write'));
+				array(&$responseHeadersIO, 'write'));
 
 		# Capture the response body...
-		$response_body_io = new RiakStringIO();
+		$responseBodyIO = new RiakStringIO();
 		curl_setopt($ch, CURLOPT_WRITEFUNCTION,
-				array(&$response_body_io, 'write'));
+				array(&$responseBodyIO, 'write'));
 
 		try {
 			# Run the request.
 			curl_exec($ch);
-			$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 			curl_close($ch);
 
 			# Get the headers...
-			$parsed_headers = RiakUtils::parseHttpHeaders(
-					$response_headers_io->contents());
-			$response_headers = array("http_code" => $http_code);
-			foreach ($parsed_headers as $key => $value) {
-				$response_headers[strtolower($key)] = $value;
+			$parsedHeaders = RiakUtils::parseHttpHeaders(
+					$responseHeadersIO->contents());
+			$responseHeaders = array("http_code" => $httpCode);
+			foreach ($parsedHeaders as $key => $value) {
+				$responseHeaders[strtolower($key)] = $value;
 			}
 
 			# Get the body...
-			$response_body = $response_body_io->contents();
+			$responseBody = $responseBodyIO->contents();
 
 			# Return a new RiakResponse object.
 
-			return array($response_headers, $response_body);
+			return array($responseHeaders, $responseBody);
 		} catch (Exception $e) {
 			curl_close($ch);
 			error_log('Error: ' . $e->getMessage());
