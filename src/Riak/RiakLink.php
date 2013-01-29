@@ -7,18 +7,18 @@
  */
 class RiakLink
 {
-	/** @var string */
-	private $bucket;
-	
-	/** @var string */
-	private $key;
-	
-	/** @var string|null */
-	private $tag;
-	
-	/** @var RiakClient|null */
-	private $client;
-	
+    /** @var string */
+    private $bucket;
+    
+    /** @var string */
+    private $key;
+    
+    /** @var string|null */
+    private $tag;
+    
+    /** @var RiakClient|null */
+    private $client;
+    
     /**
      * Construct a RiakLink object.
      * 

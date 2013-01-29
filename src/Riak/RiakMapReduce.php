@@ -8,23 +8,23 @@
 class RiakMapReduce
 {
     /** @var RiakClient */
-	private $client;
-	
-	/** @var array */
-	private $phases;
-	
-	/** @var array */
-	private $inputs;
-	
-	/** @var string|null */
-	private $inputMode;
-	
-	/** @var array */
-	private $keyFilters;
-	
-	/** @var array */
-	private $index;
-	
+    private $client;
+    
+    /** @var array */
+    private $phases;
+    
+    /** @var array */
+    private $inputs;
+    
+    /** @var string|null */
+    private $inputMode;
+    
+    /** @var array */
+    private $keyFilters;
+    
+    /** @var array */
+    private $index;
+    
     /**
      * Construct a Map/Reduce object.
      * 
@@ -78,18 +78,18 @@ class RiakMapReduce
      */
     public function __call($name, $arguments)
     {
-    	if ($name == 'key_filter') {
-    		call_user_func_array(array($this, "keyFilter"), $arguments);
-    	}
-    	if ($name == 'key_filter_and') {
-    		call_user_func_array(array($this, "keyFilterAnd"), $arguments);
-    	}
-    	if ($name == 'key_filter_or') {
-    		call_user_func_array(array($this, "keyFilterOr"), $arguments);
-    	}
-    	if ($name == 'key_filter_operator') {
-    		call_user_func_array(array($this, "keyFilterOperator"), $arguments);
-    	}
+        if ($name == 'key_filter') {
+            call_user_func_array(array($this, "keyFilter"), $arguments);
+        }
+        if ($name == 'key_filter_and') {
+            call_user_func_array(array($this, "keyFilterAnd"), $arguments);
+        }
+        if ($name == 'key_filter_or') {
+            call_user_func_array(array($this, "keyFilterOr"), $arguments);
+        }
+        if ($name == 'key_filter_operator') {
+            call_user_func_array(array($this, "keyFilterOperator"), $arguments);
+        }
     }
 
     /**
@@ -310,7 +310,7 @@ class RiakMapReduce
      * @return RiakMapReduce
      */
     public function indexSearch($indexName, $indexType, $startOrExact, 
-    		$end = null)
+            $end = null)
     {
         // Check prerequisites
         if (count($this->keyFilters)) {

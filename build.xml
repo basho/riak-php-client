@@ -1,20 +1,21 @@
 <project default="help">
-  <import file="${basedir}/build/common.xml" />
-  <import file="${targets.dir}/pdepend.xml" />
-  <import file="${targets.dir}/phpcb.xml" />
-  <import file="${targets.dir}/phpcpd.xml" />
-  <import file="${targets.dir}/phpcs.xml" />
-  <import file="${targets.dir}/phpdcd.xml" />
-  <import file="${targets.dir}/phplint.xml" />
-  <import file="${targets.dir}/phploc.xml" />
-  <import file="${targets.dir}/phpmd.xml" />
-  <import file="${targets.dir}/phpunit.xml" />
-  <import file="${targets.dir}/phpdoc.xml" />
+	<import file="${basedir}/build/common.xml" />
+	<import file="${targets.dir}/pdepend.xml" />
+	<import file="${targets.dir}/phpcb.xml" />
+	<import file="${targets.dir}/phpcpd.xml" />
+	<import file="${targets.dir}/phpcs.xml" />
+	<import file="${targets.dir}/phpdcd.xml" />
+	<import file="${targets.dir}/phplint.xml" />
+	<import file="${targets.dir}/phploc.xml" />
+	<import file="${targets.dir}/phpmd.xml" />
+	<import file="${targets.dir}/phpunit.xml" />
+	<import file="${targets.dir}/phpdoc.xml" />
+	<import file="${targets.dir}/tabtospace.xml" />
 
-  <target name="all" depends="pdepend,phpcpd,phpcs,phpdcd,phploc,phpmd,phpcb,phpunit,phpdoc" />
-  <target name="travis" depends="phpunit" />
-  <target name="help">
-    <echo>
+	<target name="all" depends="tabtospace,phpcb,phpdcd,phpdoc" />
+	<target name="travis" depends="phpunit" />
+	<target name="help">
+		<echo>
 List of targets:
   Indidividual:
     pdepend
@@ -27,10 +28,10 @@ List of targets:
     phploc
     phpmd
     phpunit
-    build
+    tabtospace
   Combos:
     all
     travis
     </echo>
-  </target>
+	</target>
 </project>

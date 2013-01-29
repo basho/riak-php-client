@@ -1,0 +1,24 @@
+<project>
+    <!-- Comma separated list of folders to include -->
+    <property name="tab-width" value="4" />
+    <property name="originals" value="${basedir}/src" />
+
+    <!-- ================================= target: tabtospace =============================== -->
+    <target name="tabtospace" depends=""
+        description="Converts tabs to spaces for files in folder">
+        <foreach target="expand" param="the_file">
+            <path>
+                <fileset dir="${originals}">
+                    <include name="**/*.php" />
+                </fileset>
+            </path>
+        </foreach>
+    </target>
+    <target name="expand" description="Converts tabs to spaces">
+        <exec executable="bash">
+            <arg line="-c 'expand -t 4 ${the_file} > output.php'" />
+        </exec>
+        <move file="output.php" tofile="${the_file}" />
+        <delete file="output.php" />
+    </target>
+</project>

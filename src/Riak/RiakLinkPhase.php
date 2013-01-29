@@ -7,15 +7,15 @@
  */
 class RiakLinkPhase
 {
-	/** @var string */
-	private $bucket;
-	
-	/** @var string|null */
-	private $tag;
+    /** @var string */
+    private $bucket;
+    
+    /** @var string|null */
+    private $tag;
 
-	/** @var boolean */
-	private $keep;
-	
+    /** @var boolean */
+    private $keep;
+    
     /**
      * Construct a RiakLinkPhase object.
      * 
@@ -43,9 +43,9 @@ class RiakLinkPhase
      */
     public function __call($name, $arguments)
     {
-    	if ($name == 'to_array') {
-    		self::toArray();
-    	}
+        if ($name == 'to_array') {
+            self::toArray();
+        }
     }
 
     /**

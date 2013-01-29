@@ -8,52 +8,52 @@
  */
 class RiakClient
 {
-	/** @var string */
-	private $host;
-	
-	/** @var integer */
-	private $port;
-	
-	/** @var string */
-	private $prefix;
-	
-	/** @var string */
-	private $mapredPrefix;
-	
-	/** @var string */
-	private $indexPrefix;
-	
-	/** @var string */
-	private $clientId;
-	
-	/** 
-	 * How many replicas need to agree when retrieving an existing object 
-	 * before the write.
-	 * 
-	 * @var integer|null
-	 */
-	private $r;
-	
-	/** 
-	 * How many replicas to write to before returning a successful response
-	 * 
-	 * @var integer|null
-	 */
-	private $w;
-	
-	/** 
-	 * How many replicas to commit to durable storage before returning a 
-	 * successful response
-	 * 
-	 * @var integer|null
-	 */
-	private $dw;
-	
+    /** @var string */
+    private $host;
+    
+    /** @var integer */
+    private $port;
+    
+    /** @var string */
+    private $prefix;
+    
+    /** @var string */
+    private $mapredPrefix;
+    
+    /** @var string */
+    private $indexPrefix;
+    
+    /** @var string */
+    private $clientId;
+    
+    /** 
+     * How many replicas need to agree when retrieving an existing object 
+     * before the write.
+     * 
+     * @var integer|null
+     */
+    private $r;
+    
+    /** 
+     * How many replicas to write to before returning a successful response
+     * 
+     * @var integer|null
+     */
+    private $w;
+    
+    /** 
+     * How many replicas to commit to durable storage before returning a 
+     * successful response
+     * 
+     * @var integer|null
+     */
+    private $dw;
+    
     /**
      * Construct a new RiakClient object.
      * 
      * @param string  $host         Hostname or IP address 
-     * 								(default '127.0.0.1')
+     *                              (default '127.0.0.1')
      * @param integer $port         Port number (default 8098)
      * @param string  $prefix       Interface prefix (default "riak")
      * @param string  $mapredPrefix MapReduce prefix (default "mapred")
@@ -61,7 +61,7 @@ class RiakClient
      * @return void
      */
     public function __construct($host = '127.0.0.1', $port = 8098,
-    		$prefix = 'riak', $mapredPrefix = 'mapred') 
+            $prefix = 'riak', $mapredPrefix = 'mapred') 
     {
         $this->host = $host;
         $this->port = $port;

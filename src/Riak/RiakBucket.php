@@ -8,41 +8,41 @@
  */
 class RiakBucket
 {
-	/** @var RiakClient */
-	private $client;
-	
-	/** @var string */
-	private $name;
-	
-	/** 
-	 * How many replicas need to agree when retrieving an existing object 
-	 * before the write.
-	 * 
-	 * @var integer|null
-	 */
-	private $r;
-	
-	/** 
-	 * How many replicas to write to before returning a successful response
-	 * 
-	 * @var integer|null
-	 */
-	private $w;
-	
-	/** 
-	 * How many replicas to commit to durable storage before returning a 
-	 * successful response
-	 * 
-	 * @var integer|null
-	 */
-	private $dw;
-	
-	/**
-	 * @param RiakClient $client Client
-	 * @param string     $name   Name
-	 * 
-	 * @return void
-	 */
+    /** @var RiakClient */
+    private $client;
+    
+    /** @var string */
+    private $name;
+    
+    /** 
+     * How many replicas need to agree when retrieving an existing object 
+     * before the write.
+     * 
+     * @var integer|null
+     */
+    private $r;
+    
+    /** 
+     * How many replicas to write to before returning a successful response
+     * 
+     * @var integer|null
+     */
+    private $w;
+    
+    /** 
+     * How many replicas to commit to durable storage before returning a 
+     * successful response
+     * 
+     * @var integer|null
+     */
+    private $dw;
+    
+    /**
+     * @param RiakClient $client Client
+     * @param string     $name   Name
+     * 
+     * @return void
+     */
     public function __construct(RiakClient $client, $name)
     {
         $this->client = $client;
@@ -63,10 +63,11 @@ class RiakBucket
     }
 
     /**
-     * Get the R-value for this bucket, if it is set, otherwise return
-     * the R-value for the client.
+     * Get the number of replicas needed to agree when retrieving an existing
+     * object before the write for this bucket, if it is set, otherwise return
+     * the number for the client.
      * 
-     * @param integer $r R-value
+     * @param integer $r Number of replicas need to agree
      * 
      * @return integer
      */
@@ -82,10 +83,11 @@ class RiakBucket
     }
 
     /**
-     * Set the R-value for this bucket. get(...) and getBinary(...)
-     * operations that do not specify an R-value will use this value.
+     * Set the the number replicas needed to agree when retrieving an existing object 
+     * before the write for this bucket. get(...) and getBinary(...)
+     * operations that do not specify an number will use this value.
      * 
-     * @param integer $r The new R-value.
+     * @param integer $r Number of replicas need to agree
      * 
      * @return RiakBucket
      */
@@ -165,8 +167,8 @@ class RiakBucket
     /**
      * Create a new Riak object that will be stored as JSON.
      * 
-     * @param  string     $key  - Name of the key.
-     * @param  object     $data - The data to store. (default null)
+     * @param string $key  Name of the key.
+     * @param object $data The data to store. (default null)
      * 
      * @return RiakObject
      */
@@ -183,10 +185,10 @@ class RiakBucket
     /**
      * Create a new Riak object that will be stored as plain text/binary.
      * 
-     * @param  string     $key          Name of the key.
-     * @param  object     $data         The data to store.
-     * @param  string     $contentType  The content type of the object. 
-     *                                  (default 'application/json')
+     * @param string $key         Name of the key.
+     * @param object $data        The data to store.
+     * @param string $contentType The content type of the object. 
+     *                            (default 'application/json')
      * @return RiakObject
      */
     public function newBinary($key, $data, $contentType = 'application/json')
@@ -202,8 +204,8 @@ class RiakBucket
     /**
      * Retrieve a JSON-encoded object from Riak.
      * 
-     * @param  string  $key Name of the key.
-     * @param  integer $r   R-Value of the request (defaults to bucket's R)
+     * @param string  $key Name of the key.
+     * @param integer $r   R-Value of the request (defaults to bucket's R)
      * 
      * @return RiakObject
      */
@@ -219,8 +221,8 @@ class RiakBucket
     /**
      * Retrieve a binary/string object from Riak.
      * 
-     * @param  string  $key Name of the key.
-     * @param  integer $r   R-Value of the request (defaults to bucket's R)
+     * @param string  $key Name of the key.
+     * @param integer $r   R-Value of the request (defaults to bucket's R)
      * 
      * @return RiakObject
      */
@@ -403,18 +405,18 @@ class RiakBucket
     /**
      * Search a secondary index
      * 
-     * @param  string         $indexName    The name of the index to search
-     * @param  string         $indexType    The type of index ('int' or 'bin')
-     * @param  string|integer $startOrExact
-     * @param  string|integer $end          Optional.
-     * @param  boolean        $dedupe       Optional. Whether to eliminate 
-     *                                      duplicate entries if any of 
-     *                                      RiakLinks
+     * @param string         $indexName    The name of the index to search
+     * @param string         $indexType    The type of index ('int' or 'bin')
+     * @param string|integer $startOrExact
+     * @param string|integer $end          Optional.
+     * @param boolean        $dedupe       Optional. Whether to eliminate 
+     *                                     duplicate entries if any of 
+     *                                     RiakLinks
      * @return array                    
      * @author Eric Stevens <estevens@taglabsinc.com>
      */
     public function indexSearch($indexName, $indexType, $startOrExact, 
-    		$end = null, $dedupe = false) 
+            $end = null, $dedupe = false) 
     {
         $url = RiakUtils::buildIndexPath($this->client, $this,
                 "{$indexName}_{$indexType}", $startOrExact, $end);

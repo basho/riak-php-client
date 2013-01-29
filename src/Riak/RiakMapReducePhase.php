@@ -7,21 +7,21 @@
  */
 class RiakMapReducePhase
 {
-	/** @var string */
-	private $type;
-	
-	/** @var string */
-	private $language;
-	
-	/** @var string|array */
-	private $function;
-	
-	/** @var boolean */
-	private $keep;
-	
-	/** @var mixed */
-	private $arg;
-	
+    /** @var string */
+    private $type;
+    
+    /** @var string */
+    private $language;
+    
+    /** @var string|array */
+    private $function;
+    
+    /** @var boolean */
+    private $keep;
+    
+    /** @var mixed */
+    private $arg;
+    
     /**
      * Construct a RiakMapReducePhase object.
      * @param string  $type     "map" or "reduce"
@@ -54,9 +54,9 @@ class RiakMapReducePhase
      */
     public function __call($name, $arguments)
     {
-    	if ($name == 'to_array') {
-    		self::toArray();
-    	}
+        if ($name == 'to_array') {
+            self::toArray();
+        }
     }
 
     /**

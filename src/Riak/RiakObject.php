@@ -7,7 +7,7 @@
  */
 class RiakObject
 {
-	/** @var array */
+    /** @var array */
     protected $meta = array();
     
     /** @var array */
@@ -52,9 +52,9 @@ class RiakObject
     */
     public function __construct(RiakClient $client, $bucket, $key = null)
     {
-    	$this->meta = array();
-    	$this->indexes = array();
-    	$this->autoIndexes = array();
+        $this->meta = array();
+        $this->indexes = array();
+        $this->autoIndexes = array();
         $this->client = $client;
         $this->bucket = $bucket;
         $this->key = $key;

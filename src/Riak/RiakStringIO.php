@@ -6,13 +6,13 @@
  */
 class RiakStringIO
 {
-	/** @var string */
-	private $contents;
-	/**
-	 * Create new Riak string
-	 * 
-	 * @return void
-	 */
+    /** @var string */
+    private $contents;
+    /**
+     * Create new Riak string
+     * 
+     * @return void
+     */
     public function __construct()
     {
         $this->contents = '';
