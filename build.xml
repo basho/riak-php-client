@@ -12,7 +12,7 @@
   <import file="${targets.dir}/phpdoc.xml" />
 
   <target name="all" depends="pdepend,phpcpd,phpcs,phpdcd,phploc,phpmd,phpcb,phpunit,phpdoc" />
-  <target name="travis" depends="all" />
+  <target name="travis" depends="phpunit" />
   <target name="help">
     <echo>
 List of targets:

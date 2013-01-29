@@ -1,10 +1,13 @@
 <?php
 /**
  * Private class used to accumulate a CURL response.
- * @package RiakStringIO
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class RiakStringIO
 {
+	/** @var string */
+	private $contents;
 	/**
 	 * Create new Riak string
 	 * 

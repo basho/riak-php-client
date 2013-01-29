@@ -1,9 +1,13 @@
 <img src="http://docs.basho.com/shared/1.2.1/images/riak-logo.png">
 
 # Riak PHP Client #
-This is the official PHP client for Riak.
+This is an updated version of the official PHP client for Riak. 
+The aim with the update is to: 
+* make it PSR-0, PSR-1 and PSR-2 complient (https://github.com/php-fig/fig-standards).
+* make it ready to use with Composer (http://getcomposer.org/).
+* tests are being rewritten for the PHPUnit framework (https://github.com/sebastianbergmann/phpunit/)
 
-[![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
+[![Build Status](https://secure.travis-ci.org/localgod/riak-php-client.png?branch=master)](http://travis-ci.org/localgod/riak-php-client)
 
 ## Documentation ##
 API documentation for this library can be found at<br/>

@@ -2,10 +2,26 @@
 /**
  * The RiakMapReducePhase holds information about a Map phase or
  * Reduce phase in a RiakMapReduce operation.
- * @package RiakMapReducePhase
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class RiakMapReducePhase
 {
+	/** @var string */
+	private $type;
+	
+	/** @var string */
+	private $language;
+	
+	/** @var string|array */
+	private $function;
+	
+	/** @var boolean */
+	private $keep;
+	
+	/** @var mixed */
+	private $arg;
+	
     /**
      * Construct a RiakMapReducePhase object.
      * @param string  $type     "map" or "reduce"

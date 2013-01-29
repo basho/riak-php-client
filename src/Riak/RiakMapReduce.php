@@ -2,10 +2,29 @@
 /**
  * The RiakMapReduce object allows you to build up and run a
  * map/reduce operation on Riak.
- * @package RiakMapReduce
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class RiakMapReduce
 {
+    /** @var RiakClient */
+	private $client;
+	
+	/** @var array */
+	private $phases;
+	
+	/** @var array */
+	private $inputs;
+	
+	/** @var string|null */
+	private $input_mode;
+	
+	/** @var array */
+	private $key_filters;
+	
+	/** @var array */
+	private $index;
+	
     /**
      * Construct a Map/Reduce object.
      * 
@@ -13,7 +32,7 @@ class RiakMapReduce
      * 
      * @return RiakMapReduce
      */
-    public function __construct($client)
+    public function __construct(RiakClient $client)
     {
         $this->client = $client;
         $this->phases = array();

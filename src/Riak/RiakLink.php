@@ -7,6 +7,18 @@
  */
 class RiakLink
 {
+	/** @var string */
+	private $bucket;
+	
+	/** @var string */
+	private $key;
+	
+	/** @var string|null */
+	private $tag;
+	
+	/** @var RiakClient|null */
+	private $client;
+	
     /**
      * Construct a RiakLink object.
      * 
@@ -27,7 +39,7 @@ class RiakLink
     /**
      * Retrieve the RiakObject to which this link points.
      * 
-     * @param  integer $r The R-value to use.
+     * @param integer $r The R-value to use.
      * 
      * @return RiakObject
      */

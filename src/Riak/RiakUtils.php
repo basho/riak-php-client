@@ -1,9 +1,11 @@
 <?php
 /**
  * Utility functions used by Riak library.
- * @package RiakUtils
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakUtils {
+class RiakUtils 
+{
 	/**
 	 * Get value
 	 * 
@@ -103,12 +105,12 @@ class RiakUtils {
 	 * 
 	 * @author Eric Stevens <estevens@taglabsinc.com>
 	 * 
-	 * @param  RiakClient     $client Riak client
-	 * @param  RiakBucket     $bucket Riak bucket
-	 * @param  string         $index  Index Name & type (eg, "indexName_bin")
-	 * @param  string|integer $start  Starting value or exact match if no ending 
-	 *                                value
-	 * @param  string|integer $end    Ending value for range search
+	 * @param  RiakClient          $client Riak client
+	 * @param  RiakBucket          $bucket Riak bucket
+	 * @param  string              $index  Index Name & type (eg, "indexName_bin")
+	 * @param  string|integer      $start  Starting value or exact match if no ending 
+	 *                                     value
+	 * @param  string|integer|null $end    Ending value for range search
 	 * 
 	 * @return string     URL
 	 */

@@ -13,6 +13,7 @@
 
     <target name="phpunit" depends="phpunit-clean,phpunit-init">
         <exec executable="phpunit">
+            <arg line="--bootstrap ${test.dir}/bootstrap.php" />
             <arg line="--log-junit ${phpunit.junit.file}" />
             <arg line="--coverage-clover ${phpunit.clover.file}" />
             <arg line="--coverage-html ${phpunit.clover.html.dir}" />

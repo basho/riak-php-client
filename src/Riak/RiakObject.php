@@ -2,13 +2,43 @@
 /**
  * The RiakObject holds meta information about a Riak object, plus the
  * object's data.
- * @package RiakObject
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class RiakObject
 {
+	/** @var array */
     protected $meta = array();
+    
+    /** @var array */
     protected $indexes = array();
+    
+    /** @var array */
     protected $autoIndexes = array();
+    
+    /** @var RiakClient */
+    private $client;
+    
+    /** @var RiakBucket */
+    private $bucket;
+    
+    /** @var string */
+    private $key;
+    
+    /** @var boolean */
+    private $jsonize;
+    
+    /** @var array */
+    private $headers;
+    
+    /** @var array */
+    private $links;
+    
+    /** @var array|null */
+    private $siblings;
+    
+    /** @var boolean */
+    private $exists;
 
     /**
      * Construct a new RiakObject.
@@ -20,8 +50,11 @@ class RiakObject
      *                           
      * @return void
     */
-    public function __construct($client, $bucket, $key = null)
+    public function __construct(RiakClient $client, $bucket, $key = null)
     {
+    	$this->meta = array();
+    	$this->indexes = array();
+    	$this->autoIndexes = array();
         $this->client = $client;
         $this->bucket = $bucket;
         $this->key = $key;

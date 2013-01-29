@@ -1,9 +1,6 @@
 language: php
 before_script: sudo search-cmd install searchbucket
-script: make test
-notifications:
-  webhooks: http://basho-engbot.herokuapp.com/travis?key=8d594c660ec46f616e37e24fd941c0ea1fc67963
-  email: eng@basho.com
+script: ant travis
 php:
   - 5.3
   - 5.4

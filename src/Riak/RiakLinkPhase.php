@@ -2,10 +2,20 @@
 /**
  * The RiakLinkPhase object holds information about a Link phase in a
  * map/reduce operation.
- * @package RiakLinkPhase
+ * 
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class RiakLinkPhase
 {
+	/** @var string */
+	private $bucket;
+	
+	/** @var string|null */
+	private $tag;
+
+	/** @var boolean */
+	private $keep;
+	
     /**
      * Construct a RiakLinkPhase object.
      * 

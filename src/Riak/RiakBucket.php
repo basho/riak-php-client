@@ -8,13 +8,28 @@
  */
 class RiakBucket
 {
+	/** @var RiakClient */
+	private $client;
+	
+	/** @var string */
+	private $name;
+	
+	/** @var integer|null */
+	private $r;
+	
+	/** @var integer|null */
+	private $w;
+	
+	/** @var integer|null */
+	private $dw;
+	
 	/**
-	 * @param unknown $client Client
-	 * @param string  $name   Name
+	 * @param RiakClient $client Client
+	 * @param string     $name   Name
 	 * 
 	 * @return void
 	 */
-    public function __construct($client, $name)
+    public function __construct(RiakClient $client, $name)
     {
         $this->client = $client;
         $this->name = $name;
@@ -56,7 +71,8 @@ class RiakBucket
      * Set the R-value for this bucket. get(...) and getBinary(...)
      * operations that do not specify an R-value will use this value.
      * 
-     * @param integer $r The new R-value.\
+     * @param integer $r The new R-value.
+     * 
      * @return RiakBucket
      */
     public function setR($r)
@@ -292,6 +308,7 @@ class RiakBucket
      * @param array $props An associative array of $key=>$value.
      * 
      * @return void
+     * @throws Exception if http request was empty or not 204
      */
     public function setProperties($props)
     {
@@ -319,6 +336,7 @@ class RiakBucket
      * Retrieve an associative array of all bucket properties.
      * 
      * @return array
+     * @throws Exception if bucket properties could not be requested
      */
     public function getProperties()
     {
@@ -347,6 +365,7 @@ class RiakBucket
      * Note: this operation is pretty slow.
      * 
      * @return array
+     * @throws Exception if bucket properties could not be requested
      */
     public function getKeys()
     {
@@ -370,7 +389,6 @@ class RiakBucket
     /**
      * Search a secondary index
      * 
-     * @author Eric Stevens <estevens@taglabsinc.com>
      * @param  string         $indexName    The name of the index to search
      * @param  string         $indexType    The type of index ('int' or 'bin')
      * @param  string|integer $startOrExact
@@ -379,6 +397,7 @@ class RiakBucket
      *                                      duplicate entries if any of 
      *                                      RiakLinks
      * @return array                    
+     * @author Eric Stevens <estevens@taglabsinc.com>
      */
     public function indexSearch($indexName, $indexType, $startOrExact, 
     		$end = null, $dedupe = false) 

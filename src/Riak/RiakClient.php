@@ -8,6 +8,33 @@
  */
 class RiakClient
 {
+	/** @var string */
+	private $host;
+	
+	/** @var integer */
+	private $port;
+	
+	/** @var string */
+	private $prefix;
+	
+	/** @var string */
+	private $mapred_prefix;
+	
+	/** @var string */
+	private $indexPrefix;
+	
+	/** @var string */
+	private $clientid;
+	
+	/** @var integer|null */
+	private $r;
+	
+	/** @var integer|null */
+	private $w;
+	
+	/** @var integer|null */
+	private $dw;
+	
     /**
      * Construct a new RiakClient object.
      * 
