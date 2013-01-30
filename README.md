@@ -141,6 +141,15 @@ For methods like newObject(), setData() and store() which return objects of a si
     );
     $bucket->newObject('riak_developer_1')->setData($data)->store();
 
+or
+# Create, set, and store an object
+    $data = array(
+    	'name' => "John Smith",
+    	'age' => 28,
+    	'company' => "Facebook"
+    );
+    $bucket->newObject('riak_developer_1',$data)->store();
+
 ## Fetching Objects ##
 Objects can be retrieved from a bucket using the RiakBucket::get() method
 
