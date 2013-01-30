@@ -1120,7 +1120,7 @@ class RiakObject {
    * JSON encoded unless the object was constructed with
    * newBinary(...) or getBinary(...).
    * @param mixed $data - The data to store.
-   * @return $data
+   * @return $this
    */
   function setData($data) { 
     $this->data = $data; 
