@@ -1,13 +1,14 @@
 <?php
+use Basho\Riak\Bucket, Basho\Riak\Client;
 /**
- * Test class for RiakClient.
+ * Test class for Bucket.
  */
-class RiakClientTest extends PHPUnit_Framework_TestCase
+class BucketTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var RiakClient
+     * @var Bucket
      */
-    protected $client;
+    protected $bucket;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -15,7 +16,7 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->client = new RiakClient();
+        $this->bucket = new Bucket(new Client(), "test");
     }
 
     /**
@@ -24,14 +25,27 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$this->client = null;
+    	$this->bucket = null;
     }
 
     /**
-     * @covers RiakClient::getR
+     * @covers Bucket::getName
+     * @todo Implement testGetName().
+     */
+    public function testGetName()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers Bucket::getR
      * @todo Implement testGetR().
+     * @test
      */
-    public function testGetR()
+    public function getR()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -40,10 +54,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::setR
+     * @covers Bucket::setR
      * @todo Implement testSetR().
+     * @test
      */
-    public function testSetR()
+    public function setR()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -52,10 +67,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::getW
+     * @covers Bucket::getW
      * @todo Implement testGetW().
+     * @test
      */
-    public function testGetW()
+    public function getW()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -64,10 +80,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::setW
+     * @covers Bucket::setW
      * @todo Implement testSetW().
+     * @test
      */
-    public function testSetW()
+    public function setW()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -76,10 +93,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::getDW
+     * @covers Bucket::getDW
      * @todo Implement testGetDW().
+     * @test
      */
-    public function testGetDW()
+    public function getDW()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -88,10 +106,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::setDW
+     * @covers Bucket::setDW
      * @todo Implement testSetDW().
+     * @test
      */
-    public function testSetDW()
+    public function setDW()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -100,10 +119,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::getClientID
-     * @todo Implement testGetClientID().
+     * @covers Bucket::newObject
+     * @todo Implement testNewObject().
+     * @test
      */
-    public function testGetClientID()
+    public function newObject()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -112,10 +132,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::setClientID
-     * @todo Implement testSetClientID().
+     * @covers Bucket::newBinary
+     * @todo Implement testNewBinary().
+     * @test
      */
-    public function testSetClientID()
+    public function newBinary()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -124,10 +145,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::bucket
-     * @todo Implement testBucket().
+     * @covers Bucket::get
+     * @todo Implement testGet().
+     * @test
      */
-    public function testBucket()
+    public function get()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -136,10 +158,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::buckets
-     * @todo Implement testBuckets().
+     * @covers Bucket::getBinary
+     * @todo Implement testGetBinary().
+     * @test
      */
-    public function testBuckets()
+    public function getBinary()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -148,10 +171,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::isAlive
-     * @todo Implement testIsAlive().
+     * @covers Bucket::setNVal
+     * @todo Implement testSetNVal().
+     * @test
      */
-    public function testIsAlive()
+    public function setNVal()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -160,10 +184,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::add
-     * @todo Implement testAdd().
+     * @covers Bucket::getNVal
+     * @todo Implement testGetNVal().
+     * @test
      */
-    public function testAdd()
+    public function getNVal()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -172,10 +197,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::search
-     * @todo Implement testSearch().
+     * @covers Bucket::setAllowMultiples
+     * @todo Implement testSetAllowMultiples().
+     * @test
      */
-    public function testSearch()
+    public function setAllowMultiples()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -184,10 +210,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::link
-     * @todo Implement testLink().
+     * @covers Bucket::getAllowMultiples
+     * @todo Implement testGetAllowMultiples().
+     * @test
      */
-    public function testLink()
+    public function getAllowMultiples()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -196,10 +223,11 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::map
-     * @todo Implement testMap().
+     * @covers Bucket::setProperty
+     * @todo Implement testSetProperty().
+     * @test
      */
-    public function testMap()
+    public function setProperty()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -208,10 +236,63 @@ class RiakClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakClient::reduce
-     * @todo Implement testReduce().
+     * @covers Bucket::getProperty
+     * @todo Implement testGetProperty().
+     * @test
      */
-    public function testReduce()
+    public function getProperty()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers Bucket::setProperties
+     * @todo Implement testSetProperties().
+     * @test
+     */
+    public function setProperties()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers Bucket::getProperties
+     * @todo Implement testGetProperties().
+     * @test
+     */
+    public function getProperties()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers Bucket::getKeys
+     * @todo Implement testGetKeys().
+     * @test
+     */
+    public function getKeys()
+    {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+    }
+
+    /**
+     * @covers Bucket::indexSearch
+     * @todo Implement testIndexSearch().
+     * @test
+     */
+    public function indexSearch()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

@@ -1,11 +1,12 @@
 <?php
+namespace Basho\Riak;
 /**
- * The RiakLink object represents a link from one Riak object to
+ * The Link object represents a link from one Riak object to
  * another.
  * 
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakLink
+class Link
 {
     /** @var string */
     private $bucket;
@@ -16,11 +17,11 @@ class RiakLink
     /** @var string|null */
     private $tag;
     
-    /** @var RiakClient|null */
-    private $client;
+    /** @var Client|null */
+    public $client;
     
     /**
-     * Construct a RiakLink object.
+     * Construct a Link object.
      * 
      * @param string $bucket The bucket name.
      * @param string $key    The key.
@@ -37,11 +38,11 @@ class RiakLink
     }
 
     /**
-     * Retrieve the RiakObject to which this link points.
+     * Retrieve the Object to which this link points.
      * 
      * @param integer $r The R-value to use.
      * 
-     * @return RiakObject
+     * @return Object
      */
     public function get($r = null)
     {
@@ -49,11 +50,11 @@ class RiakLink
     }
 
     /**
-     * Retrieve the RiakObject to which this link points, as a binary.
+     * Retrieve the Object to which this link points, as a binary.
      * 
      * @param integer $r The R-value to use.
      * 
-     * @return RiakObject
+     * @return Object
      */
     public function getBinary($r = null)
     {
@@ -75,7 +76,7 @@ class RiakLink
      * 
      * @param string $name The bucket name.
      * 
-     * @return RiakLink
+     * @return Link
      */
     public function setBucket($name)
     {
@@ -99,7 +100,7 @@ class RiakLink
      * 
      * @param string $key The key.
      * 
-     * @return RiakLink
+     * @return Link
      */
     public function setKey($key)
     {
@@ -127,7 +128,7 @@ class RiakLink
      * 
      * @param string $tag The tag.
      * 
-     * @return RiakLink
+     * @return Link
      */
     public function setTag($tag)
     {
@@ -137,9 +138,9 @@ class RiakLink
     }
 
     /**
-     * Convert this RiakLink object to a link header string. Used internally.
+     * Convert this Link object to a link header string. Used internally.
      * 
-     * @param RiakClient $client Riak client
+     * @param Client $client Riak client
      * 
      * @return string
      */
@@ -155,7 +156,7 @@ class RiakLink
     /**
      * Return true if the links are equal.
      * 
-     * @param  RiakLink $link A RiakLink object.
+     * @param  Link $link A Link object.
      * 
      * @return boolean
      */

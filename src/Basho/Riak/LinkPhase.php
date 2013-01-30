@@ -1,11 +1,12 @@
 <?php
+namespace Basho\Riak;
 /**
- * The RiakLinkPhase object holds information about a Link phase in a
+ * The LinkPhase object holds information about a Link phase in a
  * map/reduce operation.
  * 
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakLinkPhase
+class LinkPhase
 {
     /** @var string */
     private $bucket;
@@ -14,10 +15,10 @@ class RiakLinkPhase
     private $tag;
 
     /** @var boolean */
-    private $keep;
+    public $keep;
     
     /**
-     * Construct a RiakLinkPhase object.
+     * Construct a LinkPhase object.
      * 
      * @param string  $bucket The bucket name.
      * @param string  $tag    The tag.
@@ -49,7 +50,7 @@ class RiakLinkPhase
     }
 
     /**
-     * Convert the RiakLinkPhase to an associative array. Used
+     * Convert the LinkPhase to an associative array. Used
      * internally.
      * 
      * @return array

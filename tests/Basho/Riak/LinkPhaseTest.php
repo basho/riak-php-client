@@ -1,11 +1,12 @@
 <?php
+use Basho\Riak\LinkPhase;
 /**
- * Test class for RiakLinkPhase.
+ * Test class for LinkPhase.
  */
-class RiakLinkPhaseTest extends PHPUnit_Framework_TestCase
+class LinkPhaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var RiakLinkPhase
+     * @var LinkPhase
      */
     protected $linkPhase;
 
@@ -15,7 +16,7 @@ class RiakLinkPhaseTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->linkPhase = new RiakLinkPhase("test", "test", true);
+        $this->linkPhase = new LinkPhase("test", "test", true);
     }
 
     /**
@@ -24,18 +25,18 @@ class RiakLinkPhaseTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$this->linkPhase = null;
+        $this->linkPhase = null;
     }
 
     /**
-     * @covers RiakLinkPhase::toArray
+     * @covers LinkPhase::toArray
      * @todo Implement testToArray().
+     * @test
      */
-    public function testToArray()
+    public function toArray()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this
+                ->markTestIncomplete('This test has not been implemented yet.');
     }
 }

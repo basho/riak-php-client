@@ -1,11 +1,12 @@
 <?php
+use Basho\Riak\Link;
 /**
- * Test class for RiakLink.
+ * Test class for Link.
  */
-class RiakLinkTest extends PHPUnit_Framework_TestCase
+class LinkTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var RiakLink
+     * @var Link
      */
     protected $link;
 
@@ -15,7 +16,7 @@ class RiakLinkTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->link = new RiakLink("test", "test");
+        $this->link = new Link("test", "test");
     }
 
     /**
@@ -24,126 +25,115 @@ class RiakLinkTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$this->link = null;
+        $this->link = null;
     }
 
     /**
-     * @covers RiakLink::get
+     * @covers Link::get
      * @todo Implement testGet().
+     * @test
      */
-    public function testGet()
+    public function get()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::getBinary
+     * @covers Link::getBinary
      * @todo Implement testGetBinary().
+     * @test
      */
-    public function testGetBinary()
+    public function getBinary()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::getBucket
+     * @covers Link::getBucket
      * @todo Implement testGetBucket().
+     * @test
      */
-    public function testGetBucket()
+    public function getBucket()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::setBucket
+     * @covers Link::setBucket
      * @todo Implement testSetBucket().
+     * @test
      */
-    public function testSetBucket()
+    public function setBucket()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::getKey
+     * @covers Link::getKey
      * @todo Implement testGetKey().
+     * @test
      */
-    public function testGetKey()
+    public function getKey()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::setKey
+     * @covers Link::setKey
      * @todo Implement testSetKey().
+     * @test
      */
-    public function testSetKey()
+    public function setKey()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::getTag
+     * @covers Link::getTag
      * @todo Implement testGetTag().
+     * @test
      */
-    public function testGetTag()
+    public function getTag()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::setTag
+     * @covers Link::setTag
      * @todo Implement testSetTag().
      */
     public function testSetTag()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::toLinkHeader
+     * @covers Link::toLinkHeader
      * @todo Implement testToLinkHeader().
+     * @test
      */
-    public function testToLinkHeader()
+    public function toLinkHeader()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 
     /**
-     * @covers RiakLink::isEqual
+     * @covers Link::isEqual
      * @todo Implement testIsEqual().
+     * @test
      */
-    public function testIsEqual()
+    public function isEqual()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 }

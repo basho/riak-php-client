@@ -1,10 +1,12 @@
 <?php
+namespace Basho\Riak;
+use Basho\Riak\StringIO;
 /**
  * Utility functions used by Riak library.
  * 
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakUtils 
+class Utils 
 {
     /**
      * Get value
@@ -41,18 +43,18 @@ class RiakUtils
     }
 
     /**
-     * Given a RiakClient, RiakBucket, Key, LinkSpec, and Params,
+     * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL.
      * 
-     * @param RiakClient      $client Riak client
-     * @param RiakBucket|null $bucket Riak bucket
+     * @param Client      $client Riak client
+     * @param Bucket|null $bucket Riak bucket
      * @param string|null     $key
      * @param array|null      $spec
      * @param array|null      $params
      * 
      * @return string
      */
-    public static function buildRestPath(RiakClient $client, $bucket = null, $key = null,
+    public static function buildRestPath(Client $client, $bucket = null, $key = null,
             $spec = null, $params = null) 
     {
         # Build 'http://hostname:port/prefix/bucket'
@@ -61,7 +63,7 @@ class RiakUtils
         $path .= '/' . $client->prefix;
 
         # Add '.../bucket'
-        if (!is_null($bucket) && $bucket instanceof RiakBucket) {
+        if (!is_null($bucket) && $bucket instanceof Bucket) {
             $path .= '/' . urlencode($bucket->name);
         }
 
@@ -100,13 +102,13 @@ class RiakUtils
     }
 
     /**
-     * Given a RiakClient, RiakBucket, Key, LinkSpec, and Params,
+     * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL for searching secondary indexes.
      * 
      * @author Eric Stevens <estevens@taglabsinc.com>
      * 
-     * @param  RiakClient          $client Riak client
-     * @param  RiakBucket          $bucket Riak bucket
+     * @param  Client          $client Riak client
+     * @param  Bucket          $bucket Riak bucket
      * @param  string              $index  Index Name & type (eg, "indexName_bin")
      * @param  string|integer      $start  Starting value or exact match if no ending 
      *                                     value
@@ -114,8 +116,8 @@ class RiakUtils
      * 
      * @return string     URL
      */
-    public static function buildIndexPath(RiakClient $client,
-            RiakBucket $bucket, $index, $start, $end = null) 
+    public static function buildIndexPath(Client $client,
+            Bucket $bucket, $index, $start, $end = null) 
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = array('http:/', $client->host . ':' . $client->port,
@@ -176,12 +178,12 @@ class RiakUtils
         }
 
         # Capture the response headers...
-        $responseHeadersIO = new RiakStringIO();
+        $responseHeadersIO = new StringIO();
         curl_setopt($ch, CURLOPT_HEADERFUNCTION,
                 array(&$responseHeadersIO, 'write'));
 
         # Capture the response body...
-        $responseBodyIO = new RiakStringIO();
+        $responseBodyIO = new StringIO();
         curl_setopt($ch, CURLOPT_WRITEFUNCTION,
                 array(&$responseBodyIO, 'write'));
 
@@ -192,7 +194,7 @@ class RiakUtils
             curl_close($ch);
 
             # Get the headers...
-            $parsedHeaders = RiakUtils::parseHttpHeaders(
+            $parsedHeaders = Utils::parseHttpHeaders(
                     $responseHeadersIO->contents());
             $responseHeaders = array("http_code" => $httpCode);
             foreach ($parsedHeaders as $key => $value) {

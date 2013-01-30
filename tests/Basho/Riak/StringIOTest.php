@@ -1,11 +1,12 @@
 <?php
+use Basho\Riak\StringIO;
 /**
- * Test class for RiakStringIO.
+ * Test class for StringIO.
  */
-class RiakStringIOTest extends PHPUnit_Framework_TestCase
+class StringIOTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var RiakStringIO
+     * @var StringIO
      */
     protected $stringIO;
 
@@ -15,7 +16,7 @@ class RiakStringIOTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->stringIO = new RiakStringIO;
+        $this->stringIO = new StringIO;
     }
 
     /**
@@ -28,10 +29,11 @@ class RiakStringIOTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakStringIO::write
+     * @covers StringIO::write
      * @todo Implement testWrite().
+     * @test
      */
-    public function testWrite()
+    public function write()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -40,10 +42,11 @@ class RiakStringIOTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakStringIO::contents
+     * @covers StringIO::contents
      * @todo Implement testContents().
+     * @test
      */
-    public function testContents()
+    public function contents()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

@@ -1,8 +1,9 @@
 <?php
+use Basho\Riak\Utils;
 /**
- * Test class for RiakUtils.
+ * Test class for Utils.
  */
-class RiakUtilsTest extends PHPUnit_Framework_TestCase
+class UtilsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -21,10 +22,11 @@ class RiakUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakUtils::getValue
+     * @covers Utils::getValue
      * @todo Implement testGetValue().
+     * @test
      */
-    public function testGetValue()
+    public function getValue()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -33,10 +35,11 @@ class RiakUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakUtils::buildRestPath
+     * @covers Utils::buildRestPath
      * @todo Implement testBuildRestPath().
+     * @test
      */
-    public function testBuildRestPath()
+    public function buildRestPath()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -45,10 +48,11 @@ class RiakUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakUtils::buildIndexPath
+     * @covers Utils::buildIndexPath
      * @todo Implement testBuildIndexPath().
+     * @test
      */
-    public function testBuildIndexPath()
+    public function buildIndexPath()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -57,10 +61,11 @@ class RiakUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakUtils::httpRequest
+     * @covers Utils::httpRequest
      * @todo Implement testHttpRequest().
+     * @test
      */
-    public function testHttpRequest()
+    public function httpRequest()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -69,10 +74,11 @@ class RiakUtilsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakUtils::parseHttpHeaders
+     * @covers Utils::parseHttpHeaders
      * @todo Implement testParseHttpHeaders().
+     * @test
      */
-    public function testParseHttpHeaders()
+    public function parseHttpHeaders()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

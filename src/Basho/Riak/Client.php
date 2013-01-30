@@ -1,31 +1,33 @@
 <?php
+namespace Basho\Riak;
+use Basho\Riak\Bucket, Basho\Riak\MapReduce;
 /**
- * The RiakClient object holds information necessary to connect to
+ * The Client object holds information necessary to connect to
  * Riak. The Riak API uses HTTP, so there is no persistent
- * connection, and the RiakClient object is extremely lightweight.
+ * connection, and the Client object is extremely lightweight.
  * 
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakClient
+class Client
 {
     /** @var string */
-    private $host;
-    
+    public $host;
+
     /** @var integer */
-    private $port;
-    
+    public $port;
+
     /** @var string */
-    private $prefix;
-    
+    public $prefix;
+
     /** @var string */
-    private $mapredPrefix;
-    
+    public $mapredPrefix;
+
     /** @var string */
-    private $indexPrefix;
-    
+    public $indexPrefix;
+
     /** @var string */
     private $clientId;
-    
+
     /** 
      * How many replicas need to agree when retrieving an existing object 
      * before the write.
@@ -33,14 +35,14 @@ class RiakClient
      * @var integer|null
      */
     private $r;
-    
+
     /** 
      * How many replicas to write to before returning a successful response
      * 
      * @var integer|null
      */
     private $w;
-    
+
     /** 
      * How many replicas to commit to durable storage before returning a 
      * successful response
@@ -48,9 +50,9 @@ class RiakClient
      * @var integer|null
      */
     private $dw;
-    
+
     /**
-     * Construct a new RiakClient object.
+     * Construct a new Client object.
      * 
      * @param string  $host         Hostname or IP address 
      *                              (default '127.0.0.1')
@@ -61,7 +63,7 @@ class RiakClient
      * @return void
      */
     public function __construct($host = '127.0.0.1', $port = 8098,
-            $prefix = 'riak', $mapredPrefix = 'mapred') 
+            $prefix = 'riak', $mapredPrefix = 'mapred')
     {
         $this->host = $host;
         $this->port = $port;
@@ -75,7 +77,7 @@ class RiakClient
     }
 
     /**
-     * Get the R-value setting for this RiakClient. (default 2)
+     * Get the R-value setting for this Client. (default 2)
      * 
      * @return integer
      */
@@ -85,14 +87,14 @@ class RiakClient
     }
 
     /**
-     * Set the R-value for this RiakClient. This value will be used
+     * Set the R-value for this Client. This value will be used
      * for any calls to get(...) or getBinary(...) where where 1) no
      * R-value is specified in the method call and 2) no R-value has
-     * been set in the RiakBucket.
+     * been set in the Bucket.
      * 
      * @param integer $r The R value.
      * 
-     * @return RiakClient
+     * @return Client
      */
     public function setR($r)
     {
@@ -102,7 +104,7 @@ class RiakClient
     }
 
     /**
-     * Get the W-value setting for this RiakClient. (default 2)
+     * Get the W-value setting for this Client. (default 2)
      * 
      * @return integer
      */
@@ -112,12 +114,12 @@ class RiakClient
     }
 
     /**
-     * Set the W-value for this RiakClient. See setR(...) for a
+     * Set the W-value for this Client. See setR(...) for a
      * description of how these values are used.
      * 
      * @param integer $w The W value.
      * 
-     * @return RiakClient
+     * @return Client
      */
     public function setW($w)
     {
@@ -137,12 +139,12 @@ class RiakClient
     }
 
     /**
-     * Set the DW-value for this RiakClient. See setR(...) for a
+     * Set the DW-value for this Client. See setR(...) for a
      * description of how these values are used.
      * 
      * @param integer $dw The DW value.
      * 
-     * @return RiakClient
+     * @return Client
      */
     public function setDW($dw)
     {
@@ -152,7 +154,7 @@ class RiakClient
     }
 
     /**
-     * Get the clientID for this RiakClient.
+     * Get the clientID for this Client.
      * 
      * @return string
      */
@@ -162,12 +164,12 @@ class RiakClient
     }
 
     /**
-     * Set the clientID for this RiakClient. Should not be called
+     * Set the clientID for this Client. Should not be called
      * unless you know what you are doing.
      * 
      * @param string $clientId The new clientId.
      * 
-     * @return RiakClient
+     * @return Client
      */
     public function setClientID($clientId)
     {
@@ -178,26 +180,26 @@ class RiakClient
 
     /**
      * Get the bucket by the specified name. Since buckets always exist,
-     * this will always return a RiakBucket.
+     * this will always return a Bucket.
      * 
      * @param string $name Name
      * 
-     * @return RiakBucket
+     * @return Bucket
      */
     public function bucket($name)
     {
-        return new RiakBucket($this, $name);
+        return new Bucket($this, $name);
     }
 
     /**
      * Get all buckets.
      * 
-     * @return RiakBucket[]
+     * @return Bucket[]
      */
     public function buckets()
     {
-        $url = RiakUtils::buildRestPath($this);
-        $response = RiakUtils::httpRequest('GET', $url . '?buckets=true');
+        $url = Utils::buildRestPath($this);
+        $response = Utils::httpRequest('GET', $url . '?buckets=true');
         $responseObj = json_decode($response[1]);
         $buckets = array();
         foreach ($responseObj->buckets as $name) {
@@ -208,14 +210,14 @@ class RiakClient
     }
 
     /**
-     * Check if the Riak server for this RiakClient is alive.
+     * Check if the Riak server for this Client is alive.
      * 
      * @return boolean
      */
     public function isAlive()
     {
         $url = 'http://' . $this->host . ':' . $this->port . '/ping';
-        $response = RiakUtils::httpRequest('GET', $url);
+        $response = Utils::httpRequest('GET', $url);
 
         return ($response != null) && ($response[1] == 'OK');
     }
@@ -227,12 +229,12 @@ class RiakClient
      * 
      * @param mixed $params Parameters
      * 
-     * @return RiakMapReduce
-     * @see RiakMapReduce::add()
+     * @return MapReduce
+     * @see MapReduce::add()
      */
     public function add($params)
     {
-        $mapReduce = new RiakMapReduce($this);
+        $mapReduce = new MapReduce($this);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mapReduce, "add"), $args);
@@ -244,12 +246,12 @@ class RiakClient
      * 
      * @param mixed $params Parameters
      * 
-     * @return RiakMapReduce
-     * @see RiakMapReduce::search()
+     * @return MapReduce
+     * @see MapReduce::search()
      */
     public function search($params)
     {
-        $mapReduce = new RiakMapReduce($this);
+        $mapReduce = new MapReduce($this);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mapReduce, "search"), $args);
@@ -260,12 +262,12 @@ class RiakClient
      * 
      * @param mixed $params Parameters
      * 
-     * @see RiakMapReduce::link()
+     * @see MapReduce::link()
      * @return void
      */
     public function link($params)
     {
-        $mapReduce = new RiakMapReduce($this);
+        $mapReduce = new MapReduce($this);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mapReduce, "link"), $args);
@@ -276,12 +278,12 @@ class RiakClient
      * 
      * @param mixed $params Parameters
      * 
-     * @see RiakMapReduce::map()
+     * @see MapReduce::map()
      * @return void
      */
     public function map($params)
     {
-        $mapReduce = new RiakMapReduce($this);
+        $mapReduce = new MapReduce($this);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mapReduce, "map"), $args);
@@ -292,12 +294,12 @@ class RiakClient
      * 
      * @param mixed $params Parameters
      * 
-     * @see RiakMapReduce::reduce()
+     * @see MapReduce::reduce()
      * @return void
      */
     public function reduce($params)
     {
-        $mapReduce = new RiakMapReduce($this);
+        $mapReduce = new MapReduce($this);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mapReduce, "reduce"), $args);

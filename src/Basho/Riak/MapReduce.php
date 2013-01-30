@@ -1,13 +1,15 @@
 <?php
+namespace Basho\Riak;
+use Basho\Riak\LinkPhase, Basho\Riak\MapReducePhase, Basho\Riak\Link;
 /**
- * The RiakMapReduce object allows you to build up and run a
+ * The MapReduce object allows you to build up and run a
  * map/reduce operation on Riak.
  * 
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakMapReduce
+class MapReduce
 {
-    /** @var RiakClient */
+    /** @var Client */
     private $client;
     
     /** @var array */
@@ -28,11 +30,11 @@ class RiakMapReduce
     /**
      * Construct a Map/Reduce object.
      * 
-     * @param  RiakClient $client A RiakClient object.
+     * @param  Client $client A Client object.
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
-    public function __construct(RiakClient $client)
+    public function __construct(Client $client)
     {
         $this->client = $client;
         $this->phases = array();
@@ -45,19 +47,19 @@ class RiakMapReduce
     /**
      * Add inputs to a map/reduce operation. This method takes three
      * different forms, depending on the provided inputs. You can
-     * specify either  a RiakObject, a string bucket name, or a bucket,
+     * specify either  a Object, a string bucket name, or a bucket,
      * key, and additional arg.
      * 
-     * @param  mixed $arg1 RiakObject or Bucket
+     * @param  mixed $arg1 Object or Bucket
      * @param  mixed $arg2 Key or blank
      * @param  mixed $arg3 Arg or blank
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function add($arg1, $arg2 = null, $arg3 = null)
     {
         if (func_num_args() == 1) {
-            if ($arg1 instanceof RiakObject) {
+            if ($arg1 instanceof Object) {
                 return $this->addObject($arg1);
             } else {
                 return $this->addBucket($arg1);
@@ -95,7 +97,7 @@ class RiakMapReduce
     /**
      * Private.
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     private function addObject($obj)
     {
@@ -105,12 +107,12 @@ class RiakMapReduce
     /**
      * Private.
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     private function addBucketKeyData($bucket, $key, $data)
     {
         if ($this->inputMode == "bucket") {
-            throw new Exception("Already added a bucket, can't add an object.");
+            throw new \Exception("Already added a bucket, can't add an object.");
         }
         $this->inputs[] = array($bucket, $key, $data);
 
@@ -120,7 +122,7 @@ class RiakMapReduce
     /**
      * Private.
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     private function addBucket($bucket)
     {
@@ -137,7 +139,7 @@ class RiakMapReduce
      * @param string $bucket The Bucket to search.  
      * @param string $query  The Query to execute. (Lucene syntax.)  
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function search($bucket, $query)
     {
@@ -155,11 +157,11 @@ class RiakMapReduce
      * @param boolean $keep   Flag whether to keep results from this stage in 
      *                        the map/reduce. (default false, unless this is the
      *                        last step in the phase)
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function link($bucket = '_', $tag = '_', $keep = false)
     {
-        $this->phases[] = new RiakLinkPhase($bucket, $tag, $keep);
+        $this->phases[] = new LinkPhase($bucket, $tag, $keep);
 
         return $this;
     }
@@ -174,15 +176,15 @@ class RiakMapReduce
      * @param array $options  An optional associative array containing 
      *                        "language", "keep" flag, and/or "arg".
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function map($function, $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
-        $this->phases[] = new RiakMapReducePhase("map", $function,
-                RiakUtils::getValue("language", $options, $language),
-                RiakUtils::getValue("keep", $options, false),
-                RiakUtils::getValue("arg", $options, null));
+        $this->phases[] = new MapReducePhase("map", $function,
+                Utils::getValue("language", $options, $language),
+                Utils::getValue("keep", $options, false),
+                Utils::getValue("arg", $options, null));
 
         return $this;
     }
@@ -196,15 +198,15 @@ class RiakMapReduce
      * @param array $options  An optional associative array containing 
      *                        "language", "keep" flag, and/or "arg".
      *                        
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function reduce($function, $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
-        $this->phases[] = new RiakMapReducePhase("reduce", $function,
-                RiakUtils::getValue("language", $options, $language),
-                RiakUtils::getValue("keep", $options, false),
-                RiakUtils::getValue("arg", $options, null));
+        $this->phases[] = new MapReducePhase("reduce", $function,
+                Utils::getValue("language", $options, $language),
+                Utils::getValue("keep", $options, false),
+                Utils::getValue("arg", $options, null));
 
         return $this;
     }
@@ -217,7 +219,7 @@ class RiakMapReduce
      * @param array $filter A key filter (ie:->keyFilter(array("tokenize", "-", 2), 
      *                      array("between", "20110601", "20110630"))
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function keyFilter(array $filter /*. ,$filter .*/)
     {
@@ -234,7 +236,7 @@ class RiakMapReduce
      * @param array $filter A key filter (ie:->keyFilter(array("tokenize", "-", 2), 
      *                      array("between", "20110601", "20110630"))
      *                      
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function keyFilterAnd(array $filter)
     {
@@ -251,7 +253,7 @@ class RiakMapReduce
      * 
      * @param array $filter Filter
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function keyFilterOr(array $filter /*. ,$filter .*/)
     {
@@ -269,17 +271,17 @@ class RiakMapReduce
      * @param string $operator Operator (usually "and" or "or")
      * @param array  $filter   Filter
      * 
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function keyFilterOperator($operator, $filter /*. ,$filter .*/)
     {
         $filters = func_get_args();
         array_shift($filters);
         if ($this->inputMode != 'bucket') {
-            throw new Exception("Key filters can only be used in bucket mode");
+            throw new \Exception("Key filters can only be used in bucket mode");
         }
         if (count($this->index)) {
-            throw new Exception(
+            throw new \Exception(
             "You cannot use index search and key filters on the same operation"
             );
         }
@@ -307,19 +309,19 @@ class RiakMapReduce
      * @param string|integer $end          Optional. End value to search for 
      *                                     during a range search
      *                                     
-     * @return RiakMapReduce
+     * @return MapReduce
      */
     public function indexSearch($indexName, $indexType, $startOrExact, 
             $end = null)
     {
         // Check prerequisites
         if (count($this->keyFilters)) {
-            throw new Exception(
+            throw new \Exception(
             "You cannot use index search and key filters on the same operation"
             );
         }
         if ($this->inputMode != 'bucket') {
-            throw new Exception("Key filters can only be used in bucket mode");
+            throw new \Exception("Key filters can only be used in bucket mode");
         }
 
         if ($end === null) {
@@ -337,7 +339,7 @@ class RiakMapReduce
 
     /**
      * Run the map/reduce operation. Returns an array of results, or an
-     * array of RiakLink objects if the last phase is a link phase.
+     * array of Link objects if the last phase is a link phase.
      * 
      * @param integer $timeout Timeout in seconds.
      * 
@@ -393,13 +395,13 @@ class RiakMapReduce
 
         # Do the request...
         $url = "http://" . $this->client->host . ":" . $this->client->port
-        . "/" . $this->client->mapred_prefix;
-        $response = RiakUtils::httpRequest('POST', $url,
+        . "/" . $this->client->mapredPrefix;
+        $response = Utils::httpRequest('POST', $url,
                 array('Content-type: application/json'), $content);
         $result = json_decode($response[1]);
 
         # If the last phase is NOT a link phase, then return the result.
-        $linkResultsFlag |= (end($this->phases) instanceof RiakLinkPhase);
+        $linkResultsFlag |= (end($this->phases) instanceof LinkPhase);
 
         # If we don't need to link results, then just return.
         if (!$linkResultsFlag) {
@@ -407,11 +409,11 @@ class RiakMapReduce
         }
 
         # Otherwise, if the last phase IS a link phase, then convert the
-        # results to RiakLink objects.
+        # results to Link objects.
         $a = array();
         foreach ($result as $r) {
             $tag = isset($r[2]) ? $r[2] : null;
-            $link = new RiakLink($r[0], $r[1], $tag);
+            $link = new Link($r[0], $r[1], $tag);
             $link->client = $this->client;
             $a[] = $link;
         }

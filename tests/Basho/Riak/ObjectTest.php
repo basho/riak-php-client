@@ -1,11 +1,12 @@
 <?php
+use Basho\Riak\Object, Basho\Riak\Client, Basho\Riak\Bucket;
 /**
- * Test class for RiakObject.
+ * Test class for Object.
  */
-class RiakObjectTest extends PHPUnit_Framework_TestCase
+class ObjectTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var RiakObject
+     * @var Object
      */
     protected $object;
 
@@ -15,7 +16,7 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new RiakObject(new RiakClient(), new RiakBucket(new RiakClient(), 'test'));
+        $this->object = new Object(new Client(), new Bucket(new Client(), 'test'));
     }
 
     /**
@@ -28,10 +29,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getBucket
+     * @covers Object::getBucket
      * @todo Implement testGetBucket().
+     * @test
      */
-    public function testGetBucket()
+    public function getBucket()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -40,10 +42,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getKey
+     * @covers Object::getKey
      * @todo Implement testGetKey().
+     * @test
      */
-    public function testGetKey()
+    public function getKey()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -52,10 +55,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getData
+     * @covers Object::getData
      * @todo Implement testGetData().
+     * @test
      */
-    public function testGetData()
+    public function getData()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -64,10 +68,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::setData
+     * @covers Object::setData
      * @todo Implement testSetData().
+     * @test
      */
-    public function testSetData()
+    public function setData()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -76,10 +81,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::status
+     * @covers Object::status
      * @todo Implement testStatus().
+     * @test
      */
-    public function testStatus()
+    public function status()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -88,10 +94,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::exists
+     * @covers Object::exists
      * @todo Implement testExists().
+     * @test
      */
-    public function testExists()
+    public function exists()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -100,10 +107,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getContentType
+     * @covers Object::getContentType
      * @todo Implement testGetContentType().
+     * @test
      */
-    public function testGetContentType()
+    public function getContentType()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -112,10 +120,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::setContentType
+     * @covers Object::setContentType
      * @todo Implement testSetContentType().
+     * @test
      */
-    public function testSetContentType()
+    public function setContentType()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -124,10 +133,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getLastModified
+     * @covers Object::getLastModified
      * @todo Implement testGetLastModified().
+     * @test
      */
-    public function testGetLastModified()
+    public function getLastModified()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -136,10 +146,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::addLink
+     * @covers Object::addLink
      * @todo Implement testAddLink().
+     * @test
      */
-    public function testAddLink()
+    public function addLink()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -148,10 +159,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::removeLink
+     * @covers Object::removeLink
      * @todo Implement testRemoveLink().
+     * @test
      */
-    public function testRemoveLink()
+    public function removeLink()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -160,10 +172,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getLinks
+     * @covers Object::getLinks
      * @todo Implement testGetLinks().
+     * @test
      */
-    public function testGetLinks()
+    public function getLinks()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -172,10 +185,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::addIndex
+     * @covers Object::addIndex
      * @todo Implement testAddIndex().
+     * @test
      */
-    public function testAddIndex()
+    public function addIndex()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -184,10 +198,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::setIndex
+     * @covers Object::setIndex
      * @todo Implement testSetIndex().
+     * @test
      */
-    public function testSetIndex()
+    public function setIndex()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -196,10 +211,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getIndex
+     * @covers Object::getIndex
      * @todo Implement testGetIndex().
+     * @test
      */
-    public function testGetIndex()
+    public function getIndex()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -208,10 +224,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::removeIndex
+     * @covers Object::removeIndex
      * @todo Implement testRemoveIndex().
+     * @test
      */
-    public function testRemoveIndex()
+    public function removeIndex()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -220,10 +237,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::removeAllIndexes
+     * @covers Object::removeAllIndexes
      * @todo Implement testRemoveAllIndexes().
+     * @test
      */
-    public function testRemoveAllIndexes()
+    public function removeAllIndexes()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -232,10 +250,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::addAutoIndex
+     * @covers Object::addAutoIndex
      * @todo Implement testAddAutoIndex().
+     * @test
      */
-    public function testAddAutoIndex()
+    public function addAutoIndex()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -244,10 +263,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::hasAutoIndex
+     * @covers Object::hasAutoIndex
      * @todo Implement testHasAutoIndex().
+     * @test
      */
-    public function testHasAutoIndex()
+    public function hasAutoIndex()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -256,10 +276,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::removeAutoIndex
+     * @covers Object::removeAutoIndex
      * @todo Implement testRemoveAutoIndex().
+     * @test
      */
-    public function testRemoveAutoIndex()
+    public function removeAutoIndex()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -268,10 +289,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::removeAllAutoIndexes
+     * @covers Object::removeAllAutoIndexes
      * @todo Implement testRemoveAllAutoIndexes().
+     * @test
      */
-    public function testRemoveAllAutoIndexes()
+    public function removeAllAutoIndexes()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -280,10 +302,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getMeta
+     * @covers Object::getMeta
      * @todo Implement testGetMeta().
+     * @test
      */
-    public function testGetMeta()
+    public function getMeta()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -292,10 +315,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::setMeta
+     * @covers Object::setMeta
      * @todo Implement testSetMeta().
+     * @test
      */
-    public function testSetMeta()
+    public function setMeta()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -304,10 +328,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::removeMeta
+     * @covers Object::removeMeta
      * @todo Implement testRemoveMeta().
+     * @test
      */
-    public function testRemoveMeta()
+    public function removeMeta()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -316,10 +341,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getAllMeta
+     * @covers Object::getAllMeta
      * @todo Implement testGetAllMeta().
+     * @test
      */
-    public function testGetAllMeta()
+    public function getAllMeta()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -328,10 +354,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::removeAllMeta
+     * @covers Object::removeAllMeta
      * @todo Implement testRemoveAllMeta().
+     * @test
      */
-    public function testRemoveAllMeta()
+    public function removeAllMeta()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -340,10 +367,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::store
+     * @covers Object::store
      * @todo Implement testStore().
+     * @test
      */
-    public function testStore()
+    public function store()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -352,10 +380,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::reload
+     * @covers Object::reload
      * @todo Implement testReload().
+     * @test
      */
-    public function testReload()
+    public function reload()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -364,10 +393,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::delete
+     * @covers Object::delete
      * @todo Implement testDelete().
+     * @test
      */
-    public function testDelete()
+    public function delete()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -376,10 +406,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::populate
+     * @covers Object::populate
      * @todo Implement testPopulate().
+     * @test
      */
-    public function testPopulate()
+    public function populate()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -388,10 +419,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::hasSiblings
+     * @covers Object::hasSiblings
      * @todo Implement testHasSiblings().
+     * @test
      */
-    public function testHasSiblings()
+    public function hasSiblings()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -400,10 +432,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getSiblingCount
+     * @covers Object::getSiblingCount
      * @todo Implement testGetSiblingCount().
+     * @test
      */
-    public function testGetSiblingCount()
+    public function getSiblingCount()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -412,10 +445,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getSibling
+     * @covers Object::getSibling
      * @todo Implement testGetSibling().
+     * @test
      */
-    public function testGetSibling()
+    public function getSibling()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -424,10 +458,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::getSiblings
+     * @covers Object::getSiblings
      * @todo Implement testGetSiblings().
+     * @test
      */
-    public function testGetSiblings()
+    public function getSiblings()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -436,10 +471,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::add
+     * @covers Object::add
      * @todo Implement testAdd().
+     * @test
      */
-    public function testAdd()
+    public function add()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -448,10 +484,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::link
+     * @covers Object::link
      * @todo Implement testLink().
+     * @test
      */
-    public function testLink()
+    public function link()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -460,10 +497,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::map
+     * @covers Object::map
      * @todo Implement testMap().
+     * @test
      */
-    public function testMap()
+    public function map()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(
@@ -472,10 +510,11 @@ class RiakObjectTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers RiakObject::reduce
+     * @covers Object::reduce
      * @todo Implement testReduce().
+     * @test
      */
-    public function testReduce()
+    public function reduce()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

@@ -1,11 +1,12 @@
 <?php
+namespace Basho\Riak;
 /**
- * The RiakMapReducePhase holds information about a Map phase or
- * Reduce phase in a RiakMapReduce operation.
+ * The MapReducePhase holds information about a Map phase or
+ * Reduce phase in a MapReduce operation.
  * 
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakMapReducePhase
+class MapReducePhase
 {
     /** @var string */
     private $type;
@@ -17,13 +18,13 @@ class RiakMapReducePhase
     private $function;
     
     /** @var boolean */
-    private $keep;
+    public $keep;
     
     /** @var mixed */
     private $arg;
     
     /**
-     * Construct a RiakMapReducePhase object.
+     * Construct a MapReducePhase object.
      * @param string  $type     "map" or "reduce"
      * @param mixed   $function string or array()
      * @param string  $language "javascript" or "erlang"
@@ -60,7 +61,7 @@ class RiakMapReducePhase
     }
 
     /**
-     * Convert the RiakMapReducePhase to an associative array. Used
+     * Convert the MapReducePhase to an associative array. Used
      * internally.
      * 
      * @return array

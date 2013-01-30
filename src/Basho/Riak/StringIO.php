@@ -1,10 +1,11 @@
 <?php
+namespace Basho\Riak;
 /**
  * Private class used to accumulate a CURL response.
  * 
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class RiakStringIO
+class StringIO
 {
     /** @var string */
     private $contents;

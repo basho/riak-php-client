@@ -1,11 +1,12 @@
 <?php
+use Basho\Riak\MapReducePhase;
 /**
- * Test class for RiakMapReducePhase.
+ * Test class for MapReducePhase.
  */
-class RiakMapReducePhaseTest extends PHPUnit_Framework_TestCase
+class MapReducePhaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var RiakMapReducePhase
+     * @var MapReducePhase
      */
     protected $mapReducePhase;
 
@@ -15,7 +16,8 @@ class RiakMapReducePhaseTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->mapReducePhase = new RiakMapReducePhase('map', 'function', 'javascript', true, 'args');
+        $this->mapReducePhase = new MapReducePhase('map', 'function',
+                'javascript', true, 'args');
     }
 
     /**
@@ -24,18 +26,18 @@ class RiakMapReducePhaseTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$this->mapReducePhase = null;
+        $this->mapReducePhase = null;
     }
 
     /**
-     * @covers RiakMapReducePhase::toArray
+     * @covers MapReducePhase::toArray
      * @todo Implement testToArray().
+     * @test
      */
-    public function testToArray()
+    public function toArray()
     {
         // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this
+                ->markTestIncomplete('This test has not been implemented yet.');
     }
 }
