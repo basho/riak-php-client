@@ -109,13 +109,13 @@ class Object
      *
      * @param mixed $data The data to store.
      *
-     * @return mixed $data
+     * @return Object
      */
     public function setData($data)
     {
         $this->data = $data;
 
-        return $this->data;
+        return $this;
     }
 
     /**
