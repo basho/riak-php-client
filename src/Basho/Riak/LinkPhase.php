@@ -1,30 +1,30 @@
 <?php
+
 namespace Basho\Riak;
+
 /**
  * The LinkPhase object holds information about a Link phase in a
  * map/reduce operation.
- * 
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class LinkPhase
 {
     /** @var string */
     private $bucket;
-    
+
     /** @var string|null */
     private $tag;
 
     /** @var boolean */
     public $keep;
-    
+
     /**
      * Construct a LinkPhase object.
-     * 
+     *
      * @param string  $bucket The bucket name.
      * @param string  $tag    The tag.
      * @param boolean $keep   True to return results of this phase.
-     * 
-     * @return void
      */
     public function __construct($bucket, $tag, $keep)
     {
@@ -32,10 +32,10 @@ class LinkPhase
         $this->tag = $tag;
         $this->keep = $keep;
     }
-    
+
     /**
      * This method is only here to maintain backwards compatibility
-     * with old method names pre PSR codingstandard
+     * with old method names pre PSR coding standard
      *
      * @param string $name      Name of old method
      * @param array  $arguments Arguments for method
@@ -52,7 +52,7 @@ class LinkPhase
     /**
      * Convert the LinkPhase to an associative array. Used
      * internally.
-     * 
+     *
      * @return array
      */
     public function toArray()

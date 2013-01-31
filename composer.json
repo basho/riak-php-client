@@ -1,0 +1,11 @@
+{
+    "name": "basho/riak-php-client",
+    "description": "Official PHP client for Riak",
+    "type": "library",
+    "license": "Apache",
+    "autoload": {
+        "psr-0": {
+            "Basho": "src/"
+        }
+    }
+}

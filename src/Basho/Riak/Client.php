@@ -1,11 +1,12 @@
 <?php
+
 namespace Basho\Riak;
-use Basho\Riak\Bucket, Basho\Riak\MapReduce;
+
 /**
  * The Client object holds information necessary to connect to
  * Riak. The Riak API uses HTTP, so there is no persistent
  * connection, and the Client object is extremely lightweight.
- * 
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Client
@@ -28,39 +29,37 @@ class Client
     /** @var string */
     private $clientId;
 
-    /** 
-     * How many replicas need to agree when retrieving an existing object 
+    /**
+     * How many replicas need to agree when retrieving an existing object
      * before the write.
-     * 
+     *
      * @var integer|null
      */
     private $r;
 
-    /** 
+    /**
      * How many replicas to write to before returning a successful response
-     * 
+     *
      * @var integer|null
      */
     private $w;
 
-    /** 
-     * How many replicas to commit to durable storage before returning a 
+    /**
+     * How many replicas to commit to durable storage before returning a
      * successful response
-     * 
+     *
      * @var integer|null
      */
     private $dw;
 
     /**
      * Construct a new Client object.
-     * 
-     * @param string  $host         Hostname or IP address 
+     *
+     * @param string $host Hostname or IP address
      *                              (default '127.0.0.1')
      * @param integer $port         Port number (default 8098)
      * @param string  $prefix       Interface prefix (default "riak")
      * @param string  $mapredPrefix MapReduce prefix (default "mapred")
-     * 
-     * @return void
      */
     public function __construct($host = '127.0.0.1', $port = 8098,
             $prefix = 'riak', $mapredPrefix = 'mapred')
@@ -78,7 +77,7 @@ class Client
 
     /**
      * Get the R-value setting for this Client. (default 2)
-     * 
+     *
      * @return integer
      */
     public function getR()
@@ -91,9 +90,9 @@ class Client
      * for any calls to get(...) or getBinary(...) where where 1) no
      * R-value is specified in the method call and 2) no R-value has
      * been set in the Bucket.
-     * 
+     *
      * @param integer $r The R value.
-     * 
+     *
      * @return Client
      */
     public function setR($r)
@@ -105,7 +104,7 @@ class Client
 
     /**
      * Get the W-value setting for this Client. (default 2)
-     * 
+     *
      * @return integer
      */
     public function getW()
@@ -116,9 +115,9 @@ class Client
     /**
      * Set the W-value for this Client. See setR(...) for a
      * description of how these values are used.
-     * 
+     *
      * @param integer $w The W value.
-     * 
+     *
      * @return Client
      */
     public function setW($w)
@@ -130,7 +129,7 @@ class Client
 
     /**
      * Get the DW-value for this ClientOBject. (default 2)
-     * 
+     *
      * @return integer
      */
     public function getDW()
@@ -141,9 +140,9 @@ class Client
     /**
      * Set the DW-value for this Client. See setR(...) for a
      * description of how these values are used.
-     * 
+     *
      * @param integer $dw The DW value.
-     * 
+     *
      * @return Client
      */
     public function setDW($dw)
@@ -155,7 +154,7 @@ class Client
 
     /**
      * Get the clientID for this Client.
-     * 
+     *
      * @return string
      */
     public function getClientID()
@@ -166,9 +165,9 @@ class Client
     /**
      * Set the clientID for this Client. Should not be called
      * unless you know what you are doing.
-     * 
+     *
      * @param string $clientId The new clientId.
-     * 
+     *
      * @return Client
      */
     public function setClientID($clientId)
@@ -181,9 +180,9 @@ class Client
     /**
      * Get the bucket by the specified name. Since buckets always exist,
      * this will always return a Bucket.
-     * 
+     *
      * @param string $name Name
-     * 
+     *
      * @return Bucket
      */
     public function bucket($name)
@@ -193,7 +192,7 @@ class Client
 
     /**
      * Get all buckets.
-     * 
+     *
      * @return Bucket[]
      */
     public function buckets()
@@ -211,7 +210,7 @@ class Client
 
     /**
      * Check if the Riak server for this Client is alive.
-     * 
+     *
      * @return boolean
      */
     public function isAlive()
@@ -226,9 +225,9 @@ class Client
 
     /**
      * Start assembling a Map/Reduce operation.
-     * 
+     *
      * @param mixed $params Parameters
-     * 
+     *
      * @return MapReduce
      * @see MapReduce::add()
      */
@@ -243,9 +242,9 @@ class Client
     /**
      * Start assembling a Map/Reduce operation. This command will
      * return an error unless executed against a Riak Search cluster.
-     * 
+     *
      * @param mixed $params Parameters
-     * 
+     *
      * @return MapReduce
      * @see MapReduce::search()
      */
@@ -259,11 +258,11 @@ class Client
 
     /**
      * Start assembling a Map/Reduce operation.
-     * 
+     *
      * @param mixed $params Parameters
-     * 
+     *
      * @see MapReduce::link()
-     * @return void
+     * @return MapReduce
      */
     public function link($params)
     {
@@ -275,11 +274,11 @@ class Client
 
     /**
      * Start assembling a Map/Reduce operation.
-     * 
+     *
      * @param mixed $params Parameters
-     * 
+     *
      * @see MapReduce::map()
-     * @return void
+     * @return MapReduce
      */
     public function map($params)
     {
@@ -291,11 +290,11 @@ class Client
 
     /**
      * Start assembling a Map/Reduce operation.
-     * 
+     *
      * @param mixed $params Parameters
-     * 
+     *
      * @see MapReduce::reduce()
-     * @return void
+     * @return MapReduce
      */
     public function reduce($params)
     {

@@ -1,39 +1,39 @@
 <?php
+
 namespace Basho\Riak;
+
 /**
  * The MapReducePhase holds information about a Map phase or
  * Reduce phase in a MapReduce operation.
- * 
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class MapReducePhase
 {
     /** @var string */
     private $type;
-    
+
     /** @var string */
     private $language;
-    
+
     /** @var string|array */
     private $function;
-    
+
     /** @var boolean */
     public $keep;
-    
+
     /** @var mixed */
     private $arg;
-    
+
     /**
      * Construct a MapReducePhase object.
      * @param string  $type     "map" or "reduce"
      * @param mixed   $function string or array()
      * @param string  $language "javascript" or "erlang"
-     * @param boolean $keep     True to return the output of this phase in 
+     * @param boolean $keep     True to return the output of this phase in
      *                          the results.
-     * @param mixed   $arg      Additional value to pass into the map or 
+     * @param mixed   $arg      Additional value to pass into the map or
      *                          reduce function.
-     *                          
-     * @return void
      */
     public function __construct($type, $function, $language, $keep, $arg)
     {
@@ -43,10 +43,10 @@ class MapReducePhase
         $this->keep = $keep;
         $this->arg = $arg;
     }
-    
+
     /**
      * This method is only here to maintain backwards compatibility
-     * with old method names pre PSR codingstandard
+     * with old method names pre PSR coding standard
      *
      * @param string $name      Name of old method
      * @param array  $arguments Arguments for method
@@ -63,7 +63,7 @@ class MapReducePhase
     /**
      * Convert the MapReducePhase to an associative array. Used
      * internally.
-     * 
+     *
      * @return array
      */
     public function toArray()
