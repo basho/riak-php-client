@@ -326,7 +326,7 @@ class Bucket
      * @param array $props An associative array of $key=>$value.
      * 
      * @return void
-     * @throws Exception if http request was empty or not 204
+     * @throws \Exception if http request was empty or not 204
      */
     public function setProperties($props)
     {
@@ -354,7 +354,7 @@ class Bucket
      * Retrieve an associative array of all bucket properties.
      * 
      * @return array
-     * @throws Exception if bucket properties could not be requested
+     * @throws \Exception if bucket properties could not be requested
      */
     public function getProperties()
     {
@@ -383,7 +383,7 @@ class Bucket
      * Note: this operation is pretty slow.
      * 
      * @return array
-     * @throws Exception if bucket properties could not be requested
+     * @throws \Exception if bucket properties could not be requested
      */
     public function getKeys()
     {

@@ -22,7 +22,7 @@ class StringIO
     /**
      * Write
      * 
-     * @param unknown $ch
+     * @param mixed   $ch
      * @param string  $data Data to write
      * 
      * @return integer

@@ -337,7 +337,7 @@ class Object
      * 
      * @param string              $indexName
      * @param string              $indexType - must be 'bin' or 'int'
-     * @param string|int optional $explicitValue
+     * @param string|int          $explicitValue
      * 
      * @return Object
      */
@@ -377,8 +377,8 @@ class Object
      *
      * Note that this function will NOT affect auto indexes
      *
-     * @param string optional $indexName
-     * @param string optional $indexType
+     * @param string $indexName
+     * @param string $indexType
      *
      * @return Object
      */
@@ -751,7 +751,7 @@ class Object
      * @param array      $expectedStatuses Expected statuses
      * 
      * @return Object
-     * @throws Exception if we don't get an expcted status
+     * @throws \Exception if we don't get an expcted status
      */
     public function populate($response, array $expectedStatuses)
     {
