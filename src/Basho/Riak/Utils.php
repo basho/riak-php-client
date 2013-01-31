@@ -207,7 +207,7 @@ class Utils
             # Return a new RiakResponse object.
 
             return array($responseHeaders, $responseBody);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             curl_close($ch);
             error_log('Error: ' . $e->getMessage());
 
