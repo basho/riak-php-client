@@ -153,7 +153,7 @@ or
 ## Fetching Objects ##
 Objects can be retrieved from a bucket using the RiakBucket::get() method
 
-    # Save the object to Riak
+    # Retrieve the object from a bucket
     $person = $bucket->get('riak_developer_1');
 
 This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
