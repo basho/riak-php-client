@@ -1,18 +1,19 @@
 <?php
+
 namespace Basho\Riak;
+
 /**
  * Private class used to accumulate a CURL response.
- * 
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class StringIO
 {
     /** @var string */
     private $contents;
+
     /**
      * Create new Riak string
-     * 
-     * @return void
      */
     public function __construct()
     {
@@ -21,10 +22,10 @@ class StringIO
 
     /**
      * Write
-     * 
-     * @param mixed   $ch
-     * @param string  $data Data to write
-     * 
+     *
+     * @param mixed  $ch
+     * @param string $data Data to write
+     *
      * @return integer
      */
     public function write($ch, $data)
@@ -36,7 +37,7 @@ class StringIO
 
     /**
      * Get content
-     * 
+     *
      * @return string
      */
     public function contents()

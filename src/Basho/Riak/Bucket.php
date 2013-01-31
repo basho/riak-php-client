@@ -1,11 +1,12 @@
 <?php
+
 namespace Basho\Riak;
-use Basho\Riak\Link, Basho\Riak\Object, Basho\Riak\Utils;
+
 /**
  * The Bucket object allows you to access and change information
  * about a Riak bucket, and provides methods to create or retrieve
  * objects within the bucket.
- * 
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Bucket
@@ -16,34 +17,32 @@ class Bucket
     /** @var string */
     public $name;
 
-    /** 
-     * How many replicas need to agree when retrieving an existing object 
+    /**
+     * How many replicas need to agree when retrieving an existing object
      * before the write.
-     * 
+     *
      * @var integer|null
      */
     private $r;
 
-    /** 
+    /**
      * How many replicas to write to before returning a successful response
-     * 
+     *
      * @var integer|null
      */
     private $w;
 
-    /** 
-     * How many replicas to commit to durable storage before returning a 
+    /**
+     * How many replicas to commit to durable storage before returning a
      * successful response
-     * 
+     *
      * @var integer|null
      */
     private $dw;
 
     /**
      * @param Client $client Client
-     * @param string     $name   Name
-     * 
-     * @return void
+     * @param string $name
      */
     public function __construct(Client $client, $name)
     {
@@ -56,7 +55,7 @@ class Bucket
 
     /**
      * Get the bucket name.
-     * 
+     *
      * @return string
      */
     public function getName()
@@ -68,9 +67,9 @@ class Bucket
      * Get the number of replicas needed to agree when retrieving an existing
      * object before the write for this bucket, if it is set, otherwise return
      * the number for the client.
-     * 
+     *
      * @param integer $r Number of replicas need to agree
-     * 
+     *
      * @return integer
      */
     public function getR($r = null)
@@ -81,16 +80,17 @@ class Bucket
         if ($this->r != null) {
             return $this->r;
         }
+
         return $this->client->getR();
     }
 
     /**
-     * Set the the number replicas needed to agree when retrieving an existing object 
+     * Set the the number replicas needed to agree when retrieving an existing object
      * before the write for this bucket. get(...) and getBinary(...)
      * operations that do not specify an number will use this value.
-     * 
+     *
      * @param integer $r Number of replicas need to agree
-     * 
+     *
      * @return Bucket
      */
     public function setR($r)
@@ -103,9 +103,9 @@ class Bucket
     /**
      * Get the W-value for this bucket, if it is set, otherwise return
      * the W-value for the client.
-     * 
+     *
      * @param integer $w The W-value.
-     * 
+     *
      * @return integer
      */
     public function getW($w)
@@ -116,14 +116,15 @@ class Bucket
         if ($this->w != null) {
             return $this->w;
         }
+
         return $this->client->getW();
     }
 
     /**
      * Set the W-value for this bucket. See setR(...) for more information.
-     * 
+     *
      * @param integer $w The new W-value.
-     * 
+     *
      * @return Bucket
      */
     public function setW($w)
@@ -136,9 +137,9 @@ class Bucket
     /**
      * Get the DW-value for this bucket, if it is set, otherwise return
      * the DW-value for the client.
-     * 
+     *
      * @param integer $dw The DW-value
-     * 
+     *
      * @return integer
      */
     public function getDW($dw)
@@ -149,14 +150,15 @@ class Bucket
         if ($this->dw != null) {
             return $this->dw;
         }
+
         return $this->client->getDW();
     }
 
     /**
      * Set the DW-value for this bucket. See setR(...) for more information.
-     * 
+     *
      * @param integer $dw The new DW-value
-     * 
+     *
      * @return Bucket
      */
     public function setDW($dw)
@@ -168,10 +170,10 @@ class Bucket
 
     /**
      * Create a new Riak object that will be stored as JSON.
-     * 
+     *
      * @param string $key  Name of the key.
      * @param object $data The data to store. (default null)
-     * 
+     *
      * @return Object
      */
     public function newObject($key, $data = null)
@@ -186,10 +188,10 @@ class Bucket
 
     /**
      * Create a new Riak object that will be stored as plain text/binary.
-     * 
+     *
      * @param string $key         Name of the key.
      * @param object $data        The data to store.
-     * @param string $contentType The content type of the object. 
+     * @param string $contentType The content type of the object.
      *                            (default 'application/json')
      * @return Object
      */
@@ -205,10 +207,10 @@ class Bucket
 
     /**
      * Retrieve a JSON-encoded object from Riak.
-     * 
+     *
      * @param string  $key Name of the key.
      * @param integer $r   R-Value of the request (defaults to bucket's R)
-     * 
+     *
      * @return Object
      */
     public function get($key, $r = null)
@@ -222,10 +224,10 @@ class Bucket
 
     /**
      * Retrieve a binary/string object from Riak.
-     * 
+     *
      * @param string  $key Name of the key.
      * @param integer $r   R-Value of the request (defaults to bucket's R)
-     * 
+     *
      * @return Object
      */
     public function getBinary($key, $r = null)
@@ -243,19 +245,19 @@ class Bucket
      * before you write any data to the bucket, and never change it
      * again, otherwise unpredictable things could happen. This should
      * only be used if you know what you are doing.
-     * 
+     *
      * @param integer $nval The new N-Val.
-     * 
+     *
      * @return void
      */
     public function setNVal($nval)
     {
-        return $this->setProperty("n_val", $nval);
+        $this->setProperty("n_val", $nval);
     }
 
     /**
      * Retrieve the N-value for this bucket.
-     * 
+     *
      * @return integer
      */
     public function getNVal()
@@ -268,19 +270,19 @@ class Bucket
      * and returned to the client. This situation can be detected by
      * calling hasSiblings() and getSiblings(). This should only be used
      * if you know what you are doing.
-     * 
+     *
      * @param boolean $bool True to store and return conflicting writes.
-     * 
+     *
      * @return void
      */
     public function setAllowMultiples($bool)
     {
-        return $this->setProperty("allow_mult", $bool);
+        $this->setProperty("allow_mult", $bool);
     }
 
     /**
      * Retrieve the 'allow multiples' setting.
-     * 
+     *
      * @return boolean
      */
     public function getAllowMultiples()
@@ -291,22 +293,22 @@ class Bucket
     /**
      * Set a bucket property. This should only be used if you know what
      * you are doing.
-     * 
+     *
      * @param string $key   Property to set.
      * @param mixed  $value Property value.
-     * 
+     *
      * @return void
      */
     public function setProperty($key, $value)
     {
-        return $this->setProperties(array($key => $value));
+        $this->setProperties(array($key => $value));
     }
 
     /**
      * Retrieve a bucket property.
-     * 
-     * @param  string $key The property to retrieve.
-     * 
+     *
+     * @param string $key The property to retrieve.
+     *
      * @return mixed
      */
     public function getProperty($key)
@@ -322,9 +324,9 @@ class Bucket
     /**
      * Set multiple bucket properties in one call. This should only be
      * used if you know what you are doing.
-     * 
+     *
      * @param array $props An associative array of $key=>$value.
-     * 
+     *
      * @return void
      * @throws \Exception if http request was empty or not 204
      */
@@ -352,7 +354,7 @@ class Bucket
 
     /**
      * Retrieve an associative array of all bucket properties.
-     * 
+     *
      * @return array
      * @throws \Exception if bucket properties could not be requested
      */
@@ -364,7 +366,7 @@ class Bucket
                 $params);
         $response = Utils::httpRequest('GET', $url);
 
-        //Use a Object to interpret the response, 
+        //Use a Object to interpret the response,
         //we are just interested in the value.
         $obj = new Object($this->client, $this, null);
         $obj->populate($response, array(200));
@@ -381,7 +383,7 @@ class Bucket
     /**
      * Retrieve an array of all keys in this bucket.
      * Note: this operation is pretty slow.
-     * 
+     *
      * @return array
      * @throws \Exception if bucket properties could not be requested
      */
@@ -392,7 +394,7 @@ class Bucket
                 $params);
         $response = Utils::httpRequest('GET', $url);
 
-        //Use a Object to interpret the response, 
+        //Use a Object to interpret the response,
         //we are just interested in the value.
         $obj = new Object($this->client, $this, null);
         $obj->populate($response, array(200));
@@ -406,16 +408,18 @@ class Bucket
 
     /**
      * Search a secondary index
-     * 
+     *
      * @param string         $indexName    The name of the index to search
      * @param string         $indexType    The type of index ('int' or 'bin')
      * @param string|integer $startOrExact
      * @param string|integer $end          Optional.
-     * @param boolean        $dedupe       Optional. Whether to eliminate 
-     *                                     duplicate entries if any of 
+     * @param boolean        $dedupe       Optional. Whether to eliminate
+     *                                     duplicate entries if any of
      *                                     Links
-     * @return array                    
+     *
+     * @return array
      * @author Eric Stevens <estevens@taglabsinc.com>
+     * @throws \Exception if requested object does not exist
      */
     public function indexSearch($indexName, $indexType, $startOrExact,
             $end = null, $dedupe = false)
@@ -444,6 +448,7 @@ class Bucket
             $key = new Link($this->name, $key);
             $key->client = $this->client;
         }
+
         return $keys;
     }
 }

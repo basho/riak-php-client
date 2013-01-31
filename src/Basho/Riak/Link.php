@@ -1,33 +1,33 @@
 <?php
+
 namespace Basho\Riak;
+
 /**
  * The Link object represents a link from one Riak object to
  * another.
- * 
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Link
 {
     /** @var string */
     private $bucket;
-    
+
     /** @var string */
     private $key;
-    
+
     /** @var string|null */
     private $tag;
-    
+
     /** @var Client|null */
     public $client;
-    
+
     /**
      * Construct a Link object.
-     * 
+     *
      * @param string $bucket The bucket name.
      * @param string $key    The key.
      * @param string $tag    The tag.
-     * 
-     * @return void
      */
     public function __construct($bucket, $key, $tag = null)
     {
@@ -39,9 +39,9 @@ class Link
 
     /**
      * Retrieve the Object to which this link points.
-     * 
+     *
      * @param integer $r The R-value to use.
-     * 
+     *
      * @return Object
      */
     public function get($r = null)
@@ -51,9 +51,9 @@ class Link
 
     /**
      * Retrieve the Object to which this link points, as a binary.
-     * 
+     *
      * @param integer $r The R-value to use.
-     * 
+     *
      * @return Object
      */
     public function getBinary($r = null)
@@ -63,7 +63,7 @@ class Link
 
     /**
      * Get the bucket name of this link.
-     * 
+     *
      * @return string
      */
     public function getBucket()
@@ -73,9 +73,9 @@ class Link
 
     /**
      * Set the bucket name of this link.
-     * 
+     *
      * @param string $name The bucket name.
-     * 
+     *
      * @return Link
      */
     public function setBucket($name)
@@ -87,7 +87,7 @@ class Link
 
     /**
      * Get the key of this link.
-     * 
+     *
      * @return string
      */
     public function getKey()
@@ -97,9 +97,9 @@ class Link
 
     /**
      * Set the key of this link.
-     * 
+     *
      * @param string $key The key.
-     * 
+     *
      * @return Link
      */
     public function setKey($key)
@@ -111,7 +111,7 @@ class Link
 
     /**
      * Get the tag of this link.
-     * 
+     *
      * @return string
      */
     public function getTag()
@@ -125,9 +125,9 @@ class Link
 
     /**
      * Set the tag of this link.
-     * 
+     *
      * @param string $tag The tag.
-     * 
+     *
      * @return Link
      */
     public function setTag($tag)
@@ -139,9 +139,9 @@ class Link
 
     /**
      * Convert this Link object to a link header string. Used internally.
-     * 
+     *
      * @param Client $client Riak client
-     * 
+     *
      * @return string
      */
     public function toLinkHeader($client)
@@ -155,9 +155,9 @@ class Link
 
     /**
      * Return true if the links are equal.
-     * 
-     * @param  Link $link A Link object.
-     * 
+     *
+     * @param Link $link A Link object.
+     *
      * @return boolean
      */
     public function isEqual($link)

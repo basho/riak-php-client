@@ -1,23 +1,24 @@
 <?php
+
 namespace Basho\Riak;
-use Basho\Riak\StringIO;
+
 /**
  * Utility functions used by Riak library.
- * 
+ *
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
-class Utils 
+class Utils
 {
     /**
      * Get value
-     * 
+     *
      * @param string $key          Key
      * @param array  $array        List
      * @param mixed  $defaultValue Default value
-     * 
+     *
      * @return mixed
      */
-    public static function getValue($key, $array, $defaultValue) 
+    public static function getValue($key, $array, $defaultValue)
     {
         if (array_key_exists($key, $array)) {
             return $array[$key];
@@ -27,15 +28,15 @@ class Utils
     }
 
     /**
-     * This method is only here to maintain backwards compatibility 
-     * with old method names pre PSR codingstandard
-     * 
+     * This method is only here to maintain backwards compatibility
+     * with old method names pre PSR coding standard
+     *
      * @param string $name      Name of old method
      * @param array  $arguments Arguments for method
-     * 
+     *
      * @return void
      */
-    public static function __callStatic($name, $arguments) 
+    public static function __callStatic($name, $arguments)
     {
         if ($name == 'get_value') {
             self::getValue($arguments[0], $arguments[1], $arguments[2]);
@@ -45,17 +46,17 @@ class Utils
     /**
      * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL.
-     * 
+     *
      * @param Client      $client Riak client
      * @param Bucket|null $bucket Riak bucket
-     * @param string|null     $key
-     * @param array|null      $spec
-     * @param array|null      $params
-     * 
+     * @param string|null $key
+     * @param array|null  $spec
+     * @param array|null  $params
+     *
      * @return string
      */
     public static function buildRestPath(Client $client, $bucket = null, $key = null,
-            $spec = null, $params = null) 
+            $spec = null, $params = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = 'http://';
@@ -104,20 +105,20 @@ class Utils
     /**
      * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL for searching secondary indexes.
-     * 
+     *
      * @author Eric Stevens <estevens@taglabsinc.com>
-     * 
-     * @param  Client          $client Riak client
-     * @param  Bucket          $bucket Riak bucket
-     * @param  string              $index  Index Name & type (eg, "indexName_bin")
-     * @param  string|integer      $start  Starting value or exact match if no ending 
+     *
+     * @param Client         $client Riak client
+     * @param Bucket         $bucket Riak bucket
+     * @param string         $index  Index Name & type (eg, "indexName_bin")
+     * @param string|integer $start  Starting value or exact match if no ending
      *                                     value
-     * @param  string|integer|null $end    Ending value for range search
-     * 
-     * @return string     URL
+     * @param string|integer|null $end Ending value for range search
+     *
+     * @return string URL
      */
     public static function buildIndexPath(Client $client,
-            Bucket $bucket, $index, $start, $end = null) 
+            Bucket $bucket, $index, $start, $end = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = array('http:/', $client->host . ':' . $client->port,
@@ -149,16 +150,16 @@ class Utils
      * Given a Method, URL, Headers, and Body, perform and HTTP request,
      * and return an array of arity 2 containing an associative array of
      * response headers and the response body.
-     * 
+     *
      * @param string $method         Http method
      * @param string $url            Url
      * @param array  $requestHeaders Request headers
      * @param string $obj            Object
-     * 
+     *
      * @return array
      */
     public static function httpRequest($method, $url,
-            $requestHeaders = array(), $obj = '') 
+            $requestHeaders = array(), $obj = '')
     {
         # Set up curl
         $ch = curl_init();
@@ -216,14 +217,14 @@ class Utils
     }
 
     /**
-     * Parse an HTTP Header string into an asssociative array of
+     * Parse an HTTP Header string into an associative array of
      * response headers.
-     * 
+     *
      * @param string $headers Headers to parse
-     * 
+     *
      * @return array
      */
-    public static function parseHttpHeaders($headers) 
+    public static function parseHttpHeaders($headers)
     {
         $retVal = array();
         $fields = explode("\r\n",
