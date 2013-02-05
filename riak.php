@@ -37,15 +37,24 @@
  * @package RiakClient
  */
 class RiakClient {
+
+  protected $hosts = array();
+  protected $dropped = array();
+  protected $cluster = false;
+  public $host = '127.0.0.1';
+
   /**
    * Construct a new RiakClient object.
-   * @param string $host - Hostname or IP address (default '127.0.0.1')
+   * @param string|array $hosts - Hostname or IP address or hostname list (default '127.0.0.1')
    * @param int $port - Port number (default 8098)
    * @param string $prefix - Interface prefix (default "riak")
    * @param string $mapred_prefix - MapReduce prefix (default "mapred")
    */
-  function RiakClient($host='127.0.0.1', $port=8098, $prefix='riak', $mapred_prefix='mapred') {
-    $this->host = $host;
+  function RiakClient($hosts='127.0.0.1', $port=8098, $prefix='riak', $mapred_prefix='mapred') {
+    $this->hosts = (array)$hosts;
+    shuffle($this->hosts);
+    $this->host = $this->hosts[0];
+    $this->cluster = count($this->hosts) > 1;
     $this->port = $port;
     $this->prefix = $prefix;    
     $this->mapred_prefix = $mapred_prefix;
@@ -149,7 +158,7 @@ class RiakClient {
    */
   function buckets() {
     $url = RiakUtils::buildRestPath($this);
-    $response = RiakUtils::httpRequest('GET', $url.'?buckets=true');
+    $response = $this->httpRequest('GET', $url.'?buckets=true');
     $response_obj = json_decode($response[1]);
     $buckets = array();
     foreach($response_obj->buckets as $name) {
@@ -163,8 +172,7 @@ class RiakClient {
    * @return boolean
    */
   function isAlive() {
-    $url = 'http://' . $this->host . ':' . $this->port . '/ping';
-    $response = RiakUtils::httpRequest('GET', $url);
+    $response = $this->httpRequest('GET', '/ping');
     return ($response != NULL) && ($response[1] == 'OK');
   }
 
@@ -222,6 +230,57 @@ class RiakClient {
     $mr = new RiakMapReduce($this);
     $args = func_get_args();
     return call_user_func_array(array(&$mr, "reduce"), $args);
+  }
+
+  /**
+   * Wrapper over RiakUtils::httpRequest to support fast switching in case of dying host
+   * @see RiakUtils::httpRequest()
+   */
+  public function httpRequest($method, $url, $request_headers = array(), $obj = '') {
+    $response = RiakUtils::httpRequest($method, 'http://' . $this->host . ':' . $this->port . $url, $request_headers, $obj);
+    # If no response is received then try to switch to another
+    if (($response == NULL || $response[0]['http_code'] == 0) && $this->changeHost()) {
+    	$response = RiakUtils::httpRequest($method, 'http://' . $this->host . ':' . $this->port . $url, $request_headers, $obj);
+    }
+    return $response;
+  }
+
+  /**
+   * Search live host and switch to it.
+   * @return boolean
+   */
+  private function changeHost() {
+    if (!$this->cluster) {
+      return false;
+    }
+    # drop host
+    $this->dropped[] = $this->host;
+    unset($this->hosts[0]);
+    # If there are no hosts, check previously disabled in search of available
+    if (empty($this->hosts) && !empty($this->dropped)) {
+      foreach ($this->dropped as $k => $host) {
+        $response = RiakUtils::httpRequest('GET', 'http://' . $host . ':' . $this->port . '/ping');
+        if ($response != NULL && $response[1] == 'OK') {
+          $this->hosts[] = $host;
+          unset($this->dropped[$k]);
+        }
+      }
+    }
+    # switch to another host
+    if (!empty($this->hosts)) {
+      while ($this->hosts) {
+        shuffle($this->hosts);
+        $response = RiakUtils::httpRequest('GET', 'http://' . $this->hosts[0] . ':' . $this->port . '/ping');
+        if ($response != NULL && $response[1] == 'OK') {
+          $this->host = $this->hosts[0];
+          return true;
+        }
+        # host is not available. lock it
+        $this->dropped[] = $this->host;
+        unset($this->hosts[0]);
+      }
+    }
+    return false;
   }
 }
 
@@ -522,8 +581,8 @@ class RiakMapReduce {
     $content = json_encode($job); 
     
     # Do the request...
-    $url = "http://" . $this->client->host . ":" . $this->client->port . "/" . $this->client->mapred_prefix;
-    $response = RiakUtils::httpRequest('POST', $url, array('Content-type: application/json'), $content);
+    $url = '/' . $this->client->mapred_prefix;
+    $response = $this->client->httpRequest('POST', $url, array('Content-type: application/json'), $content);
     $result = json_decode($response[1]);
 
     # If the last phase is NOT a link phase, then return the result.
@@ -963,7 +1022,7 @@ class RiakBucket {
     $content = json_encode(array("props"=>$props));
     
     # Run the request...
-    $response = RiakUtils::httpRequest('PUT', $url, $headers, $content);
+    $response = $this->client->httpRequest('PUT', $url, $headers, $content);
 
     # Handle the response...
     if ($response == NULL) {
@@ -985,7 +1044,7 @@ class RiakBucket {
     # Run the request...
     $params = array('props' => 'true', 'keys' => 'false');
     $url = RiakUtils::buildRestPath($this->client, $this, NULL, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
+    $response = $this->client->httpRequest('GET', $url);
 
     # Use a RiakObject to interpret the response, we are just interested in the value.
     $obj = new RiakObject($this->client, $this, NULL);
@@ -1008,7 +1067,7 @@ class RiakBucket {
   function getKeys() {
     $params = array('props'=>'false','keys'=>'true');
     $url = RiakUtils::buildRestPath($this->client, $this, NULL, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
+    $response = $this->client->httpRequest('GET', $url);
 
     # Use a RiakObject to interpret the response, we are just interested in the value.
     $obj = new RiakObject($this->client, $this, NULL);
@@ -1032,7 +1091,7 @@ class RiakBucket {
    */
   function indexSearch($indexName, $indexType, $startOrExact, $end=NULL, $dedupe=false) {
     $url = RiakUtils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end);
-    $response = RiakUtils::httpRequest('GET', $url);
+    $response = $this->client->httpRequest('GET', $url);
     
     $obj = new RiakObject($this->client, $this, NULL);
     $obj->populate($response, array(200));
@@ -1581,7 +1640,7 @@ class RiakObject {
     $method = $this->key ? 'PUT' : 'POST';
 
     # Run the operation.
-    $response = RiakUtils::httpRequest($method, $url, $headers, $content);
+    $response = $this->client->httpRequest($method, $url, $headers, $content);
     $this->populate($response, array(200, 201, 300));
     return $this;
   }
@@ -1599,7 +1658,7 @@ class RiakObject {
     $r = $this->bucket->getR($r);
     $params = array('r' => $r);
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
+    $response = $this->client->httpRequest('GET', $url);
     $this->populate($response, array(200, 300, 404));
     
     # If there are siblings, load the data for the first one by default...
@@ -1626,7 +1685,7 @@ class RiakObject {
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
 
     # Run the operation...
-    $response = RiakUtils::httpRequest('DELETE', $url);    
+    $response = $this->client->httpRequest('DELETE', $url);    
     $this->populate($response, array(204, 404));
 
     return $this;
@@ -1682,7 +1741,7 @@ class RiakObject {
 
     # Check if the server is down (status==0)
     if ($status == 0) {
-      $m = 'Could not contact Riak Server: http://' . $this->client->host . ':' . $this->client->port . '!';
+      $m = 'Could not contact Riak Server: http://%hostname%:' . $this->client->port . '!';
       throw new Exception($m);
     }
 
@@ -1816,7 +1875,7 @@ class RiakObject {
     $vtag = $this->siblings[$i];
     $params = array('r' => $r, 'vtag' => $vtag);
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
-    $response = RiakUtils::httpRequest('GET', $url);
+    $response = $this->client->httpRequest('GET', $url);
     
     # Respond with a new object...
     $obj = new RiakObject($this->client, $this->bucket, $this->key);
@@ -1926,10 +1985,8 @@ class RiakUtils {
    * construct and return a URL.
    */
   public static function buildRestPath($client, $bucket=NULL, $key=NULL, $spec=NULL, $params=NULL) {
-    # Build 'http://hostname:port/prefix/bucket'
-    $path = 'http://';
-    $path.= $client->host . ':' . $client->port;
-    $path.= '/' . $client->prefix;
+    # Build '/prefix/bucket'
+    $path = '/' . $client->prefix;
     
     # Add '.../bucket'
     if (!is_null($bucket) && $bucket instanceof RiakBucket) {
@@ -1977,8 +2034,8 @@ class RiakUtils {
    * @return string URL
    */
   public static function buildIndexPath(RiakClient $client, RiakBucket $bucket, $index, $start, $end=NULL) {
-    # Build 'http://hostname:port/prefix/bucket'
-    $path = array('http:/',$client->host.':'.$client->port,$client->indexPrefix);
+    # Build '/prefix/bucket'
+    $path = array($client->indexPrefix);
 
     # Add '.../bucket'
     $path[] = urlencode($bucket->name);
