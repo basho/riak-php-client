@@ -676,7 +676,7 @@ class RiakLink {
    * @return $this
    */
   function setBucket($name) {
-    $this->bucket = $bucket;
+    $this->bucket = $name;
     return $this;
   }
 
