@@ -111,17 +111,18 @@ class MapReduce
     public function __call($name, $arguments)
     {
         if ($name == 'key_filter') {
-            call_user_func_array(array($this, "keyFilter"), $arguments);
+            return call_user_func_array(array($this, "keyFilter"), $arguments);
         }
         if ($name == 'key_filter_and') {
-            call_user_func_array(array($this, "keyFilterAnd"), $arguments);
+            return call_user_func_array(array($this, "keyFilterAnd"), $arguments);
         }
         if ($name == 'key_filter_or') {
-            call_user_func_array(array($this, "keyFilterOr"), $arguments);
+            return call_user_func_array(array($this, "keyFilterOr"), $arguments);
         }
         if ($name == 'key_filter_operator') {
-            call_user_func_array(array($this, "keyFilterOperator"), $arguments);
+            return call_user_func_array(array($this, "keyFilterOperator"), $arguments);
         }
+        return null;
     }
 
     /**
@@ -428,7 +429,7 @@ class MapReduce
         # Add key filters if applicable
         if ($this->inputMode == 'bucket' && count($this->keyFilters) > 0) {
             $this->inputs = array('bucket' => $this->inputs,
-                    'keyFilters' => $this->keyFilters);
+                    'key_filters' => $this->keyFilters);
         }
 
         # Add index search if applicable
