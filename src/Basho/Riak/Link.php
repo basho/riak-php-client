@@ -1,25 +1,42 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * The Link object represents a link from one Riak object to
  * another.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Link
 {
-    /** @var string */
+    /**
+     * The name of the bucket 
+     * @var string
+     */
     private $bucket;
 
-    /** @var string */
+    /**
+     * The key 
+     * @var string
+     */
     private $key;
 
-    /** @var string|null */
+    /**
+     * The tag 
+     * @var string|null
+     */
     private $tag;
 
-    /** @var Client|null */
+    /**
+     * Riak client 
+     * @var Client|null
+     */
     public $client;
 
     /**

@@ -1,32 +1,55 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * The Client object holds information necessary to connect to
  * Riak. The Riak API uses HTTP, so there is no persistent
  * connection, and the Client object is extremely lightweight.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Client
 {
-    /** @var string */
+    /**
+     * Hostname or IP address (default '127.0.0.1')
+     * @var string
+     */
     public $host;
 
-    /** @var integer */
+    /**
+     * Port number (default 8098)
+     * @var integer
+     */
     public $port;
 
-    /** @var string */
+    /**
+     * Interface prefix (default "riak") 
+     * @var string 
+     */
     public $prefix;
 
-    /** @var string */
+    /**
+     * MapReduce prefix (default "mapred") 
+     * @var string
+     */
     public $mapredPrefix;
 
-    /** @var string */
+    /**
+     * Index prefix (default "buckets") 
+     * @var string
+     */
     public $indexPrefix;
 
-    /** @var string */
+    /**
+     * Clinet id
+     * @var string 
+     */
     private $clientId;
 
     /**
@@ -55,7 +78,7 @@ class Client
     /**
      * Construct a new Client object.
      *
-     * @param string $host Hostname or IP address
+     * @param string $host          Hostname or IP address
      *                              (default '127.0.0.1')
      * @param integer $port         Port number (default 8098)
      * @param string  $prefix       Interface prefix (default "riak")

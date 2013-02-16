@@ -1,22 +1,36 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * The LinkPhase object holds information about a Link phase in a
  * map/reduce operation.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class LinkPhase
 {
-    /** @var string */
+    /**
+     * The name of the bucket 
+     * @var string
+     */
     private $bucket;
 
-    /** @var string|null */
+    /**
+     * The tag 
+     * @var string|null
+     */
     private $tag;
 
-    /** @var boolean */
+    /**
+     * Should we return results of current phase. 
+     * @var boolean
+     */
     public $keep;
 
     /**

@@ -1,31 +1,59 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * The MapReduce object allows you to build up and run a
  * map/reduce operation on Riak.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * 
+ * @method MapReduce key_filter(array $filter)
+ * @method MapReduce key_filter_and(array $filter)
+ * @method MapReduce key_filter_or(array $filter)
+ * @method MapReduce key_filter_operator($operator, array $filter)
  */
 class MapReduce
 {
-    /** @var Client */
+    /**
+     * Riak client 
+     * @var Client
+     */
     private $client;
 
-    /** @var LinkPhase[] */
+    /** 
+     * A list of phases
+     * @var LinkPhase[]
+     */
     private $phases;
 
-    /** @var array */
+    /**
+     * A list of inputs 
+     * @var array
+     */
     private $inputs;
 
-    /** @var string|null */
+    /**
+     * Input mode 
+     * @var string|null
+     */
     private $inputMode;
 
-    /** @var array */
+    /**
+     * List of key filters 
+     * @var array
+     */
     private $keyFilters;
 
-    /** @var array */
+    /**
+     * Indexes 
+     * @var array
+     */
     private $index;
 
     /**
@@ -46,10 +74,11 @@ class MapReduce
     }
 
     /**
-     * Add inputs to a map/reduce operation. This method takes three
-     * different forms, depending on the provided inputs. You can
-     * specify either  a Object, a string bucket name, or a bucket,
-     * key, and additional arg.
+     * Add inputs to a map/reduce operation. 
+     * 
+     * This method takes three different forms, depending on the provided 
+     * inputs. You can specify either  a Object, a string bucket name, or
+     * a bucket, key, and additional arg.
      *
      * @param mixed  $arg1 Object or Bucket
      * @param string $arg2 Key or blank
@@ -108,7 +137,7 @@ class MapReduce
     }
 
     /**
-     * Private.
+     * Add bucket key data
      *
      * @param mixed $bucket
      * @param mixed $key
@@ -128,7 +157,7 @@ class MapReduce
     }
 
     /**
-     * Private.
+     * Add bucket
      *
      * @param mixed $bucket
      *
@@ -143,8 +172,10 @@ class MapReduce
     }
 
     /**
-     * Begin a map/reduce operation using a Search. This command will
-     * return an error unless executed against a Riak Search cluster.
+     * Begin a map/reduce operation using a Search. 
+     * 
+     * This command will return an error unless executed against a Riak 
+     * Search cluster.
      *
      * @param string $bucket The Bucket to search.
      * @param string $query  The Query to execute. (Lucene syntax.)
@@ -201,6 +232,7 @@ class MapReduce
 
     /**
      * Add a reduce phase to the map/reduce operation.
+     * 
      * @param mixed $function Either a named Javascript function
      *                        (ie: "Riak.mapValues"), or an anonymous
      *                        javascript function (ie: "function(...) { ... }"
@@ -222,9 +254,10 @@ class MapReduce
     }
 
     /**
-     * Add a key filter to the map/reduce operation. If there are already
-     * existing filters, an "and" condition will be used to combine them.
-     * Alias for key_filter_and
+     * Add a key filter to the map/reduce operation. 
+     * 
+     * If there are already existing filters, an "and" condition will be used
+     * to combine them. Alias for key_filter_and
      *
      * @param array $filter A key filter (ie:->keyFilter(array("tokenize", "-", 2),
      *                      array("between", "20110601", "20110630"))
@@ -240,8 +273,10 @@ class MapReduce
     }
 
     /**
-     * Add a key filter to the map/reduce operation.  If there are already
-     * existing filters, an "and" condition will be used to combine them.
+     * Add a key filter to the map/reduce operation. 
+     * 
+     * If there are already existing filters, an "and" condition will be used
+     * to combine them.
      *
      * @param array $filter A key filter (ie:->keyFilter(array("tokenize", "-", 2),
      *                      array("between", "20110601", "20110630"))
@@ -257,9 +292,10 @@ class MapReduce
     }
 
     /**
-     * Adds a key filter to the map/reduce operation.  If there are already
-     * existing filters, an "or" condition will be used to combine with the
-     * existing filters.
+     * Adds a key filter to the map/reduce operation. 
+     * 
+     * If there are already existing filters, an "or" condition will be used to
+     * combine with the existing filters.
      *
      * @param array $filter Filter
      *
@@ -274,9 +310,10 @@ class MapReduce
     }
 
     /**
-     * Adds a key filter to the map/reduce operation.  If there are already
-     * existing filters, the provided conditional operator will be used
-     * to combine with the existing filters.
+     * Adds a key filter to the map/reduce operation. 
+     * 
+     * If there are already existing filters, the provided conditional operator
+     * will be used to combine with the existing filters.
      *
      * @param string $operator Operator (usually "and" or "or")
      * @param array  $filter   Filter
@@ -309,6 +346,7 @@ class MapReduce
 
     /**
      * Performs an index search as part of a Map/Reduce operation
+     * 
      * Note that you can only do index searches on a bucket, so
      * this is incompatible with object or key operations, as well
      * as key filter operations.
@@ -346,12 +384,13 @@ class MapReduce
         }
 
         return $this;
-
     }
 
     /**
-     * Run the map/reduce operation. Returns an array of results, or an
-     * array of Link objects if the last phase is a link phase.
+     * Run the map/reduce operation. 
+     * 
+     * Returns an array of results, or an array of Link objects if the last
+     * phase is a link phase.
      *
      * @param integer $timeout Timeout in seconds.
      *

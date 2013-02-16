@@ -30,7 +30,7 @@
 							<arg line="--directory ${phpdoc.include.dir}" />
 							<arg line="--sourcecode" />
 							<arg line="--defaultpackagename ${phpdoc.defaultpackagename}" />
-							<arg line="--title 'Phpdoc for ${phpdoc.defaultpackagename}'" />
+							<arg line="--title 'riak-php-client'" />
 							<arg line="--target ${target.dir}/phpdoc" />
 						</exec>
 					</then>
@@ -38,7 +38,7 @@
 						<exec dir="${basedir}" executable="phpdoc" failonerror="true">
 							<arg line="--directory ${phpdoc.include.dir}" />
 							<arg line="--sourcecode" />
-							<arg line="--title 'Phpdoc for ${phpdoc.defaultpackagename}'" />
+							<arg line="--title 'riak-php-client'" />
 							<arg line="--defaultpackagename ${phpdoc.defaultpackagename}" />
 							<arg line="--target ${target.dir}/phpdoc" />
 							<arg line="--filename ${phpdoc.include.file}" />

@@ -25,7 +25,7 @@ class ObjectTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$this->object = null;
+        $this->object = null;
     }
 
     /**

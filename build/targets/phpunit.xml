@@ -1,8 +1,4 @@
 <project>
-    <property name="phpunit.junit.file" value="${target.dir}/phpunit/junit.xml" />
-    <property name="phpunit.clover.file" value="${target.dir}/phpunit/coverage.xml" />
-    <property name="phpunit.clover.html.dir" value="${target.dir}/phpunit/coverage" />
-
   	<target name="phpunit-clean" depends="" description="Remove any previously generated report">
     		<delete dir="${target.dir}/phpunit" />
   	</target>
@@ -14,16 +10,7 @@
     <target name="phpunit" depends="phpunit-clean,phpunit-init">
         <exec executable="phpunit">
             <arg line="--bootstrap ${test.dir}/bootstrap.php" />
-            <arg line="--log-junit ${phpunit.junit.file}" />
-            <arg line="--coverage-clover ${phpunit.clover.file}" />
-            <arg line="--coverage-html ${phpunit.clover.html.dir}" />
-            <arg value="${test.dir}" />
+            <arg line="--configuration ${test.dir}/phpunit.xml" />
         </exec>
-
-        <!-- mark testcases with "phpunit" package for Jenkins -->
-        <replace file="${phpunit.junit.file}">
-            <replacetoken>testsuite name="</replacetoken>
-            <replacevalue>testsuite name="phpunit.</replacevalue>
-        </replace>
     </target>
 </project>
