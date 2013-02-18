@@ -11,7 +11,7 @@ The aim with the update is to:
 
 ## Documentation ##
 API documentation for this library can be found at<br/>
-<http://basho.github.com/riak-php-client/>
+<http://localgod.github.com/riak-php-client/>
 
 (See **Documentation Maintenance** at the bottom of the README for instructions on updating the docs.)
 
@@ -356,39 +356,3 @@ The same search format used for RiakBucket::indexSearch() may be used during Map
         ->map("function (v) { return [v.key]; }")
         ->reduce("Riak.reduceSort")
         ->run();
-
-## Additional Resources ##
-
-See unit_tests.php for more examples.<br/>
-<https://github.com/basho/riak-php-client/blob/master/unit_tests.php>
-
-## Documentation Maintenance
-
-The PHP API documentation should be regenerated upon each new client release or each new non-trivial API change.
-
-Currently the docs are generated using a tool called [Doxygen](http://www.stack.nl/~dimitri/doxygen/index.html), stored in the gh-pages branch of this repo, and are hosted at [http://basho.github.com/riak-php-client/](basho.github.com/riak-php-client/). (Basho is open to suggestions for changing how we generate and manage the API docs.)
-
-### Generating the PHP Documentation
-
-1. Make sure your local copy of this repository is up to date with the latest release/changes.
-
-2. Download and install Doxygen. This should only take you a few minutes. Simple instructions [are here](http://www.stack.nl/~dimitri/doxygen/download.html). You want the "Doxygen SVN repository" instructions.
-
-3. Now that you've got Doxygen installed, generating the new documentation is easy. The configuration is specified in the file "php-doxyfile". Simply tell Doxygen to generate the docs using that configuration:
-
-		$ doxygen php-doxyfile .
-
-4. This should produce a new "docs" directory packed with all sorts of goodness. The next step is to update the "gh-pages" branch:
-
-		$ mv docs /tmp/riak-php-docs
-		$ git checkout gh-pages
-		$ git rm -rf *
-		$ mv /tmp/riak-php-docs/* . && rm -rf /tmp/riak-php-docs
-
-5. Add, commit and push everything:
-
-		$ git add .
-		$ git commit -m "updated docs"
-		$ git push origin gh-pages
-
-Once you push your changes to the gh-pages branch they will be synced to [http://basho.github.com/riak-php-client/](http://basho.github.com/riak-php-client/)
