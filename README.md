@@ -13,8 +13,6 @@ The aim with the update is to:
 API documentation for this library can be found at<br/>
 <http://localgod.github.com/riak-php-client/>
 
-(See **Documentation Maintenance** at the bottom of the README for instructions on updating the docs.)
-
 Documentation for use of Riak clients in general can be found at<br/>
 <http://docs.basho.com/riak/latest/references/Client-Libraries/>
 
