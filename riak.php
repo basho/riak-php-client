@@ -238,9 +238,9 @@ class RiakClient {
    */
   public function httpRequest($method, $url, $request_headers = array(), $obj = '') {
     $response = RiakUtils::httpRequest($method, 'http://' . $this->host . ':' . $this->port . $url, $request_headers, $obj);
-    # If no response is received then try to switch to another
-    if (($response == NULL || $response[0]['http_code'] == 0) && $this->changeHost()) {
-    	$response = RiakUtils::httpRequest($method, 'http://' . $this->host . ':' . $this->port . $url, $request_headers, $obj);
+    # If no response is receivedor received a 5xx response then try to switch to another
+    if (($response == NULL || !$response[0]['http_code'] || $response[0]['http_code'][0] == 5) && $this->changeHost()) {
+      $response = RiakUtils::httpRequest($method, 'http://' . $this->host . ':' . $this->port . $url, $request_headers, $obj);
     }
     return $response;
   }
@@ -1685,7 +1685,7 @@ class RiakObject {
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
 
     # Run the operation...
-    $response = $this->client->httpRequest('DELETE', $url);    
+    $response = $this->client->httpRequest('DELETE', $url);
     $this->populate($response, array(204, 404));
 
     return $this;
@@ -1741,7 +1741,7 @@ class RiakObject {
 
     # Check if the server is down (status==0)
     if ($status == 0) {
-      $m = 'Could not contact Riak Server: http://%hostname%:' . $this->client->port . '!';
+      $m = 'Could not contact Riak Server: http://'.$this->client->host.':' . $this->client->port . '!';
       throw new Exception($m);
     }
 
@@ -2002,8 +2002,8 @@ class RiakUtils {
     if (!is_null($spec)) {
       $s = '';
       foreach($spec as $el) {
-	if ($s != '') $s .= '/';
-	$s .= urlencode($el[0]) . ',' . urlencode($el[1]) . ',' . $el[2] . '/';
+        if ($s != '') $s .= '/';
+        $s .= urlencode($el[0]) . ',' . urlencode($el[1]) . ',' . $el[2] . '/';
       }
       $path .= '/' . $s;
     }
@@ -2012,8 +2012,8 @@ class RiakUtils {
     if (!is_null($params)) {
       $s = '';
       foreach ($params as $key => $value) {
-	if ($s != '') $s .= '&';
-	$s .= urlencode($key) . '=' . urlencode($value);
+        if ($s != '') $s .= '&';
+        $s .= urlencode($key) . '=' . urlencode($value);
       }
 
       $path .= '?' . $s;
