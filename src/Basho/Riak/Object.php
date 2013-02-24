@@ -757,11 +757,7 @@ class Object
      * @param array      $expectedStatuses Expected statuses
      *
      * @return Object
-<<<<<<< HEAD
-     * @throws \Exception if we don't get an expcted status
-=======
      * @throws \Exception if we don't get an expected status
->>>>>>> 3c47099... PSR fixes
      */
     public function populate($response, array $expectedStatuses)
     {

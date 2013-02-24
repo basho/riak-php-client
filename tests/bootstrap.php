@@ -18,7 +18,6 @@ define('PORT', 8098);
 spl_autoload_register(
 function ($name)
 {
-    //exit($name.' / '.substr($name, 0, 10));
     if ('Basho\Riak\\' == substr($name, 0, 11)) {
         $path = __DIR__ . '/../src' . DIRECTORY_SEPARATOR
                 . str_replace('\\', DIRECTORY_SEPARATOR, $name)

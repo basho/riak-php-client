@@ -29,7 +29,8 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractScopeSniff', true) === false
  * @version   Release: 1.0.0
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class PSR_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff
+class PSR_Sniffs_NamingConventions_ValidFunctionNameSniff 
+    extends PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff
 {
 
     /**
@@ -57,7 +58,8 @@ class PSR_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_Na
         if (preg_match('|^__|', $methodName) !== 0) {
             $magicPart = substr($methodName, 2);
             if (in_array($magicPart, $this->magicMethods) === false) {
-                 $error = 'Method name "%s" is invalid; only PHP magic methods should be prefixed with a double underscore';
+                 $error = 'Method name "%s" is invalid; 
+                         only PHP magic methods should be prefixed with a double underscore';
                  
                  $phpcsFile->addError($error, $stackPtr, 'MethodDoubleUnderscore', $errorData);
             }
@@ -118,6 +120,5 @@ class PSR_Sniffs_NamingConventions_ValidFunctionNameSniff extends PEAR_Sniffs_Na
             }
         }
     }
-
 }
 

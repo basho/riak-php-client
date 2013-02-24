@@ -167,13 +167,15 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         // Test getSibling()/getSiblings()...
         $siblings = $obj->getSiblings();
         $obj3 = $obj->getSibling(3);
-        $this->assertEquals($siblings[3]->getData(), $obj3->getData(), 'check equal data');
+        $this->assertEquals($siblings[3]->getData(),
+                $obj3->getData(), 'check equal data');
 
         // Resolve the conflict, and then do a get...
         $obj3 = $obj->getSibling(3);
         $obj3->store();
         $obj->reload();
-        $this->assertEquals($obj->getData(), $obj3->getData(), 'check equal data after update');
+        $this->assertEquals($obj->getData(), 
+                $obj3->getData(), 'check equal data after update');
 
         // Clean up for next test...
         $obj->delete();
@@ -248,8 +250,12 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         $bucket->newObject('baz', 4)->store();
 
         // Run the map...
-        $result = $this->client->add($bucket->getName())->map('Riak.mapValuesJson')
-                ->reduce('Riak.reduceSum')->run();
+        $result = $this->client
+            ->add($bucket->getName())
+            ->map('Riak.mapValuesJson')
+            ->reduce('Riak.reduceSum')
+            ->run();
+        
         $this->assertEquals(array(9), $result, 'check result');
     }
     /**
@@ -261,7 +267,8 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         $bucket->newObject('foo', 2)->store();
 
         // Run the map...
-        $result = $this->client->add('bucket', 'foo', 5)->add('bucket', 'foo', 10)
+        $result = $this->client->add('bucket', 'foo', 5)
+                ->add('bucket', 'foo', 10)
                 ->add('bucket', 'foo', 15)->add('bucket', 'foo', -15)
                 ->add('bucket', 'foo', -5)
                 ->map('function(v, arg) { return [arg]; }')
@@ -391,13 +398,15 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
                 ->store();
 
         // Run some operations...
-        $results = $this->client->search('searchbucket', 'foo:one OR foo:two')->run();
+        $results = $this->client
+                ->search('searchbucket', 'foo:one OR foo:two')->run();
         if (count($results) == 0) {
             $this->markTestSkipped(
             'Not running test "testSearchIntegration()"'
             . PHP_EOL
-            . 'Please ensure that you have installed the Riak Search hook on bucket 
-               "searchbucket" by running "bin/search-cmd install searchbucket"');
+            . 'Please ensure that you have installed the Riak Search hook on 
+               bucket "searchbucket" by running "bin/search-cmd install
+               searchbucket"');
         }
 
         $this->assertEquals(2, count($results), 'check results length');
@@ -491,9 +500,10 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         $results = $bucket->indexSearch("number", "int", 1);
         $this->assertEquals(1, count($results));
     
-        # Test proper collision handling on autoIndex and regular index on same field
-        $bucket->newObject("seven", array("foo" => 7))->addAutoIndex("foo", "int")
-        ->addIndex("foo", "int", 7)->store();
+        # Test proper collision handling on autoIndex 
+        # and regular index on same field
+        $bucket->newObject("seven", array("foo" => 7))
+            ->addAutoIndex("foo", "int")->addIndex("foo", "int", 7)->store();
     
         $results = $bucket->indexSearch("foo", "int", 7);
         $this->assertEquals(1, count($results));
@@ -542,12 +552,12 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         ->setIndex("text", "bin", array("x", "y", "z"))->store();
     
         # Test
-        $result = $this->client->add($bucket->getName())->indexSearch('number', 'int', 6)
-        ->run();
+        $result = $this->client->add($bucket->getName())
+            ->indexSearch('number', 'int', 6)->run();
         $this->assertEquals(1, count($result));
     
-        $result = $this->client->add($bucket->getName())->indexSearch('number', 'int', 9)
-        ->run();
+        $result = $this->client->add($bucket->getName())
+            ->indexSearch('number', 'int', 9)->run();
         $this->assertEquals(0, count($result));
     
         $result = $this->client->add($bucket->getName())
