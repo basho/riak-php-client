@@ -25,7 +25,7 @@ class StringIOTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    	$this->stringIO = null;
+        $this->stringIO = null;
     }
 
     /**

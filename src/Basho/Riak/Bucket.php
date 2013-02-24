@@ -1,20 +1,31 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * The Bucket object allows you to access and change information
  * about a Riak bucket, and provides methods to create or retrieve
  * objects within the bucket.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Bucket
 {
-    /** @var Client */
+    /** 
+     * A riak client object
+     * @var Client 
+     */
     private $client;
 
-    /** @var string */
+    /**
+     * The name of the bucket
+     * @var string
+     */
     public $name;
 
     /**
@@ -41,8 +52,12 @@ class Bucket
     private $dw;
 
     /**
+     * Construct a new bucket.
+     * 
      * @param Client $client Client
-     * @param string $name
+     * @param string $name   The name of the bucket
+     * 
+     * @return void
      */
     public function __construct(Client $client, $name)
     {

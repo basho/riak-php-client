@@ -1,11 +1,16 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * Utility functions used by Riak library.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Utils
 {

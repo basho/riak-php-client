@@ -1,53 +1,95 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * The Object holds meta information about a Riak object, plus the
  * object's data.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class Object
 {
-    /** @var array */
+    /**
+     * A Client object. 
+     * @var array
+     */
     protected $meta = array();
 
-    /** @var array */
+    /**
+     * Indexes 
+     * @var array
+     */
     protected $indexes = array();
 
-    /** @var array */
+    /**
+     * Auto indexes 
+     * @var array
+     */
     protected $autoIndexes = array();
 
-    /** @var Client */
+    /** 
+     * A Client object.
+     * @var Client
+     */
     private $client;
 
-    /** @var Bucket */
+    /** 
+     * A Bucket object.
+     * @var Bucket
+     */
     private $bucket;
 
-    /** @var string */
+    /** 
+     * A key. (optional)
+     * @var string
+     */
     private $key;
 
-    /** @var boolean */
+    /** 
+     * Should data be json encoded
+     * @var boolean
+     */
     public $jsonize;
 
-    /** @var array */
+    /** 
+     * List of headers
+     * @var array
+     */
     private $headers;
 
-    /** @var Link[] */
+    /** 
+     * List of links
+     * @var Link[]
+     */
     private $links;
 
-    /** @var array|null */
+    /** 
+     * List of siblings
+     * @var array|null
+     */
     private $siblings;
 
-    /** @var boolean */
+    /** 
+     * Dos the object already exists
+     * @var boolean
+     */
     private $exists;
 
-    /** @var array|string|null */
+    /** 
+     * Data
+     * @var array|string|null
+     */
     private $data;
 
     /**
      * Construct a new Object.
+     * 
      * @param Client $client A Client object.
      * @param Bucket $bucket A Bucket object.
      * @param string $key    An optional key. If not specified, then key
@@ -91,9 +133,11 @@ class Object
     }
 
     /**
-     * Get the data stored in this object. Will return a associative
-     * array, unless the object was constructed with newBinary(...) or
-     * getBinary(...), in which case this will return a string.
+     * Get the data stored in this object. 
+     * 
+     * Will return a associative array, unless the object was constructed 
+     * with newBinary(...) or getBinary(...), in which case this will 
+     * return a string.
      *
      * @return array|string
      */
@@ -103,19 +147,20 @@ class Object
     }
 
     /**
-     * Set the data stored in this object. This data will be
-     * JSON encoded unless the object was constructed with
+     * Set the data stored in this object. 
+     * 
+     * This data will be JSON encoded unless the object was constructed with
      * newBinary(...) or getBinary(...).
      *
      * @param mixed $data The data to store.
      *
-     * @return mixed $data
+     * @return Object
      */
     public function setData($data)
     {
         $this->data = $data;
 
-        return $this->data;
+        return $this;
     }
 
     /**
@@ -129,6 +174,8 @@ class Object
     }
 
     /**
+     * Check if the object exists
+     * 
      * Return true if the object exists, false otherwise. Allows you to
      * detect a get(...) or getBinary(...) operation where the object
      * is missing.
@@ -141,8 +188,10 @@ class Object
     }
 
     /**
-     * Get the content type of this object. This is either application/json, or
-     * the provided content type if the object was created via newBinary(...).
+     * Get the content type of this object. 
+     * 
+     * This is either application/json, or the provided content type if the
+     * object was created via newBinary(...).
      *
      * @return string
      */
@@ -249,6 +298,7 @@ class Object
 
     /**
      * Adds a secondary index to the object
+     * 
      * This will create the index if it does not exist, or will
      * append an additional value if the index already exists and
      * does not contain the provided value.
@@ -312,6 +362,7 @@ class Object
 
     /**
      * Gets the current values for the identified index
+     * 
      * Note, the null value has special meaning - when the object is
      * ->store()d, this value will be replaced with the current value
      * the value of the field matching $indexName from the object's data
@@ -338,9 +389,9 @@ class Object
     /**
      * Removes a specific value from a given index
      *
-     * @param string     $indexName
-     * @param string     $indexType - must be 'bin' or 'int'
-     * @param string|int $explicitValue
+     * @param string         $indexName     Name of the index
+     * @param string         $indexType     Must be 'bin' or 'int'
+     * @param string|integer $explicitValue
      *
      * @return Object
      */
@@ -372,6 +423,7 @@ class Object
 
     /**
      * Bulk index removal
+     * 
      * If $indexName and $indexType are provided, all values for the
      * identified index are removed.
      * If just $indexName is provided, all values for all types of
@@ -380,7 +432,7 @@ class Object
      *
      * Note that this function will NOT affect auto indexes
      *
-     * @param string $indexName
+     * @param string $indexName Name of the index
      * @param string $indexType
      *
      * @return Object
@@ -400,10 +452,9 @@ class Object
         return $this;
     }
 
-    /** @section Auto Indexes */
-
     /**
      * Adds an automatic secondary index to the object
+     * 
      * The value of an automatic secondary index is determined at
      * time of ->store() by looking for an $fieldName key
      * in the object's data.
@@ -466,6 +517,7 @@ class Object
 
     /**
      * Removes all auto indexes
+     * 
      * If $fieldName is not provided, all auto indexes on the
      * object are stripped, otherwise just indexes on the given field
      * are stripped.
@@ -492,10 +544,9 @@ class Object
         return $this;
     }
 
-    /** @section Meta Data */
-
     /**
      * Gets a given metadata value
+     * 
      * Returns null if no metadata value with the given name exists
      *
      * @param string $metaName Meta name
@@ -565,10 +616,11 @@ class Object
     }
 
     /**
-     * Store the object in Riak. When this operation completes, the
-     * object could contain new metadata and possibly new data if Riak
-     * contains a newer version of the object according to the object's
-     * vector clock.
+     * Store the object in Riak. 
+     * 
+     * When this operation completes, the object could contain new metadata 
+     * and possibly new data if Riak contains a newer version of the object
+     * according to the object's vector clock.
      *
      * @param integer $w  W-value, wait for this many partitions to respond
      *                    before returning to client.
@@ -661,9 +713,11 @@ class Object
     }
 
     /**
-     * Reload the object from Riak. When this operation completes, the
-     * object could contain new metadata and a new value, if the object
-     * was updated in Riak since it was last retrieved.
+     * Reload the object from Riak. 
+     * 
+     * When this operation completes, the object could contain new metadata
+     * and a new value, if the object was updated in Riak since it was last
+     * retrieved.
      *
      * @param integer $r R-Value, wait for this many partitions to respond
      *                   before returning to client.
@@ -750,14 +804,15 @@ class Object
 
     /**
      * Given the output of Utils::httpRequest and a list of
-     * statuses, populate the object. Only for use by the Riak client
-     * library.
+     * statuses, populate the object. 
+     * 
+     * @internal Only for use by the Riak client library.
      *
      * @param array|null $response         Response
      * @param array      $expectedStatuses Expected statuses
      *
      * @return Object
-     * @throws \Exception if we don't get an expected status
+     * @throws \Exception if we don't get an expcted status
      */
     public function populate($response, array $expectedStatuses)
     {
@@ -873,7 +928,7 @@ class Object
     }
 
     /**
-     * Private.
+     * Populate links
      *
      * @param array $linkHeaders Link headers
      *

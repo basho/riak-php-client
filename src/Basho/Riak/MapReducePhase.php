@@ -1,32 +1,53 @@
 <?php
-
+/**
+ * This file is part of the riak-php-client.
+ *
+ * PHP version 5.3+
+ *
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
+ * @link https://github.com/localgod/riak-php-client
+ */
 namespace Basho\Riak;
 
 /**
  * The MapReducePhase holds information about a Map phase or
  * Reduce phase in a MapReduce operation.
- *
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  */
 class MapReducePhase
 {
-    /** @var string */
+    /** 
+     * Type of operation ("map" or "reduce")
+     * @var string
+     */
     private $type;
 
-    /** @var string */
+    /** 
+     * Language to use ("javascript" or "erlang")
+     * @var string
+     */
     private $language;
 
-    /** @var string|array */
+    /**
+     * Function to use 
+     * @var string|array
+     */
     private $function;
 
-    /** @var boolean */
+    /**
+     * Should we return the output of this phase in the results. 
+     * @var boolean
+     */
     public $keep;
 
-    /** @var mixed */
+    /**
+     * Additional value to pass into the map or reduce function.
+     * @var mixed
+     */
     private $arg;
 
     /**
      * Construct a MapReducePhase object.
+     * 
      * @param string  $type     "map" or "reduce"
      * @param mixed   $function string or array()
      * @param string  $language "javascript" or "erlang"

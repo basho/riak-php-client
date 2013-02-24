@@ -25,4 +25,3 @@ function ($name)
         require_once $path;
     }
 });
-
