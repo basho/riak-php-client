@@ -288,7 +288,7 @@ class Object
     {
         # Set the clients before returning...
         foreach ($this->links as $link) {
-            $link->client = $this->client;
+            $link->setClient($this->client);
         }
 
         return $this->links;

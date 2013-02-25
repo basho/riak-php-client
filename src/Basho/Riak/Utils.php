@@ -54,9 +54,9 @@ class Utils
      *
      * @param Client      $client Riak client
      * @param Bucket|null $bucket Riak bucket
-     * @param string|null $key
-     * @param array|null  $spec
-     * @param array|null  $params
+     * @param string|null $key    Key
+     * @param array|null  $spec   Link spec
+     * @param array|null  $params Parameters
      *
      * @return string
      */
@@ -113,11 +113,12 @@ class Utils
      *
      * @author Eric Stevens <estevens@taglabsinc.com>
      *
-     * @param Client         $client Riak client
-     * @param Bucket         $bucket Riak bucket
-     * @param string         $index  Index Name & type (eg, "indexName_bin")
-     * @param string|integer $start  Starting value or exact match if no ending
-     *                                     value
+     * @param Client              $client Riak client
+     * @param Bucket              $bucket Riak bucket
+     * @param string              $index  Index Name & type 
+     *                                    (eg, "indexName_bin")
+     * @param string|integer      $start  Starting value or exact
+     *                                    match if no ending value
      * @param string|integer|null $end Ending value for range search
      *
      * @return string URL
@@ -245,7 +246,6 @@ class Utils
                 }
             }
         }
-
         return $retVal;
     }
 }

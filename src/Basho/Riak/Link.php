@@ -37,7 +37,7 @@ class Link
      * Riak client 
      * @var Client|null
      */
-    public $client;
+    private $client;
 
     /**
      * Construct a Link object.
@@ -53,13 +53,26 @@ class Link
         $this->tag = $tag;
         $this->client = null;
     }
-
+    
+    /**
+     * Set the client
+     * 
+     * @param Client $client The client
+     * 
+     * @return \Basho\Riak\Link
+     */
+    public function setClient(Client $client)
+    {
+        $this->client = $client;
+        return $this;
+    }
+    
     /**
      * Retrieve the Object to which this link points.
      *
      * @param integer $r The R-value to use.
      *
-     * @return Object
+     * @return \Basho\Riak\Object
      */
     public function get($r = null)
     {
@@ -71,7 +84,7 @@ class Link
      *
      * @param integer $r The R-value to use.
      *
-     * @return Object
+     * @return \Basho\Riak\Object
      */
     public function getBinary($r = null)
     {
@@ -93,7 +106,7 @@ class Link
      *
      * @param string $name The bucket name.
      *
-     * @return Link
+     * @return \Basho\Riak\Link
      */
     public function setBucket($name)
     {
@@ -117,7 +130,7 @@ class Link
      *
      * @param string $key The key.
      *
-     * @return Link
+     * @return \Basho\Riak\Link
      */
     public function setKey($key)
     {
@@ -145,7 +158,7 @@ class Link
      *
      * @param string $tag The tag.
      *
-     * @return Link
+     * @return \Basho\Riak\Link
      */
     public function setTag($tag)
     {
@@ -161,7 +174,7 @@ class Link
      *
      * @return string
      */
-    public function toLinkHeader($client)
+    public function toLinkHeader(Client $client)
     {
         $link = "</" . $client->prefix . "/" . urlencode($this->bucket) . "/"
                 . urlencode($this->key) . ">; riaktag=\""
@@ -177,7 +190,7 @@ class Link
      *
      * @return boolean
      */
-    public function isEqual($link)
+    public function isEqual(Link $link)
     {
         return ($this->bucket == $link->bucket)
         && ($this->key == $link->key)

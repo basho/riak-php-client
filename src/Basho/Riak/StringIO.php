@@ -11,6 +11,8 @@ namespace Basho\Riak;
 
 /**
  * Private class used to accumulate a CURL response.
+ * 
+ * @internal Used internally.
  */
 class StringIO
 {

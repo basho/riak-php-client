@@ -12,6 +12,8 @@ namespace Basho\Riak;
 /**
  * The MapReducePhase holds information about a Map phase or
  * Reduce phase in a MapReduce operation.
+ * 
+ * @method array to_array()
  */
 class MapReducePhase
 {
@@ -37,7 +39,7 @@ class MapReducePhase
      * Should we return the output of this phase in the results. 
      * @var boolean
      */
-    public $keep;
+    private $keep;
 
     /**
      * Additional value to pass into the map or reduce function.
@@ -64,6 +66,29 @@ class MapReducePhase
         $this->keep = $keep;
         $this->arg = $arg;
     }
+    
+    /**
+     * Return results of current phase?
+     *
+     * @return boolean
+     */
+    public function getKeep()
+    {
+        return $this->keep;
+    }
+    
+    /**
+     * Return results of current phase?
+     *
+     * @param boolean $keep The keep value
+     *
+     * @return \Basho\Riak\LinkPhase
+     */
+    public function setKeep($keep)
+    {
+        $this->keep = $keep;
+        return $this;
+    }
 
     /**
      * This method is only here to maintain backwards compatibility
@@ -80,7 +105,7 @@ class MapReducePhase
             self::toArray();
         }
     }
-
+    
     /**
      * Convert the MapReducePhase to an associative array. Used
      * internally.

@@ -8,10 +8,11 @@
  * @link https://github.com/localgod/riak-php-client
  */
 namespace Basho\Riak;
-
 /**
  * The LinkPhase object holds information about a Link phase in a
  * map/reduce operation.
+ * 
+ * @method array   to_array()
  */
 class LinkPhase
 {
@@ -31,7 +32,7 @@ class LinkPhase
      * Should we return results of current phase. 
      * @var boolean
      */
-    public $keep;
+    private $keep;
 
     /**
      * Construct a LinkPhase object.
@@ -39,6 +40,8 @@ class LinkPhase
      * @param string  $bucket The bucket name.
      * @param string  $tag    The tag.
      * @param boolean $keep   True to return results of this phase.
+     * 
+     * @return void
      */
     public function __construct($bucket, $tag, $keep)
     {
@@ -46,10 +49,32 @@ class LinkPhase
         $this->tag = $tag;
         $this->keep = $keep;
     }
+    /**
+     * Return results of current phase?
+     *  
+     * @return boolean
+     */
+    public function getKeep()
+    {
+        return $this->keep;
+    }
+    
+    /**
+     * Return results of current phase?
+     *  
+     * @param boolean $keep The keep value
+     * 
+     * @return \Basho\Riak\LinkPhase
+     */
+    public function setKeep($keep)
+    {
+        $this->keep = $keep;
+        return $this;
+    }
 
     /**
-     * This method is only here to maintain backwards compatibility
-     * with old method names pre PSR coding standard
+     * This method is here to maintain backwards compatibility
+     * with old method names pre PSR coding standard.
      *
      * @param string $name      Name of old method
      * @param array  $arguments Arguments for method
@@ -62,11 +87,11 @@ class LinkPhase
             self::toArray();
         }
     }
-
+    
     /**
-     * Convert the LinkPhase to an associative array. Used
-     * internally.
-     *
+     * Convert the LinkPhase to an associative array.
+     * 
+     * @internal Used internally.
      * @return array
      */
     public function toArray()

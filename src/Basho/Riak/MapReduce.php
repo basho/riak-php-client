@@ -418,9 +418,9 @@ class MapReduce
         for ($i = 0; $i < $numPhases; $i++) {
             $phase = $this->phases[$i];
             if ($i == ($numPhases - 1) && !$keepFlag) {
-                $phase->keep = true;
+                $phase->setKeep(true);
             }
-            if ($phase->keep) {
+            if ($phase->getKeep()) {
                 $keepFlag = true;
             }
             $query[] = $phase->toArray();
@@ -466,7 +466,7 @@ class MapReduce
         foreach ($result as $r) {
             $tag = isset($r[2]) ? $r[2] : null;
             $link = new Link($r[0], $r[1], $tag);
-            $link->client = $this->client;
+            $link->setClient($this->client);
             $a[] = $link;
         }
 
