@@ -65,6 +65,11 @@ This quick example assumes that you have a local riak cluster running on port 80
     # Update the object
     $person->data['company'] = "Google";
     $person->store();
+	
+You can set a list of all available hosts in the cluster to which the client can be quickly switched to the case of dying host
+
+    # Connect to Riak, with support fast switching in case of dying host
+    $client = new RiakClient(array('192.168.0.1', '192.168.0.2', '192.168.0.3'), 8098);
 
 ## Connecting ##
 Connect to a Riak server by specifying the address or hostname and port:
