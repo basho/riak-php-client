@@ -1,5 +1,21 @@
 {
     "name": "basho/riak",
+    "type": "library",
+    "description": "Client Library to access Riak, distributed database",
+    "keywords": ["driver","database","nosql"],
+    "homepage": "http://basho.com",
+    "license": "Apache 2.0",
+    "authors": [
+        {
+            "name": "Kota UENISHI",
+            "email": "kota@basho.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Sean Cribbs",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=5.3.0"
     }
