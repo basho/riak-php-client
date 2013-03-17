@@ -332,7 +332,7 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(4, count($results), 'check result');
     }
     /**
-     * @notest
+     * @test
      */
     public function keyFilterOperator()
     {

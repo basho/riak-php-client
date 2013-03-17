@@ -13,6 +13,31 @@ namespace Basho\Riak;
  * The Client object holds information necessary to connect to
  * Riak. The Riak API uses HTTP, so there is no persistent
  * connection, and the Client object is extremely lightweight.
+ *
+ * @method integer getR()
+ * @method integer getW()
+ * @method integer getDW()
+ * @method string getId()
+ * @method string getHost()
+ * @method integer getPort()
+ * @method string getPrefix()
+ * @method string getMapredPrefix()
+ * @method string getIndexPrefix()
+ * @method Client setR($r)
+ * @method Client setW($w)
+ * @method Client setDW($dw)
+ * @method Client setId($Id) Should not be called unless you know what you are doing.
+ * @method Client setHost($host)
+ * @method Client setPort($port)
+ * @method Client setPrefix($prefix)
+ * @method Client setMapredPrefix($mapredPrefix)
+ * @method Client setIndexPrefix($indexPrefix)
+ * @method MapReduce add($params)
+ * @method MapReduce link($params)
+ * @method MapReduce search($params)
+ * @method MapReduce map($params)
+ * @method MapReduce reduce($params)
+ *
  */
 class Client
 {
@@ -20,48 +45,50 @@ class Client
      * Hostname or IP address (default '127.0.0.1')
      * @var string
      */
-    public $host;
+    private $host;
 
     /**
      * Port number (default 8098)
      * @var integer
      */
-    public $port;
+    private $port;
 
     /**
-     * Interface prefix (default "riak") 
-     * @var string 
-     */
-    public $prefix;
-
-    /**
-     * MapReduce prefix (default "mapred") 
+     * Interface prefix (default "riak")
      * @var string
      */
-    public $mapredPrefix;
+    private $prefix;
 
     /**
-     * Index prefix (default "buckets") 
+     * MapReduce prefix (default "mapred")
      * @var string
      */
-    public $indexPrefix;
+    private $mapredPrefix;
+
+    /**
+     * Index prefix (default "buckets")
+     * @var string
+     */
+    private $indexPrefix;
 
     /**
      * Clinet id
-     * @var string 
+     * @var string
      */
-    private $clientId;
+    private $id;
 
     /**
      * How many replicas need to agree when retrieving an existing object
-     * before the write.
+     * before the write. If not set default is 2.
      *
      * @var integer|null
      */
     private $r;
 
     /**
-     * How many replicas to write to before returning a successful response
+     * How many replicas to write to before returning a successful response.
+     *
+     * If not set default is 2.
      *
      * @var integer|null
      */
@@ -70,6 +97,8 @@ class Client
     /**
      * How many replicas to commit to durable storage before returning a
      * successful response
+     *
+     * If not set default is 2.
      *
      * @var integer|null
      */
@@ -83,122 +112,97 @@ class Client
      * @param integer $port         Port number (default 8098)
      * @param string  $prefix       Interface prefix (default "riak")
      * @param string  $mapredPrefix MapReduce prefix (default "mapred")
+     *
+     * @return void
      */
     public function __construct($host = '127.0.0.1', $port = 8098,
             $prefix = 'riak', $mapredPrefix = 'mapred')
     {
-        $this->host = $host;
-        $this->port = $port;
-        $this->prefix = $prefix;
-        $this->mapredPrefix = $mapredPrefix;
-        $this->indexPrefix = 'buckets';
-        $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
-        $this->r = 2;
-        $this->w = 2;
-        $this->dw = 2;
+        $this->setHost($host)
+            ->setPort($port)
+            ->setPrefix($prefix)
+            ->setMapredPrefix($mapredPrefix)
+            ->setIndexPrefix('buckets')
+            ->setId('php_' . base_convert(mt_rand(), 10, 36))
+            ->setR(2)
+            ->setW(2)
+            ->setDW(2);
     }
 
     /**
-     * Get the R-value setting for this Client. (default 2)
+     * Call method by name
      *
-     * @return integer
+     * @param string $name Name of method to call
+     * @param array $arguments Arguments to method
+     *
+     * @internal Used internally.
+     * @return mixed
      */
-    public function getR()
+    public function __call($name, $arguments)
     {
-        return $this->r;
+        if (preg_match('/^get.+/', $name)) {
+            return $this->callGet($name, $arguments);
+        } else if (preg_match('/^set.+/', $name)) {
+            return $this->callSet($name, $arguments);
+        } else if (preg_match('/^add$/', $name)) {
+            return $this->mapReduce(MapReduce::ADD, $arguments);
+        } else if (preg_match('/^search$/', $name)) {
+            return $this->mapReduce(MapReduce::SEARCH, $arguments);
+        } else if (preg_match('/^link$/', $name)) {
+            return $this->mapReduce(MapReduce::LINK, $arguments);
+        } else if (preg_match('/^map$/', $name)) {
+            return $this->mapReduce(MapReduce::MAP, $arguments);
+        } else if (preg_match('/^reduce$/', $name)) {
+            return $this->mapReduce(MapReduce::REDUCE, $arguments);
+        }
     }
 
     /**
-     * Set the R-value for this Client. This value will be used
-     * for any calls to get(...) or getBinary(...) where where 1) no
-     * R-value is specified in the method call and 2) no R-value has
-     * been set in the Bucket.
+     * Get property of the bucket
      *
-     * @param integer $r The R value.
+     * @param string $name Name of method to call
+     * @param array  $arguments Arguments to method
+     *
+     * @return mixed
+     */
+    private final function callGet($name, $arguments)
+    {
+        $propertyName = lcfirst(str_replace('get', '', $name));
+        $reflect = new \ReflectionClass(__CLASS__);
+
+        foreach ($reflect->getProperties() as $property) {
+            if ($property->name == $propertyName) {
+                return $this->$propertyName;
+            }
+            if ("dW" == $propertyName) {
+                return $this->dw;
+            }
+        }
+    }
+
+    /**
+     * Call set method
+     *
+     * @param string $name Name of method to call
+     * @param array $arguments Arguments to method
      *
      * @return Client
      */
-    public function setR($r)
+    private final function callSet($name, $arguments)
     {
-        $this->r = $r;
+        $propertyName = lcfirst(str_replace('set', '', $name));
+        $reflect = new \ReflectionClass(__CLASS__);
 
+        foreach ($reflect->getProperties() as $property) {
+            if ($property->name == $propertyName) {
+                $this->$propertyName = $arguments[0];;
+            }
+            if ("dW" == $propertyName) {
+                $this->dw = $arguments[0];
+            }
+        }
         return $this;
-    }
-
-    /**
-     * Get the W-value setting for this Client. (default 2)
-     *
-     * @return integer
-     */
-    public function getW()
-    {
-        return $this->w;
-    }
-
-    /**
-     * Set the W-value for this Client. See setR(...) for a
-     * description of how these values are used.
-     *
-     * @param integer $w The W value.
-     *
-     * @return Client
-     */
-    public function setW($w)
-    {
-        $this->w = $w;
-
-        return $this;
-    }
-
-    /**
-     * Get the DW-value for this ClientOBject. (default 2)
-     *
-     * @return integer
-     */
-    public function getDW()
-    {
-        return $this->dw;
-    }
-
-    /**
-     * Set the DW-value for this Client. See setR(...) for a
-     * description of how these values are used.
-     *
-     * @param integer $dw The DW value.
-     *
-     * @return Client
-     */
-    public function setDW($dw)
-    {
-        $this->dw = $dw;
-
-        return $this;
-    }
-
-    /**
-     * Get the clientID for this Client.
-     *
-     * @return string
-     */
-    public function getClientID()
-    {
-        return $this->clientId;
-    }
-
-    /**
-     * Set the clientID for this Client. Should not be called
-     * unless you know what you are doing.
-     *
-     * @param string $clientId The new clientId.
-     *
-     * @return Client
-     */
-    public function setClientID($clientId)
-    {
-        $this->clientId = $clientId;
-
-        return $this;
-    }
+     }
 
     /**
      * Get the bucket by the specified name. Since buckets always exist,
@@ -238,92 +242,23 @@ class Client
      */
     public function isAlive()
     {
-        $url = 'http://' . $this->host . ':' . $this->port . '/ping';
+        $url = 'http://' . $this->getHost() . ':' . $this->getPort() . '/ping';
         $response = Utils::httpRequest('GET', $url);
 
         return ($response != null) && ($response[1] == 'OK');
     }
 
-    # MAP/REDUCE/LINK FUNCTIONS
-
     /**
-     * Start assembling a Map/Reduce operation.
+     * Preforme Map/Reduce operation.
      *
      * @param mixed $params Parameters
      *
      * @return MapReduce
-     * @see MapReduce::add()
+     * @see MapReduce
      */
-    public function add($params)
+    private function mapReduce($operation, $params)
     {
         $mapReduce = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array(array(&$mapReduce, "add"), $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation. This command will
-     * return an error unless executed against a Riak Search cluster.
-     *
-     * @param mixed $params Parameters
-     *
-     * @return MapReduce
-     * @see MapReduce::search()
-     */
-    public function search($params)
-    {
-        $mapReduce = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array(array(&$mapReduce, "search"), $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation.
-     *
-     * @param mixed $params Parameters
-     *
-     * @see MapReduce::link()
-     * @return MapReduce
-     */
-    public function link($params)
-    {
-        $mapReduce = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array(array(&$mapReduce, "link"), $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation.
-     *
-     * @param mixed $params Parameters
-     *
-     * @see MapReduce::map()
-     * @return MapReduce
-     */
-    public function map($params)
-    {
-        $mapReduce = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array(array(&$mapReduce, "map"), $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation.
-     *
-     * @param mixed $params Parameters
-     *
-     * @see MapReduce::reduce()
-     * @return MapReduce
-     */
-    public function reduce($params)
-    {
-        $mapReduce = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array(array(&$mapReduce, "reduce"), $args);
+        return call_user_func_array(array(&$mapReduce, $operation), $params);
     }
 }

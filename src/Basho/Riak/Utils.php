@@ -65,8 +65,8 @@ class Utils
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = 'http://';
-        $path .= $client->host . ':' . $client->port;
-        $path .= '/' . $client->prefix;
+        $path .= $client->getHost() . ':' . $client->getPort();
+        $path .= '/' . $client->getPrefix();
 
         # Add '.../bucket'
         if (!is_null($bucket) && $bucket instanceof Bucket) {
@@ -127,8 +127,8 @@ class Utils
             Bucket $bucket, $index, $start, $end = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
-        $path = array('http:/', $client->host . ':' . $client->port,
-                $client->indexPrefix);
+        $path = array('http:/', $client->getHost() . ':' . $client->getPort(),
+                $client->getIndexPrefix());
 
         # Add '.../bucket'
         $path[] = urlencode($bucket->getName());

@@ -16,6 +16,36 @@ namespace Basho\Riak;
 class MapReduce
 {
     /**
+     * Add operation
+     * @var string
+     */
+    const ADD = 'add';
+
+    /**
+     * Map operation
+     * @var string
+     */
+    const MAP = 'map';
+
+    /**
+     Reduce Add operation
+     * @var string
+     */
+    const REDUCE = 'reduce';
+
+    /**
+     * Search operation
+     * @var string
+     */
+    const SEARCH = 'search';
+
+    /**
+     * Link operation
+     * @var string
+     */
+    const LINK = 'link';
+
+    /**
      * Riak client
      * @var Client
      */
@@ -415,8 +445,8 @@ class MapReduce
         $content = json_encode($job);
 
         # Do the request...
-        $url = "http://" . $this->client->host . ":" . $this->client->port
-        . "/" . $this->client->mapredPrefix;
+        $url = "http://" . $this->client->getHost() . ":" . $this->client->getPort()
+        . "/" . $this->client->getMapredPrefix();
         $response = Utils::httpRequest('POST', $url,
                 array('Content-type: application/json'), $content);
         $result = json_decode($response[1]);

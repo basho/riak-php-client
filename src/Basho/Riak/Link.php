@@ -177,7 +177,7 @@ class Link
      */
     public function toLinkHeader(Client $client)
     {
-        $link = "</" . $client->prefix . "/" . urlencode($this->bucket) . "/"
+        $link = "</" . $client->getPrefix() . "/" . urlencode($this->bucket) . "/"
                 . urlencode($this->key) . ">; riaktag=\""
                         . urlencode($this->getTag()) . "\"";
 

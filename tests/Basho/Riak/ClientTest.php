@@ -29,7 +29,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Basho\Riak\Client::getR
      * @test
      */
     public function getR()
@@ -38,7 +37,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Basho\Riak\Client::SetR
      * @test
      */
     public function setR()
@@ -48,7 +46,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Basho\Riak\Client::getW
      * @test
      */
     public function getW()
@@ -57,7 +54,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Basho\Riak\Client::setW
      * @test
      */
     public function setW()
@@ -67,7 +63,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Basho\Riak\Client::getDW
      * @test
      */
     public function getDW()
@@ -76,7 +71,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Basho\Riak\Client::setDW
      * @test
      */
     public function setDW()
@@ -86,22 +80,20 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Basho\Riak\Client::getClientID
      * @test
      */
-    public function getClientID()
+    public function getId()
     {
-        $this->assertEquals('php_', substr($this->client->getClientID(), 0, 4));
+        $this->assertEquals('php_', substr($this->client->getId(), 0, 4));
     }
 
     /**
-     * @covers Basho\Riak\Client::setClientID
      * @test
      */
-    public function setClientID()
+    public function setId()
     {
-        $this->client->setClientID('php5_');
-        $this->assertEquals('php5', substr($this->client->getClientID(), 0, 4));
+        $this->client->setId('php5_');
+        $this->assertEquals('php5', substr($this->client->getId(), 0, 4));
     }
 
     /**

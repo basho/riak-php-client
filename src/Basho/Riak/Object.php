@@ -646,7 +646,7 @@ class Object
         # Construct the headers...
         $headers = array('Accept: text/plain, */*; q=0.5',
         'Content-Type: ' . $this->getContentType(),
-        'X-Riak-ClientId: ' . $this->client->getClientID());
+        'X-Riak-ClientId: ' . $this->client->getId());
 
         # Add the vclock if it exists...
         if ($this->vclock() != null) {
@@ -832,8 +832,8 @@ class Object
 
         # Check if the server is down (status==0)
         if ($status == 0) {
-            $m = 'Could not contact Riak Server: http://' . $this->client->host
-            . ':' . $this->client->port . '!';
+            $m = 'Could not contact Riak Server: http://' . $this->client->getHost()
+            . ':' . $this->client->getPort() . '!';
             throw new \Exception($m);
         }
 
