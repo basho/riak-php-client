@@ -12,11 +12,6 @@ namespace Basho\Riak;
 /**
  * The MapReduce object allows you to build up and run a
  * map/reduce operation on Riak.
- *
- * @method MapReduce key_filter(array $filter)
- * @method MapReduce key_filter_and(array $filter)
- * @method MapReduce key_filter_or(array $filter)
- * @method MapReduce key_filter_operator($operator, array $filter)
  */
 class MapReduce
 {
@@ -97,32 +92,6 @@ class MapReduce
         }
 
         return $this->addBucketKeyData($arg1, (string) $arg2, $arg3);
-    }
-
-    /**
-     * This method is only here to maintain backwards compatibility
-     * with old method names pre PSR coding standard
-     *
-     * @param string $name      Name of old method
-     * @param array  $arguments Arguments for method
-     *
-     * @return void
-     */
-    public function __call($name, $arguments)
-    {
-        if ($name == 'key_filter') {
-            return call_user_func_array(array($this, "keyFilter"), $arguments);
-        }
-        if ($name == 'key_filter_and') {
-            return call_user_func_array(array($this, "keyFilterAnd"), $arguments);
-        }
-        if ($name == 'key_filter_or') {
-            return call_user_func_array(array($this, "keyFilterOr"), $arguments);
-        }
-        if ($name == 'key_filter_operator') {
-            return call_user_func_array(array($this, "keyFilterOperator"), $arguments);
-        }
-        return null;
     }
 
     /**
@@ -270,7 +239,7 @@ class MapReduce
         $args = func_get_args();
         array_unshift($args, 'and');
 
-        return call_user_func_array(array($this, 'key_filter_operator'), $args);
+        return call_user_func_array(array($this, 'keyFilterOperator'), $args);
     }
 
     /**
@@ -289,7 +258,7 @@ class MapReduce
         $args = func_get_args();
         array_unshift($args, 'and');
 
-        return call_user_func_array(array($this, 'key_filter_operator'), $args);
+        return call_user_func_array(array($this, 'keyFilterOperator'), $args);
     }
 
     /**
@@ -307,7 +276,7 @@ class MapReduce
         $args = func_get_args();
         array_unshift($args, 'or');
 
-        return call_user_func_array(array($this, 'key_filter_operator'), $args);
+        return call_user_func_array(array($this, 'keyFilterOperator'), $args);
     }
 
     /**

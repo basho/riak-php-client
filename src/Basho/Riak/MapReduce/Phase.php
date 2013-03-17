@@ -12,8 +12,6 @@ namespace Basho\Riak\MapReduce;
 /**
  * The Phase holds information about a Map phase or
  * Reduce phase in a MapReduce operation.
- *
- * @method array to_array()
  */
 class Phase
 {
@@ -88,22 +86,6 @@ class Phase
     {
         $this->keep = $keep;
         return $this;
-    }
-
-    /**
-     * This method is only here to maintain backwards compatibility
-     * with old method names pre PSR coding standard
-     *
-     * @param string $name      Name of old method
-     * @param array  $arguments Arguments for method
-     *
-     * @return void
-     */
-    public function __call($name, $arguments)
-    {
-        if ($name == 'to_array') {
-            self::toArray();
-        }
     }
 
     /**

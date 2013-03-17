@@ -19,11 +19,11 @@ namespace Basho\Riak;
  * @method integer getDW()
  * @method Client getClient()
  * @method string getName()
- * @method Bucket setR()
- * @method Bucket setW()
- * @method Bucket setDW()
- * @method Bucket setClient()
- * @method Bucket setName()
+ * @method Bucket setR($r)
+ * @method Bucket setW($w)
+ * @method Bucket setDW($dw)
+ * @method Bucket setClient(Client $client)
+ * @method Bucket setName($name)
  */
 class Bucket
 {
