@@ -1,4 +1,5 @@
 <?php
+use Basho\Riak\Properties;
 /**
  * Uses cases for entire framework
  */
@@ -8,7 +9,7 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
      * @var Client
      */
     protected $client;
-    
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -17,7 +18,7 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
     {
         $this->client = new \Basho\Riak\Client(HOST, PORT);
     }
-    
+
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
@@ -129,17 +130,19 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         $bucket = $this->client->bucket('bucket');
 
         // Test setting allow mult...
-        $bucket->setAllowMultiples(true);
-        $this->assertTrue($bucket->getAllowMultiples(), 'check allowMultiples property - checked');
+        $properties = new Properties($this->client, $bucket);
+        $properties->setAllowMultiples(true);
+
+        $this->assertTrue($properties->getAllowMultiples(), 'check allowMultiples property - checked');
 
         // Test setting nval...
-        $bucket->setNVal(3);
-        $this->assertEquals(3, $bucket->getNVal(), 'check NVal');
+        $properties->setNVal(3);
+        $this->assertEquals(3, $properties->getNVal(), 'check NVal');
 
         // Test setting multiple properties...
-        $bucket->setProperties(array('allow_mult' => false, 'n_val' => 2));
-        $this->assertFalse($bucket->getAllowMultiples(), 'check allowMultiples property - unchecked');
-        $this->assertEquals(2, $bucket->getNVal(), 'check new NVal');
+        $properties->setProperties(array('allow_mult' => false, 'n_val' => 2));
+        $this->assertFalse($properties->getAllowMultiples(), 'check allowMultiples property - unchecked');
+        $this->assertEquals(2, $properties->getNVal(), 'check new NVal');
     }
     /**
      * @test
@@ -148,7 +151,8 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
     {
         // Set up the bucket, clear any existing object...
         $bucket = $this->client->bucket('multiBucket');
-        $bucket->setAllowMultiples('true');
+        $properties = new Properties($this->client, $bucket);
+        $properties->setAllowMultiples('true');
         $obj = $bucket->get('foo');
         $obj->delete();
 
@@ -174,7 +178,7 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         $obj3 = $obj->getSibling(3);
         $obj3->store();
         $obj->reload();
-        $this->assertEquals($obj->getData(), 
+        $this->assertEquals($obj->getData(),
                 $obj3->getData(), 'check equal data after update');
 
         // Clean up for next test...
@@ -255,7 +259,7 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
             ->map('Riak.mapValuesJson')
             ->reduce('Riak.reduceSum')
             ->run();
-        
+
         $this->assertEquals(array(9), $result, 'check result');
     }
     /**
@@ -404,7 +408,7 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped(
             'Not running test "testSearchIntegration()"'
             . PHP_EOL
-            . 'Please ensure that you have installed the Riak Search hook on 
+            . 'Please ensure that you have installed the Riak Search hook on
                bucket "searchbucket" by running "bin/search-cmd install
                searchbucket"');
         }
@@ -422,7 +426,7 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
     public function secondaryIndexes()
     {
         $bucket = $this->client->bucket("indextest");
-    
+
         # Immediate test to see if 2i is even supported w/ the backend
         try {
             $bucket->indexSearch("foo", "bar_bin", "baz");
@@ -433,88 +437,88 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
                 throw $e;
             }
         }
-    
+
         # Okay, continue with the rest of the test
         $bucket->newObject("one", array("foo" => 1, "bar" => "red"))
         ->addIndex("number", "int", 1)->addIndex("text", "bin", "apple")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("two", array("foo" => 2, "bar" => "green"))
         ->addIndex("number", "int", 2)->addIndex("text", "bin", "avocado")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("three", array("foo" => 3, "bar" => "blue"))
         ->addIndex("number", "int", 3)
         ->addIndex("text", "bin", "blueberry")->addAutoIndex("foo", "int")
         ->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("four", array("foo" => 4, "bar" => "orange"))
         ->addIndex("number", "int", 4)->addIndex("text", "bin", "citrus")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("five", array("foo" => 5, "bar" => "yellow"))
         ->addIndex("number", "int", 5)->addIndex("text", "bin", "banana")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-    
+
         $bucket->newObject("six", array("foo" => 6, "bar" => "purple"))
         ->addIndex("number", "int", 6)->addIndex("number", "int", 7)
         ->addIndex("number", "int", 8)
         ->setIndex("text", "bin", array("x", "y", "z"))->store();
-    
+
         # Exact matches
         $results = $bucket->indexSearch("number", "int", 5);
         $this->assertEquals(1, count($results));
-    
+
         $results = $bucket->indexSearch("text", "bin", "apple");
         $this->assertEquals(1, count($results));
-    
+
         # Range searches
         $results = $bucket->indexSearch("foo", "int", 1, 3);
         $this->assertEquals(3, count($results));
-    
+
         $results = $bucket->indexSearch("bar", "bin", "blue", "orange");
         $this->assertEquals(3, count($results));
-    
+
         # Test duplicate key de-duping
         $results = $bucket->indexSearch("number", "int", 6, 8, true);
         $this->assertEquals(1, count($results));
-    
+
         $results = $bucket->indexSearch("text", "bin", "x", "z", true);
         $this->assertEquals(1, count($results));
-    
+
         # Test auto indexes don't leave cruft indexes behind, and regular
         # indexes are preserved
         $object = $bucket->get("one");
         $object->setData(array("foo" => 9, "bar" => "plaid"));
         $object->store();
-    
+
         # Auto index updates
         $results = $bucket->indexSearch("foo", "int", 9);
         $this->assertEquals(1, count($results));
-    
+
         # Auto index leaves no cruft
         $results = $bucket->indexSearch("foo", "int", 1);
         $this->assertEquals(0, count($results));
-    
+
         # Normal index is preserved
         $results = $bucket->indexSearch("number", "int", 1);
         $this->assertEquals(1, count($results));
-    
-        # Test proper collision handling on autoIndex 
+
+        # Test proper collision handling on autoIndex
         # and regular index on same field
         $bucket->newObject("seven", array("foo" => 7))
             ->addAutoIndex("foo", "int")->addIndex("foo", "int", 7)->store();
-    
+
         $results = $bucket->indexSearch("foo", "int", 7);
         $this->assertEquals(1, count($results));
-    
+
         $object = $bucket->get("seven");
         $object->setData(array("foo" => 8));
         $object->store();
-    
+
         $results = $bucket->indexSearch("foo", "int", 8);
         $this->assertEquals(1, count($results));
-    
+
         $results = $bucket->indexSearch("foo", "int", 7);
         $this->assertEquals(1, count($results));
     }
@@ -528,47 +532,47 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
         $bucket->newObject("one", array("foo" => 1, "bar" => "red"))
         ->addIndex("number", "int", 1)->addIndex("text", "bin", "apple")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("two", array("foo" => 2, "bar" => "green"))
         ->addIndex("number", "int", 2)->addIndex("text", "bin", "avocado")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("three", array("foo" => 3, "bar" => "blue"))
         ->addIndex("number", "int", 3)
         ->addIndex("text", "bin", "blueberry")->addAutoIndex("foo", "int")
         ->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("four", array("foo" => 4, "bar" => "orange"))
         ->addIndex("number", "int", 4)->addIndex("text", "bin", "citrus")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-        
+
         $bucket->newObject("five", array("foo" => 5, "bar" => "yellow"))
         ->addIndex("number", "int", 5)->addIndex("text", "bin", "banana")
         ->addAutoIndex("foo", "int")->addAutoIndex("bar", "bin")->store();
-    
+
         $bucket->newObject("six", array("foo" => 6, "bar" => "purple"))
         ->addIndex("number", "int", 6)->addIndex("number", "int", 7)
         ->addIndex("number", "int", 8)
         ->setIndex("text", "bin", array("x", "y", "z"))->store();
-    
+
         # Test
         $result = $this->client->add($bucket->getName())
             ->indexSearch('number', 'int', 6)->run();
         $this->assertEquals(1, count($result));
-    
+
         $result = $this->client->add($bucket->getName())
             ->indexSearch('number', 'int', 9)->run();
         $this->assertEquals(0, count($result));
-    
+
         $result = $this->client->add($bucket->getName())
         ->indexSearch('text', 'bin', 'banana')->run();
         $this->assertEquals(1, count($result));
-    
+
         # Test ranges
         $result = $this->client->add($bucket->getName())
         ->indexSearch('number', 'int', 1, 4)->run();
         $this->assertEquals(4, count($result));
-    
+
         $result = $this->client->add($bucket->getName())
         ->indexSearch('number', 'int', 6, 8)->run();
         # I'm not convinced this result is correct, a range
@@ -587,20 +591,20 @@ class UseCasesTest extends PHPUnit_Framework_TestCase
     {
         $client = new \Basho\Riak\Client(HOST, PORT);
         $bucket = $client->bucket("metatest");
-    
+
         # Set some meta
         $bucket->newObject("metatest", array("foo" => 'bar'))
         ->setMeta("foo", "bar")->store();
-    
+
         # Test that we load the meta back
         $object = $bucket->get("metatest");
         $this->assertEquals($object->getMeta("foo"), "bar");
-    
+
         # Test that the meta is preserved when we rewrite the object
         $bucket->get("metatest")->store();
         $object = $bucket->get("metatest");
         $this->assertEquals($object->getMeta("foo"), "bar");
-    
+
         # Test that we remove meta
         $object->removeMeta("foo")->store();
         $anotherObject = $bucket->get("metatest");

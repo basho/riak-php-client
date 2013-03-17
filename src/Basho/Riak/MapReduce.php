@@ -12,7 +12,7 @@ namespace Basho\Riak;
 /**
  * The MapReduce object allows you to build up and run a
  * map/reduce operation on Riak.
- * 
+ *
  * @method MapReduce key_filter(array $filter)
  * @method MapReduce key_filter_and(array $filter)
  * @method MapReduce key_filter_or(array $filter)
@@ -21,37 +21,37 @@ namespace Basho\Riak;
 class MapReduce
 {
     /**
-     * Riak client 
+     * Riak client
      * @var Client
      */
     private $client;
 
-    /** 
+    /**
      * A list of phases
-     * @var LinkPhase[]
+     * @var Phase[]
      */
     private $phases;
 
     /**
-     * A list of inputs 
+     * A list of inputs
      * @var array
      */
     private $inputs;
 
     /**
-     * Input mode 
+     * Input mode
      * @var string|null
      */
     private $inputMode;
 
     /**
-     * List of key filters 
+     * List of key filters
      * @var array
      */
     private $keyFilters;
 
     /**
-     * Indexes 
+     * Indexes
      * @var array
      */
     private $index;
@@ -74,9 +74,9 @@ class MapReduce
     }
 
     /**
-     * Add inputs to a map/reduce operation. 
-     * 
-     * This method takes three different forms, depending on the provided 
+     * Add inputs to a map/reduce operation.
+     *
+     * This method takes three different forms, depending on the provided
      * inputs. You can specify either  a Object, a string bucket name, or
      * a bucket, key, and additional arg.
      *
@@ -173,9 +173,9 @@ class MapReduce
     }
 
     /**
-     * Begin a map/reduce operation using a Search. 
-     * 
-     * This command will return an error unless executed against a Riak 
+     * Begin a map/reduce operation using a Search.
+     *
+     * This command will return an error unless executed against a Riak
      * Search cluster.
      *
      * @param string $bucket The Bucket to search.
@@ -203,7 +203,7 @@ class MapReduce
      */
     public function link($bucket = '_', $tag = '_', $keep = false)
     {
-        $this->phases[] = new LinkPhase($bucket, $tag, $keep);
+        $this->phases[] = new Link\Phase($bucket, $tag, $keep);
 
         return $this;
     }
@@ -223,7 +223,7 @@ class MapReduce
     public function map($function, $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
-        $this->phases[] = new MapReducePhase("map", $function,
+        $this->phases[] = new MapReduce\Phase("map", $function,
                 Utils::getValue("language", $options, $language),
                 Utils::getValue("keep", $options, false),
                 Utils::getValue("arg", $options, null));
@@ -233,7 +233,7 @@ class MapReduce
 
     /**
      * Add a reduce phase to the map/reduce operation.
-     * 
+     *
      * @param mixed $function Either a named Javascript function
      *                        (ie: "Riak.mapValues"), or an anonymous
      *                        javascript function (ie: "function(...) { ... }"
@@ -246,7 +246,7 @@ class MapReduce
     public function reduce($function, $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
-        $this->phases[] = new MapReducePhase("reduce", $function,
+        $this->phases[] = new MapReduce\Phase("reduce", $function,
                 Utils::getValue("language", $options, $language),
                 Utils::getValue("keep", $options, false),
                 Utils::getValue("arg", $options, null));
@@ -255,8 +255,8 @@ class MapReduce
     }
 
     /**
-     * Add a key filter to the map/reduce operation. 
-     * 
+     * Add a key filter to the map/reduce operation.
+     *
      * If there are already existing filters, an "and" condition will be used
      * to combine them. Alias for key_filter_and
      *
@@ -274,8 +274,8 @@ class MapReduce
     }
 
     /**
-     * Add a key filter to the map/reduce operation. 
-     * 
+     * Add a key filter to the map/reduce operation.
+     *
      * If there are already existing filters, an "and" condition will be used
      * to combine them.
      *
@@ -293,8 +293,8 @@ class MapReduce
     }
 
     /**
-     * Adds a key filter to the map/reduce operation. 
-     * 
+     * Adds a key filter to the map/reduce operation.
+     *
      * If there are already existing filters, an "or" condition will be used to
      * combine with the existing filters.
      *
@@ -311,8 +311,8 @@ class MapReduce
     }
 
     /**
-     * Adds a key filter to the map/reduce operation. 
-     * 
+     * Adds a key filter to the map/reduce operation.
+     *
      * If there are already existing filters, the provided conditional operator
      * will be used to combine with the existing filters.
      *
@@ -347,7 +347,7 @@ class MapReduce
 
     /**
      * Performs an index search as part of a Map/Reduce operation
-     * 
+     *
      * Note that you can only do index searches on a bucket, so
      * this is incompatible with object or key operations, as well
      * as key filter operations.
@@ -388,8 +388,8 @@ class MapReduce
     }
 
     /**
-     * Run the map/reduce operation. 
-     * 
+     * Run the map/reduce operation.
+     *
      * Returns an array of results, or an array of Link objects if the last
      * phase is a link phase.
      *
@@ -453,7 +453,7 @@ class MapReduce
         $result = json_decode($response[1]);
 
         # If the last phase is NOT a link phase, then return the result.
-        $linkResultsFlag |= (end($this->phases) instanceof LinkPhase);
+        $linkResultsFlag |= (end($this->phases) instanceof Link\Phase);
 
         # If we don't need to link results, then just return.
         if (!$linkResultsFlag) {

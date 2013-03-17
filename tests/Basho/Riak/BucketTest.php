@@ -3,7 +3,7 @@ use Basho\Riak\Bucket, Basho\Riak\Client;
 /**
  * Test class for Bucket.
  */
-class BucketTest extends PHPUnit_Framework_TestCase
+class BucketTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Bucket
@@ -29,266 +29,126 @@ class BucketTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Bucket::getName
      * @todo Implement testGetName().
      */
     public function testGetName()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertEquals('test', $this->bucket->getName());
     }
 
     /**
-     * @covers Bucket::getR
-     * @todo Implement testGetR().
      * @test
      */
     public function getR()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertTrue($this->bucket->getR() == 2);
     }
 
     /**
-     * @covers Bucket::setR
-     * @todo Implement testSetR().
      * @test
      */
     public function setR()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->bucket->setR(3);
+        $this->assertTrue($this->bucket->getR() == 3);
     }
 
     /**
-     * @covers Bucket::getW
-     * @todo Implement testGetW().
      * @test
      */
     public function getW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertTrue($this->bucket->getW() == 2);
     }
 
     /**
-     * @covers Bucket::setW
-     * @todo Implement testSetW().
      * @test
      */
     public function setW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->bucket->setW(3);
+        $this->assertTrue($this->bucket->getW() == 3);
     }
 
     /**
-     * @covers Bucket::getDW
-     * @todo Implement testGetDW().
      * @test
      */
     public function getDW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertTrue($this->bucket->getDW() == 2);
     }
 
     /**
-     * @covers Bucket::setDW
-     * @todo Implement testSetDW().
      * @test
      */
     public function setDW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->bucket->setDW(3);
+        $this->assertTrue($this->bucket->getDW() == 3);
     }
 
     /**
-     * @covers Bucket::newObject
-     * @todo Implement testNewObject().
+     * @covers Basho\Riak\Bucket::newObject
      * @test
      */
     public function newObject()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $object = $this->bucket->newObject('test');
+        $this->assertInstanceOf('Basho\Riak\Object', $object);
+        $this->assertTrue($object->getContentType() == 'application/json');
     }
 
     /**
-     * @covers Bucket::newBinary
-     * @todo Implement testNewBinary().
+     * @covers Basho\Riak\Bucket::newBinary
      * @test
      */
     public function newBinary()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $object = $this->bucket->newBinary('test', 'Data');
+        $this->assertInstanceOf('Basho\Riak\Object', $object);
+        $this->assertTrue($object->getData() == 'Data');
     }
 
     /**
-     * @covers Bucket::get
-     * @todo Implement testGet().
+     * @covers Basho\Riak\Bucket::get
      * @test
      */
     public function get()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $object = $this->bucket->newObject('test');
+        $this->assertInstanceOf('Basho\Riak\Object', $this->bucket->get('test'));
     }
 
     /**
-     * @covers Bucket::getBinary
-     * @todo Implement testGetBinary().
+     * @covers Basho\Riak\Bucket::getBinary
      * @test
      */
     public function getBinary()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $object = $this->bucket->newBinary('test', 'Data');
+        $this->assertInstanceOf('Basho\Riak\Object', $this->bucket->getBinary('test'));
     }
 
     /**
-     * @covers Bucket::setNVal
-     * @todo Implement testSetNVal().
-     * @test
-     */
-    public function setNVal()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Bucket::getNVal
-     * @todo Implement testGetNVal().
-     * @test
-     */
-    public function getNVal()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Bucket::setAllowMultiples
-     * @todo Implement testSetAllowMultiples().
-     * @test
-     */
-    public function setAllowMultiples()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Bucket::getAllowMultiples
-     * @todo Implement testGetAllowMultiples().
-     * @test
-     */
-    public function getAllowMultiples()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Bucket::setProperty
-     * @todo Implement testSetProperty().
-     * @test
-     */
-    public function setProperty()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Bucket::getProperty
-     * @todo Implement testGetProperty().
-     * @test
-     */
-    public function getProperty()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Bucket::setProperties
-     * @todo Implement testSetProperties().
-     * @test
-     */
-    public function setProperties()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Bucket::getProperties
-     * @todo Implement testGetProperties().
+     * @covers Basho\Riak\Bucket::getProperties
      * @test
      */
     public function getProperties()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertInstanceOf('Basho\Riak\Properties', $this->bucket->getProperties());
     }
 
     /**
-     * @covers Bucket::getKeys
-     * @todo Implement testGetKeys().
+     * @covers Basho\Riak\Bucket::getKeys
      * @test
      */
     public function getKeys()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertTrue(is_array($this->bucket->getKeys()));
     }
 
     /**
-     * @covers Bucket::indexSearch
+     * @covers Basho\Riak\Bucket::indexSearch
      * @todo Implement testIndexSearch().
      * @test
      */

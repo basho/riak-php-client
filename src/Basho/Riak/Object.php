@@ -16,72 +16,72 @@ namespace Basho\Riak;
 class Object
 {
     /**
-     * A Client object. 
+     * A Client object.
      * @var array
      */
     protected $meta = array();
 
     /**
-     * Indexes 
+     * Indexes
      * @var array
      */
     protected $indexes = array();
 
     /**
-     * Auto indexes 
+     * Auto indexes
      * @var array
      */
     protected $autoIndexes = array();
 
-    /** 
+    /**
      * A Client object.
      * @var Client
      */
     private $client;
 
-    /** 
+    /**
      * A Bucket object.
      * @var Bucket
      */
     private $bucket;
 
-    /** 
+    /**
      * A key. (optional)
      * @var string
      */
     private $key;
 
-    /** 
+    /**
      * Should data be json encoded
      * @var boolean
      */
     public $jsonize;
 
-    /** 
+    /**
      * List of headers
      * @var array
      */
     private $headers;
 
-    /** 
+    /**
      * List of links
      * @var Link[]
      */
     private $links;
 
-    /** 
+    /**
      * List of siblings
      * @var array|null
      */
     private $siblings;
 
-    /** 
+    /**
      * Dos the object already exists
      * @var boolean
      */
     private $exists;
 
-    /** 
+    /**
      * Data
      * @var array|string|null
      */
@@ -89,7 +89,7 @@ class Object
 
     /**
      * Construct a new Object.
-     * 
+     *
      * @param Client $client A Client object.
      * @param Bucket $bucket A Bucket object.
      * @param string $key    An optional key. If not specified, then key
@@ -133,10 +133,10 @@ class Object
     }
 
     /**
-     * Get the data stored in this object. 
-     * 
-     * Will return a associative array, unless the object was constructed 
-     * with newBinary(...) or getBinary(...), in which case this will 
+     * Get the data stored in this object.
+     *
+     * Will return a associative array, unless the object was constructed
+     * with newBinary(...) or getBinary(...), in which case this will
      * return a string.
      *
      * @return array|string
@@ -147,8 +147,8 @@ class Object
     }
 
     /**
-     * Set the data stored in this object. 
-     * 
+     * Set the data stored in this object.
+     *
      * This data will be JSON encoded unless the object was constructed with
      * newBinary(...) or getBinary(...).
      *
@@ -175,7 +175,7 @@ class Object
 
     /**
      * Check if the object exists
-     * 
+     *
      * Return true if the object exists, false otherwise. Allows you to
      * detect a get(...) or getBinary(...) operation where the object
      * is missing.
@@ -188,8 +188,8 @@ class Object
     }
 
     /**
-     * Get the content type of this object. 
-     * 
+     * Get the content type of this object.
+     *
      * This is either application/json, or the provided content type if the
      * object was created via newBinary(...).
      *
@@ -298,7 +298,7 @@ class Object
 
     /**
      * Adds a secondary index to the object
-     * 
+     *
      * This will create the index if it does not exist, or will
      * append an additional value if the index already exists and
      * does not contain the provided value.
@@ -362,7 +362,7 @@ class Object
 
     /**
      * Gets the current values for the identified index
-     * 
+     *
      * Note, the null value has special meaning - when the object is
      * ->store()d, this value will be replaced with the current value
      * the value of the field matching $indexName from the object's data
@@ -423,7 +423,7 @@ class Object
 
     /**
      * Bulk index removal
-     * 
+     *
      * If $indexName and $indexType are provided, all values for the
      * identified index are removed.
      * If just $indexName is provided, all values for all types of
@@ -454,7 +454,7 @@ class Object
 
     /**
      * Adds an automatic secondary index to the object
-     * 
+     *
      * The value of an automatic secondary index is determined at
      * time of ->store() by looking for an $fieldName key
      * in the object's data.
@@ -517,7 +517,7 @@ class Object
 
     /**
      * Removes all auto indexes
-     * 
+     *
      * If $fieldName is not provided, all auto indexes on the
      * object are stripped, otherwise just indexes on the given field
      * are stripped.
@@ -546,7 +546,7 @@ class Object
 
     /**
      * Gets a given metadata value
-     * 
+     *
      * Returns null if no metadata value with the given name exists
      *
      * @param string $metaName Meta name
@@ -616,9 +616,9 @@ class Object
     }
 
     /**
-     * Store the object in Riak. 
-     * 
-     * When this operation completes, the object could contain new metadata 
+     * Store the object in Riak.
+     *
+     * When this operation completes, the object could contain new metadata
      * and possibly new data if Riak contains a newer version of the object
      * according to the object's vector clock.
      *
@@ -632,9 +632,11 @@ class Object
      */
     public function store($w = null, $dw = null)
     {
+        $w != null ? $this->bucket->setW($w): null;
+        $dw != null ? $this->bucket->setDW($w): null;
         # Use defaults if not specified...
-        $w = $this->bucket->getW($w);
-        $dw = $this->bucket->getDW($w);
+        $w = $this->bucket->getW();
+        $dw = $this->bucket->getDW();
 
         # Construct the URL...
         $params = array('returnbody' => 'true', 'w' => $w, 'dw' => $dw);
@@ -713,8 +715,8 @@ class Object
     }
 
     /**
-     * Reload the object from Riak. 
-     * 
+     * Reload the object from Riak.
+     *
      * When this operation completes, the object could contain new metadata
      * and a new value, if the object was updated in Riak since it was last
      * retrieved.
@@ -804,8 +806,8 @@ class Object
 
     /**
      * Given the output of Utils::httpRequest and a list of
-     * statuses, populate the object. 
-     * 
+     * statuses, populate the object.
+     *
      * @internal Only for use by the Riak client library.
      *
      * @param array|null $response         Response

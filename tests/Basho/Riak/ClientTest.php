@@ -1,11 +1,12 @@
 <?php
+use Basho\Riak\Client;
 /**
  * Test class for Client.
  */
 class ClientTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Client
+     * @var Basho\Riak\Client
      */
     protected $client;
 
@@ -15,7 +16,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->client = new Basho\Riak\Client();
+        $this->client = new Client();
     }
 
     /**
@@ -28,130 +29,110 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Client::getR
-     * @todo Implement testGetR().
+     * @covers Basho\Riak\Client::getR
      * @test
      */
     public function getR()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->assertTrue($this->client->getR() == 2);
     }
 
     /**
-     * @covers Client::setR
-     * @todo Implement testSetR().
+     * @covers Basho\Riak\Client::SetR
      * @test
      */
     public function setR()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->client->setR(3);
+        $this->assertTrue($this->client->getR() == 3);
     }
 
     /**
-     * @covers Client::getW
-     * @todo Implement testGetW().
+     * @covers Basho\Riak\Client::getW
      * @test
      */
     public function getW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->assertTrue($this->client->getW() == 2);
     }
 
     /**
-     * @covers Client::setW
-     * @todo Implement testSetW().
+     * @covers Basho\Riak\Client::setW
      * @test
      */
     public function setW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->client->setW(3);
+        $this->assertTrue($this->client->getW() == 3);
     }
 
     /**
-     * @covers Client::getDW
-     * @todo Implement testGetDW().
+     * @covers Basho\Riak\Client::getDW
      * @test
      */
     public function getDW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->assertTrue($this->client->getDW() == 2);
     }
 
     /**
-     * @covers Client::setDW
-     * @todo Implement testSetDW().
+     * @covers Basho\Riak\Client::setDW
      * @test
      */
     public function setDW()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->client->setDW(3);
+        $this->assertTrue($this->client->getDW() == 3);
     }
 
     /**
-     * @covers Client::getClientID
-     * @todo Implement testGetClientID().
+     * @covers Basho\Riak\Client::getClientID
      * @test
      */
     public function getClientID()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->assertEquals('php_', substr($this->client->getClientID(), 0, 4));
     }
 
     /**
-     * @covers Client::setClientID
-     * @todo Implement testSetClientID().
+     * @covers Basho\Riak\Client::setClientID
      * @test
      */
     public function setClientID()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->client->setClientID('php5_');
+        $this->assertEquals('php5', substr($this->client->getClientID(), 0, 4));
     }
 
     /**
-     * @covers Client::bucket
-     * @todo Implement testBucket().
+     * @covers Basho\Riak\Client::bucket
      * @test
      */
     public function bucket()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->assertInstanceOf('Basho\Riak\Bucket', $this->client->bucket('test'));
     }
 
     /**
-     * @covers Client::buckets
-     * @todo Implement testBuckets().
+     * @covers Basho\Riak\Client::buckets
      * @test
      */
     public function buckets()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->assertTrue(is_array($this->client->buckets()));
     }
 
     /**
-     * Client::isAlive
-     * @todo Implement testAdd().
+     * @covers Basho\Riak\Client::isAlive
      * @test
      */
     public function isAlive()
     {
-        //Remove the following lines when you implement this test.
-        //$this->markTestIncomplete('This test has not been implemented yet.');
-        
         $this->assertTrue($this->client->isAlive(), 'check server live status');
     }
 
     /**
-     * @covers Client::add
+     * @covers Basho\Riak\Client::add
      * @todo Implement testAdd().
      * @test
      */
@@ -162,7 +143,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Client::search
+     * @covers Basho\Riak\Client::search
      * @todo Implement testSearch().
      * @test
      */
@@ -173,7 +154,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Client::link
+     * @covers Basho\Riak\Client::link
      * @todo Implement testLink().
      * @test
      */
@@ -184,7 +165,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Client::map
+     * @covers Basho\Riak\Client::map
      * @todo Implement testMap().
      * @test
      */
@@ -195,7 +176,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Client::reduce
+     * @covers Basho\Riak\Client::reduce
      * @todo Implement testReduce().
      * @test
      */

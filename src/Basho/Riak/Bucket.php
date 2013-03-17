@@ -11,14 +11,25 @@ namespace Basho\Riak;
 
 /**
  * The Bucket object allows you to access and change information
- * about a Riak bucket, and provides methods to create or retrieve
+ * about a Riak bucket and provides methods to create or retrieve
  * objects within the bucket.
+ *
+ * @method integer getR()
+ * @method integer getW()
+ * @method integer getDW()
+ * @method Client getClient()
+ * @method string getName()
+ * @method Bucket setR()
+ * @method Bucket setW()
+ * @method Bucket setDW()
+ * @method Bucket setClient()
+ * @method Bucket setName()
  */
 class Bucket
 {
-    /** 
+    /**
      * A riak client object
-     * @var Client 
+     * @var Client
      */
     private $client;
 
@@ -32,12 +43,17 @@ class Bucket
      * How many replicas need to agree when retrieving an existing object
      * before the write.
      *
+     * If null the number for the client will be used. get(...)
+     * and getBinary(...) operations that do not specify an number will
+     * use this value.
+     *
      * @var integer|null
      */
     private $r;
 
     /**
-     * How many replicas to write to before returning a successful response
+     * How many replicas to write to before returning a successful response.
+     * If null the number for the client will be used.
      *
      * @var integer|null
      */
@@ -45,7 +61,7 @@ class Bucket
 
     /**
      * How many replicas to commit to durable storage before returning a
-     * successful response
+     * successful response.  If null the number for the client will be used.
      *
      * @var integer|null
      */
@@ -53,10 +69,10 @@ class Bucket
 
     /**
      * Construct a new bucket.
-     * 
+     *
      * @param Client $client Client
      * @param string $name   The name of the bucket
-     * 
+     *
      * @return void
      */
     public function __construct(Client $client, $name)
@@ -69,117 +85,95 @@ class Bucket
     }
 
     /**
-     * Get the bucket name.
+     * Call method by name
      *
-     * @return string
+     * @param string $name Name of method to call
+     * @param array $arguments Arguments to method
+     *
+     * @return mixed
      */
-    public function getName()
+    public function __call($name, $arguments)
     {
-        return $this->name;
+        if (preg_match('/^get.+/', $name)) {
+            return $this->callGet($name, $arguments);
+        } else {
+            if (preg_match('/^set.+/', $name)) {
+                return $this->callSet($name, $arguments);
+            }
+        }
     }
 
     /**
-     * Get the number of replicas needed to agree when retrieving an existing
-     * object before the write for this bucket, if it is set, otherwise return
-     * the number for the client.
+     * Get property of the bucket
      *
-     * @param integer $r Number of replicas need to agree
+     * @param string $name Name of method to call
+     * @param array  $arguments Arguments to method
      *
-     * @return integer
+     * @return mixed
      */
-    public function getR($r = null)
+    private final function callGet($name, $arguments)
     {
-        if ($r != null) {
-            return $r;
-        }
-        if ($this->r != null) {
-            return $this->r;
+        $propertyName = lcfirst(str_replace('get', '', $name));
+        switch (lcfirst($propertyName)) {
+            case 'r':
+                $value = $this->r != null ? $this->r : $this->client->getR();
+                break;
+            case 'w':
+                $value = $this->w != null ? $this->w : $this->client->getW();
+                break;
+            case 'dw':
+                $value = $this->dw != null ? $this->dw : $this->client->getDW();
+                break;
+            case 'dW':
+                $value = $this->dw != null ? $this->dw : $this->client->getDW();
+                break;
+            case 'client':
+                $value = $this->client;
+                break;
+            case 'name':
+                $value = $this->name;
+                break;
+            default:
+                throw new \InvalidArgumentException('The property \'' . lcfirst($propertyName) . '\' dos not exists.');
         }
 
-        return $this->client->getR();
+        return $value;
     }
 
     /**
-     * Set the the number replicas needed to agree when retrieving an existing object
-     * before the write for this bucket. get(...) and getBinary(...)
-     * operations that do not specify an number will use this value.
+     * Call set method
      *
-     * @param integer $r Number of replicas need to agree
+     * @param string $name Name of method to call
+     * @param array $arguments Arguments to method
      *
-     * @return Bucket
+     * @throws \InvalidArgumentException if unknown property is requested
+     * @return \Basho\Riak\Client
      */
-    public function setR($r)
+    private final function callSet($name, $arguments)
     {
-        $this->r = $r;
-
-        return $this;
-    }
-
-    /**
-     * Get the W-value for this bucket, if it is set, otherwise return
-     * the W-value for the client.
-     *
-     * @param integer $w The W-value.
-     *
-     * @return integer
-     */
-    public function getW($w)
-    {
-        if ($w != null) {
-            return $w;
+        $propertyName = lcfirst(str_replace('set', '', $name));
+        switch (lcfirst($propertyName)) {
+            case 'r':
+                $this->r = $arguments[0];
+                break;
+            case 'w':
+                $this->w = $arguments[0];
+                break;
+            case 'dw':
+                $this->dw = $arguments[0];
+                break;
+            case 'dW':
+                $this->dw = $arguments[0];
+                break;
+            case 'client':
+                $this->client = $arguments[0];
+                break;
+            case 'name':
+                $this->name = $arguments[0];
+                break;
+            default:
+                throw new \InvalidArgumentException('The property \'' . lcfirst($propertyName) . '\' dos not exists.');
         }
-        if ($this->w != null) {
-            return $this->w;
-        }
-
-        return $this->client->getW();
-    }
-
-    /**
-     * Set the W-value for this bucket. See setR(...) for more information.
-     *
-     * @param integer $w The new W-value.
-     *
-     * @return Bucket
-     */
-    public function setW($w)
-    {
-        $this->w = $w;
-
-        return $this;
-    }
-
-    /**
-     * Get the DW-value for this bucket, if it is set, otherwise return
-     * the DW-value for the client.
-     *
-     * @param integer $dw The DW-value
-     *
-     * @return integer
-     */
-    public function getDW($dw)
-    {
-        if ($dw != null) {
-            return $dw;
-        }
-        if ($this->dw != null) {
-            return $this->dw;
-        }
-
-        return $this->client->getDW();
-    }
-
-    /**
-     * Set the DW-value for this bucket. See setR(...) for more information.
-     *
-     * @param integer $dw The new DW-value
-     *
-     * @return Bucket
-     */
-    public function setDW($dw)
-    {
-        $this->dw = $dw;
-
         return $this;
     }
 
@@ -255,144 +249,13 @@ class Bucket
     }
 
     /**
-     * Set the N-value for this bucket, which is the number of replicas
-     * that will be written of each object in the bucket. Set this once
-     * before you write any data to the bucket, and never change it
-     * again, otherwise unpredictable things could happen. This should
-     * only be used if you know what you are doing.
+     * Get properties object for this bucket
      *
-     * @param integer $nval The new N-Val.
-     *
-     * @return void
-     */
-    public function setNVal($nval)
-    {
-        $this->setProperty("n_val", $nval);
-    }
-
-    /**
-     * Retrieve the N-value for this bucket.
-     *
-     * @return integer
-     */
-    public function getNVal()
-    {
-        return $this->getProperty("n_val");
-    }
-
-    /**
-     * If set to true, then writes with conflicting data will be stored
-     * and returned to the client. This situation can be detected by
-     * calling hasSiblings() and getSiblings(). This should only be used
-     * if you know what you are doing.
-     *
-     * @param boolean $bool True to store and return conflicting writes.
-     *
-     * @return void
-     */
-    public function setAllowMultiples($bool)
-    {
-        $this->setProperty("allow_mult", $bool);
-    }
-
-    /**
-     * Retrieve the 'allow multiples' setting.
-     *
-     * @return boolean
-     */
-    public function getAllowMultiples()
-    {
-        return "true" == $this->getProperty("allow_mult");
-    }
-
-    /**
-     * Set a bucket property. This should only be used if you know what
-     * you are doing.
-     *
-     * @param string $key   Property to set.
-     * @param mixed  $value Property value.
-     *
-     * @return void
-     */
-    public function setProperty($key, $value)
-    {
-        $this->setProperties(array($key => $value));
-    }
-
-    /**
-     * Retrieve a bucket property.
-     *
-     * @param string $key The property to retrieve.
-     *
-     * @return mixed
-     */
-    public function getProperty($key)
-    {
-        $props = $this->getProperties();
-        if (array_key_exists($key, $props)) {
-            return $props[$key];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set multiple bucket properties in one call. This should only be
-     * used if you know what you are doing.
-     *
-     * @param array $props An associative array of $key=>$value.
-     *
-     * @return void
-     * @throws \Exception if http request was empty or not 204
-     */
-    public function setProperties($props)
-    {
-        # Construct the URL, Headers, and Content...
-        $url = Utils::buildRestPath($this->client, $this);
-        $headers = array('Content-Type: application/json');
-        $content = json_encode(array("props" => $props));
-
-        # Run the request...
-        $response = Utils::httpRequest('PUT', $url, $headers, $content);
-
-        # Handle the response...
-        if ($response == null) {
-            throw new \Exception("Error setting bucket properties.");
-        }
-
-        # Check the response value...
-        $status = $response[0]['http_code'];
-        if ($status != 204) {
-            throw new \Exception("Error setting bucket properties.");
-        }
-    }
-
-    /**
-     * Retrieve an associative array of all bucket properties.
-     *
-     * @return array
-     * @throws \Exception if bucket properties could not be requested
+     * @return \Basho\Riak\Properties
      */
     public function getProperties()
     {
-        //Run the request...
-        $params = array('props' => 'true', 'keys' => 'false');
-        $url = Utils::buildRestPath($this->client, $this, null, null,
-                $params);
-        $response = Utils::httpRequest('GET', $url);
-
-        //Use a Object to interpret the response,
-        //we are just interested in the value.
-        $obj = new Object($this->client, $this, null);
-        $obj->populate($response, array(200));
-        if (!$obj->exists()) {
-            throw new \Exception("Error getting bucket properties.");
-        }
-
-        $props = $obj->getData();
-        $props = $props["props"];
-
-        return $props;
+        return new Properties($this->client, $this);
     }
 
     /**
@@ -405,8 +268,7 @@ class Bucket
     public function getKeys()
     {
         $params = array('props' => 'false', 'keys' => 'true');
-        $url = Utils::buildRestPath($this->client, $this, null, null,
-                $params);
+        $url = Utils::buildRestPath($this->client, $this, null, null, $params);
         $response = Utils::httpRequest('GET', $url);
 
         //Use a Object to interpret the response,
@@ -436,11 +298,9 @@ class Bucket
      * @author Eric Stevens <estevens@taglabsinc.com>
      * @throws \Exception if requested object does not exist
      */
-    public function indexSearch($indexName, $indexType, $startOrExact,
-            $end = null, $dedupe = false)
+    public function indexSearch($indexName, $indexType, $startOrExact, $end = null, $dedupe = false)
     {
-        $url = Utils::buildIndexPath($this->client, $this,
-                "{$indexName}_{$indexType}", $startOrExact, $end);
+        $url = Utils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end);
         $response = Utils::httpRequest('GET', $url);
 
         $obj = new Object($this->client, $this, null);

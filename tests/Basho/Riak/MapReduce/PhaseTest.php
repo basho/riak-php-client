@@ -1,14 +1,14 @@
 <?php
-use Basho\Riak\LinkPhase;
+use Basho\Riak\MapReduce\Phase;
 /**
- * Test class for LinkPhase.
+ * Test class for MapReducePhase.
  */
-class LinkPhaseTest extends PHPUnit_Framework_TestCase
+class MapReducePhaseTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var LinkPhase
+     * @var Phase
      */
-    protected $linkPhase;
+    protected $phase;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -16,7 +16,8 @@ class LinkPhaseTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->linkPhase = new LinkPhase("test", "test", true);
+        $this->phase = new Phase('map', 'function',
+                'javascript', true, 'args');
     }
 
     /**
@@ -25,18 +26,17 @@ class LinkPhaseTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->linkPhase = null;
+        $this->phase = null;
     }
 
     /**
-     * @covers LinkPhase::toArray
+     * @covers Basho\Riak\MapReduce\Phase::toArray
      * @todo Implement testToArray().
      * @test
      */
     public function toArray()
     {
         // Remove the following lines when you implement this test.
-        $this
-                ->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestIncomplete('This test has not been implemented yet.');
     }
 }

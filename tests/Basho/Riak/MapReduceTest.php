@@ -3,7 +3,7 @@ use Basho\Riak\MapReduce, Basho\Riak\Client;
 /**
  * Test class for MapReduce.
  */
-class MapReduceTest extends PHPUnit_Framework_TestCase
+class MapReduceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var MapReduce
