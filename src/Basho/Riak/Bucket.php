@@ -321,7 +321,7 @@ class Bucket
                 $seenKeys[$key] = true;
             }
             $key = new Link($this->name, $key);
-            $key->client = $this->client;
+            $key->setClient($this->client);
         }
 
         return $keys;
