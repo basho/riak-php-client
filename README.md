@@ -1,20 +1,20 @@
+[![Build Status](https://secure.travis-ci.org/localgod/riak-php-client.png?branch=master)](http://travis-ci.org/localgod/riak-php-client)
+
 <img src="http://docs.basho.com/shared/1.2.1/images/riak-logo.png">
 
 # Riak PHP Client #
-This is an updated version of the official PHP client for Riak. 
-The aim with the update is to: 
-* make it PSR-0, PSR-1 and PSR-2 complient (https://github.com/php-fig/fig-standards).
-* make it ready to use with Composer (http://getcomposer.org/).
-* tests are being rewritten for the PHPUnit framework (https://github.com/sebastianbergmann/phpunit/)
- 
+
 ## Changes from official client ##
+This is an updated version of the official PHP client for Riak. 
 * This version of the client use namespaces which means your PHP version should be >= 5.3.0
+* It is PSR-0, PSR-1 and PSR-2 complient (https://github.com/php-fig/fig-standards).
+* It can be used with Composer (http://getcomposer.org/).
+* Tests are rewritten for the PHPUnit framework (https://github.com/sebastianbergmann/phpunit/)
 * You can no longer use the get* methods to set object properties on the bucket object. Use the set* methods.
 * Bucket properties has been moved to separate class.
 * Bucket::getProperties() now return a Properties object.
 * All other properties related methods on Bucket has been moved to the Properties class.
 
-[![Build Status](https://secure.travis-ci.org/localgod/riak-php-client.png?branch=master)](http://travis-ci.org/localgod/riak-php-client)
 
 ## Documentation ##
 API documentation for this library can be found at<br/>
@@ -37,7 +37,7 @@ or as source from<br/>
 ## Installation ##
 Clone this repository to fetch the latest version of this client
 
-    git clone git://github.com/basho/riak-php-client.git
+    git clone git://github.com/localgod/riak-php-client.git
 
 ## Quick start ##
 PHP should be configured with curl enabled
@@ -53,7 +53,8 @@ This quick example assumes that you have a local riak cluster running on port 80
     require_once('riak-php-client/riak.php');
 
     # Connect to Riak
-    $client = new RiakClient('127.0.0.1', 8098);
+    use Basho\Riak\Bucket, Basho\Riak\Client;
+    $client = new Client('127.0.0.1', 8098);
 
     # Choose a bucket name
     $bucket = $client->bucket('test');
@@ -79,39 +80,40 @@ This quick example assumes that you have a local riak cluster running on port 80
 Connect to a Riak server by specifying the address or hostname and port:
 
     # Connect to Riak
-    $client = new RiakClient('127.0.0.1', 8098);
+    use Basho\Riak\Client;
+    $client = new Client('127.0.0.1', 8098);
 
-This method returns a [RiakClient](http://basho.github.com/riak-php-client/class_riak_client.html)
+This method returns a [Client](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Client.html)
 
 ## Using Buckets ##
-To select a bucket, use the RiakClient::bucket() method
+To select a bucket, use the Client::bucket() method
 
     # Choose a bucket name
     $bucket = $client->bucket('test');
 
-or using the RiakBucket() constructor
+or using the Bucket() constructor
 
     # Create a bucket
-    $bucket = new RiakBucket($client, 'test');
+    $bucket = new Bucket($client, 'test');
 
 If a bucket by this name does not already exist, a new one will be created for you when you store your first key.
-This method returns a [RiakBucket](http://basho.github.com/riak-php-client/class_riak_bucket.html)
+This method returns a [Bucket](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Bucket.html)
 
 ## Creating Objects ##
-Objects can be created using the RiakBucket::newObject() method
+Objects can be created using the Bucket::newObject() method
 
     # Create an object for future storage and populate it with some data
     $person = $bucket->newObject('riak_developer_1');
 
-or using the RiakObject() constructor
+or using the Object() constructor
 
     # Create an object for future storage
-    $person = new RiakObject($client, $bucket, 'riak_developer_1');
+    $person = new Object($client, $bucket, 'riak_developer_1');
 
-Both methods return a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+Both methods return a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Setting Object Values ##
-Object data can be set using the RiakObject::setData() method
+Object data can be set using the Object::setData() method
 
     # Populate object with some data
     $person->setData(array(
@@ -129,18 +131,18 @@ or you may modify the object's data property directly (not recommended)
         'company' => "Facebook"
     );
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Storing Objects ##
-Objects can be stored using the RiakObject::store() method
+Objects can be stored using the Object::store() method
 
     # Save the object to Riak
     $person->store();
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Chaining ##
-For methods like newObject(), setData() and store() which return objects of a similar class (in this case RiakObject), chaining can be used to perform multiple operations in a single statement.
+For methods like newObject(), setData() and store() which return objects of a similar class (in this case Object), chaining can be used to perform multiple operations in a single statement.
 
     # Create, set, and store an object
     $data = array(
@@ -151,31 +153,31 @@ For methods like newObject(), setData() and store() which return objects of a si
     $bucket->newObject('riak_developer_1')->setData($data)->store();
 
 ## Fetching Objects ##
-Objects can be retrieved from a bucket using the RiakBucket::get() method
+Objects can be retrieved from a bucket using the Bucket::get() method
 
     # Save the object to Riak
     $person = $bucket->get('riak_developer_1');
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Modifying Objects ##
-Objects can be modified using the RiakObject::store() method
+Objects can be modified using the Object::store() method
 
     # Update the object
     $person = $bucket->get('riak_developer_1');
     $person->data['company'] = "Google";
     $person->store();
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Deleting Objects ##
-Objects can be deleted using the RiakObject::delete() method
+Objects can be deleted using the Object::delete() method
 
     # Update the object
     $person = $bucket->get('riak_developer_1');
     $person->delete();
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Adding a Link ##
 Links can be added using RiakObject::addLink()
@@ -185,35 +187,35 @@ Links can be added using RiakObject::addLink()
     $dave = $bucket->get('riak_developer_2');
     $john->addLink($dave, 'friend')->store();
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Removing a Link ##
-Links can be removed using RiakObject::removeLink()
+Links can be removed using Object::removeLink()
 
     # Remove the link from John to Dave
     $john = $bucket->get('riak_developer_1');
     $dave = $bucket->get('riak_developer_2');
     $john->removeLink($dave, 'friend')->store();
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Retrieving Links ##
-An object's links can be retrieved using RiakObject::getLinks()
+An object's links can be retrieved using Object::getLinks()
 
     # Retrieve all of John's links
     $john = $bucket->get('riak_developer_1');
     $links = $john->getLinks();
 
-This method returns an array of [RiakLink](http://basho.github.com/riak-php-client/class_riak_link.html)s
+This method returns an array of [Link](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Link.html)s
 
 ## Linkwalking ##
-Linkwalking can be done using the RiakObject::link() method
+Linkwalking can be done using the Object::link() method
 
     # Retrieve all of John's friends
     $john = $bucket->get('riak_developer_1');
     $friends = $john->link($bucket->name, "friend")->run();
 
-This method returns an array of [RiakLink](http://basho.github.com/riak-php-client/class_riak_link.html)s
+This method returns an array of [Link](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Link.html)s
 
 ## Dereferencing Links ##
 RiakLinks can be dereferenced to the linked object using the RiakLink::get() method
@@ -225,10 +227,10 @@ RiakLinks can be dereferenced to the linked object using the RiakLink::get() met
     $friends = $john->link($bucket->name, "friend")->run();
     $dave = $friends[0]->get();
 
-This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
+This method returns a [Object](http://localgod.github.com/riak-php-client/api/classes/Basho.Riak.Object.html)
 
 ## Fetching Data With Map/Reduce ##
-Data can be fetched by Map and Reduce using the RiakClient::add() method
+Data can be fetched by Map and Reduce using the Client::add() method
 
     # Fetch a sorted list of all keys in a bucket
     $result = $client->add($bucket->name)
@@ -238,10 +240,8 @@ Data can be fetched by Map and Reduce using the RiakClient::add() method
 
 This method returns an array of data representing the result of the Map/Reduce functions.
 
-*More examples of Map/Reduce can be found in unit_tests.php*
-
 ## Using Key Filters With Map/Reduce ##
-When using Map/Reduce on a bucket, you can use key filters to determine the applicable key set using the RiakMapReduce::key_filter(), RiakMapReduce::key_filter_and(), and RiakMapReduce::key_filter_or() methods.
+When using Map/Reduce on a bucket, you can use key filters to determine the applicable key set using the MapReduce::key_filter(), MapReduce::key_filter_and(), and MapReduce::key_filter_or() methods.
 
     # Retrieve the keys of all invoices from May 30, 2010
     $result = $client->add($bucket->name)
@@ -254,7 +254,7 @@ When using Map/Reduce on a bucket, you can use key filters to determine the appl
 This method returns an array of data representing the result of the Map/Reduce functions.
 
 ## Using Search ##
-Searches can be executed using the RiakClient::search() method
+Searches can be executed using the Client::search() method
 
     # Create some test data
     $bucket = $client->bucket("searchbucket");
@@ -267,7 +267,7 @@ Searches can be executed using the RiakClient::search() method
 This method will return null unless executed against a Riak Search cluster.
 
 ## Meta Data ##
-You can provide meta data on objects using RiakObject::getMeta() and RiakObject::setMeta()
+You can provide meta data on objects using Object::getMeta() and Object::setMeta()
 
     # Set some new meta data
     $object->setMeta("some-meta", "some-value");
@@ -289,7 +289,7 @@ Remove existing metadata
 ## Secondary Indexes ##
 
 ### Adding Secondary Indexes ###
-Secondary indexes can be added using the RiakObject::addIndex() and RiakObject::addAutoIndex() methods.  
+Secondary indexes can be added using the Object::addIndex() and Object::addAutoIndex() methods.  
 
 Auto indexes are kept fresh with the associated field automatically, so if you read an object, modify its data, and write it back, the auto index will reflect the new value from the object.  Traditional indexes are fixed and must be manually managed.  *NOTE* that auto indexes are a function of the Riak PHP client, and are not part of native Riak functionality.  Other clients writing the same object must manage the index manually.
 
@@ -335,7 +335,7 @@ Mass load indexes, or just replace an existing index:
     $object->setIndex("text_index", "bin", "foo");
 
 ### Querying a Bucket's secondary index ###
-Secondary indexes can be queried using the RiakBucket::indexSearch() method.  This returns an array of RiakLink objects.
+Secondary indexes can be queried using the Bucket::indexSearch() method.  This returns an array of Link objects.
 
     # Exact Match
     $results = $bucket->indexSearch("index_name", "int", 1);
@@ -352,7 +352,7 @@ Duplicate entries may be found in a ranged index search if a given index has mul
     $results = $bucket->indexSearch("index_name", "int", 1, 10, true);
 
 ### Secondary Indexes in Map/Reduce ###
-The same search format used for RiakBucket::indexSearch() may be used during Map/Reduce operations during the input phase.  This is only valid for bucket-level operations, and cannot be combined with other filtration methods such as key filters.
+The same search format used for Bucket::indexSearch() may be used during Map/Reduce operations during the input phase.  This is only valid for bucket-level operations, and cannot be combined with other filtration methods such as key filters.
 
     # Use secondary indexes to speed up our Map/Reduce operation
     $result = $client
