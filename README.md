@@ -6,6 +6,13 @@ The aim with the update is to:
 * make it PSR-0, PSR-1 and PSR-2 complient (https://github.com/php-fig/fig-standards).
 * make it ready to use with Composer (http://getcomposer.org/).
 * tests are being rewritten for the PHPUnit framework (https://github.com/sebastianbergmann/phpunit/)
+ 
+## Changes from official client ##
+* This version of the client use namespaces which means your PHP version should be >= 5.3.0
+* You can no longer use the get* methods to set object properties on the bucket object. Use the set* methods.
+* Bucket properties has been moved to separate class.
+* Bucket::getProperties() now return a Properties object.
+* All other properties related methods on Bucket has been moved to the Properties class.
 
 [![Build Status](https://secure.travis-ci.org/localgod/riak-php-client.png?branch=master)](http://travis-ci.org/localgod/riak-php-client)
 
