@@ -70,7 +70,7 @@ class Utils
 
         # Add '.../bucket'
         if (!is_null($bucket) && $bucket instanceof Bucket) {
-            $path .= '/' . urlencode($bucket->name);
+            $path .= '/' . urlencode($bucket->getName());
         }
 
         # Add '.../key'
@@ -115,7 +115,7 @@ class Utils
      *
      * @param Client              $client Riak client
      * @param Bucket              $bucket Riak bucket
-     * @param string              $index  Index Name & type 
+     * @param string              $index  Index Name & type
      *                                    (eg, "indexName_bin")
      * @param string|integer      $start  Starting value or exact
      *                                    match if no ending value
@@ -131,7 +131,7 @@ class Utils
                 $client->indexPrefix);
 
         # Add '.../bucket'
-        $path[] = urlencode($bucket->name);
+        $path[] = urlencode($bucket->getName());
 
         # Add '.../index'
         $path[] = 'index';

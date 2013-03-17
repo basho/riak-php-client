@@ -242,7 +242,7 @@ class Object
         if ($obj instanceof Link) {
             $newlink = $obj;
         } else {
-            $newlink = new Link($obj->bucket->name, $obj->key, $tag);
+            $newlink = new Link($obj->bucket->getName(), $obj->key, $tag);
         }
 
         $this->removeLink($newlink);
@@ -1032,7 +1032,7 @@ class Object
     public function add($params)
     {
         $mr = new MapReduce($this->client);
-        $mr->add($this->bucket->name, $this->key);
+        $mr->add($this->bucket->getName(), $this->key);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mr, "add"), $args);
@@ -1049,7 +1049,7 @@ class Object
     public function link($params)
     {
         $mr = new MapReduce($this->client);
-        $mr->add($this->bucket->name, $this->key);
+        $mr->add($this->bucket->getName(), $this->key);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mr, "link"), $args);
@@ -1066,7 +1066,7 @@ class Object
     public function map($params)
     {
         $mr = new MapReduce($this->client);
-        $mr->add($this->bucket->name, $this->key);
+        $mr->add($this->bucket->getName(), $this->key);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mr, "map"), $args);
@@ -1083,7 +1083,7 @@ class Object
     public function reduce($params)
     {
         $mr = new MapReduce($this->client);
-        $mr->add($this->bucket->name, $this->key);
+        $mr->add($this->bucket->getName(), $this->key);
         $args = func_get_args();
 
         return call_user_func_array(array(&$mr, "reduce"), $args);

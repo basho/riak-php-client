@@ -89,9 +89,9 @@ class Phase
     }
 
     /**
-     * Convert the Phase to an associative array. Used
-     * internally.
+     * Convert the Phase to an associative array.
      *
+     * @internal Used internally.
      * @return array
      */
     public function toArray()

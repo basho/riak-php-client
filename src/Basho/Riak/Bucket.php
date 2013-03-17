@@ -37,7 +37,7 @@ class Bucket
      * The name of the bucket
      * @var string
      */
-    public $name;
+    private $name;
 
     /**
      * How many replicas need to agree when retrieving an existing object
@@ -90,6 +90,7 @@ class Bucket
      * @param string $name Name of method to call
      * @param array $arguments Arguments to method
      *
+     * @internal Used internally.
      * @return mixed
      */
     public function __call($name, $arguments)
@@ -183,7 +184,7 @@ class Bucket
      * @param string $key  Name of the key.
      * @param object $data The data to store. (default null)
      *
-     * @return Object
+     * @return \Basho\Riak\Object
      */
     public function newObject($key, $data = null)
     {
@@ -202,7 +203,7 @@ class Bucket
      * @param object $data        The data to store.
      * @param string $contentType The content type of the object.
      *                            (default 'application/json')
-     * @return Object
+     * @return \Basho\Riak\Object
      */
     public function newBinary($key, $data, $contentType = 'application/json')
     {
@@ -237,7 +238,7 @@ class Bucket
      * @param string  $key Name of the key.
      * @param integer $r   R-Value of the request (defaults to bucket's R)
      *
-     * @return Object
+     * @return \Basho\Riak\Object
      */
     public function getBinary($key, $r = null)
     {

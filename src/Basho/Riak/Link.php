@@ -16,25 +16,25 @@ namespace Basho\Riak;
 class Link
 {
     /**
-     * The name of the bucket 
+     * The name of the bucket
      * @var string
      */
     private $bucket;
 
     /**
-     * The key 
+     * The key
      * @var string
      */
     private $key;
 
     /**
-     * The tag 
+     * The tag
      * @var string|null
      */
     private $tag;
 
     /**
-     * Riak client 
+     * Riak client
      * @var Client|null
      */
     private $client;
@@ -53,12 +53,12 @@ class Link
         $this->tag = $tag;
         $this->client = null;
     }
-    
+
     /**
      * Set the client
-     * 
+     *
      * @param Client $client The client
-     * 
+     *
      * @return \Basho\Riak\Link
      */
     public function setClient(Client $client)
@@ -66,7 +66,7 @@ class Link
         $this->client = $client;
         return $this;
     }
-    
+
     /**
      * Retrieve the Object to which this link points.
      *
@@ -168,10 +168,11 @@ class Link
     }
 
     /**
-     * Convert this Link object to a link header string. Used internally.
+     * Convert this Link object to a link header string.
      *
      * @param Client $client Riak client
      *
+     * @internal Used internally.
      * @return string
      */
     public function toLinkHeader(Client $client)
