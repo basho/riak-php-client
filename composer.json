@@ -2,7 +2,7 @@
     "name": "basho/riak",
     "type": "library",
     "description": "Client Library to access Riak, distributed database",
-    "keywords": ["driver","database","nosql"],
+    "keywords": ["riak","driver","database","nosql"],
     "homepage": "http://basho.com",
     "license": "Apache 2.0",
     "authors": [
