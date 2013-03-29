@@ -1,4 +1,4 @@
-<img src="http://www.basho.com/images/riaklogo.png">
+<img src="http://docs.basho.com/shared/1.2.1/images/riak-logo.png">
 
 # Riak PHP Client #
 This is the official PHP client for Riak.
@@ -12,7 +12,7 @@ API documentation for this library can be found at<br/>
 (See **Documentation Maintenance** at the bottom of the README for instructions on updating the docs.)
 
 Documentation for use of Riak clients in general can be found at<br/>
-<https://wiki.basho.com/display/RIAK/Client+Libraries>
+<http://docs.basho.com/riak/latest/references/Client-Libraries/>
 
 ## Repositories ##
 
@@ -20,7 +20,7 @@ The official source code for this client can be retrieved from<br/>
 <http://github.com/basho/riak-php-client/>
 
 Riak can be obtained pre-built from<br/>
-<http://downloads.basho.com/riak/>
+<http://basho.com/resources/downloads/>
 
 or as source from<br/>
 <http://github.com/basho/riak/>
@@ -31,6 +31,14 @@ Clone this repository to fetch the latest version of this client
     git clone git://github.com/basho/riak-php-client.git
 
 ## Quick start ##
+PHP should be configured with curl enabled
+
+    ./configure --with-curl
+
+Confirm your PHP installation has curl enabled
+
+    php -m | grep curl
+
 This quick example assumes that you have a local riak cluster running on port 8098
 
     require_once('riak-php-client/riak.php');
@@ -133,10 +141,19 @@ For methods like newObject(), setData() and store() which return objects of a si
     );
     $bucket->newObject('riak_developer_1')->setData($data)->store();
 
+or
+# Create, set, and store an object
+    $data = array(
+    	'name' => "John Smith",
+    	'age' => 28,
+    	'company' => "Facebook"
+    );
+    $bucket->newObject('riak_developer_1',$data)->store();
+
 ## Fetching Objects ##
 Objects can be retrieved from a bucket using the RiakBucket::get() method
 
-    # Save the object to Riak
+    # Retrieve the object from a bucket
     $person = $bucket->get('riak_developer_1');
 
 This method returns a [RiakObject](http://basho.github.com/riak-php-client/class_riak_object.html)
