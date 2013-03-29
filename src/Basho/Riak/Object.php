@@ -91,12 +91,12 @@ class Object
      * JSON encoded unless the object was constructed with
      * newBinary(...) or getBinary(...).
      * @param mixed $data - The data to store.
-     * @return $data
+     * @return $this
      */
     public function setData($data)
     {
         $this->data = $data;
-        return $this->data;
+        return $this;
     }
 
     /**
