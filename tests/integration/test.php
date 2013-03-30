@@ -8,7 +8,7 @@ set_include_path(
     PATH_SEPARATOR . dirname(__DIR__) . '/../src'
 );
 
-use Integration\TestSuite;
+use integration\TestSuite;
 
 function classLoader($className)
 {
