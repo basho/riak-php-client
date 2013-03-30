@@ -22,8 +22,8 @@ namespace Basho\Riak;
 
 use Basho\Riak\Exception,
     Basho\Riak\Link,
-    Basho\Riak\LinkPhase,
-    Basho\Riak\MapReducePhase,
+    Basho\Riak\Link\Phase as LinkPhase,
+    Basho\Riak\MapReduce\Phase as MapReducePhase,
     Basho\Riak\Object,
     Basho\Riak\Utils;
 

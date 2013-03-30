@@ -15,22 +15,24 @@
  * to <marco.debo.debortoli@gmail.com> so we can send you a copy immediately.
  *
  * @category   Riak
- * @package    LinkPhase
+ * @package    Link
+ * @subpackage Phase
  * @copyright  Copyright (c) 2012 debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
  */
-namespace Basho\Riak;
+namespace Basho\Riak\Link;
 
 /**
- * LinkPhase
+ * Phase
  *
  * @category   Riak
- * @package    LinkPhase
+ * @package    Link
+ * @subpackage Phase
  * @author     debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
  */
-class LinkPhase
+class Phase
 {
     /**
-     * Construct a LinkPhase object.
+     * Construct a Phase object.
      * @param string $bucket - The bucket name.
      * @param string $tag - The tag.
      * @param boolean $keep - True to return results of this phase.
@@ -43,7 +45,7 @@ class LinkPhase
     }
 
     /**
-     * Convert the LinkPhase to an associative array. Used
+     * Convert the Phase to an associative array. Used
      * internally.
      */
     public function to_array()

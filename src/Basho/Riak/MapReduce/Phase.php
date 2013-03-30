@@ -15,22 +15,24 @@
  * to <marco.debo.debortoli@gmail.com> so we can send you a copy immediately.
  *
  * @category   Riak
- * @package    MapReducePhase
+ * @package    MapRedeuce
+ * @subpackage Phase
  * @copyright  Copyright (c) 2012 debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
  */
-namespace Basho\Riak;
+namespace Basho\Riak\MapReduce;
 
 /**
  * MapReducePhase
  *
  * @category   Riak
- * @package    MapReducePhase
+ * @package    MapRedeuce
+ * @subpackage Phase
  * @author     debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
  */
-class MapReducePhase
+class Phase
 {
     /**
-     * Construct a MapReducePhase object.
+     * Construct a Phase object.
      * @param string $type - "map" or "reduce"
      * @param mixed $function - string or array()
      * @param string $language - "javascript" or "erlang"
@@ -49,7 +51,7 @@ class MapReducePhase
     }
 
     /**
-     * Convert the MapReducePhase to an associative array. Used
+     * Convert the Phase to an associative array. Used
      * internally.
      */
     public function to_array()
