@@ -1,0 +1,299 @@
+/* -------------------------------------------------------------------
+**
+** riakclient.proto: Protocol buffers for riak
+**
+** Copyright (c) 2007-2010 Basho Technologies, Inc.  All Rights Reserved.
+**
+** This file is provided to you under the Apache License,
+** Version 2.0 (the "License"); you may not use this file
+** except in compliance with the License.  You may obtain
+** a copy of the License at
+**
+**   http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing,
+** software distributed under the License is distributed on an
+** "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+** KIND, either express or implied.  See the License for the
+** specific language governing permissions and limitations
+** under the License.
+**
+** -------------------------------------------------------------------
+*/
+/*
+** Revision: 1.1
+**
+** Lowest Common Denominator Protocol Buffers Client
+**   - no ENUM (protobuffs_erlang does not support)
+**
+** Protocol
+**
+**   The protocol encodes requests and responses as protocol buffer messages.
+**   Each request message results in one or more response messages.
+**   As message type and length are not encoded by PB they are sent
+**   on the wire as
+**
+**     <length:32>  <msg_code:8> <pbmsg>
+**
+**     length is the length of msg_code (1 byte) plus the message length
+**     in bytes encoded in network order (big endian)
+**
+**     msg_code indicates what is encoded as pbmsg
+**
+**     pbmsg is the encoded protocol buffer message
+**
+**   On connect, the client can make requests and will receive responses.
+**   For each request message there is a corresponding response message,
+**   or the server will respond with an error message if something has
+**   gone wrong.
+**
+**   The client should be prepared to handle messages without any pbmsg
+**   (i.e. length==1) for requests like ping or a put without return_body set.
+**
+**   GetClientIdReq -> GetClientIdResp
+**   SetClientIdReq -> SetClientIdResp
+**   GetServerInfoReq -> GetServerInfoResp
+**   PingReq -> PingResp
+**   GetReq -> ErrorResp | RbpGetResp
+**   PutReq -> ErrorResp | PutResp
+**   DelReq -> ErrorResp | DelResp
+**   ListBucketsReq -> ErrorResp | ListBucketsResp
+**   ListKeysReq -> ErrorResp | ListKeysResp{1,}
+**   GetBucketReq -> ErrorResp | GetBucketResp
+**
+**
+** message Codes
+**  0 - Riak\ProtoBuf\ErrorResp
+**  1 - Riak\ProtoBuf\PingReq - 0 length
+**  2 - Riak\ProtoBuf\PingResp (pong) - 0 length
+**  3 - Riak\ProtoBuf\GetClientIdReq
+**  4 - Riak\ProtoBuf\GetClientIdResp
+**  5 - Riak\ProtoBuf\SetClientIdReq
+**  6 - Riak\ProtoBuf\SetClientIdResp
+**  7 - Riak\ProtoBuf\GetServerInfoReq
+**  8 - Riak\ProtoBuf\GetServerInfoResp
+**  9 - Riak\ProtoBuf\GetReq
+** 10 - Riak\ProtoBuf\GetResp
+** 11 - Riak\ProtoBuf\PutReq
+** 12 - Riak\ProtoBuf\PutResp - 0 length
+** 13 - Riak\ProtoBuf\DelReq
+** 14 - Riak\ProtoBuf\DelResp
+** 15 - Riak\ProtoBuf\ListBucketsReq
+** 16 - Riak\ProtoBuf\ListBucketsResp
+** 17 - Riak\ProtoBuf\ListKeysReq
+** 18 - Riak\ProtoBuf\ListKeysResp{1,}
+** 19 - Riak\ProtoBuf\GetBucketReq
+** 20 - Riak\ProtoBuf\GetBucketResp
+** 21 - Riak\ProtoBuf\SetBucketReq
+** 22 - Riak\ProtoBuf\SetBucketResp
+** 23 - Riak\ProtoBuf\MapRedReq
+** 24 - Riak\ProtoBuf\MapRedResp{1,}
+**
+*/
+package Riak;
+
+message Transport {
+message DrSLump {
+message PingReq {
+
+}
+
+message PingResp {
+
+}
+
+// Error response - may be generated for any Req
+message ErrorResp {
+    required bytes errmsg = 1;
+    required uint32 errcode = 2;
+}
+
+// Get ClientId Request - no message defined, just send GetClientIdReq message code
+message GetClientIdReq {
+
+}
+
+
+message GetClientIdResp {
+    required bytes client_id = 1; // Client id in use for this connection
+}
+
+message SetClientIdReq {
+    required bytes client_id = 1; // Client id to use for this connection
+}
+
+// Set ClientId Request - no message defined, just send SetClientIdReq message code
+message SetClientIdResp {
+
+}
+
+// Get server info request - no message defined, just send GetServerInfoReq message code
+message GetServerInfoReq {
+
+}
+
+message GetServerInfoResp {
+    optional bytes node = 1;
+    optional bytes server_version = 2;
+}
+
+
+// Get Request - retrieve bucket/key
+message GetReq {
+    required bytes bucket = 1;
+    required bytes key = 2;
+    optional uint32 r = 3;
+    optional uint32 pr = 4;
+    optional bool basic_quorum = 5;
+    optional bool notfound_ok = 6;
+    optional bytes if_modified = 7;     // fail if the supplied vclock does not match
+    optional bool head = 8;             // return everything but the value
+    optional bool deletedvclock = 9;    // return the tombstone's vclock, if applicable
+}
+
+// Get Response - if the record was not found there will be no content/vclock
+message GetResp {
+    repeated Content content = 1;
+    optional bytes vclock = 2;        // the opaque vector clock for the object
+    optional bool unchanged = 3;
+}
+
+
+// Put request - if options.return_body is set then the updated metadata/data for
+//               the key will be returned.
+message PutReq {
+    required bytes bucket = 1;
+    optional bytes key = 2;
+    optional bytes vclock = 3;
+    required Content content = 4;
+    optional uint32 w = 5;
+    optional uint32 dw = 6;
+    optional bool return_body = 7;
+    optional uint32 pw = 8;
+    optional bool if_not_modified = 9;
+    optional bool if_none_match = 10;
+    optional bool return_head = 11;
+}
+
+// Put response - same as get response with optional key if one was generated
+message PutResp {
+    repeated Content content = 1;
+    optional bytes vclock = 2;        // the opaque vector clock for the object
+    optional bytes key = 3;           // the key generated, if any
+}
+
+
+// Delete request
+message DelReq {
+    required bytes bucket = 1;
+    required bytes key = 2;
+    optional uint32 rw = 3;
+    optional bytes vclock = 4;
+    optional uint32 r = 5;
+    optional uint32 w = 6;
+    optional uint32 pr = 7;
+    optional uint32 pw = 8;
+    optional uint32 dw = 9;
+}
+
+// Delete response - not defined, will return a DelResp on success or ErrorResp on failure
+message DelResp {
+
+}
+
+// List buckets request - no message defined, just send ListBucketsReq
+message ListBucketsReq {
+
+}
+
+// List buckets response
+message ListBucketsResp {
+    repeated bytes buckets = 1;
+}
+
+
+// List keys in bucket request
+message ListKeysReq {
+    required bytes bucket = 1;
+}
+
+// List keys in bucket response - one or more of these packets will be sent
+// the last one will have done set true (and may not have any keys in it)
+message ListKeysResp {
+    repeated bytes keys = 1;
+    optional bool done = 2;
+}
+
+// Get bucket properties request
+message GetBucketReq {
+    required bytes bucket = 1;
+}
+
+// Get bucket properties response
+message GetBucketResp {
+    required BucketProps props = 1;
+}
+
+// Set bucket properties request
+message SetBucketReq {
+    required bytes bucket = 1;
+    required BucketProps props = 2;
+}
+
+
+// Set bucket properties response - no message defined, just send SetBucketResp
+message SetBucketResp {
+
+}
+
+// Map/Reduce request
+message MapRedReq {
+    required bytes request = 1;
+    required bytes content_type = 2;
+}
+
+// Map/Reduce response
+// one or more of these packets will be sent the last one will have done set
+// true (and may not have phase/data in it)
+message MapRedResp {
+    optional uint32 phase = 1;
+    optional bytes response = 2;
+    optional bool done = 3;
+}
+
+// Content message included in get/put responses
+// Holds the value and associated metadata
+message Content {
+    required bytes value = 1;
+    optional bytes content_type = 2;     // the media type/format
+    optional bytes charset = 3;
+    optional bytes content_encoding = 4;
+    optional bytes vtag = 5;
+    repeated Link links = 6;          // links to other resources
+    optional uint32 last_mod = 7;
+    optional uint32 last_mod_usecs = 8;
+    repeated Pair usermeta = 9;       // user metadata stored with the object
+    repeated Pair indexes = 10;       // user metadata stored with the object
+}
+
+// Key/value pair - used for user metadata
+message Pair {
+    required bytes key = 1;
+    optional bytes value = 2;
+}
+
+// Link metadata
+message Link {
+    optional bytes bucket = 1;
+    optional bytes key = 2;
+    optional bytes tag = 3;
+}
+
+// Bucket properties
+message BucketProps {
+    optional uint32 n_val = 1;
+    optional bool allow_mult = 2;
+}
+
+}
+}

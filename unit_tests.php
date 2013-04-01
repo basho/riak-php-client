@@ -2,7 +2,7 @@
 
 <?php
 
-require_once 'riak.php';
+require dirname(__FILE__) . '/autoload.php';
 
 define('HOST', 'localhost');
 define('PORT', 8098);
