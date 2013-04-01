@@ -16,7 +16,7 @@
  *
  * @category   Riak
  * @package    Bucket
- * @copyright  Copyright (c) 2012 debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
+ * @copyright  Copyright (c) 2013 Basho Technologies, Inc. All rights reserved.
  */
 namespace Basho\Riak;
 
@@ -30,7 +30,7 @@ use Basho\Riak\Exception,
  *
  * @category   Riak
  * @package    Bucket
- * @author     debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
+ * @author     Riak team (https://github.com/basho/riak-php-client/contributors)
  */
 class Bucket
 {
