@@ -12,11 +12,11 @@
  *
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
- * to <marco.debo.debortoli@gmail.com> so we can send you a copy immediately.
+ * to <eng@basho.com> so we can send you a copy immediately.
  *
  * @category   Riak
  * @package    Utils
- * @copyright  Copyright (c) 2013 Basho Technologies, Inc. All rights reserved.
+ * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
  */
 namespace Basho\Riak;
 
