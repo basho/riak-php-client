@@ -576,7 +576,7 @@ class Object
         $method = $this->key ? 'PUT' : 'POST';
 
         # Run the operation.
-        $response = Utils::httpRequest($method, $url, $headers, $content);
+        $response = $this->client->httpRequest($method, $url, $headers, $content);
         $this->populate($response, array(200, 201, 300));
         return $this;
     }
@@ -595,7 +595,7 @@ class Object
         $r = $this->bucket->getR($r);
         $params = array('r' => $r);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $response = $this->client->httpRequest('GET', $url);
         $this->populate($response, array(200, 300, 404));
 
         # If there are siblings, load the data for the first one by default...
@@ -623,7 +623,7 @@ class Object
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
 
         # Run the operation...
-        $response = Utils::httpRequest('DELETE', $url);
+        $response = $this->client->httpRequest('DELETE', $url);
         $this->populate($response, array(204, 404));
 
         return $this;
@@ -820,7 +820,7 @@ class Object
         $vtag = $this->siblings[$i];
         $params = array('r' => $r, 'vtag' => $vtag);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $response = $this->client->httpRequest('GET', $url);
 
         # Respond with a new object...
         $obj = new Object($this->client, $this->bucket, $this->key);
