@@ -100,7 +100,7 @@ class Utils
     public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = NULL)
     {
         # Build '/prefix/bucket'
-        $path = array($client->indexPrefix);
+        $path = array($client->indexPrefix ? '/'.$client->indexPrefix : '');
 
         # Add '.../bucket'
         $path[] = urlencode($bucket->name);
