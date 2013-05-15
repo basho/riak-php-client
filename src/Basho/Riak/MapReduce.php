@@ -341,7 +341,7 @@ class MapReduce
         $content = json_encode($job);
 
         # Do the request...
-        $url = "http://" . $this->client->host . ":" . $this->client->port . "/" . $this->client->mapred_prefix;
+        $url = $this->client->mapred_prefix;
         $response = $this->client->httpRequest('POST', $url, array('Content-type: application/json'), $content);
         $result = json_decode($response[1]);
 
