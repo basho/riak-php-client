@@ -276,13 +276,13 @@ class MapReduce
         if ($end === NULL) {
             $this->index = array(
                 'index' => "{$indexName}_{$indexType}",
-                'key' => urlencode($startOrExact)
+                'key' => $startOrExact
             );
         } else {
             $this->index = array(
                 'index' => "{$indexName}_{$indexType}",
-                'start' => urlencode($startOrExact),
-                'end' => urlencode($end)
+                'start' => $startOrExact,
+                'end' => $end
             );
         }
         return $this;
