@@ -14,8 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to <eng@basho.com> so we can send you a copy immediately.
  *
- * @category   Riak
- * @package    Object
+ * @category   Basho
  * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
  */
 namespace Basho\Riak;
@@ -28,8 +27,7 @@ use Basho\Riak\Exception,
 /**
  * Object
  *
- * @category   Riak
- * @package    Object
+ * @category   Basho
  * @author     Riak team (https://github.com/basho/riak-php-client/contributors)
  */
 class Object
