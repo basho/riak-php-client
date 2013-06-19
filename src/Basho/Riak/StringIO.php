@@ -29,17 +29,33 @@ namespace Basho\Riak;
  */
 class StringIO
 {
+    /**
+     * Construct a StringIO object.
+     */
     public function __construct()
     {
         $this->contents = '';
     }
 
+    /**
+     * Add data to contents
+     *
+     * @param resource $ch Curl Resource Handler (unused)
+     * @param string $data Data to add to contents
+     *
+     * @return int
+     */
     public function write($ch, $data)
     {
         $this->contents .= $data;
         return strlen($data);
     }
 
+    /**
+     * Retrieve current contents
+     *
+     * @return string
+     */
     public function contents()
     {
         return $this->contents;

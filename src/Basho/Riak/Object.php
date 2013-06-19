@@ -34,8 +34,33 @@ use Basho\Riak\Exception,
  */
 class Object
 {
+    /**
+     * @var array Meta data store
+     * @see \Basho\Riak\Object::setMeta()
+     * @see \Basho\Riak\Object::getMeta()
+     * @see \Basho\Riak\Object::getAllMeta()
+     * @see \Basho\Riak\Object::removeMeta()
+     * @see \Basho\Riak\Object::removeAllMeta()
+     */
     protected $meta = array();
+
+    /**
+     * @var array Array of indexes
+     * @see \Basho\Riak\Object::addIndex()
+     * @see \Basho\Riak\Object::setIndex()
+     * @see \Basho\Riak\Object::getIndex()
+     * @see \Basho\Riak\Object::removeIndex()
+     * @see \Basho\Riak\Object::removeAllIndexes()
+     */
     protected $indexes = array();
+
+    /**
+     * @var array Array of automatic indexes
+     * @see \Basho\Riak\Object::addAutoIndex()
+     * @see \Basho\Riak\Object::hasAutoIndex()
+     * @see \Basho\Riak\Object::removeAutoIndex()
+     * @see \Basho\Riak\Object::removeAllAutoIndexes()
+     */
     protected $autoIndexes = array();
 
     /**

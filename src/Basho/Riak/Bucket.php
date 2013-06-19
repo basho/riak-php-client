@@ -34,6 +34,12 @@ use Basho\Riak\Exception,
  */
 class Bucket
 {
+    /**
+     * Construct a Bucket object
+     *
+     * @param \Basho\Riak\Riak $client Riak Client object
+     * @param string $name Bucket name
+     */
     public function __construct($client, $name)
     {
         $this->client = $client;

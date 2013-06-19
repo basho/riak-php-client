@@ -34,6 +34,15 @@ use Basho\Riak\Bucket,
 class Utils
 {
 
+    /**
+     * Fetch a value from an array by it's key, or default if not exists
+
+     * @param mixed $key Key to fetch
+     * @param array $array Array to fetch from
+     * @param mixed $defaultValue Default to return if not exists
+     *
+     * @return mixed
+     */
     public static function get_value($key, $array, $defaultValue)
     {
         if (array_key_exists($key, $array)) {
