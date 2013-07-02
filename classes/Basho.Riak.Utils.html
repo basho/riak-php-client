@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
+    <meta charset="utf-8"/>
+    <title>    Riak PHP Client &raquo; \Basho\Riak\Utils
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+            <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+        <![endif]-->
+        <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script>
+        <script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.js" type="text/javascript"></script>
+        <script src="../js/template.js" type="text/javascript"></script>
+        <script src="../js/prettify/prettify.min.js" type="text/javascript"></script>
+    
+            <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+            <link rel="shortcut icon" href="../img/favicon.ico"/>
+        <link rel="apple-touch-icon" href="../img/apple-touch-icon.png"/>
+        <link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png"/>
+        <link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png"/>
+    </head>
+<body>
+
+        <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span> <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> </a>
+                <a class="brand" href="../index.html">Riak PHP Client</a>
+
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="dropdown">
+                            <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                API Documentation <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                                                    <li><a>Namespaces</a></li>
+                                                                        <li><a href="../namespaces/Basho.html">Basho</a></li>
+                                                                                                                                </ul>
+                        </li>
+                        <li class="dropdown" id="charts-menu">
+                            <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                Charts <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../graph_class.html">
+                                        <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="reports-menu">
+                            <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                Reports <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../errors.html">
+                                        <i class="icon-list-alt"></i>&#160;Errors
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../markers.html">
+                                        <i class="icon-list-alt"></i>&#160;Markers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../deprecated.html">
+                                        <i class="icon-list-alt"></i>&#160;Deprecated
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="go_to_top">
+            <a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>
+        </div>
+    </div>
+    
+    <div id="___" class="container">
+        <noscript>
+            <div class="alert alert-warning">
+                Javascript is disabled; several features are only available if Javascript is enabled.
+            </div>
+        </noscript>
+
+        
+            <div class="row">
+        <div class="span4">
+                    <span class="btn-group visibility" data-toggle="buttons-checkbox">
+        <button class="btn public active" title="Show public elements">Public</button>
+        <button class="btn protected" title="Show protected elements">Protected</button>
+        <button class="btn private" title="Show private elements">Private</button>
+        <button class="btn inherited active" title="Show inherited elements">Inherited</button>
+    </span>
+    <div class="btn-group view pull-right" data-toggle="buttons-radio">
+        <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+        <button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+    </div>
+
+        <ul class="side-nav nav nav-list">
+        <li class="nav-header">
+            <i class="icon-custom icon-method"></i> Methods
+            <ul>
+                                                                                    <li class="method public">
+        <a href="#method_get_value" title="get_value :: Fetch a value from an array by it&#039;s key, or default if not exists">
+            <span class="description">Fetch a value from an array by it&#039;s key, or default if not exists</span><pre>get_value</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_buildRestPath" title="buildRestPath :: Construct REST URLs">
+            <span class="description">Construct REST URLs</span><pre>buildRestPath</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_buildIndexPath" title="buildIndexPath :: Construct secondary index URLs">
+            <span class="description">Construct secondary index URLs</span><pre>buildIndexPath</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_httpRequest" title="httpRequest :: Send HTTP request">
+            <span class="description">Send HTTP request</span><pre>httpRequest</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_parseHttpHeaders" title="parseHttpHeaders :: Parse HTTP headers">
+            <span class="description">Parse HTTP headers</span><pre>parseHttpHeaders</pre>
+        </a>
+    </li>
+
+                                                </ul>
+        </li>
+        <li class="nav-header protected">» Protected
+            <ul>
+                                                                                                                                                                                                                </ul>
+        </li>
+        <li class="nav-header private">» Private
+            <ul>
+                                                                                                                                                                                                                </ul>
+        </li>
+        <li class="nav-header">
+            <i class="icon-custom icon-constant"></i> Constants
+            <ul>
+                            </ul>
+        </li>
+    </ul>
+
+
+        </div>
+
+        <div class="span8">
+            <div class="element class">
+                <h1>Utils</h1>
+                <small style="display: block; text-align: right">
+                                                        </small>
+                <p class="short_description">Utils</p>
+                <div class="details">
+                    <div class="long_description">
+                        
+
+                    </div>
+                    <table class="table table-bordered">
+                                                                                    <tr>
+                                    <th>
+                                        category
+                                                                            </th>
+                                    <td>
+                                                                                <p>Basho</p>
+
+                                    </td>
+                                </tr>
+                                                                                                                <tr>
+                                    <th>
+                                        author
+                                                                            </th>
+                                    <td>
+                                                                                <p>Riak team (https://github.com/basho/riak-php-client/contributors)</p>
+
+                                    </td>
+                                </tr>
+                                                                        </table>
+
+                    <h3><i class="icon-custom icon-method"></i> Methods</h3>
+                                                                <a id="method_get_value"></a>
+                        <div class="element clickable method public method_get_value" data-toggle="collapse" data-target=".method_get_value .collapse">
+                            <h2>Fetch a value from an array by it&#039;s key, or default if not exists</h2>
+                            <pre>get_value(mixed $key, array $array, mixed $defaultValue) : mixed</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description">
+</div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                            </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$key</h4>
+                                                <code>mixed</code><p><p>Key to fetch</p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$array</h4>
+                                                <code>array</code><p><p>Array to fetch from</p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$defaultValue</h4>
+                                                <code>mixed</code><p><p>Default to return if not exists</p>
+</p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>mixed</code><p>
+</p>
+                                                                    </div>
+                            </div>
+                        </div>
+                                            <a id="method_buildRestPath"></a>
+                        <div class="element clickable method public method_buildRestPath" data-toggle="collapse" data-target=".method_buildRestPath .collapse">
+                            <h2>Construct REST URLs</h2>
+                            <pre>buildRestPath($client, \Basho\Riak\Bucket $bucket = NULL, string $key = NULL, string $spec = NULL, string $params = NULL) : string</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"><p>Given a Client, Bucket, Key, LinkSpec, and Params,
+construct and return a URL.</p>
+</div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                            </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$client</h4>
+                                                <code></code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$bucket</h4>
+                                                <code><a href="../classes/Basho.Riak.Bucket.html">\Basho\Riak\Bucket</a></code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$key</h4>
+                                                <code>string</code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$spec</h4>
+                                                <code>string</code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$params</h4>
+                                                <code>string</code><p><p>Array of key-value param pairs</p>
+</p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p>
+</p>
+                                                                    </div>
+                            </div>
+                        </div>
+                                            <a id="method_buildIndexPath"></a>
+                        <div class="element clickable method public method_buildIndexPath" data-toggle="collapse" data-target=".method_buildIndexPath .collapse">
+                            <h2>Construct secondary index URLs</h2>
+                            <pre>buildIndexPath(\Basho\Riak\Riak $client, \Basho\Riak\Bucket $bucket, string $index, string|int $start, string|int $end = NULL) : string</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"><p>Given a Client, Bucket, Key, LinkSpec, and Params,
+construct and return a URL for searching secondary indexes.</p>
+</div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    author
+                                                </th>
+                                                <td>
+                                                                                                                                                                    <p>Eric Stevens <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#101;&#115;&#116;e&#x76;&#x65;&#x6e;&#x73;&#x40;&#116;&#97;&#103;&#108;&#97;b&#x73;&#x69;&#x6e;&#x63;&#x2e;&#99;&#111;&#109;">&#101;&#115;&#116;e&#x76;&#x65;&#x6e;&#x73;&#x40;&#116;&#97;&#103;&#108;&#97;b&#x73;&#x69;&#x6e;&#x63;&#x2e;&#99;&#111;&#109;</a></p>
+
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                            </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$client</h4>
+                                                <code><a href="../classes/Basho.Riak.Riak.html">\Basho\Riak\Riak</a></code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$bucket</h4>
+                                                <code><a href="../classes/Basho.Riak.Bucket.html">\Basho\Riak\Bucket</a></code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$index</h4>
+                                                <code>string</code><p><ul>
+<li>Index Name &amp; type (eg, "indexName_bin")</li>
+</ul>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$start</h4>
+                                                <code>string|int</code><p><ul>
+<li>Starting value or exact match if no ending value</li>
+</ul>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$end</h4>
+                                                <code>string|int</code><p><ul>
+<li>Ending value for range search</li>
+</ul>
+</p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p><p>URL</p>
+</p>
+                                                                    </div>
+                            </div>
+                        </div>
+                                            <a id="method_httpRequest"></a>
+                        <div class="element clickable method public method_httpRequest" data-toggle="collapse" data-target=".method_httpRequest .collapse">
+                            <h2>Send HTTP request</h2>
+                            <pre>httpRequest($method, $url, $request_headers = array(), $obj = &#039;&#039;) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"><p>Given a Method, URL, Headers, and Body, perform and HTTP request,
+and return an array of arity 2 containing an associative array of
+response headers and the response body.</p>
+</div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                            </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$method</h4>
+                                                <code></code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$url</h4>
+                                                <code></code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$request_headers</h4>
+                                                <code></code><p>
+</p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$obj</h4>
+                                                <code></code><p>
+</p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p>
+</p>
+                                                                    </div>
+                            </div>
+                        </div>
+                                            <a id="method_parseHttpHeaders"></a>
+                        <div class="element clickable method public method_parseHttpHeaders" data-toggle="collapse" data-target=".method_parseHttpHeaders .collapse">
+                            <h2>Parse HTTP headers</h2>
+                            <pre>parseHttpHeaders($headers) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"><p>Parse an HTTP Header string into an asssociative array of
+response headers.</p>
+</div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                            </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$headers</h4>
+                                                <code></code><p>
+</p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p>
+</p>
+                                                                    </div>
+                            </div>
+                        </div>
+                    
+                    
+                                                        </div>
+            </div>
+            <a id="\Basho\Riak\Utils"></a>
+            <ul class="breadcrumb">
+                <li><a href="../index.html"><i class="icon-custom icon-class"></i></a></li>
+                    
+    
+    <li><span class="divider">\</span><a href="../namespaces/Basho.Riak.html">Riak</a></li>
+
+                <li class="active"><span class="divider">\</span><a href="../classes/Basho.Riak.Utils.html">Utils</a></li>
+            </ul>
+        </div>
+    </div>
+
+    </div>
+
+        <footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
+            <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
+            generated on Tue, 02 Jul 2013 14:27:39 +0200.<br/>
+    </footer>
+    </body>
+</html>
