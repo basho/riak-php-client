@@ -14,9 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to <eng@basho.com> so we can send you a copy immediately.
  *
- * @category   Riak
- * @package    MapRedeuce
- * @subpackage Phase
+ * @category   Basho
  * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
  */
 namespace Basho\Riak\MapReduce;
@@ -24,9 +22,7 @@ namespace Basho\Riak\MapReduce;
 /**
  * MapReducePhase
  *
- * @category   Riak
- * @package    MapRedeuce
- * @subpackage Phase
+ * @category   Basho
  * @author     debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
  */
 class Phase
