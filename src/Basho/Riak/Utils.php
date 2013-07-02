@@ -34,7 +34,7 @@ class Utils
 
     /**
      * Fetch a value from an array by it's key, or default if not exists
-
+     *
      * @param mixed $key Key to fetch
      * @param array $array Array to fetch from
      * @param mixed $defaultValue Default to return if not exists
@@ -51,8 +51,17 @@ class Utils
     }
 
     /**
+     * Construct REST URLs
+     *
      * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL.
+     *
+     * @param \Basho\Riak\Riak
+     * @param \Basho\Riak\Bucket $bucket
+     * @param string $key
+     * @param string $spec
+     * @param string $params Array of key-value param pairs
+     * @return string
      */
     public static function buildRestPath($client, $bucket = NULL, $key = NULL, $spec = NULL, $params = NULL)
     {
@@ -96,11 +105,15 @@ class Utils
     }
 
     /**
+     * Construct secondary index URLs
+     *
      * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL for searching secondary indexes.
+     *
      * @author Eric Stevens <estevens@taglabsinc.com>
-     * @param Client $client
-     * @param Bucket $bucket
+     *
+     * @param \Basho\Riak\Riak  $client
+     * @param \Basho\Riak\Bucket $bucket
      * @param string $index - Index Name & type (eg, "indexName_bin")
      * @param string|int $start - Starting value or exact match if no ending value
      * @param string|int $end - Ending value for range search
@@ -134,9 +147,13 @@ class Utils
     }
 
     /**
+     * Send HTTP request
+     *
      * Given a Method, URL, Headers, and Body, perform and HTTP request,
      * and return an array of arity 2 containing an associative array of
      * response headers and the response body.
+     *
+     * @return array
      */
     public static function httpRequest($method, $url, $request_headers = array(), $obj = '')
     {
@@ -191,8 +208,12 @@ class Utils
     }
 
     /**
+     * Parse HTTP headers
+     *
      * Parse an HTTP Header string into an asssociative array of
      * response headers.
+     *
+     * @return array
      */
     static function parseHttpHeaders($headers)
     {

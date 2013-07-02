@@ -25,7 +25,7 @@ use Basho\Riak\Exception,
     Basho\Riak\Utils;
 
 /**
- * Object
+ * \Riak\Object
  *
  * @category   Basho
  * @author     Riak team (https://github.com/basho/riak-php-client/contributors)
@@ -82,6 +82,7 @@ class Object
 
     /**
      * Get the bucket of this object.
+     *
      * @return Bucket
      */
     public function getBucket()
@@ -91,6 +92,7 @@ class Object
 
     /**
      * Get the key of this object.
+     *
      * @return string
      */
     public function getKey()
@@ -99,10 +101,13 @@ class Object
     }
 
     /**
-     * Get the data stored in this object. Will return a associative
-     * array, unless the object was constructed with newBinary(...) or
-     * getBinary(...), in which case this will return a string.
-     * @return array or string
+     * Get the data stored in this object.
+     *
+     * Will return a associative array, unless the object
+     * was constructed with newBinary(...) or getBinary(...),
+     * in which case this will return a string.
+     *
+     * @return array|string
      */
     public function getData()
     {
@@ -110,11 +115,14 @@ class Object
     }
 
     /**
-     * Set the data stored in this object. This data will be
-     * JSON encoded unless the object was constructed with
+     * Set the data stored in this object.
+     *
+     * This data will be JSON encoded unless
+     * the object was constructed with
      * newBinary(...) or getBinary(...).
+     *
      * @param mixed $data - The data to store.
-     * @return $this
+     * @return Object
      */
     public function setData($data)
     {
@@ -124,6 +132,7 @@ class Object
 
     /**
      * Get the HTTP status from the last operation on this object.
+     *
      * @return integer
      */
     public function status()
@@ -132,8 +141,11 @@ class Object
     }
 
     /**
-     * Return true if the object exists, false otherwise. Allows you to
-     * detect a get(...) or getBinary(...) operation where the object is missing.
+     * Return true if the object exists, false otherwise.
+     *
+     * Allows you to detect a get(...) or getBinary(...)
+     * operation where the object is missing.
+     *
      * @return boolean
      */
     public function exists()
@@ -142,8 +154,11 @@ class Object
     }
 
     /**
-     * Get the content type of this object. This is either application/json, or
-     * the provided content type if the object was created via newBinary(...).
+     * Get the content type of this object.
+     *
+     * This is either application/json, or the provided content
+     * type if the object was created via newBinary(...).
+     *
      * @return string
      */
     public function getContentType()
@@ -153,6 +168,7 @@ class Object
 
     /**
      * Set the content type of this object.
+     *
      * @param  string $content_type - The new content type.
      * @return $this
      */
@@ -164,6 +180,7 @@ class Object
 
     /**
      * Get last-modified from the object.
+     *
      * @return DateTime
      */
     public function getLastModified()
@@ -178,6 +195,7 @@ class Object
 
     /**
      * Add a link to a Object.
+     *
      * @param mixed $obj - Either a Object or a Link object.
      * @param string $tag - Optional link tag. (default is bucket name,
      * ignored if $obj is a Link object.)
@@ -198,6 +216,7 @@ class Object
 
     /**
      * Remove a link to a Object.
+     *
      * @param mixed $obj - Either a Object or a Link object.
      * @param string $tag -
      * @param mixed $obj - Either a Object or a Link object.
@@ -224,6 +243,7 @@ class Object
 
     /**
      * Return an array of Link objects.
+     *
      * @return array()
      */
     public function getLinks()
@@ -239,6 +259,7 @@ class Object
 
     /**
      * Adds a secondary index to the object
+     *
      * This will create the index if it does not exist, or will
      * append an additional value if the index already exists and
      * does not contain the provided value.
@@ -272,6 +293,7 @@ class Object
 
     /**
      * Sets a given index to a specific value or set of values
+     *
      * @param string $indexName
      * @param string $indexType - must be 'bin' or 'int'
      * @param array|string|int $values
@@ -292,6 +314,7 @@ class Object
 
     /**
      * Gets the current values for the identified index
+     *
      * Note, the NULL value has special meaning - when the object is
      * ->store()d, this value will be replaced with the current value
      * the value of the field matching $indexName from the object's data
@@ -312,6 +335,7 @@ class Object
 
     /**
      * Removes a specific value from a given index
+     *
      * @param string $indexName
      * @param string $indexType - must be 'bin' or 'int'
      * @param string|int optional $explicitValue
@@ -340,6 +364,7 @@ class Object
 
     /**
      * Bulk index removal
+     *
      * If $indexName and $indexType are provided, all values for the
      * identified index are removed.
      * If just $indexName is provided, all values for all types of
@@ -372,6 +397,7 @@ class Object
 
     /**
      * Adds an automatic secondary index to the object
+     *
      * The value of an automatic secondary index is determined at
      * time of ->store() by looking for an $fieldName key
      * in the object's data.
@@ -395,6 +421,7 @@ class Object
 
     /**
      * Returns whether the object has a given auto index
+     *
      * @param string $fieldName
      * @param string $indexType - must be one of 'int' or 'bin'
      *
@@ -431,6 +458,7 @@ class Object
 
     /**
      * Removes all auto indexes
+     *
      * If $fieldName is not provided, all auto indexes on the
      * object are stripped, otherwise just indexes on the given field
      * are stripped.
@@ -460,6 +488,7 @@ class Object
 
     /**
      * Gets a given metadata value
+     *
      * Returns null if no metadata value with the given name exists
      *
      * @param string $metaName
@@ -474,8 +503,11 @@ class Object
     }
 
     /**
-     * Sets a given metadata value, overwriting an existing
-     * value with the same name if it exists.
+     * Sets a given metadata value
+     *
+     * Overwrites an existing value with
+     * the same name if it exists.
+     *
      * @param string $metaName
      * @param string $value
      * @return $this
@@ -488,6 +520,7 @@ class Object
 
     /**
      * Removes a given metadata value
+     *
      * @param string $metaName
      * @return $this
      */
@@ -499,6 +532,7 @@ class Object
 
     /**
      * Gets all metadata values
+     *
      * @return array<string>=string
      */
     public function getAllMeta()
@@ -508,6 +542,7 @@ class Object
 
     /**
      * Strips all metadata values
+     *
      * @return $this;
      */
     public function removeAllMeta()
@@ -517,10 +552,13 @@ class Object
     }
 
     /**
-     * Store the object in Riak. When this operation completes, the
+     * Store the object in Riak
+     *
+     * When this operation completes, the
      * object could contain new metadata and possibly new data if Riak
      * contains a newer version of the object according to the object's
      * vector clock.
+     *
      * @param integer $w - W-value, wait for this many partitions to respond
      * before returning to client.
      * @param integer $dw - DW-value, wait for this many partitions to
@@ -605,9 +643,12 @@ class Object
     }
 
     /**
-     * Reload the object from Riak. When this operation completes, the
+     * Reload the object from Riak
+     *
+     * When this operation completes, the
      * object could contain new metadata and a new value, if the object
      * was updated in Riak since it was last retrieved.
+     *
      * @param integer $r - R-Value, wait for this many partitions to respond
      * before returning to client.
      * @return $this
@@ -631,7 +672,8 @@ class Object
     }
 
     /**
-     * Delete this object from Riak.
+     * Delete this object from Riak
+     *
      * @param  integer $dw - DW-value. Wait until this many partitions have
      * deleted the object before responding.
      * @return $this
@@ -655,6 +697,7 @@ class Object
 
     /**
      * Reset this object.
+     *
      * @return $this
      */
     private function clear()
@@ -672,6 +715,7 @@ class Object
 
     /**
      * Get the vclock of this object.
+     *
      * @return string
      */
     private function vclock()
@@ -684,9 +728,13 @@ class Object
     }
 
     /**
+     * Populate object with Utils::httpRequest expected statuses
+     *
      * Given the output of Utils::httpRequest and a list of
      * statuses, populate the object. Only for use by the Riak client
-     * library.
+     * library
+     *
+     * @ignore
      * @return $this
      */
     public function populate($response, $expected_statuses)
@@ -792,6 +840,8 @@ class Object
 
     /**
      * Private.
+     *
+     * @ignore
      * @return $this
      */
     private function populateLinks($linkHeaders)
@@ -811,6 +861,7 @@ class Object
 
     /**
      * Return true if this object has siblings.
+     *
      * @return boolean
      */
     public function hasSiblings()
@@ -820,6 +871,7 @@ class Object
 
     /**
      * Get the number of siblings that this object contains.
+     *
      * @return integer
      */
     public function getSiblingCount()
@@ -829,6 +881,7 @@ class Object
 
     /**
      * Retrieve a sibling by sibling number.
+     *
      * @param  integer $i - Sibling number.
      * @param  integer $r - R-Value. Wait until this many partitions
      * have responded before returning to client.
@@ -854,6 +907,7 @@ class Object
 
     /**
      * Retrieve an array of siblings.
+     *
      * @param integer $r - R-Value. Wait until this many partitions have
      * responded before returning to client.
      * @return array of Object
@@ -869,6 +923,7 @@ class Object
 
     /**
      * Start assembling a Map/Reduce operation.
+     *
      * @see MapReduce::add()
      * @return MapReduce
      */
@@ -882,6 +937,7 @@ class Object
 
     /**
      * Start assembling a Map/Reduce operation.
+     *
      * @see MapReduce::link()
      * @return MapReduce
      */
@@ -895,6 +951,7 @@ class Object
 
     /**
      * Start assembling a Map/Reduce operation.
+     *
      * @see MapReduce::map()
      * @return MapReduce
      */
@@ -908,6 +965,7 @@ class Object
 
     /**
      * Start assembling a Map/Reduce operation.
+     *
      * @see MapReduce::reduce()
      * @return MapReduce
      */

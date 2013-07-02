@@ -33,6 +33,7 @@ class Riak
 {
     /**
      * Construct a new Client object.
+     *
      * @param string $host - Hostname or IP address (default '127.0.0.1')
      * @param int $port - Port number (default 8098)
      * @param string $prefix - Interface prefix (default "riak")
@@ -52,7 +53,10 @@ class Riak
     }
 
     /**
-     * Get the R-value setting for this Client. (default 2)
+     * Get the R-value setting for this Client
+     *
+     * Default: 2
+     *
      * @return integer
      */
     public function getR()
@@ -61,10 +65,13 @@ class Riak
     }
 
     /**
-     * Set the R-value for this Client. This value will be used
-     * for any calls to get(...) or getBinary(...) where where 1) no
+     * Set the R-value for this Client
+     *
+     * This value will be used
+     * for any calls to get(...) or getBinary(...) where 1) no
      * R-value is specified in the method call and 2) no R-value has
      * been set in the Bucket.
+     *
      * @param integer $r - The R value.
      * @return $this
      */
@@ -75,7 +82,10 @@ class Riak
     }
 
     /**
-     * Get the W-value setting for this Client. (default 2)
+     * Get the W-value setting for this Client
+     *
+     * Default: 2
+     *
      * @return integer
      */
     public function getW()
@@ -84,8 +94,10 @@ class Riak
     }
 
     /**
-     * Set the W-value for this Client. See setR(...) for a
-     * description of how these values are used.
+     * Set the W-value for this Client
+     *
+     * See setR(...) for a description of how these values are used.
+     *
      * @param integer $w - The W value.
      * @return $this
      */
@@ -96,7 +108,10 @@ class Riak
     }
 
     /**
-     * Get the DW-value for this ClientOBject. (default 2)
+     * Get the DW-value for this ClientOBject
+     *
+     * Default: 2
+     *
      * @return integer
      */
     public function getDW()
@@ -105,8 +120,10 @@ class Riak
     }
 
     /**
-     * Set the DW-value for this Client. See setR(...) for a
-     * description of how these values are used.
+     * Set the DW-value for this Client
+     *
+     * See setR(...) for a description of how these values are used.
+     *
      * @param  integer $dw - The DW value.
      * @return $this
      */
@@ -118,6 +135,7 @@ class Riak
 
     /**
      * Get the clientID for this Client.
+     *
      * @return string
      */
     public function getClientID()
@@ -126,8 +144,10 @@ class Riak
     }
 
     /**
-     * Set the clientID for this Client. Should not be called
-     * unless you know what you are doing.
+     * Set the clientID for this Client
+     *
+     * Should not be called unless you know what you are doing.
+     *
      * @param string $clientID - The new clientID.
      * @return $this
      */
@@ -138,8 +158,10 @@ class Riak
     }
 
     /**
-     * Get the bucket by the specified name. Since buckets always exist,
-     * this will always return a Bucket.
+     * Get the bucket by the specified name
+     *
+     * Since buckets always exist, this will always return a Bucket.
+     *
      * @return Bucket
      */
     public function bucket($name)
@@ -148,7 +170,8 @@ class Riak
     }
 
     /**
-     * Get all buckets.
+     * Get all buckets
+     *
      * @return array() of Bucket objects
      */
     public function buckets()
@@ -164,7 +187,8 @@ class Riak
     }
 
     /**
-     * Check if the Riak server for this Client is alive.
+     * Check if the Riak server for this Client is alive
+     *
      * @return boolean
      */
     public function isAlive()
@@ -178,7 +202,8 @@ class Riak
     # MAP/REDUCE/LINK FUNCTIONS
 
     /**
-     * Start assembling a Map/Reduce operation.
+     * Start assembling a Map/Reduce operation
+     *
      * @see MapReduce::add()
      * @return MapReduce
      */
@@ -190,8 +215,11 @@ class Riak
     }
 
     /**
-     * Start assembling a Map/Reduce operation. This command will
-     * return an error unless executed against a Riak Search cluster.
+     * Start assembling a Map/Reduce operation
+     *
+     * This command will return an error unless
+     * executed against a Riak Search cluster.
+     *
      * @see MapReduce::search()
      * @return MapReduce
      */
@@ -204,6 +232,7 @@ class Riak
 
     /**
      * Start assembling a Map/Reduce operation.
+     *
      * @see MapReduce::link()
      */
     public function link($params)
@@ -215,6 +244,7 @@ class Riak
 
     /**
      * Start assembling a Map/Reduce operation.
+     *
      * @see MapReduce::map()
      */
     public function map($params)
@@ -226,6 +256,7 @@ class Riak
 
     /**
      * Start assembling a Map/Reduce operation.
+     *
      * @see MapReduce::reduce()
      */
     public function reduce($params)
