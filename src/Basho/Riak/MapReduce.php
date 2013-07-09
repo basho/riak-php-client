@@ -14,8 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to <eng@basho.com> so we can send you a copy immediately.
  *
- * @category   Riak
- * @package    MapReduce
+ * @category   Basho
  * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
  */
 namespace Basho\Riak;
@@ -30,8 +29,7 @@ use Basho\Riak\Exception,
 /**
  * MapReduce
  *
- * @category   Riak
- * @package    MapReduce
+ * @category   Basho
  * @author     Riak team (https://github.com/basho/riak-php-client/contributors)
  */
 class MapReduce
@@ -39,7 +37,8 @@ class MapReduce
 
     /**
      * Construct a Map/Reduce object.
-     * @param Client $client - A Client object.
+     *
+     * @param \Basho\Riak\Riak $client - A Client object.
      * @return MapReduce
      */
     public function __construct($client)
@@ -53,13 +52,16 @@ class MapReduce
     }
 
     /**
-     * Add inputs to a map/reduce operation. This method takes three
-     * different forms, depending on the provided inputs. You can
-     * specify either  a Object, a string bucket name, or a bucket,
-     * key, and additional arg.
-     * @param mixed $arg1 - Object or Bucket
-     * @param mixed $arg2 - Key or blank
-     * @param mixed $arg3 - Arg or blank
+     * Add inputs to a map/reduce operation
+     *
+     * This method takes three different forms, 
+     * depending on the provided inputs. You can 
+     * specify either  a Object, a string bucket name, 
+     * or a bucket, key, and additional arg.
+     *
+     * @param mixed $arg1 Object or Bucket
+     * @param mixed $arg2 Key or blank
+     * @param mixed $arg3 Arg or blank
      * @return MapReduce
      */
     public function add($arg1, $arg2 = NULL, $arg3 = NULL)
@@ -74,7 +76,9 @@ class MapReduce
     }
 
     /**
-     * Private.
+     * Private
+     *
+     * @ignore
      */
     private function add_object($obj)
     {
@@ -82,7 +86,9 @@ class MapReduce
     }
 
     /**
-     * Private.
+     * Private
+     *
+     * @ignore
      */
     private function add_bucket_key_data($bucket, $key, $data)
     {
@@ -93,7 +99,9 @@ class MapReduce
     }
 
     /**
-     * Private.
+     * Private
+     *
+     * @ignore
      * @return $this
      */
     private function add_bucket($bucket)
@@ -104,11 +112,13 @@ class MapReduce
     }
 
     /**
-     * Begin a map/reduce operation using a Search. This command will
+     * Begin a map/reduce operation using a Search
+     *
+     * This command will
      * return an error unless executed against a Riak Search cluster.
+     *
      * @param string $bucket - The Bucket to search.  @param string
-     * query - The Query to execute. (Lucene syntax.)  @return
-     * MapReduce
+     * query - The Query to execute. (Lucene syntax.)  @return \Basho\Riak\MapReduce
      */
     public function search($bucket, $query)
     {
@@ -117,7 +127,8 @@ class MapReduce
     }
 
     /**
-     * Add a link phase to the map/reduce operation.
+     * Add a link phase to the map/reduce operation
+     *
      * @param string $bucket - Bucket name (default '_', which means all
      * buckets)
      * @param string $tag - Tag (default '_', which means all buckets)
@@ -133,7 +144,8 @@ class MapReduce
     }
 
     /**
-     * Add a map phase to the map/reduce operation.
+     * Add a map phase to the map/reduce operation
+     *
      * @param mixed $function - Either a named Javascript function (ie:
      * "Riak.mapValues"), or an anonymous javascript function (ie:
      * "function(...) { ... }" or an array ["erlang_module",
@@ -154,7 +166,8 @@ class MapReduce
     }
 
     /**
-     * Add a reduce phase to the map/reduce operation.
+     * Add a reduce phase to the map/reduce operation
+     *
      * @param mixed $function - Either a named Javascript function (ie:
      * "Riak.mapValues"), or an anonymous javascript function (ie:
      * "function(...) { ... }" or an array ["erlang_module",
@@ -175,9 +188,12 @@ class MapReduce
     }
 
     /**
-     * Add a key filter to the map/reduce operation.  If there are already
+     * Add a key filter to the map/reduce operation
+     *
+     * If there are already
      * existing filters, an "and" condition will be used to combine them.
      * Alias for key_filter_and
+     *
      * @param array $filter - a key filter (ie:
      * ->key_filter(
      *     array("tokenize", "-", 2),
@@ -193,8 +209,11 @@ class MapReduce
     }
 
     /**
-     * Add a key filter to the map/reduce operation.  If there are already
+     * Add a key filter to the map/reduce operation
+     *
+     * If there are already
      * existing filters, an "and" condition will be used to combine them.
+     *
      * @param array $filter - a key filter (ie:
      * ->key_filter(
      *     array("tokenize", "-", 2),
@@ -210,9 +229,12 @@ class MapReduce
     }
 
     /**
-     * Adds a key filter to the map/reduce operation.  If there are already
+     * Adds a key filter to the map/reduce operation
+     *
+     * If there are already
      * existing filters, an "or" condition will be used to combine with the
      * existing filters.
+     *
      * @param array $filter
      * @return $this
      */
@@ -224,9 +246,12 @@ class MapReduce
     }
 
     /**
-     * Adds a key filter to the map/reduce operation.  If there are already
+     * Adds a key filter to the map/reduce operation
+     *
+     * If there are already
      * existing filters, the provided conditional operator will be used
      * to combine with the existing filters.
+     *
      * @param string $operator - Operator (usually "and" or "or")
      * @param array $filter
      * @return $this
@@ -254,9 +279,11 @@ class MapReduce
 
     /**
      * Performs an index search as part of a Map/Reduce operation
+     *
      * Note that you can only do index searches on a bucket, so
      * this is incompatible with object or key operations, as well
      * as key filter operations.
+     *
      * @param string $indexName The name of the index to search.
      * @param string $indexType The index type ('bin' or 'int')
      * @param string|int $startOrExact Start value to search for, or
@@ -291,8 +318,11 @@ class MapReduce
 
 
     /**
-     * Run the map/reduce operation. Returns an array of results, or an
+     * Run the map/reduce operation
+     *
+     * Returns an array of results, or an
      * array of Link objects if the last phase is a link phase.
+     *
      * @param integer $timeout - Timeout in seconds.
      * @return array()
      */

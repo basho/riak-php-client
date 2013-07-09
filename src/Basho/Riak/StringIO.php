@@ -14,8 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to <eng@basho.com> so we can send you a copy immediately.
  *
- * @category   Riak
- * @package    StringIO
+ * @category   Basho
  * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
  */
 namespace Basho\Riak;
@@ -23,23 +22,38 @@ namespace Basho\Riak;
 /**
  * StringIO
  *
- * @category   Riak
- * @package    StringIO
+ * @category   Basho
  * @author     Riak team (https://github.com/basho/riak-php-client/contributors)
  */
 class StringIO
 {
+    /**
+     * Construct a StringIO object.
+     */
     public function __construct()
     {
         $this->contents = '';
     }
 
+    /**
+     * Add data to contents
+     *
+     * @param resource $ch Curl Resource Handler (unused)
+     * @param string $data Data to add to contents
+     *
+     * @return int
+     */
     public function write($ch, $data)
     {
         $this->contents .= $data;
         return strlen($data);
     }
 
+    /**
+     * Retrieve current contents
+     *
+     * @return string
+     */
     public function contents()
     {
         return $this->contents;
