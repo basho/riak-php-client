@@ -74,55 +74,55 @@
 <polygon fill="none" stroke="black" points="243,-500 189,-500 189,-464 243,-464 243,-500"/>
 <text text-anchor="middle" x="216" y="-477.6" font-family="Courier,monospace" font-size="11.00">Phase</text>
 </g>
-<!-- \\Basho\\Riak\\Object -->
-<g id="node8" class="node"><title>\\Basho\\Riak\\Object</title>
-<polygon fill="none" stroke="black" points="243.608,-446 188.392,-446 188.392,-410 243.608,-410 243.608,-446"/>
-<text text-anchor="middle" x="216" y="-423.6" font-family="Courier,monospace" font-size="11.00">Object</text>
-</g>
-<!-- \\Basho\\Riak\\StringIO -->
-<g id="node9" class="node"><title>\\Basho\\Riak\\StringIO</title>
-<polygon fill="none" stroke="black" points="250.309,-392 181.691,-392 181.691,-356 250.309,-356 250.309,-392"/>
-<text text-anchor="middle" x="216" y="-369.6" font-family="Courier,monospace" font-size="11.00">StringIO</text>
-</g>
 <!-- \\Basho\\Riak\\Bucket -->
-<g id="node10" class="node"><title>\\Basho\\Riak\\Bucket</title>
-<polygon fill="none" stroke="black" points="243.608,-338 188.392,-338 188.392,-302 243.608,-302 243.608,-338"/>
-<text text-anchor="middle" x="216" y="-315.6" font-family="Courier,monospace" font-size="11.00">Bucket</text>
-</g>
-<!-- \\Basho\\Riak\\Riak -->
-<g id="node11" class="node"><title>\\Basho\\Riak\\Riak</title>
-<polygon fill="none" stroke="black" points="243,-284 189,-284 189,-248 243,-248 243,-284"/>
-<text text-anchor="middle" x="216" y="-261.6" font-family="Courier,monospace" font-size="11.00">Riak</text>
-</g>
-<!-- \\Basho\\Riak\\Link -->
-<g id="node12" class="node"><title>\\Basho\\Riak\\Link</title>
-<polygon fill="none" stroke="black" points="243,-230 189,-230 189,-194 243,-194 243,-230"/>
-<text text-anchor="middle" x="216" y="-207.6" font-family="Courier,monospace" font-size="11.00">Link</text>
-</g>
-<!-- \\Basho\\Riak\\Utils -->
-<g id="node13" class="node"><title>\\Basho\\Riak\\Utils</title>
-<polygon fill="none" stroke="black" points="243,-176 189,-176 189,-140 243,-140 243,-176"/>
-<text text-anchor="middle" x="216" y="-153.6" font-family="Courier,monospace" font-size="11.00">Utils</text>
+<g id="node8" class="node"><title>\\Basho\\Riak\\Bucket</title>
+<polygon fill="none" stroke="black" points="243.608,-446 188.392,-446 188.392,-410 243.608,-410 243.608,-446"/>
+<text text-anchor="middle" x="216" y="-423.6" font-family="Courier,monospace" font-size="11.00">Bucket</text>
 </g>
 <!-- \\Basho\\Riak\\Exception -->
-<g id="node14" class="node"><title>\\Basho\\Riak\\Exception</title>
-<polygon fill="none" stroke="black" points="253.911,-122 178.089,-122 178.089,-86 253.911,-86 253.911,-122"/>
-<text text-anchor="middle" x="216" y="-99.6" font-family="Courier,monospace" font-size="11.00">Exception</text>
+<g id="node9" class="node"><title>\\Basho\\Riak\\Exception</title>
+<polygon fill="none" stroke="black" points="253.911,-392 178.089,-392 178.089,-356 253.911,-356 253.911,-392"/>
+<text text-anchor="middle" x="216" y="-369.6" font-family="Courier,monospace" font-size="11.00">Exception</text>
 </g>
 <!-- \\Exception -->
 <g id="node17" class="node"><title>\\Exception</title>
-<ellipse fill="none" stroke="black" cx="53" cy="-104" rx="52.7417" ry="18"/>
-<text text-anchor="middle" x="53" y="-98.4" font-family="Times,serif" font-size="14.00" fill="gray">\Exception</text>
+<ellipse fill="none" stroke="black" cx="53" cy="-374" rx="52.7417" ry="18"/>
+<text text-anchor="middle" x="53" y="-368.4" font-family="Times,serif" font-size="14.00" fill="gray">\Exception</text>
 </g>
 <!-- \\Basho\\Riak\\Exception&#45;&gt;\\Exception -->
 <g id="edge7" class="edge"><title>\\Basho\\Riak\\Exception&#45;&gt;\\Exception</title>
-<path fill="none" stroke="black" d="M178.063,-104C159.713,-104 137.042,-104 116.12,-104"/>
-<polygon fill="none" stroke="black" points="116.017,-100.5 106.017,-104 116.017,-107.5 116.017,-100.5"/>
+<path fill="none" stroke="black" d="M178.063,-374C159.713,-374 137.042,-374 116.12,-374"/>
+<polygon fill="none" stroke="black" points="116.017,-370.5 106.017,-374 116.017,-377.5 116.017,-370.5"/>
+</g>
+<!-- \\Basho\\Riak\\Link -->
+<g id="node10" class="node"><title>\\Basho\\Riak\\Link</title>
+<polygon fill="none" stroke="black" points="243,-338 189,-338 189,-302 243,-302 243,-338"/>
+<text text-anchor="middle" x="216" y="-315.6" font-family="Courier,monospace" font-size="11.00">Link</text>
 </g>
 <!-- \\Basho\\Riak\\MapReduce -->
-<g id="node15" class="node"><title>\\Basho\\Riak\\MapReduce</title>
-<polygon fill="none" stroke="black" points="253.911,-68 178.089,-68 178.089,-32 253.911,-32 253.911,-68"/>
-<text text-anchor="middle" x="216" y="-45.6" font-family="Courier,monospace" font-size="11.00">MapReduce</text>
+<g id="node11" class="node"><title>\\Basho\\Riak\\MapReduce</title>
+<polygon fill="none" stroke="black" points="253.911,-284 178.089,-284 178.089,-248 253.911,-248 253.911,-284"/>
+<text text-anchor="middle" x="216" y="-261.6" font-family="Courier,monospace" font-size="11.00">MapReduce</text>
+</g>
+<!-- \\Basho\\Riak\\Object -->
+<g id="node12" class="node"><title>\\Basho\\Riak\\Object</title>
+<polygon fill="none" stroke="black" points="243.608,-230 188.392,-230 188.392,-194 243.608,-194 243.608,-230"/>
+<text text-anchor="middle" x="216" y="-207.6" font-family="Courier,monospace" font-size="11.00">Object</text>
+</g>
+<!-- \\Basho\\Riak\\Riak -->
+<g id="node13" class="node"><title>\\Basho\\Riak\\Riak</title>
+<polygon fill="none" stroke="black" points="243,-176 189,-176 189,-140 243,-140 243,-176"/>
+<text text-anchor="middle" x="216" y="-153.6" font-family="Courier,monospace" font-size="11.00">Riak</text>
+</g>
+<!-- \\Basho\\Riak\\StringIO -->
+<g id="node14" class="node"><title>\\Basho\\Riak\\StringIO</title>
+<polygon fill="none" stroke="black" points="250.309,-122 181.691,-122 181.691,-86 250.309,-86 250.309,-122"/>
+<text text-anchor="middle" x="216" y="-99.6" font-family="Courier,monospace" font-size="11.00">StringIO</text>
+</g>
+<!-- \\Basho\\Riak\\Utils -->
+<g id="node15" class="node"><title>\\Basho\\Riak\\Utils</title>
+<polygon fill="none" stroke="black" points="243,-68 189,-68 189,-32 243,-32 243,-68"/>
+<text text-anchor="middle" x="216" y="-45.6" font-family="Courier,monospace" font-size="11.00">Utils</text>
 </g>
 </g>
 </svg>
