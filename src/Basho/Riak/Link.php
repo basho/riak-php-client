@@ -28,7 +28,28 @@ namespace Basho\Riak;
 class Link
 {
     /**
+     * @var string
+     */
+    public $bucket;
+
+    /**
+     * @var string
+     */
+    public $key;
+
+    /**
+     * @var null|string
+     */
+    public $tag;
+
+    /**
+     * @var Riak
+     */
+    public $client;
+
+    /**
      * Construct a Link object.
+     *
      * @param string $bucket - The bucket name.
      * @param string $key - The key.
      * @param string $tag - The tag.
@@ -43,7 +64,9 @@ class Link
 
     /**
      * Retrieve the Object to which this link points.
+     *
      * @param integer $r - The R-value to use.
+     *
      * @return Object
      */
     public function get($r = NULL)
@@ -53,7 +76,9 @@ class Link
 
     /**
      * Retrieve the Object to which this link points, as a binary.
+     *
      * @param integer $r - The R-value to use.
+     *
      * @return Object
      */
     public function getBinary($r = NULL)
@@ -63,6 +88,7 @@ class Link
 
     /**
      * Get the bucket name of this link.
+     *
      * @return string
      */
     public function getBucket()
@@ -72,17 +98,21 @@ class Link
 
     /**
      * Set the bucket name of this link.
-     * @param string $name - The bucket name.
+     *
+     * @param string $bucket The bucket name.
+     *
      * @return $this
      */
     public function setBucket($bucket)
     {
         $this->bucket = $bucket;
+
         return $this;
     }
 
     /**
      * Get the key of this link.
+     *
      * @return string
      */
     public function getKey()
@@ -92,40 +122,51 @@ class Link
 
     /**
      * Set the key of this link.
+     *
      * @param string $key - The key.
+     *
      * @return $this
      */
     public function setKey($key)
     {
         $this->key = $key;
+
         return $this;
     }
 
     /**
      * Get the tag of this link.
+     *
      * @return string
      */
     public function getTag()
     {
         if ($this->tag == null)
             return $this->bucket;
-        else
-            return $this->tag;
+
+        return $this->tag;
     }
 
     /**
      * Set the tag of this link.
+     *
      * @param string $tag - The tag.
+     *
      * @return $this
      */
     public function setTag($tag)
     {
         $this->tag = $tag;
+
         return $this;
     }
 
     /**
      * Convert this Link object to a link header string. Used internally.
+     *
+     * @param $client
+     *
+     * @return string
      */
     public function toLinkHeader($client)
     {
@@ -134,12 +175,15 @@ class Link
             urlencode($this->bucket) . "/" .
             urlencode($this->key) . ">; riaktag=\"" .
             urlencode($this->getTag()) . "\"";
+
         return $link;
     }
 
     /**
      * Return true if the links are equal.
+     *
      * @param Link $link - A Link object.
+     *
      * @return boolean
      */
     public function isEqual($link)
@@ -148,6 +192,7 @@ class Link
             ($this->bucket == $link->bucket) &&
                 ($this->key == $link->key) &&
                 ($this->getTag() == $link->getTag());
+
         return $is_equal;
     }
 }

@@ -29,6 +29,7 @@ class Phase
 {
     /**
      * Construct a Phase object.
+     *
      * @param string $bucket - The bucket name.
      * @param string $tag - The tag.
      * @param boolean $keep - True to return results of this phase.
@@ -41,8 +42,7 @@ class Phase
     }
 
     /**
-     * Convert the Phase to an associative array. Used
-     * internally.
+     * Convert the Phase to an associative array. Used internally.
      */
     public function to_array()
     {

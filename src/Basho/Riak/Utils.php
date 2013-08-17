@@ -61,6 +61,7 @@ class Utils
      * @param string $key
      * @param string $spec
      * @param string $params Array of key-value param pairs
+     *
      * @return string
      */
     public static function buildRestPath($client, $bucket = NULL, $key = NULL, $spec = NULL, $params = NULL)
@@ -117,6 +118,7 @@ class Utils
      * @param string $index - Index Name & type (eg, "indexName_bin")
      * @param string|int $start - Starting value or exact match if no ending value
      * @param string|int $end - Ending value for range search
+     *
      * @return string URL
      */
     public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = NULL)
@@ -152,6 +154,11 @@ class Utils
      * Given a Method, URL, Headers, and Body, perform and HTTP request,
      * and return an array of arity 2 containing an associative array of
      * response headers and the response body.
+     *
+     * @param $method
+     * @param $url
+     * @param array $request_headers
+     * @param string $obj
      *
      * @return array
      */
@@ -212,6 +219,8 @@ class Utils
      *
      * Parse an HTTP Header string into an asssociative array of
      * response headers.
+     *
+     * @param string $headers
      *
      * @return array
      */

@@ -39,6 +39,7 @@ class MapReduce
      * Construct a Map/Reduce object.
      *
      * @param \Basho\Riak\Riak $client - A Client object.
+     *
      * @return MapReduce
      */
     public function __construct($client)
@@ -62,6 +63,7 @@ class MapReduce
      * @param mixed $arg1 Object or Bucket
      * @param mixed $arg2 Key or blank
      * @param mixed $arg3 Arg or blank
+     *
      * @return MapReduce
      */
     public function add($arg1, $arg2 = NULL, $arg3 = NULL)
@@ -72,6 +74,7 @@ class MapReduce
             else
                 return $this->add_bucket($arg1);
         }
+
         return $this->add_bucket_key_data($arg1, (string)$arg2, $arg3);
     }
 
@@ -79,6 +82,8 @@ class MapReduce
      * Private
      *
      * @ignore
+     *
+     * @param object $obj
      */
     private function add_object($obj)
     {
@@ -95,6 +100,7 @@ class MapReduce
         if ($this->input_mode == "bucket")
             throw new Exception("Already added a bucket, can't add an object.");
         $this->inputs[] = array($bucket, $key, $data);
+
         return $this;
     }
 
@@ -102,6 +108,9 @@ class MapReduce
      * Private
      *
      * @ignore
+     *
+     * @param Bucket $bucket
+     *
      * @return $this
      */
     private function add_bucket($bucket)
@@ -114,15 +123,17 @@ class MapReduce
     /**
      * Begin a map/reduce operation using a Search
      *
-     * This command will
-     * return an error unless executed against a Riak Search cluster.
+     * This command will return an error unless executed against a Riak Search cluster.
      *
-     * @param string $bucket - The Bucket to search.  @param string
-     * query - The Query to execute. (Lucene syntax.)  @return \Basho\Riak\MapReduce
+     * @param string $bucket - The Bucket to search.
+     * @param string $query - The Query to execute. (Lucene syntax.)
+     *
+     * @return \Basho\Riak\MapReduce
      */
     public function search($bucket, $query)
     {
         $this->inputs = array("module" => "riak_search", "function" => "mapred_search", "arg" => array($bucket, $query));
+
         return $this;
     }
 
@@ -135,11 +146,13 @@ class MapReduce
      * @param boolean $keep - Flag whether to keep results from this
      * stage in the map/reduce. (default FALSE, unless this is the last
      * step in the phase)
+     *
      * @return $this
      */
     public function link($bucket = '_', $tag = '_', $keep = FALSE)
     {
         $this->phases[] = new LinkPhase($bucket, $tag, $keep);
+
         return $this;
     }
 
@@ -150,8 +163,8 @@ class MapReduce
      * "Riak.mapValues"), or an anonymous javascript function (ie:
      * "function(...) { ... }" or an array ["erlang_module",
      * "function"].
-     * @param array() $options - An optional associative array
-     * containing "language", "keep" flag, and/or "arg".
+     * @param array() $options - An optional associative array containing "language", "keep" flag, and/or "arg".
+     *
      * @return $this
      */
     public function map($function, $options = array())
@@ -162,6 +175,7 @@ class MapReduce
             Utils::get_value("language", $options, $language),
             Utils::get_value("keep", $options, FALSE),
             Utils::get_value("arg", $options, NULL));
+
         return $this;
     }
 
@@ -172,8 +186,8 @@ class MapReduce
      * "Riak.mapValues"), or an anonymous javascript function (ie:
      * "function(...) { ... }" or an array ["erlang_module",
      * "function"].
-     * @param array() $options - An optional associative array
-     * containing "language", "keep" flag, and/or "arg".
+     * @param array() $options - An optional associative array containing "language", "keep" flag, and/or "arg".
+     *
      * @return $this
      */
     public function reduce($function, $options = array())
@@ -184,6 +198,7 @@ class MapReduce
             Utils::get_value("language", $options, $language),
             Utils::get_value("keep", $options, FALSE),
             Utils::get_value("arg", $options, NULL));
+
         return $this;
     }
 
@@ -199,12 +214,14 @@ class MapReduce
      *     array("tokenize", "-", 2),
      *     array("between", "20110601", "20110630")
      * )
+     *
      * @return $this
      */
     public function key_filter(array $filter /*. ,$filter .*/)
     {
         $args = func_get_args();
         array_unshift($args, 'and');
+
         return call_user_func_array(array($this, 'key_filter_operator'), $args);
     }
 
@@ -219,12 +236,14 @@ class MapReduce
      *     array("tokenize", "-", 2),
      *     array("between", "20110601", "20110630")
      * )
+     *
      * @return $this
      */
     public function key_filter_and(array $filter)
     {
         $args = func_get_args();
         array_unshift($args, 'and');
+
         return call_user_func_array(array($this, 'key_filter_operator'), $args);
     }
 
@@ -236,12 +255,14 @@ class MapReduce
      * existing filters.
      *
      * @param array $filter
+     *
      * @return $this
      */
     public function key_filter_or(array $filter /*. ,$filter .*/)
     {
         $args = func_get_args();
         array_unshift($args, 'or');
+
         return call_user_func_array(array($this, 'key_filter_operator'), $args);
     }
 
@@ -254,7 +275,10 @@ class MapReduce
      *
      * @param string $operator - Operator (usually "and" or "or")
      * @param array $filter
+     *
      * @return $this
+     *
+     * @throws Exception
      */
     public function key_filter_operator($operator, $filter /*. ,$filter .*/)
     {
@@ -286,11 +310,12 @@ class MapReduce
      *
      * @param string $indexName The name of the index to search.
      * @param string $indexType The index type ('bin' or 'int')
-     * @param string|int $startOrExact Start value to search for, or
-     * exact value if no end value specified.
-     * @param string|int optional $end End value to search for during
-     * a range search
+     * @param string|int $startOrExact Start value to search for, or exact value if no end value specified.
+     * @param int|string|null $end End value to search for during a range search
+     *
      * @return $this
+     *
+     * @throws Exception
      */
     public function indexSearch($indexName, $indexType, $startOrExact, $end = NULL)
     {
@@ -324,6 +349,7 @@ class MapReduce
      * array of Link objects if the last phase is a link phase.
      *
      * @param integer $timeout - Timeout in seconds.
+     *
      * @return array()
      */
     public function run($timeout = NULL)
@@ -390,6 +416,7 @@ class MapReduce
             $link->client = $this->client;
             $a[] = $link;
         }
+
         return $a;
     }
 }
