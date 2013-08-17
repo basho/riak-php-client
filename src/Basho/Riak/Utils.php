@@ -31,6 +31,10 @@ use Basho\Riak\Bucket,
  */
 class Utils
 {
+    /**
+     * @var bool
+     */
+    public static $logExceptions = false;
 
     /**
      * Fetch a value from an array by it's key, or default if not exists
@@ -43,11 +47,11 @@ class Utils
      */
     public static function get_value($key, $array, $defaultValue)
     {
-        if (array_key_exists($key, $array)) {
+        if (isset($array[$key]) || array_key_exists($key, $array)) {
             return $array[$key];
-        } else {
-            return $defaultValue;
         }
+
+        return $defaultValue;
     }
 
     /**
@@ -56,14 +60,15 @@ class Utils
      * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL.
      *
-     * @param \Basho\Riak\Riak
-     * @param \Basho\Riak\Bucket $bucket
+     * @param Riak $client
+     * @param Bucket $bucket
      * @param string $key
      * @param string $spec
      * @param string $params Array of key-value param pairs
+     *
      * @return string
      */
-    public static function buildRestPath($client, $bucket = NULL, $key = NULL, $spec = NULL, $params = NULL)
+    public static function buildRestPath(Riak $client, Bucket $bucket = NULL, $key = NULL, $spec = NULL, $params = NULL)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = 'http://';
@@ -87,6 +92,7 @@ class Utils
                 if ($s != '') $s .= '/';
                 $s .= urlencode($el[0]) . ',' . urlencode($el[1]) . ',' . $el[2] . '/';
             }
+
             $path .= '/' . $s;
         }
 
@@ -117,6 +123,7 @@ class Utils
      * @param string $index - Index Name & type (eg, "indexName_bin")
      * @param string|int $start - Starting value or exact match if no ending value
      * @param string|int $end - Ending value for range search
+     *
      * @return string URL
      */
     public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = NULL)
@@ -153,6 +160,11 @@ class Utils
      * and return an array of arity 2 containing an associative array of
      * response headers and the response body.
      *
+     * @param $method
+     * @param $url
+     * @param array $request_headers
+     * @param string $obj
+     *
      * @return array
      */
     public static function httpRequest($method, $url, $request_headers = array(), $obj = '')
@@ -162,25 +174,33 @@ class Utils
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
 
-        if ($method == 'GET') {
-            curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        } else if ($method == 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-        } else if ($method == 'PUT') {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-        } else if ($method == 'DELETE') {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        switch ($method) {
+            case 'GET' : {
+                curl_setopt($ch, CURLOPT_HTTPGET, 1);
+            }; break;
+
+            case 'POST' : {
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+            }; break;
+
+            case 'PUT' : {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+            }; break;
+
+            case 'DELETE' : {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+            }; break;
         }
 
         # Capture the response headers...
         $response_headers_io = new StringIO();
-        curl_setopt($ch, CURLOPT_HEADERFUNCTION, array(&$response_headers_io, 'write'));
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, array($response_headers_io, 'write'));
 
         # Capture the response body...
         $response_body_io = new StringIO();
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, array(&$response_body_io, 'write'));
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, array($response_body_io, 'write'));
 
         try {
             # Run the request.
@@ -190,6 +210,7 @@ class Utils
 
             # Get the headers...
             $parsed_headers = Utils::parseHttpHeaders($response_headers_io->contents());
+
             $response_headers = array("http_code" => $http_code);
             foreach ($parsed_headers as $key => $value) {
                 $response_headers[strtolower($key)] = $value;
@@ -202,7 +223,11 @@ class Utils
             return array($response_headers, $response_body);
         } catch (Exception $e) {
             curl_close($ch);
-            error_log('Error: ' . $e->getMessage());
+
+            if (self::$logExceptions) {
+                error_log('Error: ' . $e->getMessage());
+            }
+
             return NULL;
         }
     }
@@ -213,22 +238,28 @@ class Utils
      * Parse an HTTP Header string into an asssociative array of
      * response headers.
      *
+     * @param string $headers
+     *
      * @return array
      */
     static function parseHttpHeaders($headers)
     {
         $retVal = array();
+
         $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $headers));
         foreach ($fields as $field) {
-            if (preg_match('/([^:]+): (.+)/m', $field, $match)) {
-                $match[1] = preg_replace('/(?<=^|[\x09\x20\x2D])./e', 'strtoupper("\0")', strtolower(trim($match[1])));
-                if (isset($retVal[$match[1]])) {
-                    $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
-                } else {
-                    $retVal[$match[1]] = trim($match[2]);
-                }
+            if (!preg_match('/([^:]+): (.+)/m', $field, $match)) {
+                continue;
+            }
+
+            $match[1] = preg_replace('/(?<=^|[\x09\x20\x2D])./e', 'strtoupper("\0")', strtolower(trim($match[1])));
+            if (isset($retVal[$match[1]])) {
+                $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+            } else {
+                $retVal[$match[1]] = trim($match[2]);
             }
         }
+
         return $retVal;
     }
 }

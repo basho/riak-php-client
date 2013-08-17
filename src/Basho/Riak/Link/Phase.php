@@ -28,7 +28,23 @@ namespace Basho\Riak\Link;
 class Phase
 {
     /**
+     * @var string
+     */
+    public $bucket;
+
+    /**
+     * @var string
+     */
+    public $tag;
+
+    /**
+     * @var bool
+     */
+    public $keep;
+
+    /**
      * Construct a Phase object.
+     *
      * @param string $bucket - The bucket name.
      * @param string $tag - The tag.
      * @param boolean $keep - True to return results of this phase.
@@ -41,14 +57,16 @@ class Phase
     }
 
     /**
-     * Convert the Phase to an associative array. Used
-     * internally.
+     * Convert the Phase to an associative array. Used internally.
      */
     public function to_array()
     {
-        $stepdef = array("bucket" => $this->bucket,
+        $stepdef = array(
+            "bucket" => $this->bucket,
             "tag" => $this->tag,
-            "keep" => $this->keep);
+            "keep" => $this->keep
+        );
+
         return array("link" => $stepdef);
     }
 }

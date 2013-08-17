@@ -76,35 +76,93 @@ class TestSuite
     {
         print("Starting Unit Tests\n---\n");
 
-        $this->_test('testIsAlive');
-        $this->_test('testStoreAndGet');
-        $this->_test('testStoreAndGetWithoutKey');
-        $this->_test('testBinaryStoreAndGet');
-        $this->_test('testMissingObject');
-        $this->_test('testDelete');
-        $this->_test('testSetBucketProperties');
-        $this->_test('testSiblings');
+        try {
+            $this->_test('testIsAlive');
+        } catch (Exception $e) {}
 
-        $this->_test('testJavascriptSourceMap');
-        $this->_test('testJavascriptNamedMap');
-        $this->_test('testJavascriptSourceMapReduce');
-        $this->_test('testJavascriptNamedMapReduce');
-        $this->_test('testJavascriptArgMapReduce');
+        try {
+            $this->_test('testStoreAndGet');
+        } catch (Exception $e) {}
 
-        $this->_test('testErlangMapReduce');
-        $this->_test('testMapReduceFromObject');
+        try {
+            $this->_test('testStoreAndGetWithoutKey');
+        } catch (Exception $e) {}
 
-        $this->_test('testKeyFilter');
-        $this->_test('testKeyFilterOperator');
+        try {
+            $this->_test('testBinaryStoreAndGet');
+        } catch (Exception $e) {}
 
-        $this->_test('testStoreAndGetLinks');
-        $this->_test('testLinkWalking');
+        try {
+            $this->_test('testMissingObject');
+        } catch (Exception $e) {}
 
-        $this->_test('testSearchIntegration');
+        try {
+            $this->_test('testDelete');
+        } catch (Exception $e) {}
 
-        $this->_test('testSecondaryIndexes');
+        try {
+            $this->_test('testSetBucketProperties');
+        } catch (Exception $e) {}
 
-        $this->_test('testMetaData');
+        try {
+            $this->_test('testSiblings');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testJavascriptSourceMap');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testJavascriptNamedMap');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testJavascriptSourceMapReduce');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testJavascriptNamedMapReduce');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testJavascriptArgMapReduce');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testErlangMapReduce');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testMapReduceFromObject');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testKeyFilter');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testKeyFilterOperator');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testStoreAndGetLinks');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testLinkWalking');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testSearchIntegration');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testSecondaryIndexes');
+        } catch (Exception $e) {}
+
+        try {
+            $this->_test('testMetaData');
+        } catch (Exception $e) {}
 
         $this->_summary();
     }

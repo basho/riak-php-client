@@ -32,6 +32,51 @@ use Basho\Riak\Bucket,
 class Riak
 {
     /**
+     * @var string
+     */
+    public $host;
+
+    /**
+     * @var int
+     */
+    public $port;
+
+    /**
+     * @var string
+     */
+    public $prefix;
+
+    /**
+     * @var string
+     */
+    public $mapred_prefix;
+
+    /**
+     * @var string
+     */
+    public $indexPrefix = 'buckets';
+
+    /**
+     * @var string
+     */
+    public $clientid;
+
+    /**
+     * @var int
+     */
+    public $r = 2;
+
+    /**
+     * @var int
+     */
+    public $w = 2;
+
+    /**
+     * @var int
+     */
+    public $dw = 2;
+
+    /**
      * Construct a new Client object.
      *
      * @param string $host - Hostname or IP address (default '127.0.0.1')
@@ -45,11 +90,7 @@ class Riak
         $this->port = $port;
         $this->prefix = $prefix;
         $this->mapred_prefix = $mapred_prefix;
-        $this->indexPrefix = 'buckets';
         $this->clientid = 'php_' . base_convert(mt_rand(), 10, 36);
-        $this->r = 2;
-        $this->w = 2;
-        $this->dw = 2;
     }
 
     /**
@@ -78,6 +119,7 @@ class Riak
     public function setR($r)
     {
         $this->r = $r;
+
         return $this;
     }
 
@@ -104,6 +146,7 @@ class Riak
     public function setW($w)
     {
         $this->w = $w;
+
         return $this;
     }
 
@@ -130,6 +173,7 @@ class Riak
     public function setDW($dw)
     {
         $this->dw = $dw;
+
         return $this;
     }
 
@@ -148,12 +192,14 @@ class Riak
      *
      * Should not be called unless you know what you are doing.
      *
-     * @param string $clientID - The new clientID.
+     * @param string $clientid - The new clientID.
+     *
      * @return $this
      */
     public function setClientID($clientid)
     {
         $this->clientid = $clientid;
+
         return $this;
     }
 
@@ -161,6 +207,8 @@ class Riak
      * Get the bucket by the specified name
      *
      * Since buckets always exist, this will always return a Bucket.
+     *
+     * @param string $name
      *
      * @return Bucket
      */
@@ -179,10 +227,12 @@ class Riak
         $url = Utils::buildRestPath($this);
         $response = Utils::httpRequest('GET', $url . '?buckets=true');
         $response_obj = json_decode($response[1]);
+
         $buckets = array();
         foreach ($response_obj->buckets as $name) {
             $buckets[] = $this->bucket($name);
         }
+
         return $buckets;
     }
 
@@ -195,6 +245,7 @@ class Riak
     {
         $url = 'http://' . $this->host . ':' . $this->port . '/ping';
         $response = Utils::httpRequest('GET', $url);
+
         return ($response != NULL) && ($response[1] == 'OK');
     }
 
@@ -205,13 +256,17 @@ class Riak
      * Start assembling a Map/Reduce operation
      *
      * @see MapReduce::add()
+     *
+     * @param $params
+     *
      * @return MapReduce
      */
     public function add($params)
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
-        return call_user_func_array(array(&$mr, "add"), $args);
+
+        return call_user_func_array(array($mr, "add"), $args);
     }
 
     /**
@@ -221,13 +276,17 @@ class Riak
      * executed against a Riak Search cluster.
      *
      * @see MapReduce::search()
+     *
+     * @param $params
+     *
      * @return MapReduce
      */
     public function search($params)
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
-        return call_user_func_array(array(&$mr, "search"), $args);
+
+        return call_user_func_array(array($mr, "search"), $args);
     }
 
     /**
@@ -239,7 +298,8 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
-        return call_user_func_array(array(&$mr, "link"), $args);
+
+        return call_user_func_array(array($mr, "link"), $args);
     }
 
     /**
@@ -251,7 +311,8 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
-        return call_user_func_array(array(&$mr, "map"), $args);
+
+        return call_user_func_array(array($mr, "map"), $args);
     }
 
     /**
@@ -263,6 +324,7 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
-        return call_user_func_array(array(&$mr, "reduce"), $args);
+
+        return call_user_func_array(array($mr, "reduce"), $args);
     }
 }

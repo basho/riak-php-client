@@ -33,18 +33,40 @@ use Basho\Riak\Exception,
 class Bucket
 {
     /**
+     * @var Riak
+     */
+    public $client;
+
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var integer
+     */
+    public $r = null;
+
+    /**
+     * @var integer
+     */
+    public $w = null;
+
+    /**
+     * @var integer
+     */
+    public $dw = null;
+
+    /**
      * Construct a Bucket object
      *
-     * @param \Basho\Riak\Riak $client Riak Client object
+     * @param Riak $client Riak Client object
      * @param string $name Bucket name
      */
-    public function __construct($client, $name)
+    public function __construct(Riak $client, $name)
     {
         $this->client = $client;
         $this->name = $name;
-        $this->r = NULL;
-        $this->w = NULL;
-        $this->dw = NULL;
     }
 
     /**
@@ -60,15 +82,23 @@ class Bucket
     /**
      * Get the R-value for this bucket
      *
-     * Returns the buckets R-value If it is set, 
+     * Returns the buckets R-value If it is set,
      * otherwise return the R-value for the client.
+     *
+     * @param integer $r
      *
      * @return integer
      */
     public function getR($r = NULL)
     {
-        if ($r != NULL) return $r;
-        if ($this->r != NULL) return $this->r;
+        if ($r != NULL) {
+            return $r;
+        }
+
+        if ($this->r != NULL) {
+            return $this->r;
+        }
+
         return $this->client->getR();
     }
 
@@ -80,12 +110,15 @@ class Bucket
      *
      * @see \Basho\Riak\Bucket::get()
      * @see \Basho\Riak\Bucket::getBinary()
+     *
      * @param integer $r - The new R-value.
+     *
      * @return $this
      */
     public function setR($r)
     {
         $this->r = $r;
+
         return $this;
     }
 
@@ -95,12 +128,20 @@ class Bucket
      * If it is set for this bucket, otherwise return
      * the W-value for the client.
      *
+     * @param integer $w
+     *
      * @return integer
      */
     public function getW($w)
     {
-        if ($w != NULL) return $w;
-        if ($this->w != NULL) return $this->w;
+        if ($w != NULL) {
+            return $w;
+        }
+
+        if ($this->w != NULL) {
+            return $this->w;
+        }
+
         return $this->client->getW();
     }
 
@@ -109,12 +150,14 @@ class Bucket
      *
      * See setR(...) for more information.
      *
-     * @param  integer $w - The new W-value.
+     * @param integer $w - The new W-value.
+     *
      * @return $this
      */
     public function setW($w)
     {
         $this->w = $w;
+
         return $this;
     }
 
@@ -124,12 +167,16 @@ class Bucket
      * If it is set for this bucket, otherwise return
      * the DW-value for the client.
      *
+     * @param integer $dw
+     *
      * @return integer
      */
     public function getDW($dw)
     {
         if ($dw != NULL) return $dw;
+
         if ($this->dw != NULL) return $this->dw;
+
         return $this->client->getDW();
     }
 
@@ -138,20 +185,23 @@ class Bucket
      *
      * See setR(...) for more information.
      *
-     * @param  integer $dw - The new DW-value
+     * @param integer $dw - The new DW-value
+     *
      * @return $this
      */
     public function setDW($dw)
     {
         $this->dw = $dw;
+
         return $this;
     }
 
     /**
      * Create a new Riak object that will be stored as JSON.
      *
-     * @param  string $key - Name of the key.
-     * @param  object $data - The data to store. (default NULL)
+     * @param string $key - Name of the key.
+     * @param mixed $data - The data to store. (default NULL)
+     *
      * @return Object
      */
     public function newObject($key, $data = NULL)
@@ -160,15 +210,17 @@ class Bucket
         $obj->setData($data);
         $obj->setContentType('application/json');
         $obj->jsonize = TRUE;
+
         return $obj;
     }
 
     /**
      * Create a new Riak object that will be stored as plain text/binary.
      *
-     * @param  string $key - Name of the key.
-     * @param  object $data - The data to store.
-     * @param  string $content_type - The content type of the object. (default 'application/json')
+     * @param string $key - Name of the key.
+     * @param object $data - The data to store.
+     * @param string $content_type - The content type of the object. (default 'application/json')
+     *
      * @return Object
      */
     public function newBinary($key, $data, $content_type = 'application/json')
@@ -177,14 +229,16 @@ class Bucket
         $obj->setData($data);
         $obj->setContentType($content_type);
         $obj->jsonize = FALSE;
+
         return $obj;
     }
 
     /**
      * Retrieve a JSON-encoded object from Riak.
      *
-     * @param  string $key - Name of the key.
-     * @param  int    $r   - R-Value of the request (defaults to bucket's R)
+     * @param string $key - Name of the key.
+     * @param int    $r   - R-Value of the request (defaults to bucket's R)
+     *
      * @return Object
      */
     public function get($key, $r = NULL)
@@ -192,14 +246,16 @@ class Bucket
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = TRUE;
         $r = $this->getR($r);
+
         return $obj->reload($r);
     }
 
     /**
      * Retrieve a binary/string object from Riak.
      *
-     * @param  string $key - Name of the key.
-     * @param  int    $r   - R-Value of the request (defaults to bucket's R)
+     * @param string $key - Name of the key.
+     * @param int    $r   - R-Value of the request (defaults to bucket's R)
+     *
      * @return Object
      */
     public function getBinary($key, $r = NULL)
@@ -207,6 +263,7 @@ class Bucket
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = FALSE;
         $r = $this->getR($r);
+
         return $obj->reload($r);
     }
 
@@ -220,6 +277,8 @@ class Bucket
      * only be used if you know what you are doing.
      *
      * @param integer $nval - The new N-Val.
+     *
+     * @return bool
      */
     public function setNVal($nval)
     {
@@ -245,6 +304,8 @@ class Bucket
      * if you know what you are doing.
      *
      * @param  boolean $bool - True to store and return conflicting writes.
+     *
+     * @return bool
      */
     public function setAllowMultiples($bool)
     {
@@ -266,8 +327,10 @@ class Bucket
      *
      * This should only be used if you know what you are doing.
      *
-     * @param  string $key - Property to set.
-     * @param  mixed  $value - Property value.
+     * @param string $key - Property to set.
+     * @param mixed  $value - Property value.
+     *
+     * @return bool
      */
     public function setProperty($key, $value)
     {
@@ -283,11 +346,11 @@ class Bucket
     public function getProperty($key)
     {
         $props = $this->getProperties();
-        if (array_key_exists($key, $props)) {
+        if (isset($props[$key]) || array_key_exists($key, $props)) {
             return $props[$key];
-        } else {
-            return NULL;
         }
+
+        return NULL;
     }
 
     /**
@@ -295,7 +358,11 @@ class Bucket
      *
      * This should only be used if you know what you are doing.
      *
-     * @param  array $props - An associative array of $key=>$value.
+     * @param array $props - An associative array of $key=>$value.
+     *
+     * @return bool
+
+     * @throws Exception
      */
     public function setProperties($props)
     {
@@ -317,12 +384,16 @@ class Bucket
         if ($status != 204) {
             throw new Exception("Error setting bucket properties.");
         }
+
+        return true;
     }
 
     /**
      * Retrieve an associative array of all bucket properties.
      *
-     * @return Array
+     * @return array
+     *
+     * @throws Exception
      */
     public function getProperties()
     {
@@ -349,7 +420,9 @@ class Bucket
      *
      * Note: this operation is pretty slow.
      *
-     * @return Array
+     * @return array
+     *
+     * @throws Exception
      */
     public function getKeys()
     {
@@ -363,7 +436,9 @@ class Bucket
         if (!$obj->exists()) {
             throw new Exception("Error getting bucket properties.");
         }
+
         $keys = $obj->getData();
+
         return array_map("urldecode", $keys["keys"]);
     }
 
@@ -375,8 +450,11 @@ class Bucket
      * @param string $indexType - The type of index ('int' or 'bin')
      * @param string|int $startOrExact
      * @param string|int optional $end
-     * @param bool optional $dedupe - whether to eliminate duplicate entries if any
+     * @param bool $dedupe - whether to eliminate duplicate entries if any
+     *
      * @return array of Links
+     *
+     * @throws Exception
      */
     public function indexSearch($indexName, $indexType, $startOrExact, $end = NULL, $dedupe = false)
     {
@@ -389,6 +467,7 @@ class Bucket
         if (!$obj->exists()) {
             throw new Exception("Error searching index.");
         }
+
         $data = $obj->getData();
         $keys = array_map("urldecode", $data["keys"]);
 
@@ -397,13 +476,17 @@ class Bucket
             if ($dedupe) {
                 if (isset($seenKeys[$key])) {
                     unset($keys[$id]);
+
                     continue;
                 }
+
                 $seenKeys[$key] = true;
             }
+
             $key = new Link($this->name, $key);
             $key->client = $this->client;
         }
+
         return $keys;
     }
 }

@@ -28,14 +28,38 @@ namespace Basho\Riak\MapReduce;
 class Phase
 {
     /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var string
+     */
+    public $language;
+
+    /**
+     * @var mixed
+     */
+    public $function;
+
+    /**
+     * @var bool
+     */
+    public $keep;
+
+    /**
+     * @var mixed
+     */
+    public $arg;
+
+    /**
      * Construct a Phase object.
+     *
      * @param string $type - "map" or "reduce"
      * @param mixed $function - string or array()
      * @param string $language - "javascript" or "erlang"
-     * @param boolean $keep - True to return the output of this phase in
-     * the results.
-     * @param mixed $arg - Additional value to pass into the map or
-     * reduce function.
+     * @param boolean $keep - True to return the output of this phase in the results.
+     * @param mixed $arg - Additional value to pass into the map or reduce function.
      */
     public function __construct($type, $function, $language, $keep, $arg)
     {
@@ -47,24 +71,26 @@ class Phase
     }
 
     /**
-     * Convert the Phase to an associative array. Used
-     * internally.
+     * Convert the Phase to an associative array. Used internally.
      */
     public function to_array()
     {
-        $stepdef = array("keep" => $this->keep,
+        $stepdef = array(
+            "keep" => $this->keep,
             "language" => $this->language,
-            "arg" => $this->arg);
+            "arg" => $this->arg
+        );
 
         if ($this->language == "javascript" && is_array($this->function)) {
             $stepdef["bucket"] = $this->function[0];
             $stepdef["key"] = $this->function[1];
-        } else if ($this->language == "javascript" && is_string($this->function)) {
-            if (strpos($this->function, "{") == FALSE)
+        } elseif ($this->language == "javascript" && is_string($this->function)) {
+            if (strpos($this->function, "{") == FALSE) {
                 $stepdef["name"] = $this->function;
-            else
+            } else {
                 $stepdef["source"] = $this->function;
-        } else if ($this->language == "erlang" && is_array($this->function)) {
+            }
+        } elseif ($this->language == "erlang" && is_array($this->function)) {
             $stepdef["module"] = $this->function[0];
             $stepdef["function"] = $this->function[1];
         }
