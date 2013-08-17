@@ -859,7 +859,7 @@ class Object
         $this->exists = TRUE;
 
         # Parse the link header...
-        if (array_key_exists("link", $this->headers)) {
+        if (isset($this->headers['link']) || array_key_exists("link", $this->headers)) {
             $this->populateLinks($this->headers["link"]);
         }
 

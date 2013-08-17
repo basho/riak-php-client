@@ -43,7 +43,7 @@ class Utils
      */
     public static function get_value($key, $array, $defaultValue)
     {
-        if (array_key_exists($key, $array)) {
+        if (isset($array[$key]) || array_key_exists($key, $array)) {
             return $array[$key];
         }
 
