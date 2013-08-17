@@ -75,19 +75,22 @@ class Phase
      */
     public function to_array()
     {
-        $stepdef = array("keep" => $this->keep,
+        $stepdef = array(
+            "keep" => $this->keep,
             "language" => $this->language,
-            "arg" => $this->arg);
+            "arg" => $this->arg
+        );
 
         if ($this->language == "javascript" && is_array($this->function)) {
             $stepdef["bucket"] = $this->function[0];
             $stepdef["key"] = $this->function[1];
-        } else if ($this->language == "javascript" && is_string($this->function)) {
-            if (strpos($this->function, "{") == FALSE)
+        } elseif ($this->language == "javascript" && is_string($this->function)) {
+            if (strpos($this->function, "{") == FALSE) {
                 $stepdef["name"] = $this->function;
-            else
+            } else {
                 $stepdef["source"] = $this->function;
-        } else if ($this->language == "erlang" && is_array($this->function)) {
+            }
+        } elseif ($this->language == "erlang" && is_array($this->function)) {
             $stepdef["module"] = $this->function[0];
             $stepdef["function"] = $this->function[1];
         }

@@ -123,6 +123,7 @@ class Riak
     public function setR($r)
     {
         $this->r = $r;
+
         return $this;
     }
 
@@ -149,6 +150,7 @@ class Riak
     public function setW($w)
     {
         $this->w = $w;
+
         return $this;
     }
 
@@ -175,6 +177,7 @@ class Riak
     public function setDW($dw)
     {
         $this->dw = $dw;
+
         return $this;
     }
 
@@ -200,6 +203,7 @@ class Riak
     public function setClientID($clientid)
     {
         $this->clientid = $clientid;
+
         return $this;
     }
 
@@ -227,6 +231,7 @@ class Riak
         $url = Utils::buildRestPath($this);
         $response = Utils::httpRequest('GET', $url . '?buckets=true');
         $response_obj = json_decode($response[1]);
+
         $buckets = array();
         foreach ($response_obj->buckets as $name) {
             $buckets[] = $this->bucket($name);

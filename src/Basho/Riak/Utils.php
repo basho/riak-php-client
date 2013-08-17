@@ -45,9 +45,9 @@ class Utils
     {
         if (array_key_exists($key, $array)) {
             return $array[$key];
-        } else {
-            return $defaultValue;
         }
+
+        return $defaultValue;
     }
 
     /**
@@ -88,6 +88,7 @@ class Utils
                 if ($s != '') $s .= '/';
                 $s .= urlencode($el[0]) . ',' . urlencode($el[1]) . ',' . $el[2] . '/';
             }
+
             $path .= '/' . $s;
         }
 
@@ -169,25 +170,33 @@ class Utils
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $request_headers);
 
-        if ($method == 'GET') {
-            curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        } else if ($method == 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-        } else if ($method == 'PUT') {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-        } else if ($method == 'DELETE') {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        switch ($method) {
+            case 'GET' : {
+                curl_setopt($ch, CURLOPT_HTTPGET, 1);
+            }; break;
+
+            case 'POST' : {
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+            }; break;
+
+            case 'PUT' : {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+            }; break;
+
+            case 'DELETE' : {
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+            }; break;
         }
 
         # Capture the response headers...
         $response_headers_io = new StringIO();
-        curl_setopt($ch, CURLOPT_HEADERFUNCTION, array(&$response_headers_io, 'write'));
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, array($response_headers_io, 'write'));
 
         # Capture the response body...
         $response_body_io = new StringIO();
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, array(&$response_body_io, 'write'));
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, array($response_body_io, 'write'));
 
         try {
             # Run the request.
@@ -197,6 +206,7 @@ class Utils
 
             # Get the headers...
             $parsed_headers = Utils::parseHttpHeaders($response_headers_io->contents());
+
             $response_headers = array("http_code" => $http_code);
             foreach ($parsed_headers as $key => $value) {
                 $response_headers[strtolower($key)] = $value;
@@ -227,17 +237,21 @@ class Utils
     static function parseHttpHeaders($headers)
     {
         $retVal = array();
+
         $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $headers));
         foreach ($fields as $field) {
-            if (preg_match('/([^:]+): (.+)/m', $field, $match)) {
-                $match[1] = preg_replace('/(?<=^|[\x09\x20\x2D])./e', 'strtoupper("\0")', strtolower(trim($match[1])));
-                if (isset($retVal[$match[1]])) {
-                    $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
-                } else {
-                    $retVal[$match[1]] = trim($match[2]);
-                }
+            if (!preg_match('/([^:]+): (.+)/m', $field, $match)) {
+                continue;
+            }
+
+            $match[1] = preg_replace('/(?<=^|[\x09\x20\x2D])./e', 'strtoupper("\0")', strtolower(trim($match[1])));
+            if (isset($retVal[$match[1]])) {
+                $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+            } else {
+                $retVal[$match[1]] = trim($match[2]);
             }
         }
+
         return $retVal;
     }
 }

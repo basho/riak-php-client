@@ -141,8 +141,9 @@ class Link
      */
     public function getTag()
     {
-        if ($this->tag == null)
+        if ($this->tag == null) {
             return $this->bucket;
+        }
 
         return $this->tag;
     }
@@ -170,8 +171,7 @@ class Link
      */
     public function toLinkHeader($client)
     {
-        $link = "</" .
-            $client->prefix . "/" .
+        $link = "</" . $client->prefix . "/" .
             urlencode($this->bucket) . "/" .
             urlencode($this->key) . ">; riaktag=\"" .
             urlencode($this->getTag()) . "\"";
@@ -188,8 +188,7 @@ class Link
      */
     public function isEqual($link)
     {
-        $is_equal =
-            ($this->bucket == $link->bucket) &&
+        $is_equal = ($this->bucket == $link->bucket) &&
                 ($this->key == $link->key) &&
                 ($this->getTag() == $link->getTag());
 

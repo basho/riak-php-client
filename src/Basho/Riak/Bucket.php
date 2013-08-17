@@ -94,8 +94,14 @@ class Bucket
      */
     public function getR($r = NULL)
     {
-        if ($r != NULL) return $r;
-        if ($this->r != NULL) return $this->r;
+        if ($r != NULL) {
+            return $r;
+        }
+
+        if ($this->r != NULL) {
+            return $this->r;
+        }
+
         return $this->client->getR();
     }
 
@@ -131,8 +137,14 @@ class Bucket
      */
     public function getW($w)
     {
-        if ($w != NULL) return $w;
-        if ($this->w != NULL) return $this->w;
+        if ($w != NULL) {
+            return $w;
+        }
+
+        if ($this->w != NULL) {
+            return $this->w;
+        }
+
         return $this->client->getW();
     }
 
@@ -148,6 +160,7 @@ class Bucket
     public function setW($w)
     {
         $this->w = $w;
+
         return $this;
     }
 
@@ -182,6 +195,7 @@ class Bucket
     public function setDW($dw)
     {
         $this->dw = $dw;
+
         return $this;
     }
 
@@ -199,6 +213,7 @@ class Bucket
         $obj->setData($data);
         $obj->setContentType('application/json');
         $obj->jsonize = TRUE;
+
         return $obj;
     }
 
@@ -217,6 +232,7 @@ class Bucket
         $obj->setData($data);
         $obj->setContentType($content_type);
         $obj->jsonize = FALSE;
+
         return $obj;
     }
 
@@ -233,6 +249,7 @@ class Bucket
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = TRUE;
         $r = $this->getR($r);
+
         return $obj->reload($r);
     }
 
@@ -249,6 +266,7 @@ class Bucket
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = FALSE;
         $r = $this->getR($r);
+
         return $obj->reload($r);
     }
 
@@ -331,11 +349,11 @@ class Bucket
     public function getProperty($key)
     {
         $props = $this->getProperties();
-        if (array_key_exists($key, $props)) {
+        if (isset($props[$key]) || array_key_exists($key, $props)) {
             return $props[$key];
-        } else {
-            return NULL;
         }
+
+        return NULL;
     }
 
     /**
@@ -421,7 +439,9 @@ class Bucket
         if (!$obj->exists()) {
             throw new Exception("Error getting bucket properties.");
         }
+
         $keys = $obj->getData();
+
         return array_map("urldecode", $keys["keys"]);
     }
 
@@ -450,6 +470,7 @@ class Bucket
         if (!$obj->exists()) {
             throw new Exception("Error searching index.");
         }
+
         $data = $obj->getData();
         $keys = array_map("urldecode", $data["keys"]);
 
@@ -458,13 +479,17 @@ class Bucket
             if ($dedupe) {
                 if (isset($seenKeys[$key])) {
                     unset($keys[$id]);
+
                     continue;
                 }
+
                 $seenKeys[$key] = true;
             }
+
             $key = new Link($this->name, $key);
             $key->client = $this->client;
         }
+
         return $keys;
     }
 }

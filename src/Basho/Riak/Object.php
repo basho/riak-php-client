@@ -156,6 +156,7 @@ class Object
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -234,10 +235,11 @@ class Object
      */
     public function addLink($obj, $tag = NULL)
     {
-        if ($obj instanceof Link)
+        if ($obj instanceof Link) {
             $newlink = $obj;
-        else
+        } else {
             $newlink = new Link($obj->bucket->name, $obj->key, $tag);
+        }
 
         $this->removeLink($newlink);
         $this->links[] = $newlink;
@@ -257,18 +259,21 @@ class Object
      */
     public function removeLink($obj, $tag = NULL)
     {
-        if ($obj instanceof Link)
+        if ($obj instanceof Link) {
             $oldlink = $obj;
-        else
+        } else {
             $oldlink = new Link($obj->bucket->name, $obj->key, $tag);
+        }
 
         $a = array();
         foreach ($this->links as $link) {
-            if (!$link->isEqual($oldlink))
+            if (!$link->isEqual($oldlink)) {
                 $a[] = $link;
+            }
         }
 
         $this->links = $a;
+
         return $this;
     }
 
@@ -283,6 +288,7 @@ class Object
         foreach ($this->links as $link) {
             $link->client = $this->client;
         }
+
         return $this->links;
     }
 
@@ -307,6 +313,7 @@ class Object
     {
         if ($explicitValue === null) {
             $this->addAutoIndex($indexName, $indexType);
+
             return $this;
         }
 
@@ -315,11 +322,15 @@ class Object
         } else {
             $index = strtolower($indexName);
         }
-        if (!isset($this->indexes[$index])) $this->indexes[$index] = array();
+
+        if (!isset($this->indexes[$index])) {
+            $this->indexes[$index] = array();
+        }
 
         if (false === array_search($explicitValue, $this->indexes[$index])) {
             $this->indexes[$index][] = $explicitValue;
         }
+
         return $this;
     }
 
@@ -364,7 +375,10 @@ class Object
         } else {
             $index = strtolower($indexName);
         }
-        if (!isset($this->indexes[$index])) return array();
+
+        if (!isset($this->indexes[$index])) {
+            return array();
+        }
 
         return $this->indexes[$index];
     }
@@ -382,6 +396,7 @@ class Object
     {
         if ($explicitValue === null) {
             $this->removeAutoIndex($indexName, $indexType);
+
             return $this;
         }
         if ($indexType !== null) {
@@ -390,7 +405,9 @@ class Object
             $index = strtolower($indexName);
         }
 
-        if (!isset($this->indexes[$index])) return $this;
+        if (!isset($this->indexes[$index])) {
+            return $this;
+        }
 
         if (false !== ($position = array_search($explicitValue, $this->indexes[$index]))) {
             unset($this->indexes[$index][$position]);
@@ -471,6 +488,7 @@ class Object
         } else {
             $index = strtolower($fieldName);
         }
+
         return isset($this->autoIndexes[$index]);
     }
 
@@ -489,7 +507,9 @@ class Object
         } else {
             $index = strtolower($fieldName);
         }
+
         unset($this->autoIndexes[$index]);
+
         return $this;
     }
 
@@ -511,13 +531,14 @@ class Object
     {
         if ($fieldName === null) {
             $this->autoIndexes = array();
-        } else if ($indexType === null) {
+        } elseif ($indexType === null) {
             $fieldName = strtolower($fieldName);
             unset($this->autoIndexes["{$fieldName}_bin"]);
             unset($this->autoIndexes["{$fieldName}_int"]);
         } else {
             unset($this->autoIndexes[strtolower("{$fieldName}_{$indexType}")]);
         }
+
         return $this;
     }
 
@@ -535,7 +556,10 @@ class Object
     public function getMeta($metaName)
     {
         $metaName = strtolower($metaName);
-        if (isset($this->meta[$metaName])) return $this->meta[$metaName];
+        if (isset($this->meta[$metaName])) {
+            return $this->meta[$metaName];
+        }
+
         return null;
     }
 
@@ -553,6 +577,7 @@ class Object
     public function setMeta($metaName, $value)
     {
         $this->meta[strtolower($metaName)] = $value;
+
         return $this;
     }
 
@@ -560,11 +585,13 @@ class Object
      * Removes a given metadata value
      *
      * @param string $metaName
+     *
      * @return $this
      */
     public function removeMeta($metaName)
     {
         unset ($this->meta[strtolower($metaName)]);
+
         return $this;
     }
 
@@ -586,6 +613,7 @@ class Object
     public function removeAllMeta()
     {
         $this->meta = array();
+
         return $this;
     }
 
@@ -615,9 +643,11 @@ class Object
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
 
         # Construct the headers...
-        $headers = array('Accept: text/plain, */*; q=0.5',
+        $headers = array(
+            'Accept: text/plain, */*; q=0.5',
             'Content-Type: ' . $this->getContentType(),
-            'X-Riak-ClientId: ' . $this->client->getClientID());
+            'X-Riak-ClientId: ' . $this->client->getClientID()
+        );
 
         # Add the vclock if it exists...
         if ($this->vclock() != NULL) {
@@ -634,24 +664,31 @@ class Object
         if (!empty($this->autoIndexes) && !is_array($this->data)) {
             throw new Exception('Unsupported data type for auto indexing feature.  Object must be an array to use auto indexes.');
         }
+
         foreach ($this->autoIndexes as $index => $fieldName) {
             $value = null;
             // look up the value
-            if (isset($this->data[$fieldName])) {
-                $value = $this->data[$fieldName];
-                $headers[] = "x-riak-index-$index: " . urlencode($value);
+            if (!isset($this->data[$fieldName])) {
+                continue;
+            }
 
-                // look for value collisions with normal indexes
-                if (isset($this->indexes[$index])) {
-                    if (false !== array_search($value, $this->indexes[$index])) {
-                        $collisions[$index] = $value;
-                    }
-                }
+            $value = $this->data[$fieldName];
+            $headers[] = "x-riak-index-$index: " . urlencode($value);
+
+            // look for value collisions with normal indexes
+            if (!isset($this->indexes[$index])) {
+                continue;
+            }
+
+            if (false !== array_search($value, $this->indexes[$index])) {
+                $collisions[$index] = $value;
             }
         }
+
         count($this->autoIndexes) > 0
             ? $this->meta['x-rc-autoindex'] = json_encode($this->autoIndexes)
             : $this->meta['x-rc-autoindex'] = null;
+
         count($collisions) > 0
             ? $this->meta['x-rc-autoindexcollision'] = json_encode($collisions)
             : $this->meta['x-rc-autoindexcollision'] = null;
@@ -661,10 +698,11 @@ class Object
             $headers[] = "x-riak-index-$index: " . join(', ', array_map('urlencode', $values));
         }
 
-
         # Add the metadata...
         foreach ($this->meta as $metaName => $metaValue) {
-            if ($metaValue !== null) $headers[] = "X-Riak-Meta-$metaName: $metaValue";
+            if ($metaValue !== null) {
+                $headers[] = "X-Riak-Meta-$metaName: $metaValue";
+            }
         }
 
         if ($this->jsonize) {
@@ -678,6 +716,7 @@ class Object
         # Run the operation.
         $response = Utils::httpRequest($method, $url, $headers, $content);
         $this->populate($response, array(200, 201, 300));
+
         return $this;
     }
 
@@ -812,6 +851,7 @@ class Object
         # If 404 (Not Found), then clear the object.
         if ($status == 404) {
             $this->clear();
+
             return $this;
         }
 
@@ -828,17 +868,20 @@ class Object
         $this->autoIndexes = array();
         $this->meta = array();
         foreach ($this->headers as $key => $val) {
-            if (preg_match('~^x-riak-([^-]+)-(.+)$~', $key, $matches)) {
-                switch ($matches[1]) {
-                    case 'index':
-                        $index = substr($matches[2], 0, strrpos($matches[2], '_'));
-                        $type = substr($matches[2], strlen($index) + 1);
-                        $this->setIndex($index, $type, array_map('urldecode', explode(', ', $val)));
-                        break;
-                    case 'meta':
-                        $this->meta[$matches[2]] = $val;
-                        break;
-                }
+            if (!preg_match('~^x-riak-([^-]+)-(.+)$~', $key, $matches)) {
+                continue;
+            }
+
+            switch ($matches[1]) {
+                case 'index': {
+                    $index = substr($matches[2], 0, strrpos($matches[2], '_'));
+                    $type = substr($matches[2], strlen($index) + 1);
+                    $this->setIndex($index, $type, array_map('urldecode', explode(', ', $val)));
+                }; break;
+
+                case 'meta': {
+                    $this->meta[$matches[2]] = $val;
+                }; break;
             }
         }
 
@@ -849,6 +892,7 @@ class Object
             array_shift($siblings); # Get rid of 'Siblings:' string.
             $this->siblings = $siblings;
             $this->exists = TRUE;
+
             return $this;
         }
 
@@ -870,13 +914,15 @@ class Object
 
             foreach ($this->autoIndexes as $index => $fieldName) {
                 $value = null;
-                if (isset($this->data[$fieldName])) {
-                    $value = $this->data[$fieldName];
-                    if (isset($collisions[$index]) && $collisions[$index] === $value) {
-                        // Don't strip this value, it's an explicit index.
-                    } else {
-                        if ($value !== null) $this->removeIndex($index, null, $value);
-                    }
+                if (!isset($this->data[$fieldName])) {
+                    continue;
+                }
+
+                $value = $this->data[$fieldName];
+                if (isset($collisions[$index]) && $collisions[$index] === $value) {
+                    // Don't strip this value, it's an explicit index.
+                } elseif ($value !== null) {
+                    $this->removeIndex($index, null, $value);
                 }
             }
         }
@@ -985,7 +1031,7 @@ class Object
         $mr->add($this->bucket->name, $this->key);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "add"), $args);
+        return call_user_func_array(array($mr, "add"), $args);
     }
 
     /**
@@ -1002,7 +1048,7 @@ class Object
         $mr->add($this->bucket->name, $this->key);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "link"), $args);
+        return call_user_func_array(array($mr, "link"), $args);
     }
 
     /**
@@ -1019,7 +1065,7 @@ class Object
         $mr->add($this->bucket->name, $this->key);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "map"), $args);
+        return call_user_func_array(array($mr, "map"), $args);
     }
 
     /**
@@ -1036,6 +1082,6 @@ class Object
         $mr->add($this->bucket->name, $this->key);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "reduce"), $args);
+        return call_user_func_array(array($mr, "reduce"), $args);
     }
 }

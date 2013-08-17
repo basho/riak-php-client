@@ -99,10 +99,11 @@ class MapReduce
     public function add($arg1, $arg2 = NULL, $arg3 = NULL)
     {
         if (func_num_args() == 1) {
-            if ($arg1 instanceof Object)
+            if ($arg1 instanceof Object) {
                 return $this->add_object($arg1);
-            else
-                return $this->add_bucket($arg1);
+            }
+
+            return $this->add_bucket($arg1);
         }
 
         return $this->add_bucket_key_data($arg1, (string)$arg2, $arg3);
@@ -114,6 +115,8 @@ class MapReduce
      * @ignore
      *
      * @param object $obj
+     *
+     * @return $this
      */
     private function add_object($obj)
     {
@@ -127,8 +130,10 @@ class MapReduce
      */
     private function add_bucket_key_data($bucket, $key, $data)
     {
-        if ($this->input_mode == "bucket")
+        if ($this->input_mode == "bucket") {
             throw new Exception("Already added a bucket, can't add an object.");
+        }
+
         $this->inputs[] = array($bucket, $key, $data);
 
         return $this;
@@ -147,6 +152,7 @@ class MapReduce
     {
         $this->input_mode = "bucket";
         $this->inputs = $bucket;
+
         return $this;
     }
 
@@ -162,7 +168,11 @@ class MapReduce
      */
     public function search($bucket, $query)
     {
-        $this->inputs = array("module" => "riak_search", "function" => "mapred_search", "arg" => array($bucket, $query));
+        $this->inputs = array(
+            "module" => "riak_search",
+            "function" => "mapred_search",
+            "arg" => array($bucket, $query)
+        );
 
         return $this;
     }
@@ -200,11 +210,13 @@ class MapReduce
     public function map($function, $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
-        $this->phases[] = new MapReducePhase("map",
+        $this->phases[] = new MapReducePhase(
+            "map",
             $function,
             Utils::get_value("language", $options, $language),
             Utils::get_value("keep", $options, FALSE),
-            Utils::get_value("arg", $options, NULL));
+            Utils::get_value("arg", $options, NULL)
+        );
 
         return $this;
     }
@@ -223,11 +235,13 @@ class MapReduce
     public function reduce($function, $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
-        $this->phases[] = new MapReducePhase("reduce",
+        $this->phases[] = new MapReducePhase(
+            "reduce",
             $function,
             Utils::get_value("language", $options, $language),
             Utils::get_value("keep", $options, FALSE),
-            Utils::get_value("arg", $options, NULL));
+            Utils::get_value("arg", $options, NULL)
+        );
 
         return $this;
     }
@@ -314,20 +328,22 @@ class MapReduce
     {
         $filters = func_get_args();
         array_shift($filters);
-        if ($this->input_mode != 'bucket')
+        if ($this->input_mode != 'bucket') {
             throw new Exception("Key filters can only be used in bucket mode");
-        if (count($this->index))
+        }
+
+        if (count($this->index)) {
             throw new Exception("You cannot use index search and key filters on the same operation");
+        }
 
         if (count($this->key_filters) > 0) {
-            $this->key_filters = array(array(
-                $operator,
-                $this->key_filters,
-                $filters
-            ));
+            $this->key_filters = array(
+                array($operator, $this->key_filters, $filters)
+            );
         } else {
             $this->key_filters = $filters;
         }
+
         return $this;
     }
 
@@ -350,10 +366,14 @@ class MapReduce
     public function indexSearch($indexName, $indexType, $startOrExact, $end = NULL)
     {
         // Check prerequisites
-        if (count($this->key_filters))
+        if (count($this->key_filters)) {
             throw new Exception("You cannot use index search and key filters on the same operation");
-        if ($this->input_mode != 'bucket')
+        }
+
+        if ($this->input_mode != 'bucket') {
             throw new Exception("Key filters can only be used in bucket mode");
+        }
+
 
         if ($end === NULL) {
             $this->index = array(
@@ -367,8 +387,8 @@ class MapReduce
                 'end' => urlencode($end)
             );
         }
-        return $this;
 
+        return $this;
     }
 
 
@@ -402,9 +422,14 @@ class MapReduce
         $query = array();
         for ($i = 0; $i < $num_phases; $i++) {
             $phase = $this->phases[$i];
-            if ($i == ($num_phases - 1) && !$keep_flag)
+            if ($i == ($num_phases - 1) && !$keep_flag) {
                 $phase->keep = TRUE;
-            if ($phase->keep) $keep_flag = TRUE;
+            }
+
+            if ($phase->keep) {
+                $keep_flag = TRUE;
+            }
+
             $query[] = $phase->to_array();
         }
 
@@ -423,7 +448,10 @@ class MapReduce
 
         # Construct the job, optionally set the timeout...
         $job = array("inputs" => $this->inputs, "query" => $query);
-        if ($timeout != NULL) $job["timeout"] = $timeout;
+        if ($timeout != NULL) {
+            $job["timeout"] = $timeout;
+        }
+
         $content = json_encode($job);
 
         # Do the request...
@@ -435,15 +463,19 @@ class MapReduce
         $linkResultsFlag |= (end($this->phases) instanceof LinkPhase);
 
         # If we don't need to link results, then just return.
-        if (!$linkResultsFlag) return $result;
+        if (!$linkResultsFlag) {
+            return $result;
+        }
 
         # Otherwise, if the last phase IS a link phase, then convert the
         # results to Link objects.
         $a = array();
         foreach ($result as $r) {
             $tag = isset($r[2]) ? $r[2] : null;
+
             $link = new Link($r[0], $r[1], $tag);
             $link->client = $this->client;
+
             $a[] = $link;
         }
 
