@@ -27,6 +27,12 @@ namespace Basho\Riak;
  */
 class StringIO
 {
+
+    /**
+     * @var string
+     */
+    private $contents;
+
     /**
      * Construct a StringIO object.
      */
@@ -46,6 +52,7 @@ class StringIO
     public function write($ch, $data)
     {
         $this->contents .= $data;
+
         return strlen($data);
     }
 

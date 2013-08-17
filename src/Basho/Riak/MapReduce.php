@@ -36,9 +36,39 @@ class MapReduce
 {
 
     /**
+     * @var Riak
+     */
+    private $client;
+
+    /**
+     * @var LinkPhase[]
+     */
+    private $phases;
+
+    /**
+     * @var array
+     */
+    private $inputs;
+
+    /**
+     * @var null|string
+     */
+    private $input_mode;
+
+    /**
+     * @var array
+     */
+    private $key_filters;
+
+    /**
+     * @var array
+     */
+    private $index;
+
+    /**
      * Construct a Map/Reduce object.
      *
-     * @param \Basho\Riak\Riak $client - A Client object.
+     * @param Riak $client - A Client object.
      *
      * @return MapReduce
      */

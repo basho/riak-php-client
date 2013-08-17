@@ -28,6 +28,21 @@ namespace Basho\Riak\Link;
 class Phase
 {
     /**
+     * @var string
+     */
+    public $bucket;
+
+    /**
+     * @var string
+     */
+    public $tag;
+
+    /**
+     * @var bool
+     */
+    public $keep;
+
+    /**
      * Construct a Phase object.
      *
      * @param string $bucket - The bucket name.

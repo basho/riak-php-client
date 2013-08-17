@@ -64,7 +64,32 @@ class Object
     /**
      * @var mixed
      */
-    private $data;
+    public $data;
+
+    /**
+     * @var bool
+     */
+    public $jsonize;
+
+    /**
+     * @var array
+     */
+    public $headers;
+
+    /**
+     * @var Link[]
+     */
+    public $links;
+
+    /**
+     * @var bool
+     */
+    public $exists;
+
+    /**
+     * @var Object[]
+     */
+    public $siblings;
 
     /**
      * Construct a new Object.
@@ -906,9 +931,9 @@ class Object
      * Retrieve a sibling by sibling number.
      *
      * @param  integer $i - Sibling number.
-     * @param  integer $r - R-Value. Wait until this many partitions
-     * have responded before returning to client.
-     * @return Object.
+     * @param  integer $r - R-Value. Wait until this many partitions have responded before returning to client.
+     *
+     * @return Object
      */
     public function getSibling($i, $r = NULL)
     {
@@ -925,6 +950,7 @@ class Object
         $obj = new Object($this->client, $this->bucket, $this->key);
         $obj->jsonize = $this->jsonize;
         $obj->populate($response, array(200));
+
         return $obj;
     }
 
@@ -941,6 +967,7 @@ class Object
         for ($i = 0; $i < $this->getSiblingCount(); $i++) {
             $a[] = $this->getSibling($i, $r);
         }
+
         return $a;
     }
 
@@ -957,6 +984,7 @@ class Object
         $mr = new MapReduce($this->client);
         $mr->add($this->bucket->name, $this->key);
         $args = func_get_args();
+
         return call_user_func_array(array(&$mr, "add"), $args);
     }
 
@@ -982,6 +1010,7 @@ class Object
      *
      * @see MapReduce::map()
      * @param $params
+     *
      * @return MapReduce
      */
     public function map($params)

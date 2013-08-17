@@ -32,6 +32,51 @@ use Basho\Riak\Bucket,
 class Riak
 {
     /**
+     * @var string
+     */
+    public $host;
+
+    /**
+     * @var int
+     */
+    public $port;
+
+    /**
+     * @var string
+     */
+    public $prefix;
+
+    /**
+     * @var string
+     */
+    public $mapred_prefix;
+
+    /**
+     * @var string
+     */
+    public $indexPrefix;
+
+    /**
+     * @var string
+     */
+    public $clientid;
+
+    /**
+     * @var int
+     */
+    public $r;
+
+    /**
+     * @var int
+     */
+    public $w;
+
+    /**
+     * @var int
+     */
+    public $dw;
+
+    /**
      * Construct a new Client object.
      *
      * @param string $host - Hostname or IP address (default '127.0.0.1')
@@ -220,7 +265,7 @@ class Riak
         $mr = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "add"), $args);
+        return call_user_func_array(array($mr, "add"), $args);
     }
 
     /**
@@ -240,7 +285,7 @@ class Riak
         $mr = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "search"), $args);
+        return call_user_func_array(array($mr, "search"), $args);
     }
 
     /**
@@ -253,7 +298,7 @@ class Riak
         $mr = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "link"), $args);
+        return call_user_func_array(array($mr, "link"), $args);
     }
 
     /**
@@ -266,7 +311,7 @@ class Riak
         $mr = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "map"), $args);
+        return call_user_func_array(array($mr, "map"), $args);
     }
 
     /**
@@ -279,6 +324,6 @@ class Riak
         $mr = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "reduce"), $args);
+        return call_user_func_array(array($mr, "reduce"), $args);
     }
 }

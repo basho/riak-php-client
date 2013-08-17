@@ -28,6 +28,31 @@ namespace Basho\Riak\MapReduce;
 class Phase
 {
     /**
+     * @var string
+     */
+    public $type;
+
+    /**
+     * @var string
+     */
+    public $language;
+
+    /**
+     * @var mixed
+     */
+    public $function;
+
+    /**
+     * @var bool
+     */
+    public $keep;
+
+    /**
+     * @var mixed
+     */
+    public $arg;
+
+    /**
      * Construct a Phase object.
      *
      * @param string $type - "map" or "reduce"
