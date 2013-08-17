@@ -31,6 +31,10 @@ use Basho\Riak\Bucket,
  */
 class Utils
 {
+    /**
+     * @var bool
+     */
+    public static $logExceptions = false;
 
     /**
      * Fetch a value from an array by it's key, or default if not exists
@@ -219,7 +223,11 @@ class Utils
             return array($response_headers, $response_body);
         } catch (Exception $e) {
             curl_close($ch);
-            error_log('Error: ' . $e->getMessage());
+
+            if (self::$logExceptions) {
+                error_log('Error: ' . $e->getMessage());
+            }
+
             return NULL;
         }
     }
