@@ -31,15 +31,7 @@ class StringIO
     /**
      * @var string
      */
-    private $contents;
-
-    /**
-     * Construct a StringIO object.
-     */
-    public function __construct()
-    {
-        $this->contents = '';
-    }
+    private $contents = '';
 
     /**
      * Add data to contents

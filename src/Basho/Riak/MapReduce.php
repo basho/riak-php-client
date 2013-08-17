@@ -43,27 +43,27 @@ class MapReduce
     /**
      * @var LinkPhase[]
      */
-    private $phases;
+    private $phases = array();
 
     /**
      * @var array
      */
-    private $inputs;
+    private $inputs = array();
 
     /**
      * @var null|string
      */
-    private $input_mode;
+    private $input_mode = null;
 
     /**
      * @var array
      */
-    private $key_filters;
+    private $key_filters = array();
 
     /**
      * @var array
      */
-    private $index;
+    private $index = array();
 
     /**
      * Construct a Map/Reduce object.
@@ -72,14 +72,9 @@ class MapReduce
      *
      * @return MapReduce
      */
-    public function __construct($client)
+    public function __construct(Riak $client)
     {
         $this->client = $client;
-        $this->phases = array();
-        $this->inputs = array();
-        $this->input_mode = NULL;
-        $this->key_filters = array();
-        $this->index = array();
     }
 
     /**

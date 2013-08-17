@@ -60,15 +60,15 @@ class Utils
      * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL.
      *
-     * @param \Basho\Riak\Riak
-     * @param \Basho\Riak\Bucket $bucket
+     * @param Riak $client
+     * @param Bucket $bucket
      * @param string $key
      * @param string $spec
      * @param string $params Array of key-value param pairs
      *
      * @return string
      */
-    public static function buildRestPath($client, $bucket = NULL, $key = NULL, $spec = NULL, $params = NULL)
+    public static function buildRestPath(Riak $client, Bucket $bucket = NULL, $key = NULL, $spec = NULL, $params = NULL)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = 'http://';

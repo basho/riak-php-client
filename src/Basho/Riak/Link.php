@@ -45,7 +45,7 @@ class Link
     /**
      * @var Riak
      */
-    public $client;
+    public $client = null;
 
     /**
      * Construct a Link object.
@@ -59,7 +59,6 @@ class Link
         $this->bucket = $bucket;
         $this->key = $key;
         $this->tag = $tag;
-        $this->client = NULL;
     }
 
     /**

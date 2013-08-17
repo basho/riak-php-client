@@ -54,7 +54,7 @@ class Riak
     /**
      * @var string
      */
-    public $indexPrefix;
+    public $indexPrefix = 'buckets';
 
     /**
      * @var string
@@ -64,17 +64,17 @@ class Riak
     /**
      * @var int
      */
-    public $r;
+    public $r = 2;
 
     /**
      * @var int
      */
-    public $w;
+    public $w = 2;
 
     /**
      * @var int
      */
-    public $dw;
+    public $dw = 2;
 
     /**
      * Construct a new Client object.
@@ -90,11 +90,7 @@ class Riak
         $this->port = $port;
         $this->prefix = $prefix;
         $this->mapred_prefix = $mapred_prefix;
-        $this->indexPrefix = 'buckets';
         $this->clientid = 'php_' . base_convert(mt_rand(), 10, 36);
-        $this->r = 2;
-        $this->w = 2;
-        $this->dw = 2;
     }
 
     /**

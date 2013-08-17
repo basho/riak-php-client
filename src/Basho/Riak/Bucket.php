@@ -33,7 +33,7 @@ use Basho\Riak\Exception,
 class Bucket
 {
     /**
-     * @var \Basho\Riak\Riak
+     * @var Riak
      */
     public $client;
 
@@ -45,31 +45,28 @@ class Bucket
     /**
      * @var integer
      */
-    public $r;
+    public $r = null;
 
     /**
      * @var integer
      */
-    public $w;
+    public $w = null;
 
     /**
      * @var integer
      */
-    public $dw;
+    public $dw = null;
 
     /**
      * Construct a Bucket object
      *
-     * @param \Basho\Riak\Riak $client Riak Client object
+     * @param Riak $client Riak Client object
      * @param string $name Bucket name
      */
-    public function __construct($client, $name)
+    public function __construct(Riak $client, $name)
     {
         $this->client = $client;
         $this->name = $name;
-        $this->r = NULL;
-        $this->w = NULL;
-        $this->dw = NULL;
     }
 
     /**
