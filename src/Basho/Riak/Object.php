@@ -608,7 +608,7 @@ class Object
     {
         # Use defaults if not specified...
         $w = $this->bucket->getW($w);
-        $dw = $this->bucket->getDW($w);
+        $dw = $this->bucket->getDW($dw);
 
         # Construct the URL...
         $params = array('returnbody' => 'true', 'w' => $w, 'dw' => $dw);
