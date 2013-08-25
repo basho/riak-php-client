@@ -35,10 +35,10 @@ class Bucket
     /**
      * Construct a Bucket object
      *
-     * @param \Basho\Riak\Riak $client Riak Client object
+     * @param Riak $client Riak Client object
      * @param string $name Bucket name
      */
-    public function __construct($client, $name)
+    public function __construct(Riak $client, $name)
     {
         $this->client = $client;
         $this->name = $name;
@@ -60,10 +60,11 @@ class Bucket
     /**
      * Get the R-value for this bucket
      *
-     * Returns the buckets R-value If it is set,
-     * otherwise return the R-value for the client.
+     * Returns the buckets R-value If it is set, otherwise return the R-value for the client.
      *
-     * @return integer
+     * @param null|int $r
+     *
+     * @return int
      */
     public function getR($r = null)
     {
@@ -84,10 +85,11 @@ class Bucket
      * get(...) and getBinary(...)
      * operations that do not specify an R-value will use this value.
      *
-     * @see \Basho\Riak\Bucket::get()
-     * @see \Basho\Riak\Bucket::getBinary()
-     * @param integer $r - The new R-value.
-     * @return $this
+     * @see Bucket::get()
+     * @see Bucket::getBinary()
+     * @param int $r - The new R-value.
+     *
+     * @return Bucket
      */
     public function setR($r)
     {
@@ -99,10 +101,11 @@ class Bucket
     /**
      * Get the W-value for this bucket
      *
-     * If it is set for this bucket, otherwise return
-     * the W-value for the client.
+     * If it is set for this bucket, otherwise return the W-value for the client.
      *
-     * @return integer
+     * @param int $w
+     *
+     * @return int
      */
     public function getW($w)
     {
@@ -122,8 +125,9 @@ class Bucket
      *
      * See setR(...) for more information.
      *
-     * @param  integer $w - The new W-value.
-     * @return $this
+     * @param int $w - The new W-value.
+     *
+     * @return Bucket
      */
     public function setW($w)
     {
@@ -135,10 +139,11 @@ class Bucket
     /**
      * Get the DW-value for this bucket
      *
-     * If it is set for this bucket, otherwise return
-     * the DW-value for the client.
+     * If it is set for this bucket, otherwise return the DW-value for the client.
      *
-     * @return integer
+     * @param int $dw
+     *
+     * @return int
      */
     public function getDW($dw)
     {
@@ -158,8 +163,9 @@ class Bucket
      *
      * See setR(...) for more information.
      *
-     * @param  integer $dw - The new DW-value
-     * @return $this
+     * @param int $dw - The new DW-value
+     *
+     * @return Bucket
      */
     public function setDW($dw)
     {
@@ -171,8 +177,9 @@ class Bucket
     /**
      * Create a new Riak object that will be stored as JSON.
      *
-     * @param  string $key - Name of the key.
-     * @param  object $data - The data to store. (default NULL)
+     * @param string $key - Name of the key.
+     * @param object $data - The data to store. (default NULL)
+     *
      * @return Object
      */
     public function newObject($key, $data = null)
@@ -188,9 +195,10 @@ class Bucket
     /**
      * Create a new Riak object that will be stored as plain text/binary.
      *
-     * @param  string $key - Name of the key.
-     * @param  object $data - The data to store.
-     * @param  string $content_type - The content type of the object. (default 'application/json')
+     * @param string $key - Name of the key.
+     * @param object $data - The data to store.
+     * @param string $content_type - The content type of the object. (default 'application/json')
+     *
      * @return Object
      */
     public function newBinary($key, $data, $content_type = 'application/json')
@@ -206,8 +214,9 @@ class Bucket
     /**
      * Retrieve a JSON-encoded object from Riak.
      *
-     * @param  string $key - Name of the key.
-     * @param  int $r   - R-Value of the request (defaults to bucket's R)
+     * @param string $key - Name of the key.
+     * @param int $r   - R-Value of the request (defaults to bucket's R)
+     *
      * @return Object
      */
     public function get($key, $r = null)
@@ -222,8 +231,9 @@ class Bucket
     /**
      * Retrieve a binary/string object from Riak.
      *
-     * @param  string $key - Name of the key.
-     * @param  int $r   - R-Value of the request (defaults to bucket's R)
+     * @param string $key - Name of the key.
+     * @param int $r   - R-Value of the request (defaults to bucket's R)
+     *
      * @return Object
      */
     public function getBinary($key, $r = null)
@@ -244,7 +254,7 @@ class Bucket
      * again, otherwise unpredictable things could happen. This should
      * only be used if you know what you are doing.
      *
-     * @param integer $nval - The new N-Val.
+     * @param int $nval - The new N-Val.
      */
     public function setNVal($nval)
     {
@@ -254,7 +264,7 @@ class Bucket
     /**
      * Retrieve the N-value for this bucket.
      *
-     * @return integer
+     * @return int
      */
     public function getNVal()
     {
@@ -269,7 +279,7 @@ class Bucket
      * calling hasSiblings() and getSiblings(). This should only be used
      * if you know what you are doing.
      *
-     * @param  boolean $bool - True to store and return conflicting writes.
+     * @param bool $bool - True to store and return conflicting writes.
      */
     public function setAllowMultiples($bool)
     {
@@ -279,7 +289,7 @@ class Bucket
     /**
      * Retrieve the 'allow multiples' setting.
      *
-     * @return Boolean
+     * @return bool
      */
     public function getAllowMultiples()
     {
@@ -291,8 +301,8 @@ class Bucket
      *
      * This should only be used if you know what you are doing.
      *
-     * @param  string $key - Property to set.
-     * @param  mixed $value - Property value.
+     * @param string $key - Property to set.
+     * @param mixed $value - Property value.
      */
     public function setProperty($key, $value)
     {
@@ -303,6 +313,7 @@ class Bucket
      * Retrieve a bucket property.
      *
      * @param string $key - The property to retrieve.
+     *
      * @return mixed
      */
     public function getProperty($key)
@@ -320,7 +331,9 @@ class Bucket
      *
      * This should only be used if you know what you are doing.
      *
-     * @param  array $props - An associative array of $key=>$value.
+     * @param array $props - An associative array of $key=>$value.
+     *
+     * @throws Exception
      */
     public function setProperties($props)
     {
@@ -347,7 +360,9 @@ class Bucket
     /**
      * Retrieve an associative array of all bucket properties.
      *
-     * @return Array
+     * @return array
+     *
+     * @throws Exception
      */
     public function getProperties()
     {
@@ -375,6 +390,8 @@ class Bucket
      * Note: this operation is pretty slow.
      *
      * @return Array
+     *
+     * @throws Exception
      */
     public function getKeys()
     {
@@ -397,12 +414,16 @@ class Bucket
      * Search a secondary index
      *
      * @author Eric Stevens <estevens@taglabsinc.com>
+     *
      * @param string $indexName - The name of the index to search
      * @param string $indexType - The type of index ('int' or 'bin')
      * @param string|int $startOrExact
      * @param string|int optional $end
-     * @param bool optional $dedupe - whether to eliminate duplicate entries if any
-     * @return array of Links
+     * @param bool $dedupe - Whether to eliminate duplicate entries if any. Optional
+     *
+     * @return Link[]
+     *
+     * @throws Exception
      */
     public function indexSearch($indexName, $indexType, $startOrExact, $end = null, $dedupe = false)
     {

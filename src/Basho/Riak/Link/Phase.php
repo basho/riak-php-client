@@ -29,9 +29,10 @@ class Phase
 {
     /**
      * Construct a Phase object.
+     *
      * @param string $bucket - The bucket name.
      * @param string $tag - The tag.
-     * @param boolean $keep - True to return results of this phase.
+     * @param bool $keep - True to return results of this phase.
      */
     public function __construct($bucket, $tag, $keep)
     {
@@ -41,8 +42,9 @@ class Phase
     }
 
     /**
-     * Convert the Phase to an associative array. Used
-     * internally.
+     * Convert the Phase to an associative array. Used internally.
+     *
+     * @return array
      */
     public function to_array()
     {

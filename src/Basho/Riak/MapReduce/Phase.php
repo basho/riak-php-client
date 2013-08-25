@@ -29,13 +29,12 @@ class Phase
 {
     /**
      * Construct a Phase object.
+     *
      * @param string $type - "map" or "reduce"
      * @param mixed $function - string or array()
      * @param string $language - "javascript" or "erlang"
-     * @param boolean $keep - True to return the output of this phase in
-     * the results.
-     * @param mixed $arg - Additional value to pass into the map or
-     * reduce function.
+     * @param bool $keep - True to return the output of this phase in the results.
+     * @param mixed $arg - Additional value to pass into the map or reduce function.
      */
     public function __construct($type, $function, $language, $keep, $arg)
     {
@@ -47,8 +46,9 @@ class Phase
     }
 
     /**
-     * Convert the Phase to an associative array. Used
-     * internally.
+     * Convert the Phase to an associative array. Used internally.
+     *
+     * @return array
      */
     public function to_array()
     {
