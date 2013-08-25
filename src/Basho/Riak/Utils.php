@@ -63,7 +63,7 @@ class Utils
      * @param string $params Array of key-value param pairs
      * @return string
      */
-    public static function buildRestPath($client, $bucket = NULL, $key = NULL, $spec = NULL, $params = NULL)
+    public static function buildRestPath($client, $bucket = null, $key = null, $spec = null, $params = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = 'http://';
@@ -84,7 +84,9 @@ class Utils
         if (!is_null($spec)) {
             $s = '';
             foreach ($spec as $el) {
-                if ($s != '') $s .= '/';
+                if ($s != '') {
+                    $s .= '/';
+                }
                 $s .= urlencode($el[0]) . ',' . urlencode($el[1]) . ',' . $el[2] . '/';
             }
             $path .= '/' . $s;
@@ -94,7 +96,9 @@ class Utils
         if (!is_null($params)) {
             $s = '';
             foreach ($params as $key => $value) {
-                if ($s != '') $s .= '&';
+                if ($s != '') {
+                    $s .= '&';
+                }
                 $s .= urlencode($key) . '=' . urlencode($value);
             }
 
@@ -112,14 +116,14 @@ class Utils
      *
      * @author Eric Stevens <estevens@taglabsinc.com>
      *
-     * @param \Basho\Riak\Riak  $client
+     * @param \Basho\Riak\Riak $client
      * @param \Basho\Riak\Bucket $bucket
      * @param string $index - Index Name & type (eg, "indexName_bin")
      * @param string|int $start - Starting value or exact match if no ending value
      * @param string|int $end - Ending value for range search
      * @return string URL
      */
-    public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = NULL)
+    public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = array('http:/', $client->host . ':' . $client->port, $client->indexPrefix);
@@ -164,14 +168,20 @@ class Utils
 
         if ($method == 'GET') {
             curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        } else if ($method == 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-        } else if ($method == 'PUT') {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-        } else if ($method == 'DELETE') {
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        } else {
+            if ($method == 'POST') {
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+            } else {
+                if ($method == 'PUT') {
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+                } else {
+                    if ($method == 'DELETE') {
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+                    }
+                }
+            }
         }
 
         # Capture the response headers...
@@ -203,7 +213,8 @@ class Utils
         } catch (Exception $e) {
             curl_close($ch);
             error_log('Error: ' . $e->getMessage());
-            return NULL;
+
+            return null;
         }
     }
 
@@ -229,6 +240,7 @@ class Utils
                 }
             }
         }
+
         return $retVal;
     }
 }
