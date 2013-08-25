@@ -46,9 +46,12 @@ class Phase
      */
     public function to_array()
     {
-        $stepdef = array("bucket" => $this->bucket,
+        $stepdef = array(
+            "bucket" => $this->bucket,
             "tag" => $this->tag,
-            "keep" => $this->keep);
+            "keep" => $this->keep
+        );
+
         return array("link" => $stepdef);
     }
 }

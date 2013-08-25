@@ -46,7 +46,7 @@ class MapReduce
         $this->client = $client;
         $this->phases = array();
         $this->inputs = array();
-        $this->input_mode = NULL;
+        $this->input_mode = null;
         $this->key_filters = array();
         $this->index = array();
     }
@@ -54,9 +54,9 @@ class MapReduce
     /**
      * Add inputs to a map/reduce operation
      *
-     * This method takes three different forms, 
-     * depending on the provided inputs. You can 
-     * specify either  a Object, a string bucket name, 
+     * This method takes three different forms,
+     * depending on the provided inputs. You can
+     * specify either  a Object, a string bucket name,
      * or a bucket, key, and additional arg.
      *
      * @param mixed $arg1 Object or Bucket
@@ -64,14 +64,16 @@ class MapReduce
      * @param mixed $arg3 Arg or blank
      * @return MapReduce
      */
-    public function add($arg1, $arg2 = NULL, $arg3 = NULL)
+    public function add($arg1, $arg2 = null, $arg3 = null)
     {
         if (func_num_args() == 1) {
-            if ($arg1 instanceof Object)
+            if ($arg1 instanceof Object) {
                 return $this->add_object($arg1);
-            else
+            } else {
                 return $this->add_bucket($arg1);
+            }
         }
+
         return $this->add_bucket_key_data($arg1, (string)$arg2, $arg3);
     }
 
@@ -82,7 +84,7 @@ class MapReduce
      */
     private function add_object($obj)
     {
-        return $this->add_bucket_key_data($obj->bucket->name, $obj->key, NULL);
+        return $this->add_bucket_key_data($obj->bucket->name, $obj->key, null);
     }
 
     /**
@@ -92,9 +94,11 @@ class MapReduce
      */
     private function add_bucket_key_data($bucket, $key, $data)
     {
-        if ($this->input_mode == "bucket")
+        if ($this->input_mode == "bucket") {
             throw new Exception("Already added a bucket, can't add an object.");
+        }
         $this->inputs[] = array($bucket, $key, $data);
+
         return $this;
     }
 
@@ -108,6 +112,7 @@ class MapReduce
     {
         $this->input_mode = "bucket";
         $this->inputs = $bucket;
+
         return $this;
     }
 
@@ -122,7 +127,12 @@ class MapReduce
      */
     public function search($bucket, $query)
     {
-        $this->inputs = array("module" => "riak_search", "function" => "mapred_search", "arg" => array($bucket, $query));
+        $this->inputs = array(
+            "module" => "riak_search",
+            "function" => "mapred_search",
+            "arg" => array($bucket, $query)
+        );
+
         return $this;
     }
 
@@ -137,9 +147,10 @@ class MapReduce
      * step in the phase)
      * @return $this
      */
-    public function link($bucket = '_', $tag = '_', $keep = FALSE)
+    public function link($bucket = '_', $tag = '_', $keep = false)
     {
         $this->phases[] = new LinkPhase($bucket, $tag, $keep);
+
         return $this;
     }
 
@@ -160,8 +171,9 @@ class MapReduce
         $this->phases[] = new MapReducePhase("map",
             $function,
             Utils::get_value("language", $options, $language),
-            Utils::get_value("keep", $options, FALSE),
-            Utils::get_value("arg", $options, NULL));
+            Utils::get_value("keep", $options, false),
+            Utils::get_value("arg", $options, null));
+
         return $this;
     }
 
@@ -182,8 +194,9 @@ class MapReduce
         $this->phases[] = new MapReducePhase("reduce",
             $function,
             Utils::get_value("language", $options, $language),
-            Utils::get_value("keep", $options, FALSE),
-            Utils::get_value("arg", $options, NULL));
+            Utils::get_value("keep", $options, false),
+            Utils::get_value("arg", $options, null));
+
         return $this;
     }
 
@@ -205,6 +218,7 @@ class MapReduce
     {
         $args = func_get_args();
         array_unshift($args, 'and');
+
         return call_user_func_array(array($this, 'key_filter_operator'), $args);
     }
 
@@ -225,6 +239,7 @@ class MapReduce
     {
         $args = func_get_args();
         array_unshift($args, 'and');
+
         return call_user_func_array(array($this, 'key_filter_operator'), $args);
     }
 
@@ -260,20 +275,26 @@ class MapReduce
     {
         $filters = func_get_args();
         array_shift($filters);
-        if ($this->input_mode != 'bucket')
+        if ($this->input_mode != 'bucket') {
             throw new Exception("Key filters can only be used in bucket mode");
-        if (count($this->index))
+        }
+
+        if (count($this->index)) {
             throw new Exception("You cannot use index search and key filters on the same operation");
+        }
 
         if (count($this->key_filters) > 0) {
-            $this->key_filters = array(array(
-                $operator,
-                $this->key_filters,
-                $filters
-            ));
+            $this->key_filters = array(
+                array(
+                    $operator,
+                    $this->key_filters,
+                    $filters
+                )
+            );
         } else {
             $this->key_filters = $filters;
         }
+
         return $this;
     }
 
@@ -292,15 +313,18 @@ class MapReduce
      * a range search
      * @return $this
      */
-    public function indexSearch($indexName, $indexType, $startOrExact, $end = NULL)
+    public function indexSearch($indexName, $indexType, $startOrExact, $end = null)
     {
         // Check prerequisites
-        if (count($this->key_filters))
+        if (count($this->key_filters)) {
             throw new Exception("You cannot use index search and key filters on the same operation");
-        if ($this->input_mode != 'bucket')
-            throw new Exception("Key filters can only be used in bucket mode");
+        }
 
-        if ($end === NULL) {
+        if ($this->input_mode != 'bucket') {
+            throw new Exception("Key filters can only be used in bucket mode");
+        }
+
+        if ($end === null) {
             $this->index = array(
                 'index' => "{$indexName}_{$indexType}",
                 'key' => urlencode($startOrExact)
@@ -312,6 +336,7 @@ class MapReduce
                 'end' => urlencode($end)
             );
         }
+
         return $this;
 
     }
@@ -326,29 +351,32 @@ class MapReduce
      * @param integer $timeout - Timeout in seconds.
      * @return array()
      */
-    public function run($timeout = NULL)
+    public function run($timeout = null)
     {
         $num_phases = count($this->phases);
 
-        $linkResultsFlag = FALSE;
+        $linkResultsFlag = false;
 
         # If there are no phases, then just echo the inputs back to the user.
         if ($num_phases == 0) {
             $this->reduce(array("riak_kv_mapreduce", "reduce_identity"));
             $num_phases = 1;
-            $linkResultsFlag = TRUE;
+            $linkResultsFlag = true;
         }
 
         # Convert all phases to associative arrays. Also,
         # if none of the phases are accumulating, then set the last one to
         # accumulate.
-        $keep_flag = FALSE;
+        $keep_flag = false;
         $query = array();
         for ($i = 0; $i < $num_phases; $i++) {
             $phase = $this->phases[$i];
-            if ($i == ($num_phases - 1) && !$keep_flag)
-                $phase->keep = TRUE;
-            if ($phase->keep) $keep_flag = TRUE;
+            if ($i == ($num_phases - 1) && !$keep_flag) {
+                $phase->keep = true;
+            }
+            if ($phase->keep) {
+                $keep_flag = true;
+            }
             $query[] = $phase->to_array();
         }
 
@@ -367,7 +395,9 @@ class MapReduce
 
         # Construct the job, optionally set the timeout...
         $job = array("inputs" => $this->inputs, "query" => $query);
-        if ($timeout != NULL) $job["timeout"] = $timeout;
+        if ($timeout != null) {
+            $job["timeout"] = $timeout;
+        }
         $content = json_encode($job);
 
         # Do the request...
@@ -379,7 +409,9 @@ class MapReduce
         $linkResultsFlag |= (end($this->phases) instanceof LinkPhase);
 
         # If we don't need to link results, then just return.
-        if (!$linkResultsFlag) return $result;
+        if (!$linkResultsFlag) {
+            return $result;
+        }
 
         # Otherwise, if the last phase IS a link phase, then convert the
         # results to Link objects.
@@ -390,6 +422,7 @@ class MapReduce
             $link->client = $this->client;
             $a[] = $link;
         }
+
         return $a;
     }
 }
