@@ -177,7 +177,7 @@ class TestSuite
         $bucket = $client->bucket('bucket');
         $obj = $bucket->get("missing");
         $this->_assert(!$obj->exists());
-        $this->_assert($obj->getData() == NULL);
+        $this->_assert($obj->getData() == null);
     }
 
     public function testDelete()
@@ -203,7 +203,7 @@ class TestSuite
         $bucket = $client->bucket('bucket');
 
         # Test setting allow mult...
-        $bucket->setAllowMultiples(TRUE);
+        $bucket->setAllowMultiples(true);
         $this->_assert($bucket->getAllowMultiples());
 
         # Test setting nval...
@@ -211,7 +211,7 @@ class TestSuite
         $this->_assert($bucket->getNVal() == 3);
 
         # Test setting multiple properties...
-        $bucket->setProperties(array("allow_mult" => FALSE, "n_val" => 2));
+        $bucket->setProperties(array("allow_mult" => false, "n_val" => 2));
         $this->_assert(!$bucket->getAllowMultiples());
         $this->_assert($bucket->getNVal() == 2);
     }
@@ -489,7 +489,10 @@ class TestSuite
         }
         $this->_assert(count($results) == 2);
 
-        $results = $client->search("searchbucket", "(foo:one OR foo:two OR foo:three OR foo:four) AND (NOT bar:green)")->run();
+        $results = $client->search(
+            "searchbucket",
+            "(foo:one OR foo:two OR foo:three OR foo:four) AND (NOT bar:green)"
+        )->run();
         $this->_assert(count($results) == 3);
     }
 
@@ -502,7 +505,7 @@ class TestSuite
         try {
             $bucket->indexSearch("foo", "bar_bin", "baz");
         } catch (Exception $e) {
-            if (strpos($e->__toString(), "indexes_not_supported") !== FALSE) {
+            if (strpos($e->__toString(), "indexes_not_supported") !== false) {
                 return true;
             } else {
                 throw $e;
@@ -642,6 +645,8 @@ class TestSuite
 
     private function _assert($bool)
     {
-        if (!$bool) throw new Exception("Test failed.");
+        if (!$bool) {
+            throw new Exception("Test failed.");
+        }
     }
 }

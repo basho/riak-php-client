@@ -78,6 +78,7 @@ class Riak
     public function setR($r)
     {
         $this->r = $r;
+
         return $this;
     }
 
@@ -104,6 +105,7 @@ class Riak
     public function setW($w)
     {
         $this->w = $w;
+
         return $this;
     }
 
@@ -130,6 +132,7 @@ class Riak
     public function setDW($dw)
     {
         $this->dw = $dw;
+
         return $this;
     }
 
@@ -154,6 +157,7 @@ class Riak
     public function setClientID($clientid)
     {
         $this->clientid = $clientid;
+
         return $this;
     }
 
@@ -183,6 +187,7 @@ class Riak
         foreach ($response_obj->buckets as $name) {
             $buckets[] = $this->bucket($name);
         }
+
         return $buckets;
     }
 
@@ -195,7 +200,8 @@ class Riak
     {
         $url = 'http://' . $this->host . ':' . $this->port . '/ping';
         $response = Utils::httpRequest('GET', $url);
-        return ($response != NULL) && ($response[1] == 'OK');
+
+        return ($response != null) && ($response[1] == 'OK');
     }
 
 
@@ -211,6 +217,7 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
+
         return call_user_func_array(array(&$mr, "add"), $args);
     }
 
@@ -227,6 +234,7 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
+
         return call_user_func_array(array(&$mr, "search"), $args);
     }
 
@@ -239,6 +247,7 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
+
         return call_user_func_array(array(&$mr, "link"), $args);
     }
 
@@ -251,6 +260,7 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
+
         return call_user_func_array(array(&$mr, "map"), $args);
     }
 
@@ -263,6 +273,7 @@ class Riak
     {
         $mr = new MapReduce($this);
         $args = func_get_args();
+
         return call_user_func_array(array(&$mr, "reduce"), $args);
     }
 }

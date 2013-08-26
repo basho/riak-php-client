@@ -46,6 +46,7 @@ class StringIO
     public function write($ch, $data)
     {
         $this->contents .= $data;
+
         return strlen($data);
     }
 

@@ -42,9 +42,9 @@ class Bucket
     {
         $this->client = $client;
         $this->name = $name;
-        $this->r = NULL;
-        $this->w = NULL;
-        $this->dw = NULL;
+        $this->r = null;
+        $this->w = null;
+        $this->dw = null;
     }
 
     /**
@@ -60,15 +60,21 @@ class Bucket
     /**
      * Get the R-value for this bucket
      *
-     * Returns the buckets R-value If it is set, 
+     * Returns the buckets R-value If it is set,
      * otherwise return the R-value for the client.
      *
      * @return integer
      */
-    public function getR($r = NULL)
+    public function getR($r = null)
     {
-        if ($r != NULL) return $r;
-        if ($this->r != NULL) return $this->r;
+        if ($r != null) {
+            return $r;
+        }
+
+        if ($this->r != null) {
+            return $this->r;
+        }
+
         return $this->client->getR();
     }
 
@@ -86,6 +92,7 @@ class Bucket
     public function setR($r)
     {
         $this->r = $r;
+
         return $this;
     }
 
@@ -99,8 +106,14 @@ class Bucket
      */
     public function getW($w)
     {
-        if ($w != NULL) return $w;
-        if ($this->w != NULL) return $this->w;
+        if ($w != null) {
+            return $w;
+        }
+
+        if ($this->w != null) {
+            return $this->w;
+        }
+
         return $this->client->getW();
     }
 
@@ -115,6 +128,7 @@ class Bucket
     public function setW($w)
     {
         $this->w = $w;
+
         return $this;
     }
 
@@ -128,8 +142,14 @@ class Bucket
      */
     public function getDW($dw)
     {
-        if ($dw != NULL) return $dw;
-        if ($this->dw != NULL) return $this->dw;
+        if ($dw != null) {
+            return $dw;
+        }
+
+        if ($this->dw != null) {
+            return $this->dw;
+        }
+
         return $this->client->getDW();
     }
 
@@ -144,6 +164,7 @@ class Bucket
     public function setDW($dw)
     {
         $this->dw = $dw;
+
         return $this;
     }
 
@@ -154,12 +175,13 @@ class Bucket
      * @param  object $data - The data to store. (default NULL)
      * @return Object
      */
-    public function newObject($key, $data = NULL)
+    public function newObject($key, $data = null)
     {
         $obj = new Object($this->client, $this, $key);
         $obj->setData($data);
         $obj->setContentType('application/json');
-        $obj->jsonize = TRUE;
+        $obj->jsonize = true;
+
         return $obj;
     }
 
@@ -176,7 +198,8 @@ class Bucket
         $obj = new Object($this->client, $this, $key);
         $obj->setData($data);
         $obj->setContentType($content_type);
-        $obj->jsonize = FALSE;
+        $obj->jsonize = false;
+
         return $obj;
     }
 
@@ -184,14 +207,15 @@ class Bucket
      * Retrieve a JSON-encoded object from Riak.
      *
      * @param  string $key - Name of the key.
-     * @param  int    $r   - R-Value of the request (defaults to bucket's R)
+     * @param  int $r   - R-Value of the request (defaults to bucket's R)
      * @return Object
      */
-    public function get($key, $r = NULL)
+    public function get($key, $r = null)
     {
         $obj = new Object($this->client, $this, $key);
-        $obj->jsonize = TRUE;
+        $obj->jsonize = true;
         $r = $this->getR($r);
+
         return $obj->reload($r);
     }
 
@@ -199,14 +223,15 @@ class Bucket
      * Retrieve a binary/string object from Riak.
      *
      * @param  string $key - Name of the key.
-     * @param  int    $r   - R-Value of the request (defaults to bucket's R)
+     * @param  int $r   - R-Value of the request (defaults to bucket's R)
      * @return Object
      */
-    public function getBinary($key, $r = NULL)
+    public function getBinary($key, $r = null)
     {
         $obj = new Object($this->client, $this, $key);
-        $obj->jsonize = FALSE;
+        $obj->jsonize = false;
         $r = $this->getR($r);
+
         return $obj->reload($r);
     }
 
@@ -267,7 +292,7 @@ class Bucket
      * This should only be used if you know what you are doing.
      *
      * @param  string $key - Property to set.
-     * @param  mixed  $value - Property value.
+     * @param  mixed $value - Property value.
      */
     public function setProperty($key, $value)
     {
@@ -286,7 +311,7 @@ class Bucket
         if (array_key_exists($key, $props)) {
             return $props[$key];
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -308,7 +333,7 @@ class Bucket
         $response = Utils::httpRequest('PUT', $url, $headers, $content);
 
         # Handle the response...
-        if ($response == NULL) {
+        if ($response == null) {
             throw new Exception("Error setting bucket properties.");
         }
 
@@ -328,11 +353,11 @@ class Bucket
     {
         # Run the request...
         $params = array('props' => 'true', 'keys' => 'false');
-        $url = Utils::buildRestPath($this->client, $this, NULL, NULL, $params);
+        $url = Utils::buildRestPath($this->client, $this, null, null, $params);
         $response = Utils::httpRequest('GET', $url);
 
         # Use a Object to interpret the response, we are just interested in the value.
-        $obj = new Object($this->client, $this, NULL);
+        $obj = new Object($this->client, $this, null);
         $obj->populate($response, array(200));
         if (!$obj->exists()) {
             throw new Exception("Error getting bucket properties.");
@@ -354,16 +379,17 @@ class Bucket
     public function getKeys()
     {
         $params = array('props' => 'false', 'keys' => 'true');
-        $url = Utils::buildRestPath($this->client, $this, NULL, NULL, $params);
+        $url = Utils::buildRestPath($this->client, $this, null, null, $params);
         $response = Utils::httpRequest('GET', $url);
 
         # Use a Object to interpret the response, we are just interested in the value.
-        $obj = new Object($this->client, $this, NULL);
+        $obj = new Object($this->client, $this, null);
         $obj->populate($response, array(200));
         if (!$obj->exists()) {
             throw new Exception("Error getting bucket properties.");
         }
         $keys = $obj->getData();
+
         return array_map("urldecode", $keys["keys"]);
     }
 
@@ -378,12 +404,12 @@ class Bucket
      * @param bool optional $dedupe - whether to eliminate duplicate entries if any
      * @return array of Links
      */
-    public function indexSearch($indexName, $indexType, $startOrExact, $end = NULL, $dedupe = false)
+    public function indexSearch($indexName, $indexType, $startOrExact, $end = null, $dedupe = false)
     {
         $url = Utils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, null);
         $response = Utils::httpRequest('GET', $url);
 
-        $obj = new Object($this->client, $this, NULL);
+        $obj = new Object($this->client, $this, null);
 
         $obj->populate($response, array(200));
         if (!$obj->exists()) {
@@ -404,6 +430,7 @@ class Bucket
             $key = new Link($this->name, $key);
             $key->client = $this->client;
         }
+
         return $keys;
     }
 }
