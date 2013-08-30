@@ -645,23 +645,23 @@ class TestSuite
         $this->_assert($anotherObject->getMeta("foo") === null);
     }
 
-	public function testNotExists()
-	{
-		$client = new Riak(self::HOST, self::PORT);
-		$bucket = $client->bucket('bucket');
+    public function testNotExists()
+    {
+        $client = new Riak(self::HOST, self::PORT);
+        $bucket = $client->bucket('bucket');
 
-		$exists = $bucket->exists('missing');
-		$this->_assert(!$exists);
-	}
+        $exists = $bucket->exists('missing');
+        $this->_assert(!$exists);
+    }
 
-	public function testExists()
-	{
-		$client = new Riak(self::HOST, self::PORT);
-		$bucket = $client->bucket('bucket');
+    public function testExists()
+    {
+        $client = new Riak(self::HOST, self::PORT);
+        $bucket = $client->bucket('bucket');
 
-		$exists = $bucket->exists('foo');
-		$this->_assert($exists);
-	}
+        $exists = $bucket->exists('foo');
+        $this->_assert($exists);
+    }
 
     private function _assert($bool)
     {

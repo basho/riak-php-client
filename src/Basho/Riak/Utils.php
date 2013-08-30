@@ -179,11 +179,11 @@ class Utils
                 } else {
                     if ($method == 'DELETE') {
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-					} else {
-						if ($method == 'HEAD') {
-							curl_setopt($ch, CURLOPT_NOBODY, 1);
-						}
-					}
+                    } else {
+                        if ($method == 'HEAD') {
+                            curl_setopt($ch, CURLOPT_NOBODY, 1);
+                        }
+                    }
                 }
             }
         }
