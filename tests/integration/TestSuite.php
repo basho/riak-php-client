@@ -659,6 +659,10 @@ class TestSuite
         $client = new Riak(self::HOST, self::PORT);
         $bucket = $client->bucket('bucket');
 
+        $rand = rand();
+        $obj = $bucket->newObject('foo', $rand);
+        $obj->store();
+
         $exists = $bucket->exists('foo');
         $this->_assert($exists);
     }
