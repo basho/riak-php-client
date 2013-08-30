@@ -433,4 +433,28 @@ class Bucket
 
         return $keys;
     }
+
+	/**
+	 * Check if a given key exists in a bucket
+	 *
+	 * @author Edgar Veiga <edgarmveiga@gmail.com>
+	 * @param string $key - The key to check
+	 * @return bool
+	 */
+	public function exists($key)
+	{
+		$url = Utils::buildRestPath($this->client, $this, $key);
+		$response = Utils::httpRequest('HEAD', $url);
+
+		if ($response == null) {
+			throw new Exception("Error checking if key exists.");
+		}
+
+		$status = $response[0]['http_code'];
+		if ($status === 404) {
+			return false;
+		}
+
+		return true;
+	}
 }
