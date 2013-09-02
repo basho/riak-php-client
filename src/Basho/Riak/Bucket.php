@@ -451,10 +451,10 @@ class Bucket
         }
 
         $status = $response[0]['http_code'];
-        if ($status === 404) {
-            return false;
+        if ($status === 200) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 }
