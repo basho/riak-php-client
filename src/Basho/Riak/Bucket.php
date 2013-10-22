@@ -171,11 +171,11 @@ class Bucket
     /**
      * Create a new Riak object that will be stored as JSON.
      *
-     * @param  string $key - Name of the key.
+     * @param  string $key - Name of the key. (default NULL)
      * @param  object $data - The data to store. (default NULL)
      * @return Object
      */
-    public function newObject($key, $data = null)
+    public function newObject($key = null, $data = null)
     {
         $obj = new Object($this->client, $this, $key);
         $obj->setData($data);
@@ -188,12 +188,12 @@ class Bucket
     /**
      * Create a new Riak object that will be stored as plain text/binary.
      *
-     * @param  string $key - Name of the key.
+     * @param  string $key - Name of the key. (default NULL)
      * @param  object $data - The data to store.
      * @param  string $content_type - The content type of the object. (default 'application/json')
      * @return Object
      */
-    public function newBinary($key, $data, $content_type = 'application/json')
+    public function newBinary($key = null, $data, $content_type = 'application/json')
     {
         $obj = new Object($this->client, $this, $key);
         $obj->setData($data);
