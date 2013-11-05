@@ -441,7 +441,7 @@ class Bucket
     * @param string $key - The key to check
     * @return bool
     */
-    public function exists($key)
+    public function hasKey($key)
     {
         $url = Utils::buildRestPath($this->client, $this, $key);
         $response = Utils::httpRequest('HEAD', $url);
