@@ -77,6 +77,8 @@ class TestSuite
         print("Starting Unit Tests\n---\n");
 
         $this->_test('testIsAlive');
+	$this->_test('testNotHasKey');
+	$this->_test('testHasKey');
         $this->_test('testStoreAndGet');
         $this->_test('testStoreAndGetWithoutKey');
         $this->_test('testBinaryStoreAndGet');
@@ -641,6 +643,28 @@ class TestSuite
         $object->removeMeta("foo")->store();
         $anotherObject = $bucket->get("metatest");
         $this->_assert($anotherObject->getMeta("foo") === null);
+    }
+
+    public function testNotHasKey()
+    {
+        $client = new Riak(self::HOST, self::PORT);
+        $bucket = $client->bucket('bucket');
+
+        $exists = $bucket->hasKey('missing');
+        $this->_assert(!$exists);
+    }
+
+    public function testHasKey()
+    {
+        $client = new Riak(self::HOST, self::PORT);
+        $bucket = $client->bucket('bucket');
+
+        $rand = rand();
+        $obj = $bucket->newObject('foo', $rand);
+        $obj->store();
+
+        $exists = $bucket->hasKey('foo');
+        $this->_assert($exists);
     }
 
     private function _assert($bool)
