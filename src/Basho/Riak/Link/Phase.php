@@ -14,9 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to <eng@basho.com> so we can send you a copy immediately.
  *
- * @category   Riak
- * @package    Link
- * @subpackage Phase
+ * @category   Basho
  * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
  */
 namespace Basho\Riak\Link;
@@ -24,9 +22,7 @@ namespace Basho\Riak\Link;
 /**
  * Phase
  *
- * @category   Riak
- * @package    Link
- * @subpackage Phase
+ * @category   Basho
  * @author     debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
  */
 class Phase
@@ -50,9 +46,12 @@ class Phase
      */
     public function to_array()
     {
-        $stepdef = array("bucket" => $this->bucket,
+        $stepdef = array(
+            "bucket" => $this->bucket,
             "tag" => $this->tag,
-            "keep" => $this->keep);
+            "keep" => $this->keep
+        );
+
         return array("link" => $stepdef);
     }
 }

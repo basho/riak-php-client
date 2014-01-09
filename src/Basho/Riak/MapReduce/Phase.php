@@ -14,9 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to <eng@basho.com> so we can send you a copy immediately.
  *
- * @category   Riak
- * @package    MapRedeuce
- * @subpackage Phase
+ * @category   Basho
  * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
  */
 namespace Basho\Riak\MapReduce;
@@ -24,9 +22,7 @@ namespace Basho\Riak\MapReduce;
 /**
  * MapReducePhase
  *
- * @category   Riak
- * @package    MapRedeuce
- * @subpackage Phase
+ * @category   Basho
  * @author     debo <marco.debo.debortoli@gmail.com> (https://github.com/MarcoDeBortoli)
  */
 class Phase
@@ -56,21 +52,28 @@ class Phase
      */
     public function to_array()
     {
-        $stepdef = array("keep" => $this->keep,
+        $stepdef = array(
+            "keep" => $this->keep,
             "language" => $this->language,
-            "arg" => $this->arg);
+            "arg" => $this->arg
+        );
 
         if ($this->language == "javascript" && is_array($this->function)) {
             $stepdef["bucket"] = $this->function[0];
             $stepdef["key"] = $this->function[1];
-        } else if ($this->language == "javascript" && is_string($this->function)) {
-            if (strpos($this->function, "{") == FALSE)
-                $stepdef["name"] = $this->function;
-            else
-                $stepdef["source"] = $this->function;
-        } else if ($this->language == "erlang" && is_array($this->function)) {
-            $stepdef["module"] = $this->function[0];
-            $stepdef["function"] = $this->function[1];
+        } else {
+            if ($this->language == "javascript" && is_string($this->function)) {
+                if (strpos($this->function, "{") == false) {
+                    $stepdef["name"] = $this->function;
+                } else {
+                    $stepdef["source"] = $this->function;
+                }
+            } else {
+                if ($this->language == "erlang" && is_array($this->function)) {
+                    $stepdef["module"] = $this->function[0];
+                    $stepdef["function"] = $this->function[1];
+                }
+            }
         }
 
         return array(($this->type) => $stepdef);
