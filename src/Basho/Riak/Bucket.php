@@ -444,7 +444,7 @@ class Bucket
     public function hasKey($key)
     {
         $url = Utils::buildRestPath($this->client, $this, $key);
-        $response = Utils::httpRequest('HEAD', $url);
+        $response = $this->client->httpRequest('HEAD', $url);
 
         if ($response == null) {
             throw new Exception("Error checking if key exists.");
