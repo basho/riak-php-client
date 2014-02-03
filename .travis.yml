@@ -8,7 +8,7 @@ notifications:
   irc: "irc.freenode.org#riak-php-client"
 
 php:
-  - "5.3"
+  - "5.5"
   - "5.4"
 
 services:
