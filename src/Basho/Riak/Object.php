@@ -594,16 +594,17 @@ class Object
      * before returning to client.
      * @param integer $dw - DW-value, wait for this many partitions to
      * confirm the write before returning to client.
+     * @param integer $timeoutms - Timeout specified in milliseconds
      * @return $this
      */
-    public function store($w = null, $dw = null)
+    public function store($w = null, $dw = null, $timeoutms = null)
     {
         # Use defaults if not specified...
         $w = $this->bucket->getW($w);
         $dw = $this->bucket->getDW($w);
 
         # Construct the URL...
-        $params = array('returnbody' => 'true', 'w' => $w, 'dw' => $dw);
+        $params = array('returnbody' => 'true', 'w' => $w, 'dw' => $dw, 'timeout' => $timeoutms);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, null, $params);
 
         # Construct the headers...
@@ -673,7 +674,7 @@ class Object
         $method = $this->key ? 'PUT' : 'POST';
 
         # Run the operation.
-        $response = Utils::httpRequest($method, $url, $headers, $content);
+        $response = Utils::httpRequest($method, $url, $this->client->getConnectTimeout(), $timeoutms, $headers, $content);
         $this->populate($response, array(200, 201, 300));
 
         return $this;
@@ -688,15 +689,16 @@ class Object
      *
      * @param integer $r - R-Value, wait for this many partitions to respond
      * before returning to client.
+     * @param integer $timeoutms - Timeout specified in milliseconds
      * @return $this
      */
-    public function reload($r = null)
+    public function reload($r = null, $timeoutms = null)
     {
         # Do the request...
         $r = $this->bucket->getR($r);
-        $params = array('r' => $r);
+        $params = array('r' => $r, 'timeout' => $timeoutms);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, null, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $response = Utils::httpRequest('GET', $url, $this->client->getConnectTimeout(), $timeoutms);
         $this->populate($response, array(200, 300, 404));
 
         # If there are siblings, load the data for the first one by default...
@@ -713,19 +715,20 @@ class Object
      *
      * @param  integer $dw - DW-value. Wait until this many partitions have
      * deleted the object before responding.
+     * @param integer $timeoutms - Timeout specified in milliseconds
      * @return $this
      */
-    public function delete($dw = null)
+    public function delete($dw = null, $timeoutms = null)
     {
         # Use defaults if not specified...
         $dw = $this->bucket->getDW($dw);
 
         # Construct the URL...
-        $params = array('dw' => $dw);
+        $params = array('dw' => $dw, 'timeout' => $timeoutms);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, null, $params);
 
         # Run the operation...
-        $response = Utils::httpRequest('DELETE', $url);
+        $response = Utils::httpRequest('DELETE', $url, $this->client->getConnectTimeout(), $timeoutms);
         $this->populate($response, array(204, 404));
 
         return $this;
@@ -931,18 +934,19 @@ class Object
      * @param  integer $i - Sibling number.
      * @param  integer $r - R-Value. Wait until this many partitions
      * have responded before returning to client.
+     * @param integer $timeoutms - Timeout specified in milliseconds
      * @return Object.
      */
-    public function getSibling($i, $r = null)
+    public function getSibling($i, $r = null, $timeoutms = null)
     {
         # Use defaults if not specified.
         $r = $this->bucket->getR($r);
 
         # Run the request...
         $vtag = $this->siblings[$i];
-        $params = array('r' => $r, 'vtag' => $vtag);
+        $params = array('r' => $r, 'vtag' => $vtag, 'timeout' => $timeoutms);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, null, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $response = Utils::httpRequest('GET', $url, $this->client->getConnectTimeout(), $timeoutms);
 
         # Respond with a new object...
         $obj = new Object($this->client, $this->bucket, $this->key);
@@ -957,13 +961,14 @@ class Object
      *
      * @param integer $r - R-Value. Wait until this many partitions have
      * responded before returning to client.
+     * @param integer $timeoutms - Timeout specified in milliseconds
      * @return array of Object
      */
-    public function getSiblings($r = null)
+    public function getSiblings($r = null, $timeoutms = null)
     {
         $a = array();
         for ($i = 0; $i < $this->getSiblingCount(); $i++) {
-            $a[] = $this->getSibling($i, $r);
+            $a[] = $this->getSibling($i, $r, $timeoutms);
         }
 
         return $a;

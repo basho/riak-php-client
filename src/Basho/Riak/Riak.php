@@ -50,6 +50,31 @@ class Riak
         $this->r = 2;
         $this->w = 2;
         $this->dw = 2;
+        $this->connect_timeoutms = 5000;
+    }
+
+    /**
+     * Set the connect timeout setting for this Client in milliseconds
+     *
+     * Default: 5000
+     *
+     * @return integer
+     */
+    public function getConnectTimeout() {
+        return $this->connect_timeoutms;
+    }
+
+    /**
+     * Set the connect timeout for this client
+     *
+     * @param integer $connect_timeoutms - The connection timeout value in milliseconds.
+     *
+     * @return $this
+     */
+    public function setConnectTimeout($connect_timeoutms) {
+        $this->connect_timeoutms = $connect_timeoutms;
+
+        return $this;
     }
 
     /**
@@ -176,12 +201,14 @@ class Riak
     /**
      * Get all buckets
      *
+     * @param integer $timeoutms - Timeout specified in milliseconds
      * @return array() of Bucket objects
      */
-    public function buckets()
+    public function buckets($timeoutms = null)
     {
-        $url = Utils::buildRestPath($this);
-        $response = Utils::httpRequest('GET', $url . '?buckets=true');
+        $params = array('bucket' => true, 'timeout' => $timeoutms);
+        $url = Utils::buildRestPath($this, null, null, null, $params);
+        $response = Utils::httpRequest('GET', $url, $this->getConnectTimeout(), $timeoutms);
         $response_obj = json_decode($response[1]);
         $buckets = array();
         foreach ($response_obj->buckets as $name) {
@@ -194,12 +221,13 @@ class Riak
     /**
      * Check if the Riak server for this Client is alive
      *
+     * @param integer $timeoutms - Timeout specified in milliseconds
      * @return boolean
      */
-    public function isAlive()
+    public function isAlive($timeoutms = null)
     {
         $url = 'http://' . $this->host . ':' . $this->port . '/ping';
-        $response = Utils::httpRequest('GET', $url);
+        $response = Utils::httpRequest('GET', $url, $this->getConnectTimeout(), $timeoutms);
 
         return ($response != null) && ($response[1] == 'OK');
     }

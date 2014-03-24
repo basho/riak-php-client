@@ -208,15 +208,16 @@ class Bucket
      *
      * @param  string $key - Name of the key.
      * @param  int $r   - R-Value of the request (defaults to bucket's R)
+     * @param integer optional timeout specified in milliseconds
      * @return Object
      */
-    public function get($key, $r = null)
+    public function get($key, $r = null, $timeoutms = null)
     {
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = true;
         $r = $this->getR($r);
 
-        return $obj->reload($r);
+        return $obj->reload($r, $timeoutms);
     }
 
     /**
@@ -224,15 +225,16 @@ class Bucket
      *
      * @param  string $key - Name of the key.
      * @param  int $r   - R-Value of the request (defaults to bucket's R)
+     * @param integer optional timeout specified in milliseconds
      * @return Object
      */
-    public function getBinary($key, $r = null)
+    public function getBinary($key, $r = null, $timeoutms = null)
     {
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = false;
         $r = $this->getR($r);
 
-        return $obj->reload($r);
+        return $obj->reload($r, $timeoutms);
     }
 
     /**
@@ -293,21 +295,23 @@ class Bucket
      *
      * @param  string $key - Property to set.
      * @param  mixed $value - Property value.
+     * @param integer optional timeout specified in milliseconds
      */
-    public function setProperty($key, $value)
+    public function setProperty($key, $value, $timeoutms = null)
     {
-        return $this->setProperties(array($key => $value));
+        return $this->setProperties(array($key => $value), $timeoutms);
     }
 
     /**
      * Retrieve a bucket property.
      *
      * @param string $key - The property to retrieve.
+     * @param integer optional timeout specified in milliseconds
      * @return mixed
      */
-    public function getProperty($key)
+    public function getProperty($key, $timeoutms = null)
     {
-        $props = $this->getProperties();
+        $props = $this->getProperties($timeoutms);
         if (array_key_exists($key, $props)) {
             return $props[$key];
         } else {
@@ -321,16 +325,18 @@ class Bucket
      * This should only be used if you know what you are doing.
      *
      * @param  array $props - An associative array of $key=>$value.
+     * @param integer optional timeout specified in milliseconds
      */
-    public function setProperties($props)
+    public function setProperties($props, $timeoutms = null)
     {
         # Construct the URL, Headers, and Content...
-        $url = Utils::buildRestPath($this->client, $this);
+        $params = array('timeout' => $timeoutms);
+        $url = Utils::buildRestPath($this->client, $this, null, null, $params);
         $headers = array('Content-Type: application/json');
         $content = json_encode(array("props" => $props));
 
         # Run the request...
-        $response = Utils::httpRequest('PUT', $url, $headers, $content);
+        $response = Utils::httpRequest('PUT', $url, $this->client->getConnectTimeout(), $timeoutms, $headers, $content);
 
         # Handle the response...
         if ($response == null) {
@@ -347,14 +353,15 @@ class Bucket
     /**
      * Retrieve an associative array of all bucket properties.
      *
+     * @param integer optional timeout specified in milliseconds
      * @return Array
      */
-    public function getProperties()
+    public function getProperties($timeoutms = null)
     {
         # Run the request...
-        $params = array('props' => 'true', 'keys' => 'false');
+        $params = array('props' => 'true', 'keys' => 'false', 'timeout' => $timeoutms);
         $url = Utils::buildRestPath($this->client, $this, null, null, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $response = Utils::httpRequest('GET', $url, $this->client->getConnectTimeout(), $timeoutms);
 
         # Use a Object to interpret the response, we are just interested in the value.
         $obj = new Object($this->client, $this, null);
@@ -374,13 +381,14 @@ class Bucket
      *
      * Note: this operation is pretty slow.
      *
+     * @param integer optional timeout specified in milliseconds
      * @return Array
      */
-    public function getKeys()
+    public function getKeys($timeoutms = null)
     {
         $params = array('props' => 'false', 'keys' => 'true');
-        $url = Utils::buildRestPath($this->client, $this, null, null, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $url = Utils::buildRestPath($this->client, $this, null, null, $params, $timeoutms);
+        $response = Utils::httpRequest('GET', $url, $this->client->getConnectTimeout(), $timeoutms);
 
         # Use a Object to interpret the response, we are just interested in the value.
         $obj = new Object($this->client, $this, null);
@@ -402,12 +410,13 @@ class Bucket
      * @param string|int $startOrExact
      * @param string|int optional $end
      * @param bool optional $dedupe - whether to eliminate duplicate entries if any
+     * @param integer optional timeout specified in milliseconds
      * @return array of Links
      */
-    public function indexSearch($indexName, $indexType, $startOrExact, $end = null, $dedupe = false)
+    public function indexSearch($indexName, $indexType, $startOrExact, $end = null, $dedupe = false, $timeoutms = null)
     {
-        $url = Utils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, null);
-        $response = Utils::httpRequest('GET', $url);
+        $url = Utils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, null, $timeoutms);
+        $response = Utils::httpRequest('GET', $url, $this->client->getConnectTimeout(), $timeoutms);
 
         $obj = new Object($this->client, $this, null);
 
@@ -439,12 +448,14 @@ class Bucket
     *
     * @author Edgar Veiga <edgarmveiga@gmail.com>
     * @param string $key - The key to check
+    * @param integer optional timeout specified in milliseconds
     * @return bool
     */
-    public function hasKey($key)
+    public function hasKey($key, $timeoutms = null)
     {
-        $url = Utils::buildRestPath($this->client, $this, $key);
-        $response = Utils::httpRequest('HEAD', $url);
+        $params = array('timeout' => $timeoutms);
+        $url = Utils::buildRestPath($this->client, $this, $key, null, $params);
+        $response = Utils::httpRequest('HEAD', $url, $this->client->getConnectTimeout(), $timeoutms);
 
         if ($response == null) {
             throw new Exception("Error checking if key exists.");
