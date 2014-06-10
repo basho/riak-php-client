@@ -188,7 +188,7 @@ class Object
     public function getLastModified()
     {
         if (array_key_exists('last-modified', $this->headers)) {
-            return new DateTime($this->headers['last-modified']);
+            return new \DateTime($this->headers['last-modified']);
         } else {
             return null;
         }
