@@ -35,13 +35,15 @@ class Utils
     /**
      * Fetch a value from an array by it's key, or default if not exists
      *
+     * @static
+     *
      * @param mixed $key Key to fetch
      * @param array $array Array to fetch from
      * @param mixed $defaultValue Default to return if not exists
      *
      * @return mixed
      */
-    public static function get_value($key, $array, $defaultValue)
+    public static function get_value($key, array $array, $defaultValue)
     {
         if (array_key_exists($key, $array)) {
             return $array[$key];
@@ -56,14 +58,17 @@ class Utils
      * Given a Client, Bucket, Key, LinkSpec, and Params,
      * construct and return a URL.
      *
-     * @param \Basho\Riak\Riak
-     * @param \Basho\Riak\Bucket $bucket
-     * @param string $key
-     * @param string $spec
-     * @param string $params Array of key-value param pairs
+     * @static
+     *
+     * @param Riak
+     * @param Bucket|null $bucket
+     * @param string|null $key
+     * @param string|null $spec
+     * @param array|null $params Array of key-value param pairs
+     *
      * @return string
      */
-    public static function buildRestPath($client, $bucket = null, $key = null, $spec = null, $params = null)
+    public static function buildRestPath(Riak $client, Bucket $bucket = null, $key = null, $spec = null, $params = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = 'http://';
@@ -111,16 +116,18 @@ class Utils
     /**
      * Construct secondary index URLs
      *
-     * Given a Client, Bucket, Key, LinkSpec, and Params,
-     * construct and return a URL for searching secondary indexes.
+     * Given a Client, Bucket, Key, LinkSpec, and Params, construct and return a URL for searching secondary indexes.
      *
      * @author Eric Stevens <estevens@taglabsinc.com>
      *
-     * @param \Basho\Riak\Riak $client
-     * @param \Basho\Riak\Bucket $bucket
+     * @static
+     *
+     * @param Riak $client
+     * @param Bucket $bucket
      * @param string $index - Index Name & type (eg, "indexName_bin")
      * @param string|int $start - Starting value or exact match if no ending value
      * @param string|int $end - Ending value for range search
+     *
      * @return string URL
      */
     public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = null)
@@ -157,9 +164,16 @@ class Utils
      * and return an array of arity 2 containing an associative array of
      * response headers and the response body.
      *
+     * @static
+     *
+     * @param string $method
+     * @param string $url
+     * @param array $request_headers
+     * @param string $obj
+     *
      * @return array
      */
-    public static function httpRequest($method, $url, $request_headers = array(), $obj = '')
+    public static function httpRequest($method, $url, array $request_headers = array(), $obj = '')
     {
         # Set up curl
         $ch = curl_init();
@@ -225,8 +239,11 @@ class Utils
     /**
      * Parse HTTP headers
      *
-     * Parse an HTTP Header string into an asssociative array of
-     * response headers.
+     * Parse an HTTP Header string into an asssociative array of response headers.
+     *
+     * @static
+     *
+     * @param string $headers
      *
      * @param mixed $headers
      *

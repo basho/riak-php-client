@@ -57,7 +57,7 @@ class Riak
      *
      * Default: 2
      *
-     * @return integer
+     * @return int
      */
     public function getR()
     {
@@ -72,7 +72,8 @@ class Riak
      * R-value is specified in the method call and 2) no R-value has
      * been set in the Bucket.
      *
-     * @param integer $r - The R value.
+     * @param int $r - The R value.
+     *
      * @return $this
      */
     public function setR($r)
@@ -87,7 +88,7 @@ class Riak
      *
      * Default: 2
      *
-     * @return integer
+     * @return int
      */
     public function getW()
     {
@@ -99,7 +100,8 @@ class Riak
      *
      * See setR(...) for a description of how these values are used.
      *
-     * @param integer $w - The W value.
+     * @param int $w - The W value.
+     *
      * @return $this
      */
     public function setW($w)
@@ -114,7 +116,7 @@ class Riak
      *
      * Default: 2
      *
-     * @return integer
+     * @return int
      */
     public function getDW()
     {
@@ -126,7 +128,8 @@ class Riak
      *
      * See setR(...) for a description of how these values are used.
      *
-     * @param  integer $dw - The DW value.
+     * @param  int $dw - The DW value.
+     *
      * @return $this
      */
     public function setDW($dw)
@@ -151,7 +154,8 @@ class Riak
      *
      * Should not be called unless you know what you are doing.
      *
-     * @param string $clientID - The new clientID.
+     * @param string $clientid - The new clientID.
+     *
      * @return $this
      */
     public function setClientID($clientid)
@@ -166,6 +170,8 @@ class Riak
      *
      * Since buckets always exist, this will always return a Bucket.
      *
+     * @param string $name
+     *
      * @return Bucket
      */
     public function bucket($name)
@@ -176,7 +182,7 @@ class Riak
     /**
      * Get all buckets
      *
-     * @return array() of Bucket objects
+     * @return Bucket[]
      */
     public function buckets()
     {
@@ -194,7 +200,7 @@ class Riak
     /**
      * Check if the Riak server for this Client is alive
      *
-     * @return boolean
+     * @return bool
      */
     public function isAlive()
     {
@@ -211,6 +217,7 @@ class Riak
      * Start assembling a Map/Reduce operation
      *
      * @see MapReduce::add()
+     *
      * @return MapReduce
      */
     public function add($params)
@@ -228,6 +235,7 @@ class Riak
      * executed against a Riak Search cluster.
      *
      * @see MapReduce::search()
+     *
      * @return MapReduce
      */
     public function search($params)

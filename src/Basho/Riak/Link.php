@@ -29,6 +29,7 @@ class Link
 {
     /**
      * Construct a Link object.
+     *
      * @param string $bucket - The bucket name.
      * @param string $key - The key.
      * @param string $tag - The tag.
@@ -43,7 +44,9 @@ class Link
 
     /**
      * Retrieve the Object to which this link points.
-     * @param integer $r - The R-value to use.
+     *
+     * @param int $r - The R-value to use.
+     *
      * @return Object
      */
     public function get($r = null)
@@ -53,7 +56,9 @@ class Link
 
     /**
      * Retrieve the Object to which this link points, as a binary.
-     * @param integer $r - The R-value to use.
+     *
+     * @param int $r - The R-value to use.
+     *
      * @return Object
      */
     public function getBinary($r = null)
@@ -63,6 +68,7 @@ class Link
 
     /**
      * Get the bucket name of this link.
+     *
      * @return string
      */
     public function getBucket()
@@ -72,8 +78,10 @@ class Link
 
     /**
      * Set the bucket name of this link.
-     * @param string $name - The bucket name.
-     * @return $this
+     *
+     * @param string $bucket - The bucket name.
+     *
+     * @return Link
      */
     public function setBucket($bucket)
     {
@@ -84,6 +92,7 @@ class Link
 
     /**
      * Get the key of this link.
+     *
      * @return string
      */
     public function getKey()
@@ -93,8 +102,10 @@ class Link
 
     /**
      * Set the key of this link.
+     *
      * @param string $key - The key.
-     * @return $this
+     *
+     * @return Link
      */
     public function setKey($key)
     {
@@ -105,6 +116,7 @@ class Link
 
     /**
      * Get the tag of this link.
+     *
      * @return string
      */
     public function getTag()
@@ -118,19 +130,26 @@ class Link
 
     /**
      * Set the tag of this link.
+     *
      * @param string $tag - The tag.
+     *
      * @return $this
      */
     public function setTag($tag)
     {
         $this->tag = $tag;
+
         return $this;
     }
 
     /**
      * Convert this Link object to a link header string. Used internally.
+     *
+     * @param Riak $client
+     *
+     * @return string
      */
-    public function toLinkHeader($client)
+    public function toLinkHeader(Riak $client)
     {
         $link = "</" .
             $client->prefix . "/" .
@@ -143,10 +162,12 @@ class Link
 
     /**
      * Return true if the links are equal.
+     *
      * @param Link $link - A Link object.
-     * @return boolean
+     *
+     * @return bool
      */
-    public function isEqual($link)
+    public function isEqual(Link $link)
     {
         $is_equal =
             ($this->bucket == $link->bucket) &&

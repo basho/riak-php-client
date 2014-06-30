@@ -38,10 +38,11 @@ class MapReduce
     /**
      * Construct a Map/Reduce object.
      *
-     * @param \Basho\Riak\Riak $client - A Client object.
+     * @param Riak $client - A Client object.
+     *
      * @return MapReduce
      */
-    public function __construct($client)
+    public function __construct(Riak $client)
     {
         $this->client = $client;
         $this->phases = array();
@@ -62,6 +63,7 @@ class MapReduce
      * @param mixed $arg1 Object or Bucket
      * @param mixed $arg2 Key or blank
      * @param mixed $arg3 Arg or blank
+     *
      * @return MapReduce
      */
     public function add($arg1, $arg2 = null, $arg3 = null)
@@ -81,6 +83,8 @@ class MapReduce
      * Private
      *
      * @ignore
+     *
+     * @param Object $obj
      */
     private function add_object($obj)
     {
@@ -91,6 +95,10 @@ class MapReduce
      * Private
      *
      * @ignore
+     *
+     * @param $bucket
+     * @param string $key
+     * @param mixed $data
      */
     private function add_bucket_key_data($bucket, $key, $data)
     {
@@ -106,7 +114,10 @@ class MapReduce
      * Private
      *
      * @ignore
-     * @return $this
+     *
+     * @param Bucket $bucket
+     *
+     * @return MapReduce
      */
     private function add_bucket($bucket)
     {
@@ -119,11 +130,12 @@ class MapReduce
     /**
      * Begin a map/reduce operation using a Search
      *
-     * This command will
-     * return an error unless executed against a Riak Search cluster.
+     * This command will return an error unless executed against a Riak Search cluster.
      *
-     * @param string $bucket - The Bucket to search.  @param string
-     * query - The Query to execute. (Lucene syntax.)  @return \Basho\Riak\MapReduce
+     * @param string $bucket - The Bucket to search.
+     * @param string $query - The Query to execute. (Lucene syntax.)
+     *
+     * @return MapReduce
      */
     public function search($bucket, $query)
     {
@@ -139,13 +151,12 @@ class MapReduce
     /**
      * Add a link phase to the map/reduce operation
      *
-     * @param string $bucket - Bucket name (default '_', which means all
-     * buckets)
+     * @param string $bucket - Bucket name (default '_', which means all buckets)
      * @param string $tag - Tag (default '_', which means all buckets)
-     * @param boolean $keep - Flag whether to keep results from this
-     * stage in the map/reduce. (default FALSE, unless this is the last
-     * step in the phase)
-     * @return $this
+     * @param bool $keep - Flag whether to keep results from this stage in the map/reduce.
+     * (default FALSE, unless this is the last step in the phase)
+     *
+     * @return MapReduce
      */
     public function link($bucket = '_', $tag = '_', $keep = false)
     {
@@ -161,11 +172,12 @@ class MapReduce
      * "Riak.mapValues"), or an anonymous javascript function (ie:
      * "function(...) { ... }" or an array ["erlang_module",
      * "function"].
-     * @param array() $options - An optional associative array
+     * @param array $options - An optional associative array
      * containing "language", "keep" flag, and/or "arg".
-     * @return $this
+     *
+     * @return MapReduce
      */
-    public function map($function, $options = array())
+    public function map($function, array $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
         $this->phases[] = new MapReducePhase("map",
@@ -186,9 +198,10 @@ class MapReduce
      * "function"].
      * @param array() $options - An optional associative array
      * containing "language", "keep" flag, and/or "arg".
-     * @return $this
+     *
+     * @return MapReduce
      */
-    public function reduce($function, $options = array())
+    public function reduce($function, array $options = array())
     {
         $language = is_array($function) ? "erlang" : "javascript";
         $this->phases[] = new MapReducePhase("reduce",
@@ -212,7 +225,8 @@ class MapReduce
      *     array("tokenize", "-", 2),
      *     array("between", "20110601", "20110630")
      * )
-     * @return $this
+     *
+     * @return MapReduce
      */
     public function key_filter(array $filter /*. ,$filter .*/)
     {
@@ -233,7 +247,8 @@ class MapReduce
      *     array("tokenize", "-", 2),
      *     array("between", "20110601", "20110630")
      * )
-     * @return $this
+     *
+     * @return MapReduce
      */
     public function key_filter_and(array $filter)
     {
@@ -251,7 +266,8 @@ class MapReduce
      * existing filters.
      *
      * @param array $filter
-     * @return $this
+     *
+     * @return MapReduce
      */
     public function key_filter_or(array $filter /*. ,$filter .*/)
     {
@@ -269,7 +285,10 @@ class MapReduce
      *
      * @param string $operator - Operator (usually "and" or "or")
      * @param array $filter
-     * @return $this
+     *
+     * @return MapReduce
+     *
+     * @throws Exception
      */
     public function key_filter_operator($operator, $filter /*. ,$filter .*/)
     {
@@ -307,11 +326,12 @@ class MapReduce
      *
      * @param string $indexName The name of the index to search.
      * @param string $indexType The index type ('bin' or 'int')
-     * @param string|int $startOrExact Start value to search for, or
-     * exact value if no end value specified.
-     * @param string|int optional $end End value to search for during
-     * a range search
-     * @return $this
+     * @param string|int $startOrExact Start value to search for, or exact value if no end value specified.
+     * @param string|int $end End value to search for during a range search
+     *
+     * @return MapReduce
+     *
+     * @throws Exception
      */
     public function indexSearch($indexName, $indexType, $startOrExact, $end = null)
     {
@@ -348,7 +368,8 @@ class MapReduce
      * Returns an array of results, or an
      * array of Link objects if the last phase is a link phase.
      *
-     * @param integer $timeout - Timeout in seconds.
+     * @param int $timeout - Timeout in seconds.
+     *
      * @return array()
      */
     public function run($timeout = null)
