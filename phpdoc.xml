@@ -27,6 +27,6 @@
         <template name="responsive-twig" />
     </transformations>
     <files>
-        <directory>src/Basho/Riak</directory>
+        <directory>src/Riak</directory>
     </files>
 </phpdoc>

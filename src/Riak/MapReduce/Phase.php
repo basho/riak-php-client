@@ -1,22 +1,18 @@
 <?php
-/**
- * Riak PHP Client
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Apache License, Version 2.0 that is
- * bundled with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to <eng@basho.com> so we can send you a copy immediately.
- *
- * @category   Basho
- * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
- */
+
+/*
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
 namespace Basho\Riak\MapReduce;
 
 /**
@@ -29,13 +25,14 @@ class Phase
 {
     /**
      * Construct a Phase object.
-     * @param string $type - "map" or "reduce"
-     * @param mixed $function - string or array()
-     * @param string $language - "javascript" or "erlang"
-     * @param boolean $keep - True to return the output of this phase in
-     * the results.
-     * @param mixed $arg - Additional value to pass into the map or
-     * reduce function.
+     *
+     * @param string  $type     - "map" or "reduce"
+     * @param mixed   $function - string or array()
+     * @param string  $language - "javascript" or "erlang"
+     * @param boolean $keep     - True to return the output of this phase in
+     *                          the results.
+     * @param mixed   $arg      - Additional value to pass into the map or
+     *                          reduce function.
      */
     public function __construct($type, $function, $language, $keep, $arg)
     {
@@ -43,7 +40,7 @@ class Phase
         $this->language = $language;
         $this->function = $function;
         $this->keep = $keep;
-        $this->arg = $arg;
+        $this->arg  = $arg;
     }
 
     /**
@@ -52,11 +49,11 @@ class Phase
      */
     public function to_array()
     {
-        $stepdef = array(
+        $stepdef            = [
             "keep" => $this->keep,
             "language" => $this->language,
-            "arg" => $this->arg
-        );
+            "arg"  => $this->arg
+        ];
 
         if ($this->language == "javascript" && is_array($this->function)) {
             $stepdef["bucket"] = $this->function[0];
@@ -76,6 +73,6 @@ class Phase
             }
         }
 
-        return array(($this->type) => $stepdef);
+        return [($this->type) => $stepdef];
     }
 }

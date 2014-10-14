@@ -1,22 +1,18 @@
 <?php
-/**
- * Riak PHP Client
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Apache License, Version 2.0 that is
- * bundled with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to <eng@basho.com> so we can send you a copy immediately.
- *
- * @category   Basho
- * @copyright  Copyright (c) 2013 Basho Technologies, Inc, and contributors.
- */
+
+/*
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
 namespace Basho\Riak;
 
 /**
@@ -29,6 +25,7 @@ class Link
 {
     /**
      * Construct a Link object.
+     *
      * @param string $bucket - The bucket name.
      * @param string $key - The key.
      * @param string $tag - The tag.
@@ -43,6 +40,7 @@ class Link
 
     /**
      * Retrieve the Object to which this link points.
+     *
      * @param integer $r - The R-value to use.
      * @return Object
      */
@@ -53,6 +51,7 @@ class Link
 
     /**
      * Retrieve the Object to which this link points, as a binary.
+     *
      * @param integer $r - The R-value to use.
      * @return Object
      */
@@ -63,6 +62,7 @@ class Link
 
     /**
      * Get the bucket name of this link.
+     *
      * @return string
      */
     public function getBucket()
@@ -72,6 +72,7 @@ class Link
 
     /**
      * Set the bucket name of this link.
+     *
      * @param string $name - The bucket name.
      * @return $this
      */
@@ -84,6 +85,7 @@ class Link
 
     /**
      * Get the key of this link.
+     *
      * @return string
      */
     public function getKey()
@@ -93,6 +95,7 @@ class Link
 
     /**
      * Set the key of this link.
+     *
      * @param string $key - The key.
      * @return $this
      */
@@ -104,26 +107,15 @@ class Link
     }
 
     /**
-     * Get the tag of this link.
-     * @return string
-     */
-    public function getTag()
-    {
-        if ($this->tag == null) {
-            return $this->bucket;
-        } else {
-            return $this->tag;
-        }
-    }
-
-    /**
      * Set the tag of this link.
+     *
      * @param string $tag - The tag.
      * @return $this
      */
     public function setTag($tag)
     {
         $this->tag = $tag;
+
         return $this;
     }
 
@@ -142,7 +134,22 @@ class Link
     }
 
     /**
+     * Get the tag of this link.
+     *
+     * @return string
+     */
+    public function getTag()
+    {
+        if ($this->tag == null) {
+            return $this->bucket;
+        } else {
+            return $this->tag;
+        }
+    }
+
+    /**
      * Return true if the links are equal.
+     *
      * @param Link $link - A Link object.
      * @return boolean
      */

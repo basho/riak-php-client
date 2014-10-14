@@ -1,27 +1,21 @@
 <?php
-/**
- * Riak PHP Client
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Apache License, Version 2.0 that is
- * bundled with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to <eng@basho.com> so we can send you a copy immediately.
- *
- * @category   Basho
- * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
- */
+
+/*
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
 namespace Basho\Riak;
 
-use Basho\Riak\Bucket,
-    Basho\Riak\Riak,
-    Basho\Riak\StringIO;
+use Basho\Riak;
 
 /**
  * Utils
@@ -35,7 +29,7 @@ class Utils
     /**
      * Fetch a value from an array by it's key, or default if not exists
      *
-     * @param mixed $key Key to fetch
+     * @param mixed $key   Key to fetch
      * @param array $array Array to fetch from
      * @param mixed $defaultValue Default to return if not exists
      *
@@ -58,9 +52,9 @@ class Utils
      *
      * @param \Basho\Riak\Riak
      * @param \Basho\Riak\Bucket $bucket
-     * @param string $key
-     * @param string $spec
-     * @param string $params Array of key-value param pairs
+     * @param string             $key
+     * @param string             $spec
+     * @param string             $params Array of key-value param pairs
      * @return string
      */
     public static function buildRestPath($client, $bucket = null, $key = null, $spec = null, $params = null)
@@ -116,17 +110,17 @@ class Utils
      *
      * @author Eric Stevens <estevens@taglabsinc.com>
      *
-     * @param \Basho\Riak\Riak $client
+     * @param \Basho\Riak\Riak   $client
      * @param \Basho\Riak\Bucket $bucket
-     * @param string $index - Index Name & type (eg, "indexName_bin")
-     * @param string|int $start - Starting value or exact match if no ending value
-     * @param string|int $end - Ending value for range search
+     * @param string             $index - Index Name & type (eg, "indexName_bin")
+     * @param string|int         $start - Starting value or exact match if no ending value
+     * @param string|int         $end   - Ending value for range search
      * @return string URL
      */
     public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
-        $path = array('http:/', $client->host . ':' . $client->port, $client->indexPrefix);
+        $path = ['http:/', $client->host . ':' . $client->port, $client->indexPrefix];
 
         # Add '.../bucket'
         $path[] = urlencode($bucket->name);
@@ -159,7 +153,7 @@ class Utils
      *
      * @return array
      */
-    public static function httpRequest($method, $url, $request_headers = array(), $obj = '')
+    public static function httpRequest($method, $url, $request_headers = [], $obj = '')
     {
         # Set up curl
         $ch = curl_init();
@@ -190,11 +184,11 @@ class Utils
 
         # Capture the response headers...
         $response_headers_io = new StringIO();
-        curl_setopt($ch, CURLOPT_HEADERFUNCTION, array(&$response_headers_io, 'write'));
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, [&$response_headers_io, 'write']);
 
         # Capture the response body...
         $response_body_io = new StringIO();
-        curl_setopt($ch, CURLOPT_WRITEFUNCTION, array(&$response_body_io, 'write'));
+        curl_setopt($ch, CURLOPT_WRITEFUNCTION, [&$response_body_io, 'write']);
 
         try {
             # Run the request.
@@ -203,8 +197,8 @@ class Utils
             curl_close($ch);
 
             # Get the headers...
-            $parsed_headers = Utils::parseHttpHeaders($response_headers_io->contents());
-            $response_headers = array("http_code" => $http_code);
+            $parsed_headers   = Utils::parseHttpHeaders($response_headers_io->contents());
+            $response_headers = ["http_code" => $http_code];
             foreach ($parsed_headers as $key => $value) {
                 $response_headers[strtolower($key)] = $value;
             }
@@ -213,7 +207,7 @@ class Utils
             $response_body = $response_body_io->contents();
 
             # Return a new RiakResponse object.
-            return array($response_headers, $response_body);
+            return [$response_headers, $response_body];
         } catch (Exception $e) {
             curl_close($ch);
             error_log('Error: ' . $e->getMessage());
@@ -234,7 +228,7 @@ class Utils
      */
     static function parseHttpHeaders($headers)
     {
-        $retVal = array();
+        $retVal = [];
         $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $headers));
         foreach ($fields as $field) {
             if (preg_match('/([^:]+): (.+)/m', $field, $match)) {
@@ -245,7 +239,7 @@ class Utils
                     }, strtolower(trim($match[1]))
                 );
                 if (isset($retVal[$match[1]])) {
-                    $retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+                    $retVal[$match[1]] = [$retVal[$match[1]], $match[2]];
                 } else {
                     $retVal[$match[1]] = trim($match[2]);
                 }

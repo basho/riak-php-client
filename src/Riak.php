@@ -1,55 +1,101 @@
 <?php
-/**
- * Riak PHP Client
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Apache License, Version 2.0 that is
- * bundled with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to <eng@basho.com> so we can send you a copy immediately.
- *
- * @category   Basho
- * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
- */
-namespace Basho\Riak;
 
-use Basho\Riak\Bucket,
-    Basho\Riak\MapReduce,
-    Basho\Riak\Utils;
+/*
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
+namespace Basho;
+
+use Basho\Riak\MapReduce;
 
 /**
- * Riak
+ * Riak core class.
  *
- * @category   Basho
- * @author     Riak team (https://github.com/basho/riak-php-client/contributors)
+ * This is the core class to this library which initializes and maintains your connection to the Riak instance.
+ *
+ * @package     Basho
+ * @subpackage  Riak
+ * @author      Riak Team and contributors <eng@basho.com> (https://github.com/basho/riak-php-client/contributors)
+ * @copyright   2011-2014 Basho Technologies, Inc. and contributors.
+ * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  */
 class Riak
 {
     /**
-     * Construct a new Client object.
-     *
-     * @param string $host - Hostname or IP address (default '127.0.0.1')
-     * @param int $port - Port number (default 8098)
-     * @param string $prefix - Interface prefix (default "riak")
-     * @param string $mapred_prefix - MapReduce prefix (default "mapred")
+     * Riak server cluster
+     * @var array[string]
      */
-    public function __construct($host = '127.0.0.1', $port = 8098, $prefix = 'riak', $mapred_prefix = 'mapred')
+    protected $hosts = [];
+
+    /**
+     * Configuration options for this client
+     *
+     * @var array
+     */
+    protected $config = [
+        'port'          => 8098,
+        'prefix'        => 'riak',
+        'mapred_prefix' => 'mapred',
+        'index_prefix'  => 'buckets',
+    ];
+
+    /**
+     * Unique id for this client connection
+     *
+     * @var string
+     */
+    protected $clientId = '';
+
+    /**
+     * R-Value
+     *
+     * @var integer
+     */
+    protected $r = 2;
+
+    /**
+     * W-Value
+     *
+     * @var integer
+     */
+    protected $w = 2;
+
+    /**
+     * DW-Value
+     *
+     * @var integer
+     */
+    protected $dw = 2;
+
+    /**
+     * Construct a new Client object, defaults to port 8098.
+     *
+     * @param array $hosts  - array('127.0.0.1')
+     * @param array $config - array('prefix', 'mapred_prefix', 'index_prefix')
+     */
+    public function __construct(array $hosts, array $config = [])
     {
-        $this->host = $host;
-        $this->port = $port;
-        $this->prefix = $prefix;
-        $this->mapred_prefix = $mapred_prefix;
-        $this->indexPrefix = 'buckets';
-        $this->clientid = 'php_' . base_convert(mt_rand(), 10, 36);
-        $this->r = 2;
-        $this->w = 2;
-        $this->dw = 2;
+        if (!empty($hosts['host'])) {
+            $this->hosts = [$hosts];
+        } else {
+            $this->hosts = $hosts;
+        }
+
+        if (!empty($config)) {
+            // use php array merge so passed in config overrides defaults
+            $this->config = array_merge($this->config, $config);
+        }
+
+        $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
     }
 
     /**
@@ -162,6 +208,24 @@ class Riak
     }
 
     /**
+     * Get all buckets
+     *
+     * @return array() of Bucket objects
+     */
+    public function buckets()
+    {
+        $url          = Utils::buildRestPath($this);
+        $response     = Utils::httpRequest('GET', $url . '?buckets=true');
+        $response_obj = json_decode($response[1]);
+        $buckets      = [];
+        foreach ($response_obj->buckets as $name) {
+            $buckets[] = $this->bucket($name);
+        }
+
+        return $buckets;
+    }
+
+    /**
      * Get the bucket by the specified name
      *
      * Since buckets always exist, this will always return a Bucket.
@@ -171,24 +235,6 @@ class Riak
     public function bucket($name)
     {
         return new Bucket($this, $name);
-    }
-
-    /**
-     * Get all buckets
-     *
-     * @return array() of Bucket objects
-     */
-    public function buckets()
-    {
-        $url = Utils::buildRestPath($this);
-        $response = Utils::httpRequest('GET', $url . '?buckets=true');
-        $response_obj = json_decode($response[1]);
-        $buckets = array();
-        foreach ($response_obj->buckets as $name) {
-            $buckets[] = $this->bucket($name);
-        }
-
-        return $buckets;
     }
 
     /**
@@ -215,10 +261,10 @@ class Riak
      */
     public function add($params)
     {
-        $mr = new MapReduce($this);
+        $mr   = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "add"), $args);
+        return call_user_func_array([&$mr, "add"], $args);
     }
 
     /**
@@ -232,10 +278,10 @@ class Riak
      */
     public function search($params)
     {
-        $mr = new MapReduce($this);
+        $mr   = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "search"), $args);
+        return call_user_func_array([&$mr, "search"], $args);
     }
 
     /**
@@ -245,10 +291,10 @@ class Riak
      */
     public function link($params)
     {
-        $mr = new MapReduce($this);
+        $mr   = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "link"), $args);
+        return call_user_func_array([&$mr, "link"], $args);
     }
 
     /**
@@ -258,10 +304,10 @@ class Riak
      */
     public function map($params)
     {
-        $mr = new MapReduce($this);
+        $mr   = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "map"), $args);
+        return call_user_func_array([&$mr, "map"], $args);
     }
 
     /**
@@ -271,9 +317,9 @@ class Riak
      */
     public function reduce($params)
     {
-        $mr = new MapReduce($this);
+        $mr   = new MapReduce($this);
         $args = func_get_args();
 
-        return call_user_func_array(array(&$mr, "reduce"), $args);
+        return call_user_func_array([&$mr, "reduce"], $args);
     }
 }

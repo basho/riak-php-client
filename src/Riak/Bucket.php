@@ -1,28 +1,21 @@
 <?php
-/**
- * Riak PHP Client
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Apache License, Version 2.0 that is
- * bundled with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to <eng@basho.com> so we can send you a copy immediately.
- *
- * @category   Basho
- * @copyright  Copyright (c) 2013 Basho Technologies, Inc. and contributors.
- */
+
+/*
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
 namespace Basho\Riak;
 
-use Basho\Riak\Exception,
-    Basho\Riak\Link,
-    Basho\Riak\Object,
-    Basho\Riak\Utils;
+use Basho\Riak\Link;
 
 /**
  * Bucket
@@ -55,27 +48,6 @@ class Bucket
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Get the R-value for this bucket
-     *
-     * Returns the buckets R-value If it is set,
-     * otherwise return the R-value for the client.
-     *
-     * @return integer
-     */
-    public function getR($r = null)
-    {
-        if ($r != null) {
-            return $r;
-        }
-
-        if ($this->r != null) {
-            return $this->r;
-        }
-
-        return $this->client->getR();
     }
 
     /**
@@ -188,7 +160,7 @@ class Bucket
     /**
      * Create a new Riak object that will be stored as plain text/binary.
      *
-     * @param  string $key - Name of the key.
+     * @param  string $key  - Name of the key.
      * @param  object $data - The data to store.
      * @param  string $content_type - The content type of the object. (default 'application/json')
      * @return Object
@@ -207,30 +179,51 @@ class Bucket
      * Retrieve a JSON-encoded object from Riak.
      *
      * @param  string $key - Name of the key.
-     * @param  int $r   - R-Value of the request (defaults to bucket's R)
+     * @param  int $r - R-Value of the request (defaults to bucket's R)
      * @return Object
      */
     public function get($key, $r = null)
     {
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = true;
-        $r = $this->getR($r);
+        $r   = $this->getR($r);
 
         return $obj->reload($r);
+    }
+
+    /**
+     * Get the R-value for this bucket
+     *
+     * Returns the buckets R-value If it is set,
+     * otherwise return the R-value for the client.
+     *
+     * @return integer
+     */
+    public function getR($r = null)
+    {
+        if ($r != null) {
+            return $r;
+        }
+
+        if ($this->r != null) {
+            return $this->r;
+        }
+
+        return $this->client->getR();
     }
 
     /**
      * Retrieve a binary/string object from Riak.
      *
      * @param  string $key - Name of the key.
-     * @param  int $r   - R-Value of the request (defaults to bucket's R)
+     * @param  int $r - R-Value of the request (defaults to bucket's R)
      * @return Object
      */
     public function getBinary($key, $r = null)
     {
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = false;
-        $r = $this->getR($r);
+        $r   = $this->getR($r);
 
         return $obj->reload($r);
     }
@@ -252,6 +245,48 @@ class Bucket
     }
 
     /**
+     * Set a bucket property
+     *
+     * This should only be used if you know what you are doing.
+     *
+     * @param  string $key   - Property to set.
+     * @param  mixed  $value - Property value.
+     */
+    public function setProperty($key, $value)
+    {
+        return $this->setProperties([$key => $value]);
+    }
+
+    /**
+     * Set multiple bucket properties in one call
+     *
+     * This should only be used if you know what you are doing.
+     *
+     * @param  array $props - An associative array of $key=>$value.
+     */
+    public function setProperties($props)
+    {
+        # Construct the URL, Headers, and Content...
+        $url     = Utils::buildRestPath($this->client, $this);
+        $headers = ['Content-Type: application/json'];
+        $content = json_encode(["props" => $props]);
+
+        # Run the request...
+        $response = Utils::httpRequest('PUT', $url, $headers, $content);
+
+        # Handle the response...
+        if ($response == null) {
+            throw new Exception("Error setting bucket properties.");
+        }
+
+        # Check the response value...
+        $status = $response[0]['http_code'];
+        if ($status != 204) {
+            throw new Exception("Error setting bucket properties.");
+        }
+    }
+
+    /**
      * Retrieve the N-value for this bucket.
      *
      * @return integer
@@ -259,6 +294,47 @@ class Bucket
     public function getNVal()
     {
         return $this->getProperty("n_val");
+    }
+
+    /**
+     * Retrieve a bucket property.
+     *
+     * @param string $key - The property to retrieve.
+     * @return mixed
+     */
+    public function getProperty($key)
+    {
+        $props = $this->getProperties();
+        if (array_key_exists($key, $props)) {
+            return $props[$key];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Retrieve an associative array of all bucket properties.
+     *
+     * @return Array
+     */
+    public function getProperties()
+    {
+        # Run the request...
+        $params = ['props' => 'true', 'keys' => 'false'];
+        $url    = Utils::buildRestPath($this->client, $this, null, null, $params);
+        $response = Utils::httpRequest('GET', $url);
+
+        # Use a Object to interpret the response, we are just interested in the value.
+        $obj = new Object($this->client, $this, null);
+        $obj->populate($response, [200]);
+        if (!$obj->exists()) {
+            throw new Exception("Error getting bucket properties.");
+        }
+
+        $props = $obj->getData();
+        $props = $props["props"];
+
+        return $props;
     }
 
     /**
@@ -287,89 +363,6 @@ class Bucket
     }
 
     /**
-     * Set a bucket property
-     *
-     * This should only be used if you know what you are doing.
-     *
-     * @param  string $key - Property to set.
-     * @param  mixed $value - Property value.
-     */
-    public function setProperty($key, $value)
-    {
-        return $this->setProperties(array($key => $value));
-    }
-
-    /**
-     * Retrieve a bucket property.
-     *
-     * @param string $key - The property to retrieve.
-     * @return mixed
-     */
-    public function getProperty($key)
-    {
-        $props = $this->getProperties();
-        if (array_key_exists($key, $props)) {
-            return $props[$key];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set multiple bucket properties in one call
-     *
-     * This should only be used if you know what you are doing.
-     *
-     * @param  array $props - An associative array of $key=>$value.
-     */
-    public function setProperties($props)
-    {
-        # Construct the URL, Headers, and Content...
-        $url = Utils::buildRestPath($this->client, $this);
-        $headers = array('Content-Type: application/json');
-        $content = json_encode(array("props" => $props));
-
-        # Run the request...
-        $response = Utils::httpRequest('PUT', $url, $headers, $content);
-
-        # Handle the response...
-        if ($response == null) {
-            throw new Exception("Error setting bucket properties.");
-        }
-
-        # Check the response value...
-        $status = $response[0]['http_code'];
-        if ($status != 204) {
-            throw new Exception("Error setting bucket properties.");
-        }
-    }
-
-    /**
-     * Retrieve an associative array of all bucket properties.
-     *
-     * @return Array
-     */
-    public function getProperties()
-    {
-        # Run the request...
-        $params = array('props' => 'true', 'keys' => 'false');
-        $url = Utils::buildRestPath($this->client, $this, null, null, $params);
-        $response = Utils::httpRequest('GET', $url);
-
-        # Use a Object to interpret the response, we are just interested in the value.
-        $obj = new Object($this->client, $this, null);
-        $obj->populate($response, array(200));
-        if (!$obj->exists()) {
-            throw new Exception("Error getting bucket properties.");
-        }
-
-        $props = $obj->getData();
-        $props = $props["props"];
-
-        return $props;
-    }
-
-    /**
      * Retrieve an array of all keys in this bucket.
      *
      * Note: this operation is pretty slow.
@@ -378,13 +371,13 @@ class Bucket
      */
     public function getKeys()
     {
-        $params = array('props' => 'false', 'keys' => 'true');
-        $url = Utils::buildRestPath($this->client, $this, null, null, $params);
+        $params = ['props' => 'false', 'keys' => 'true'];
+        $url    = Utils::buildRestPath($this->client, $this, null, null, $params);
         $response = Utils::httpRequest('GET', $url);
 
         # Use a Object to interpret the response, we are just interested in the value.
         $obj = new Object($this->client, $this, null);
-        $obj->populate($response, array(200));
+        $obj->populate($response, [200]);
         if (!$obj->exists()) {
             throw new Exception("Error getting bucket properties.");
         }
@@ -397,11 +390,11 @@ class Bucket
      * Search a secondary index
      *
      * @author Eric Stevens <estevens@taglabsinc.com>
-     * @param string $indexName - The name of the index to search
-     * @param string $indexType - The type of index ('int' or 'bin')
+     * @param string     $indexName - The name of the index to search
+     * @param string     $indexType - The type of index ('int' or 'bin')
      * @param string|int $startOrExact
-     * @param string|int optional $end
-     * @param bool optional $dedupe - whether to eliminate duplicate entries if any
+     * @param string|int optional   $end
+     * @param            bool       optional $dedupe - whether to eliminate duplicate entries if any
      * @return array of Links
      */
     public function indexSearch($indexName, $indexType, $startOrExact, $end = null, $dedupe = false)
@@ -411,14 +404,14 @@ class Bucket
 
         $obj = new Object($this->client, $this, null);
 
-        $obj->populate($response, array(200));
+        $obj->populate($response, [200]);
         if (!$obj->exists()) {
             throw new Exception("Error searching index.");
         }
         $data = $obj->getData();
         $keys = array_map("urldecode", $data["keys"]);
 
-        $seenKeys = array();
+        $seenKeys = [];
         foreach ($keys as $id => &$key) {
             if ($dedupe) {
                 if (isset($seenKeys[$key])) {
@@ -435,12 +428,12 @@ class Bucket
     }
 
     /**
-    * Check if a given key exists in a bucket
-    *
-    * @author Edgar Veiga <edgarmveiga@gmail.com>
-    * @param string $key - The key to check
-    * @return bool
-    */
+     * Check if a given key exists in a bucket
+     *
+     * @author Edgar Veiga <edgarmveiga@gmail.com>
+     * @param string $key - The key to check
+     * @return bool
+     */
     public function hasKey($key)
     {
         $url = Utils::buildRestPath($this->client, $this, $key);
