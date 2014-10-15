@@ -13,18 +13,20 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak;
+namespace Basho\Riak\Node\Builder;
 
 /**
- * Exception
+ * Class Exception
  *
- * @package     Basho\Riak
+ * Exception thrown when there is a validation error within a Builder object.
+ *
+ * @package     Basho\Riak\Node\Builder
  * @author      Christopher Mancini <cmancini at basho d0t com>
  * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class Exception extends \Exception
+class Exception extends \Basho\Riak\Exception
 {
 
-}
+} 

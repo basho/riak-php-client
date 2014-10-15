@@ -15,71 +15,91 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
+use Basho\Riak\Node\Config;
+
 /**
  * Class Node
  *
+ * Contains the connection configuration to connect to a Riak node.
+ *
  * @package     Basho\Riak
- * @author      Riak Team and contributors <eng@basho.com> (https://github.com/basho/riak-php-client/contributors)
- * @copyright   2011-2014 Basho Technologies, Inc. and contributors.
+ * @author      Christopher Mancini <cmancini at basho d0t com>
+ * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
+ * @since       2.0
  */
 class Node
 {
     /**
-     * @var string
+     * Configuration
+     *
+     * Contains configuration needed to connect to a Riak node.
+     *
+     * @var Config|null
      */
-    protected $host = '127.0.0.1';
+    protected $config = null;
 
     /**
-     * @var int
+     * Inactive node
+     *
+     * This is only set to true if the node has been marked as unreachable.
+     *
+     * @var bool
      */
-    protected $port = 8098;
+    protected $inactive = false;
 
-    public function __construct($host = '', $port = 0)
+    /**
+     * Node signature
+     *
+     * This property is used to store a stateless unique identifier for this node.
+     *
+     * @var string
+     */
+    protected $signature = '';
+
+    public function __construct(Config $config)
     {
-        $this->setHost($host);
-        $this->setPort($port);
+        $this->config = $config;
+        $this->setSignature();
+    }
+
+    /**
+     * This should NEVER be invoked outside of this object.
+     */
+    private function setSignature()
+    {
+        $this->signature = md5($this->config);
+    }
+
+    /**
+     * @return Config|null
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInactive()
+    {
+        return $this->inactive;
+    }
+
+    /**
+     * @param boolean $inactive
+     */
+    public function setInactive($inactive)
+    {
+        $this->inactive = $inactive;
     }
 
     /**
      * @return string
      */
-    public function getHost()
+    public function getSignature()
     {
-        return $this->host;
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setHost($value)
-    {
-        if ($value) {
-            $this->host = $value;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPort()
-    {
-        return $this->port;
-    }
-
-    /**
-     * @param $value
-     * @return $this
-     */
-    public function setPort($value)
-    {
-        if ($value) {
-            $this->port = $value;
-        }
-
-        return $this;
+        return $this->signature;
     }
 }
