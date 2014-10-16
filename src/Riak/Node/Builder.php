@@ -82,21 +82,6 @@ class Builder
     }
 
     /**
-     * Build node objects with configuration for the HTTP API
-     *
-     * Any node objects generated from this instance, will use the http api instead of protocol buffers to communicate
-     * with Riak.
-     *
-     * @return $this
-     */
-    public function withHttpApi()
-    {
-        $this->config->setHttp(true);
-
-        return $this;
-    }
-
-    /**
      * Build distributed cluster
      *
      * Build node objects configured to listen on the same port but different hosts. Commonly used in
