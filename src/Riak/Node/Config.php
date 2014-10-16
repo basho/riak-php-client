@@ -57,15 +57,6 @@ class Config
     protected $pass = '';
 
     /**
-     * HTTP API flag
-     *
-     * If this is set to true, then the HTTP API for Riak will be used instead of Protocol Buffers
-     *
-     * @var bool
-     */
-    protected $http = false;
-
-    /**
      * User authentication flag
      *
      * If this is set to true, then the client will attempt to authenticate to the Riak node
@@ -88,22 +79,6 @@ class Config
     public function setAuth($auth)
     {
         $this->auth = $auth;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isHttp()
-    {
-        return $this->http;
-    }
-
-    /**
-     * @param boolean $http
-     */
-    public function setHttp($http)
-    {
-        $this->http = $http;
     }
 
     /**
