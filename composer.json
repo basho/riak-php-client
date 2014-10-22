@@ -18,7 +18,8 @@
         "php": ">=5.4",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "react/socket-client": "0.4.*"
     },
     "require-dev": {
         "phpunit/phpunit": "4.3.1"

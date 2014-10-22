@@ -53,14 +53,6 @@ class Builder
     }
 
     /**
-     * @return Config|null
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
      * Build nodes with user / password authentication
      *
      * NOTICE: This is NOT IMPLEMENTED / SUPPORTED AT THIS TIME.
@@ -74,11 +66,19 @@ class Builder
      */
     public function withAuth($user, $pass)
     {
-        $this->config->setUser($user);
-        $this->config->setPass($pass);
-        $this->config->setAuth(true);
+        $this->getConfig()->setUser($user);
+        $this->getConfig()->setPass($pass);
+        $this->getConfig()->setAuth(true);
 
         return $this;
+    }
+
+    /**
+     * @return Config|null
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
@@ -111,7 +111,7 @@ class Builder
     {
         $this->validate();
 
-        return new Node($this->config);
+        return new Node($this->getConfig());
     }
 
     /**
@@ -141,7 +141,7 @@ class Builder
      */
     public function withHost($host)
     {
-        $this->config->setHost($host);
+        $this->getConfig()->setHost($host);
 
         return $this;
     }
@@ -173,7 +173,7 @@ class Builder
      */
     public function withPort($port)
     {
-        $this->config->setPort($port);
+        $this->getConfig()->setPort($port);
 
         return $this;
     }

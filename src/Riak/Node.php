@@ -72,14 +72,6 @@ class Node
     }
 
     /**
-     * @return Config|null
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
      * @return boolean
      */
     public function isInactive()
@@ -101,5 +93,34 @@ class Node
     public function getSignature()
     {
         return $this->signature;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->getConfig()->getHost();
+    }
+
+    /**
+     * @return Config|null
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPort()
+    {
+        return $this->getConfig()->getPort();
+    }
+
+    public function useSsl()
+    {
+        return $this->getConfig()->isAuth();
     }
 }

@@ -15,26 +15,34 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho;
 
-use Basho\Riak\MapReduce;
+use Basho\Riak\Command;
+use Basho\Riak\Exception;
+use Basho\Riak\Node;
+use React\Dns\Resolver\Factory as DnsFactory;
+use React\EventLoop\Factory as LoopFactory;
+use React\SocketClient\Connector;
+use React\SocketClient\SecureConnector;
+use React\Stream\Stream;
 
 /**
- * Riak core class.
+ * Class Riak
  *
- * This is the core class to this library which initializes and maintains your connection to the Riak instance.
+ * This class is the quarterback of the Riak PHP client library. It maintains the list of nodes in the Riak cluster,
  *
- * @package     Basho
- * @subpackage  Riak
- * @author      Riak Team and contributors <eng@basho.com> (https://github.com/basho/riak-php-client/contributors)
- * @copyright   2011-2014 Basho Technologies, Inc. and contributors.
+ *
+ * @package     Basho\Riak
+ * @author      Christopher Mancini <cmancini at basho d0t com>
+ * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  */
 class Riak
 {
     /**
-     * Riak server cluster
-     * @var array[string]
+     * Riak server ring
+     *
+     * @var Node[]
      */
-    protected $hosts = [];
+    protected $nodes = [];
 
     /**
      * Configuration options for this client
@@ -42,10 +50,11 @@ class Riak
      * @var array
      */
     protected $config = [
-        'port'          => 8098,
-        'prefix'        => 'riak',
-        'mapred_prefix' => 'mapred',
-        'index_prefix'  => 'buckets',
+        'prefix'               => 'riak',
+        'mapred_prefix'        => 'mapred',
+        'index_prefix'         => 'buckets',
+        'dns_server'           => '8.8.8.8',
+        'max_connect_attempts' => 3,
     ];
 
     /**
@@ -56,270 +65,229 @@ class Riak
     protected $clientId = '';
 
     /**
-     * R-Value
+     * Socket client connector
      *
-     * @var integer
+     * @var Connector|null
      */
-    protected $r = 2;
+    protected $connector = null;
 
     /**
-     * W-Value
+     * Socket client connector that uses SSL / TLS
      *
-     * @var integer
+     * @var null
      */
-    protected $w = 2;
+    protected $secureConnector = null;
 
     /**
-     * DW-Value
+     * Loop interface used with socket client
      *
-     * @var integer
+     * @var null
      */
-    protected $dw = 2;
+    protected $eventLoop = null;
+
+    /**
+     * The actively connected Riak Node from the ring
+     *
+     * @var int
+     */
+    protected $activeNodeIndex = 0;
 
     /**
      * Construct a new Client object, defaults to port 8098.
      *
-     * @param array $hosts  - array('127.0.0.1')
-     * @param array $config - array('prefix', 'mapred_prefix', 'index_prefix')
+     * @param Node[] $nodes  an array of Basho\Riak\Node objects
+     * @param array  $config a configuration object
      */
-    public function __construct(array $hosts, array $config = [])
+    public function __construct(array $nodes, array $config = [])
     {
-        if (!empty($hosts['host'])) {
-            $this->hosts = [$hosts];
-        } else {
-            $this->hosts = $hosts;
-        }
+        $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
+        $this->nodes    = $nodes;
+        $this->setActiveNodeIndex($this->pickNode());
 
         if (!empty($config)) {
             // use php array merge so passed in config overrides defaults
             $this->config = array_merge($this->config, $config);
         }
-
-        $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
     }
 
     /**
-     * Get the R-value setting for this Client
+     * Pick a random Node from the ring
      *
-     * Default: 2
+     * You can pick your friends, you can pick your node, but you can't pick your friend's node.  :)
      *
-     * @return integer
+     * @param int $attempts
+     * @return int
+     * @throws Exception
      */
-    public function getR()
+    protected function pickNode($attempts = 0)
     {
-        return $this->r;
+        $nodes       = $this->getNodes();
+        $randomIndex = mt_rand(0, count($nodes) - 1);
+
+        // check if node has been marked inactive
+        if ($nodes[$randomIndex]->isInactive()) {
+            // if we have not reached max connection attempts, use recursion
+            if ($attempts < $this->getConfigValue('max_connect_attempts')) {
+                return $this->pickNode($attempts + 1);
+            } else {
+                throw new Exception('Unable to connect to an active node.');
+            }
+        }
+
+        return $randomIndex;
     }
 
     /**
-     * Set the R-value for this Client
-     *
-     * This value will be used
-     * for any calls to get(...) or getBinary(...) where 1) no
-     * R-value is specified in the method call and 2) no R-value has
-     * been set in the Bucket.
-     *
-     * @param integer $r - The R value.
-     * @return $this
+     * @return Node[]
      */
-    public function setR($r)
+    public function getNodes()
     {
-        $this->r = $r;
-
-        return $this;
+        return $this->nodes;
     }
 
     /**
-     * Get the W-value setting for this Client
+     * Get value from connection config
      *
-     * Default: 2
-     *
-     * @return integer
+     * @param $key
+     * @return mixed
      */
-    public function getW()
+    public function getConfigValue($key)
     {
-        return $this->w;
+        return $this->config[$key];
     }
 
     /**
-     * Set the W-value for this Client
-     *
-     * See setR(...) for a description of how these values are used.
-     *
-     * @param integer $w - The W value.
-     * @return $this
-     */
-    public function setW($w)
-    {
-        $this->w = $w;
-
-        return $this;
-    }
-
-    /**
-     * Get the DW-value for this ClientOBject
-     *
-     * Default: 2
-     *
-     * @return integer
-     */
-    public function getDW()
-    {
-        return $this->dw;
-    }
-
-    /**
-     * Set the DW-value for this Client
-     *
-     * See setR(...) for a description of how these values are used.
-     *
-     * @param  integer $dw - The DW value.
-     * @return $this
-     */
-    public function setDW($dw)
-    {
-        $this->dw = $dw;
-
-        return $this;
-    }
-
-    /**
-     * Get the clientID for this Client.
-     *
      * @return string
      */
     public function getClientID()
     {
-        return $this->clientid;
+        return $this->clientId;
     }
 
     /**
-     * Set the clientID for this Client
-     *
-     * Should not be called unless you know what you are doing.
-     *
-     * @param string $clientID - The new clientID.
-     * @return $this
+     * @return array
      */
-    public function setClientID($clientid)
+    public function getConfig()
     {
-        $this->clientid = $clientid;
+        return $this->config;
+    }
+
+    /**
+     * Execute a Riak command
+     *
+     * @param Command $command
+     * @return null
+     */
+    public function execute(Command $command)
+    {
+        $result = null;
+
+        $connector = $this->getActiveNode()->useSsl() ? $this->getSecureConnector() : $this->getConnector();
+        $connector->create($this->getActiveNode()->getHost(), $this->getActiveNode()->getPort())
+            ->then(function (Stream $stream) {
+                $stream->write($command);
+                $stream->close();
+            });
+
+        return $result;
+    }
+
+    /**
+     * Get secure socket client connector
+     *
+     * Uses the singleton pattern.
+     *
+     * @return null|SecureConnector
+     */
+    public function getSecureConnector()
+    {
+        if (!$this->secureConnector) {
+            $this->secureConnector = new SecureConnector($this->getConnector(), $this->getEventLoop());
+        }
+
+        return $this->secureConnector;
+    }
+
+    /**
+     * Get socket client connector
+     *
+     * Uses the singleton pattern.
+     *
+     * @return Connector|null
+     */
+    public function getConnector()
+    {
+        if (!$this->connector) {
+            $dnsResolverFactory = new DnsFactory();
+            $dns                = $dnsResolverFactory->createCached($this->getConfigValue('dns_server'),
+                                                                    $this->getEventLoop());
+
+            $this->connector = new Connector($this->getEventLoop(), $dns);
+        }
+
+        return $this->connector;
+    }
+
+    /**
+     * Get the socket client event loop
+     *
+     * Uses the singleton pattern.
+     *
+     * @return \React\EventLoop\ExtEventLoop
+     *         |\React\EventLoop\LibEventLoop
+     *         |\React\EventLoop\LibEvLoop
+     *         |\React\EventLoop\StreamSelectLoop
+     *         |null
+     */
+    protected function getEventLoop()
+    {
+        if (!$this->eventLoop) {
+            $this->eventLoop = LoopFactory::create();
+        }
+
+        return $this->eventLoop;
+    }
+
+    /**
+     * Pick new active node
+     *
+     * Used when the currently active node fails to complete a command / query
+     *
+     * @return $this
+     * @throws Exception
+     */
+    protected function pickNewNode()
+    {
+        // mark current active node as inactive
+        $this->getActiveNode()->setInactive(true);
+        $this->setActiveNodeIndex($this->pickNode());
 
         return $this;
     }
 
     /**
-     * Get all buckets
-     *
-     * @return array() of Bucket objects
+     * @return Node
      */
-    public function buckets()
+    public function getActiveNode()
     {
-        $url          = Utils::buildRestPath($this);
-        $response     = Utils::httpRequest('GET', $url . '?buckets=true');
-        $response_obj = json_decode($response[1]);
-        $buckets      = [];
-        foreach ($response_obj->buckets as $name) {
-            $buckets[] = $this->bucket($name);
-        }
+        $nodes = $this->getNodes();
 
-        return $buckets;
+        return $nodes[$this->getActiveNodeIndex()];
     }
 
     /**
-     * Get the bucket by the specified name
-     *
-     * Since buckets always exist, this will always return a Bucket.
-     *
-     * @return Bucket
+     * @return int
      */
-    public function bucket($name)
+    public function getActiveNodeIndex()
     {
-        return new Bucket($this, $name);
+        return $this->activeNodeIndex;
     }
 
     /**
-     * Check if the Riak server for this Client is alive
-     *
-     * @return boolean
+     * @param int $activeNodeIndex
      */
-    public function isAlive()
+    public function setActiveNodeIndex($activeNodeIndex)
     {
-        $url = 'http://' . $this->host . ':' . $this->port . '/ping';
-        $response = Utils::httpRequest('GET', $url);
-
-        return ($response != null) && ($response[1] == 'OK');
-    }
-
-
-    # MAP/REDUCE/LINK FUNCTIONS
-
-    /**
-     * Start assembling a Map/Reduce operation
-     *
-     * @see MapReduce::add()
-     * @return MapReduce
-     */
-    public function add($params)
-    {
-        $mr   = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array([&$mr, "add"], $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation
-     *
-     * This command will return an error unless
-     * executed against a Riak Search cluster.
-     *
-     * @see MapReduce::search()
-     * @return MapReduce
-     */
-    public function search($params)
-    {
-        $mr   = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array([&$mr, "search"], $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation.
-     *
-     * @see MapReduce::link()
-     */
-    public function link($params)
-    {
-        $mr   = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array([&$mr, "link"], $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation.
-     *
-     * @see MapReduce::map()
-     */
-    public function map($params)
-    {
-        $mr   = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array([&$mr, "map"], $args);
-    }
-
-    /**
-     * Start assembling a Map/Reduce operation.
-     *
-     * @see MapReduce::reduce()
-     */
-    public function reduce($params)
-    {
-        $mr   = new MapReduce($this);
-        $args = func_get_args();
-
-        return call_user_func_array([&$mr, "reduce"], $args);
+        $this->activeNodeIndex = $activeNodeIndex;
     }
 }

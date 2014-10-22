@@ -13,48 +13,24 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command;
+namespace Basho\Riak;
 
-use Basho\Riak\Bucket;
-use Basho\Riak\Command;
+use Basho\Riak\Command\Builder;
 
 /**
- * Class Builder
+ * Interface Command
  *
- * This class follows the Builder design pattern and is the preferred method for creating Basho\Riak\Node objects for
- * connecting to your Riak node cluster.
+ * The interface for implementing a new Riak Command class.
  *
- * <code>
- * use Basho\Riak\Command\Builder as CommandBuilder;
- *
- * $command = (new CommandBuilder)
- *     ->withHost('127.0.0.1')
- *     ->buildLocalhost([10018, 10028, 10038, 10048, 10058]);
- * </code>
- *
- * @package     Basho\Riak\Command
+ * @package     Basho\Riak
  * @author      Christopher Mancini <cmancini at basho d0t com>
  * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class Builder {
-    protected $bucket = null;
-    protected $object = null;
+interface CommandInterface
+{
+    public function __construct(Builder $builder);
 
-    public function __construct()
-    {
-    }
-
-    public function build(Command $command)
-    {
-    }
-
-    public function withBucket(Bucket $bucket)
-    {
-    }
-
-    public function withObject(Object $object)
-    {
-    }
-} 
+    public function __toString();
+}
