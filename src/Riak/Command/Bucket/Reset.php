@@ -19,9 +19,9 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class FetchList
+ * Class Delete
  *
- * Fetches a list of buckets on the node.
+ * [summary]
  *
  * @package     Basho\Riak\Command\Bucket
  * @author      Christopher Mancini <cmancini at basho d0t com>
@@ -29,7 +29,7 @@ use Basho\Riak\CommandInterface;
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class FetchList extends Command implements CommandInterface
+class Reset extends Command implements CommandInterface
 {
-
+    protected $method = 'DELETE';
 }

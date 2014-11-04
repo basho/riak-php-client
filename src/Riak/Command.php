@@ -28,5 +28,104 @@ namespace Basho\Riak;
  */
 abstract class Command
 {
+    /**
+     * Request method
+     *
+     * This can be GET, POST, PUT, or DELETE
+     *
+     * @see http://docs.basho.com/riak/latest/dev/references/http/
+     *
+     * @var string
+     */
+    protected $method = 'GET';
 
+    /**
+     * Riak Bucket
+     *
+     * @var Bucket|null
+     */
+    protected $bucket = null;
+
+    /**
+     * Riak Object
+     *
+     * @var \Basho\Riak\Object|null
+     */
+    protected $object = null;
+
+    /**
+     * Command parameters
+     *
+     * @var array
+     */
+    protected $parameters = [];
+
+    /**
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * @param array $parameters
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
+     * Command has parameters?
+     *
+     * @return bool
+     */
+    public function hasParameters()
+    {
+        return (bool)count($this->parameters);
+    }
+
+    /**
+     * @return Bucket|null
+     */
+    public function getBucket()
+    {
+        return $this->bucket;
+    }
+
+    /**
+     * @param Bucket|null $bucket
+     * @return $this
+     */
+    public function setBucket(Bucket $bucket)
+    {
+        $this->bucket = $bucket;
+
+        return $this;
+    }
+
+    /**
+     * @return \Basho\Riak\Object|null
+     */
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    /**
+     * @param \Basho\Riak\Object|null $object
+     * @return $this
+     */
+    public function setObject(Object $object)
+    {
+        $this->object = $object;
+
+        return $this;
+    }
+
+    public function getMethod()
+    {
+        return $this->method;
+    }
 }

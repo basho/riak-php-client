@@ -13,23 +13,23 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Bucket;
+namespace Riak\Command\Bucket;
 
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class FetchList
+ * Class Keys
  *
- * Fetches a list of buckets on the node.
+ * [summary]
  *
- * @package     Basho\Riak\Command\Bucket
+ * @package     Riak\Command\Bucket
  * @author      Christopher Mancini <cmancini at basho d0t com>
  * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class FetchList extends Command implements CommandInterface
+class Keys extends Command implements CommandInterface
 {
 
 }

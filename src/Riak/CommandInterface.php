@@ -15,8 +15,6 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
-use Basho\Riak\Command\Builder;
-
 /**
  * Interface Command
  *
@@ -30,7 +28,15 @@ use Basho\Riak\Command\Builder;
  */
 interface CommandInterface
 {
-    public function __construct(Builder $builder);
+    public function getMethod();
 
-    public function __toString();
+    public function getBucket();
+
+    public function setBucket();
+
+    public function getObject();
+
+    public function setObject();
+
+    public function hasParameters();
 }

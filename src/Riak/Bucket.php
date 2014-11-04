@@ -43,6 +43,7 @@ class Bucket
      * @var string
      */
     protected $name = '';
+
     /**
      * Bucket type
      *

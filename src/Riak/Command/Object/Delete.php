@@ -15,6 +15,9 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Object;
 
+use Basho\Riak\Command;
+use Basho\Riak\CommandInterface;
+
 /**
  * Class Delete
  *
@@ -28,5 +31,5 @@ namespace Basho\Riak\Command\Object;
  */
 class Delete extends Command implements CommandInterface
 {
-
+    protected $method = 'DELETE';
 } 

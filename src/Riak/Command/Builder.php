@@ -17,6 +17,7 @@ namespace Basho\Riak\Command;
 
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
+use Basho\Riak\Object;
 
 /**
  * Class Builder

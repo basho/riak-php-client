@@ -13,15 +13,15 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Bucket;
+namespace Basho\Riak\Command\DataType;
 
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Update
+ * Class Create
  *
- * Updates a Riak bucket on a node.
+ * Creates a Riak bucket on a node.
  *
  * @package     Basho\Riak\Command\Bucket
  * @author      Christopher Mancini <cmancini at basho d0t com>
@@ -29,9 +29,7 @@ use Basho\Riak\CommandInterface;
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class Update extends Command implements CommandInterface
+class Fetch extends Command implements CommandInterface
 {
-    public function execute()
-    {
-    }
-} 
+    protected $method = 'GET';
+}
