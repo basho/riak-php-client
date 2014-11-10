@@ -28,7 +28,6 @@ use Basho\Riak\Node\Builder\Exception;
  * use Basho\Riak\Node\Builder as NodeBuilder;
  *
  * $nodes = (new NodeBuilder)
- *     ->withHost('127.0.0.1')
  *     ->buildLocalhost([10018, 10028, 10038, 10048, 10058]);
  * </code>
  *
@@ -90,7 +89,7 @@ class Builder
      * @param array $hosts
      * @return Node[]
      */
-    public function buildCluster(array $hosts = ['127.0.0.1'])
+    public function buildCluster(array $hosts = ['localhost'])
     {
         $nodes = [];
         foreach ($hosts as $host) {
@@ -158,6 +157,7 @@ class Builder
     public function buildLocalhost(array $ports = [8087])
     {
         $nodes = [];
+        $this->withHost('localhost');
         foreach ($ports as $port) {
             $nodes[] = $this->withPort($port)->build();
         }

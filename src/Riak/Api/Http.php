@@ -39,12 +39,14 @@ class Http extends Api implements ApiInterface
      * @var null
      */
     protected static $connection = null;
+
     /**
      * API path
      *
      * @var string
      */
     protected $path = '';
+
     /**
      * Query string
      *
@@ -191,7 +193,6 @@ class Http extends Api implements ApiInterface
      */
     protected function setPath()
     {
-        $path          = '';
         $bucket        = $this->getCommand()->getBucket();
         $typeSegment   = $bucket->getType() ? '/types/' . $bucket->getType() : '';
         $bucketSegment = '/buckets/' . $bucket->getName();

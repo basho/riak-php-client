@@ -40,22 +40,101 @@ use Basho\Riak\Object;
  * @since       2.0
  */
 class Builder {
-    protected $bucket = null;
-    protected $object = null;
+    /**
+     * Command object to be built
+     *
+     * @var Command|null
+     */
+    protected $command = null;
 
-    public function __construct()
+    public function __construct(Command $command)
     {
+        $this->setCommand($command);
     }
 
-    public function build(Command $command)
+    /**
+     * Command build
+     *
+     * Validates then returns the built command object.
+     *
+     * @return Command|null
+     */
+    public function build()
     {
+        // validate command is ready to execute
+        $this->getCommand()->validate();
+
+        return $this->getCommand();
     }
 
+    /**
+     * @return Command|null
+     */
+    protected function getCommand()
+    {
+        return $this->command;
+    }
+
+    /**
+     * @param Command|null $command
+     */
+    protected function setCommand($command)
+    {
+        $this->command = $command;
+    }
+
+    /**
+     * withBucket
+     *
+     * @param Bucket $bucket
+     * @return $this
+     */
     public function withBucket(Bucket $bucket)
     {
+        $this->getCommand()->setBucket($bucket);
+
+        return $this;
     }
 
     public function withObject(Object $object)
     {
+        $this->getCommand()->setObject($object);
+
+        return $this;
     }
-} 
+
+    public function withCounter(Object $object)
+    {
+        $this->getCommand()->setObject($object);
+
+        return $this;
+    }
+
+    public function withSet(Object $object)
+    {
+        $this->getCommand()->setObject($object);
+
+        return $this;
+    }
+
+    public function withMap(Object $object)
+    {
+        $this->getCommand()->setObject($object);
+
+        return $this;
+    }
+
+    public function withParameter($key, $value = true)
+    {
+        $this->getCommand()->setParameter($key, $value);
+
+        return $this;
+    }
+
+    public function withParameters($parameters = [])
+    {
+        $this->getCommand()->setParameters($parameters);
+
+        return $this;
+    }
+}

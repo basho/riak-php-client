@@ -39,10 +39,10 @@ class Link
     }
 
     /**
-     * Retrieve the Object to which this link points.
+     * Retrieve the DataType to which this link points.
      *
      * @param integer $r - The R-value to use.
-     * @return Object
+     * @return DataType
      */
     public function get($r = null)
     {
@@ -50,10 +50,10 @@ class Link
     }
 
     /**
-     * Retrieve the Object to which this link points, as a binary.
+     * Retrieve the DataType to which this link points, as a binary.
      *
      * @param integer $r - The R-value to use.
-     * @return Object
+     * @return DataType
      */
     public function getBinary($r = null)
     {

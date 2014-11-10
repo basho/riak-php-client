@@ -15,14 +15,10 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho;
 
+use Basho\Riak\Api\Http;
 use Basho\Riak\Command;
 use Basho\Riak\Exception;
 use Basho\Riak\Node;
-use React\Dns\Resolver\Factory as DnsFactory;
-use React\EventLoop\Factory as LoopFactory;
-use React\SocketClient\Connector;
-use React\SocketClient\SecureConnector;
-use React\Stream\Stream;
 
 /**
  * Class Riak
@@ -63,27 +59,6 @@ class Riak
      * @var string
      */
     protected $clientId = '';
-
-    /**
-     * Socket client connector
-     *
-     * @var Connector|null
-     */
-    protected $connector = null;
-
-    /**
-     * Socket client connector that uses SSL / TLS
-     *
-     * @var null
-     */
-    protected $secureConnector = null;
-
-    /**
-     * Loop interface used with socket client
-     *
-     * @var null
-     */
-    protected $eventLoop = null;
 
     /**
      * The actively connected Riak Node from the ring
@@ -157,14 +132,6 @@ class Riak
     }
 
     /**
-     * @return string
-     */
-    public function getClientID()
-    {
-        return $this->clientId;
-    }
-
-    /**
      * @return array
      */
     public function getConfig()
@@ -182,87 +149,9 @@ class Riak
     {
         $result = null;
 
-        $connector = $this->getActiveNode()->useSsl() ? $this->getSecureConnector() : $this->getConnector();
-        $connector->create($this->getActiveNode()->getHost(), $this->getActiveNode()->getPort())
-            ->then(function (Stream $stream) {
-                $stream->write($command);
-                $stream->close();
-            });
+        $result = $this->getActiveNode()->execute($command, $this->getApi());
 
         return $result;
-    }
-
-    /**
-     * Get secure socket client connector
-     *
-     * Uses the singleton pattern.
-     *
-     * @return null|SecureConnector
-     */
-    public function getSecureConnector()
-    {
-        if (!$this->secureConnector) {
-            $this->secureConnector = new SecureConnector($this->getConnector(), $this->getEventLoop());
-        }
-
-        return $this->secureConnector;
-    }
-
-    /**
-     * Get socket client connector
-     *
-     * Uses the singleton pattern.
-     *
-     * @return Connector|null
-     */
-    public function getConnector()
-    {
-        if (!$this->connector) {
-            $dnsResolverFactory = new DnsFactory();
-            $dns                = $dnsResolverFactory->createCached($this->getConfigValue('dns_server'),
-                                                                    $this->getEventLoop());
-
-            $this->connector = new Connector($this->getEventLoop(), $dns);
-        }
-
-        return $this->connector;
-    }
-
-    /**
-     * Get the socket client event loop
-     *
-     * Uses the singleton pattern.
-     *
-     * @return \React\EventLoop\ExtEventLoop
-     *         |\React\EventLoop\LibEventLoop
-     *         |\React\EventLoop\LibEvLoop
-     *         |\React\EventLoop\StreamSelectLoop
-     *         |null
-     */
-    protected function getEventLoop()
-    {
-        if (!$this->eventLoop) {
-            $this->eventLoop = LoopFactory::create();
-        }
-
-        return $this->eventLoop;
-    }
-
-    /**
-     * Pick new active node
-     *
-     * Used when the currently active node fails to complete a command / query
-     *
-     * @return $this
-     * @throws Exception
-     */
-    protected function pickNewNode()
-    {
-        // mark current active node as inactive
-        $this->getActiveNode()->setInactive(true);
-        $this->setActiveNodeIndex($this->pickNode());
-
-        return $this;
     }
 
     /**
@@ -289,5 +178,35 @@ class Riak
     public function setActiveNodeIndex($activeNodeIndex)
     {
         $this->activeNodeIndex = $activeNodeIndex;
+    }
+
+    public function getApi()
+    {
+        return new Http($this->getClientID());
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientID()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * Pick new active node
+     *
+     * Used when the currently active node fails to complete a command / query
+     *
+     * @return $this
+     * @throws Exception
+     */
+    protected function pickNewNode()
+    {
+        // mark current active node as inactive
+        $this->getActiveNode()->setInactive(true);
+        $this->setActiveNodeIndex($this->pickNode());
+
+        return $this;
     }
 }

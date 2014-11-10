@@ -13,23 +13,20 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
-
-use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
+namespace Basho\Riak\Command\Builder;
 
 /**
- * Class Delete
+ * Class Exception
  *
- * [summary]
+ * Exception thrown when there is an error within the validation of a built command.
  *
- * @package     Basho\Riak\Command\DataType
+ * @package     Basho\Riak\Command\Builder
  * @author      Christopher Mancini <cmancini at basho d0t com>
  * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class Delete extends Command implements CommandInterface
+class Exception extends \Basho\Riak\Exception
 {
-    protected $method = 'DELETE';
+
 } 

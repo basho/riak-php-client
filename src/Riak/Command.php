@@ -15,6 +15,8 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
+use Basho\Riak\Command\Builder;
+
 /**
  * Class Command
  *
@@ -47,7 +49,7 @@ abstract class Command
     protected $bucket = null;
 
     /**
-     * Riak Object
+     * Riak DataType
      *
      * @var \Basho\Riak\Object|null
      */
@@ -60,6 +62,31 @@ abstract class Command
      */
     protected $parameters = [];
 
+    public static function builder()
+    {
+        return new Builder(new static());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParameter($key)
+    {
+        return $this->parameter[$key];
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    public function setParameter($key, $value)
+    {
+        $this->parameters[$key] = $value;
+
+        return $this;
+    }
+
     /**
      * @return array
      */
@@ -70,10 +97,13 @@ abstract class Command
 
     /**
      * @param array $parameters
+     * @return $this
      */
     public function setParameters($parameters)
     {
         $this->parameters = $parameters;
+
+        return $this;
     }
 
     /**
@@ -127,5 +157,18 @@ abstract class Command
     public function getMethod()
     {
         return $this->method;
+    }
+
+    /**
+     * Validate command
+     *
+     * Method validates if the command has been built with the parameters / objects required to successfully execute.
+     *
+     * @return bool
+     * @throws Builder\Exception
+     */
+    public function validate()
+    {
+        return true;
     }
 }

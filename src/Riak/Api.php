@@ -67,6 +67,29 @@ abstract class Api
      */
     protected $node = null;
 
+    protected $clientId = '';
+
+    public function __construct($clientId)
+    {
+        $this->setClientId($clientId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param string $clientId
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+    }
+
     /**
      * @return int
      */

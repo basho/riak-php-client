@@ -16,9 +16,9 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak;
 
 /**
- * Interface Command
+ * Class DataType
  *
- * The interface for implementing a new Riak Command class.
+ * [summary]
  *
  * @package     Basho\Riak
  * @author      Christopher Mancini <cmancini at basho d0t com>
@@ -26,19 +26,73 @@ namespace Basho\Riak;
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-interface CommandInterface
+class DataType
 {
-    public function getMethod();
+    /**
+     * DataType type
+     *
+     * Options: byte, counter, map, set
+     *
+     * @var string
+     */
+    protected $type = '';
 
-    public function getBucket();
+    /**
+     * Value stored by the data type
+     *
+     * @var mixed|null
+     */
+    protected $data = null;
 
-    public function setBucket();
+    /**
+     * [short description]
+     *
+     * @var string
+     */
+    protected $key = '';
 
-    public function getObject();
+    public function __construct($key = '')
+    {
+        $this->setKey($key);
+    }
 
-    public function setObject();
+    /**
+     * @return mixed|null
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 
-    public function hasParameters();
+    /**
+     * @param mixed|null $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
 
-    public function validate();
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param string $key
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }

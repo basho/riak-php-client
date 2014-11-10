@@ -123,4 +123,15 @@ class Node
     {
         return $this->getConfig()->isAuth();
     }
+
+    public function execute(Command $command, Api $api)
+    {
+        // instantiate API connection
+
+        // prepare request
+
+        // send request
+
+        // return object
+    }
 }

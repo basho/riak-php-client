@@ -13,23 +13,24 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\DataType;
 
-use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
+use Basho\Riak\DataType;
 
 /**
- * Class Delete
+ * Class Map
  *
  * [summary]
  *
- * @package     Basho\Riak\Command\DataType
+ * @package     Basho\Riak\DataType
  * @author      Christopher Mancini <cmancini at basho d0t com>
  * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class Delete extends Command implements CommandInterface
+class Map extends DataType
 {
-    protected $method = 'DELETE';
+    protected $type = 'map';
+
+    protected $data = [];
 } 

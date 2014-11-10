@@ -49,10 +49,10 @@ class MapReduce
      *
      * This method takes three different forms,
      * depending on the provided inputs. You can
-     * specify either  a Object, a string bucket name,
+     * specify either  a DataType, a string bucket name,
      * or a bucket, key, and additional arg.
      *
-     * @param mixed $arg1 Object or Bucket
+     * @param mixed $arg1 DataType or Bucket
      * @param mixed $arg2 Key or blank
      * @param mixed $arg3 Arg or blank
      * @return MapReduce

@@ -31,5 +31,15 @@ use Basho\Riak\CommandInterface;
  */
 class FetchList extends Command implements CommandInterface
 {
-
+    /**
+     * Validate Command
+     *
+     * No required parameters / objects
+     *
+     * @return bool
+     */
+    public function validate()
+    {
+        return true;
+    }
 }
