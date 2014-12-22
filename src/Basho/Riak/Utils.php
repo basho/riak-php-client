@@ -96,6 +96,10 @@ class Utils
         if (!is_null($params)) {
             $s = '';
             foreach ($params as $key => $value) {
+                if ($key === 'timeout' && $value === null) {
+                    continue;
+                }
+
                 if ($s != '') {
                     $s .= '&';
                 }
@@ -121,9 +125,10 @@ class Utils
      * @param string $index - Index Name & type (eg, "indexName_bin")
      * @param string|int $start - Starting value or exact match if no ending value
      * @param string|int $end - Ending value for range search
+     * @params integer $timeoutms - Timeout specified in milliseconds
      * @return string URL
      */
-    public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = null)
+    public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = null, $timeoutms = null)
     {
         # Build 'http://hostname:port/prefix/bucket'
         $path = array('http:/', $client->host . ':' . $client->port, $client->indexPrefix);
@@ -147,19 +152,23 @@ class Utils
         // faster than repeated string concatenations
         $path = join('/', $path);
 
+        if ($timeoutms !== null) {
+            $path .= '?timeout='.$timeoutms;
+        }
+
         return $path;
     }
 
     /**
      * Send HTTP request
      *
-     * Given a Method, URL, Headers, and Body, perform and HTTP request,
+     * Given a Method, URL, Connect Timeout, Timeout, Headers, and Body, perform and HTTP request,
      * and return an array of arity 2 containing an associative array of
      * response headers and the response body.
      *
      * @return array
      */
-    public static function httpRequest($method, $url, $request_headers = array(), $obj = '')
+    public static function httpRequest($method, $url, $connect_timeoutms = null, $timeoutms = null, $request_headers = array(), $obj = '')
     {
         # Set up curl
         $ch = curl_init();
@@ -168,24 +177,24 @@ class Utils
 
         if ($method == 'GET') {
             curl_setopt($ch, CURLOPT_HTTPGET, 1);
-        } else {
-            if ($method == 'POST') {
-                curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-            } else {
-                if ($method == 'PUT') {
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
-                } else {
-                    if ($method == 'DELETE') {
-                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-                    } else {
-                        if ($method == 'HEAD') {
-                            curl_setopt($ch, CURLOPT_NOBODY, 1);
-                        }
-                    }
-                }
-            }
+        } elseif ($method == 'POST') {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+        } elseif ($method == 'PUT') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $obj);
+        } elseif ($method == 'DELETE') {
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+        } else if ($method == 'HEAD') {
+            curl_setopt($ch, CURLOPT_NOBODY, 1);
+        }
+
+        if ($connect_timeoutms !== null) {
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $connect_timeoutms);
+        }
+
+        if ($timeoutms !== null) {
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, $timeoutms);
         }
 
         # Capture the response headers...

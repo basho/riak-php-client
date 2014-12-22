@@ -46,9 +46,9 @@ class Link
      * @param integer $r - The R-value to use.
      * @return Object
      */
-    public function get($r = null)
+    public function get($r = null, $timeoutms = null)
     {
-        return $this->client->bucket($this->bucket)->get($this->key, $r);
+        return $this->client->bucket($this->bucket)->get($this->key, $r, $timeoutms);
     }
 
     /**
@@ -56,9 +56,9 @@ class Link
      * @param integer $r - The R-value to use.
      * @return Object
      */
-    public function getBinary($r = null)
+    public function getBinary($r = null, $timeoutms = null)
     {
-        return $this->client->bucket($this->bucket)->getBinary($this->key, $r);
+        return $this->client->bucket($this->bucket)->getBinary($this->key, $r, $timeoutms);
     }
 
     /**
