@@ -596,7 +596,7 @@ class Object
      * confirm the write before returning to client.
      * @return $this
      */
-    public function store($w = null, $dw = null)
+    public function store($w = null, $dw = null, $returnbody = 'true')
     {
         # Use defaults if not specified...
         $w = $this->bucket->getW($w);
@@ -606,7 +606,7 @@ class Object
         $method = 'POST';
 
         # Construct the URL...
-        $params = array('returnbody' => 'true', 'w' => $w, 'dw' => $dw);
+        $params = array('returnbody' => $returnbody, 'w' => $w, 'dw' => $dw);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, null, $params);
 
         # Construct the headers...
