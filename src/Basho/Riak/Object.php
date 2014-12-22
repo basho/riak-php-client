@@ -602,6 +602,9 @@ class Object
         $w = $this->bucket->getW($w);
         $dw = $this->bucket->getDW($w);
 
+        $status_codes = [200, 201, 300];
+        $method = 'POST';
+
         # Construct the URL...
         $params = array('returnbody' => 'true', 'w' => $w, 'dw' => $dw);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, null, $params);
@@ -656,7 +659,6 @@ class Object
             $headers[] = "x-riak-index-$index: " . join(', ', array_map('urlencode', $values));
         }
 
-
         # Add the metadata...
         foreach ($this->meta as $metaName => $metaValue) {
             if ($metaValue !== null) {
@@ -670,11 +672,15 @@ class Object
             $content = $this->getData();
         }
 
-        $method = $this->key ? 'PUT' : 'POST';
+        // if key is provided, this is a put, support 'No Content' code
+        if ($this->key) {
+            $method = 'PUT';
+            $status_codes[] = 204;
+        }
 
         # Run the operation.
         $response = Utils::httpRequest($method, $url, $headers, $content);
-        $this->populate($response, array(200, 201, 300));
+        $this->populate($response, $status_codes);
 
         return $this;
     }
