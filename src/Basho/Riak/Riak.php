@@ -31,17 +31,24 @@ use Basho\Riak\Bucket,
  */
 class Riak
 {
+    protected $hosts = array();
+    protected $dropped = array();
+    protected $cluster = false;
+    public $host = '127.0.0.1';
+
     /**
      * Construct a new Client object.
      *
-     * @param string $host - Hostname or IP address (default '127.0.0.1')
+     * @param string|array $hosts - Hostname or IP address or hostname list (default '127.0.0.1')
      * @param int $port - Port number (default 8098)
      * @param string $prefix - Interface prefix (default "riak")
      * @param string $mapred_prefix - MapReduce prefix (default "mapred")
      */
-    public function __construct($host = '127.0.0.1', $port = 8098, $prefix = 'riak', $mapred_prefix = 'mapred')
+    public function __construct($hosts = '127.0.0.1', $port = 8098, $prefix = 'riak', $mapred_prefix = 'mapred')
     {
-        $this->host = $host;
+        $this->hosts = (array)$hosts;
+        $this->host = $this->hosts[0];
+        $this->cluster = count($this->hosts) > 1;
         $this->port = $port;
         $this->prefix = $prefix;
         $this->mapred_prefix = $mapred_prefix;
@@ -181,7 +188,7 @@ class Riak
     public function buckets()
     {
         $url = Utils::buildRestPath($this);
-        $response = Utils::httpRequest('GET', $url . '?buckets=true');
+        $response = $this->httpRequest('GET', $url . '?buckets=true');
         $response_obj = json_decode($response[1]);
         $buckets = array();
         foreach ($response_obj->buckets as $name) {
@@ -198,10 +205,66 @@ class Riak
      */
     public function isAlive()
     {
-        $url = 'http://' . $this->host . ':' . $this->port . '/ping';
-        $response = Utils::httpRequest('GET', $url);
-
+        $response = $this->httpRequest('GET', '/ping');
         return ($response != null) && ($response[1] == 'OK');
+    }
+
+    /**
+     * Wrapper over \Basho\Riak\Utils::httpRequest to support fast switching in case of dying host
+     * @see \Basho\Riak\Utils::httpRequest()
+     */
+    public function httpRequest($method, $url, $request_headers = array(), $obj = '')
+    {
+        # Each request for a new server for load balancing
+        if ($this->cluster) {
+            shuffle($this->hosts);
+            $this->host = $this->hosts[0];
+        }
+        # The first request
+        $response = Utils::httpRequest($method, 'http://' . $this->host . ':' . $this->port . $url, $request_headers, $obj);
+        # If no response is received then try to switch to another
+        if (($response == NULL || $response[0]['http_code'] == 0) && $this->changeHost()) {
+            $response = Utils::httpRequest($method, 'http://' . $this->host . ':' . $this->port . $url, $request_headers, $obj);
+        }
+        return $response;
+    }
+
+    /**
+     * Search live host and switch to it.
+     * @return boolean
+     */
+    private function changeHost() {
+        if (!$this->cluster) {
+            return false;
+        }
+        # drop host
+        $this->dropped[] = $this->host;
+        unset($this->hosts[0]);
+        # If there are no hosts, check previously disabled in search of available
+        if (empty($this->hosts)) {
+            foreach ($this->dropped as $k => $host) {
+                $response = Utils::httpRequest('GET', 'http://' . $host . ':' . $this->port . '/ping');
+                if ($response != NULL && $response[1] == 'OK') {
+                    $this->hosts[] = $host;
+                    unset($this->dropped[$k]);
+                }
+            }
+        }
+        # switch to another host
+        if (!empty($this->hosts)) {
+            while ($this->hosts) {
+                shuffle($this->hosts);
+                $response = Utils::httpRequest('GET', 'http://' . $this->hosts[0] . ':' . $this->port . '/ping');
+                if ($response != NULL && $response[1] == 'OK') {
+                    $this->host = $this->hosts[0];
+                    return true;
+                }
+                # host is not available. lock it
+                $this->dropped[] = $this->hosts[0];
+                unset($this->hosts[0]);
+            }
+        }
+        return false;
     }
 
 

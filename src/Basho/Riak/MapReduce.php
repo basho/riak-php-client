@@ -401,8 +401,8 @@ class MapReduce
         $content = json_encode($job);
 
         # Do the request...
-        $url = "http://" . $this->client->host . ":" . $this->client->port . "/" . $this->client->mapred_prefix;
-        $response = Utils::httpRequest('POST', $url, array('Content-type: application/json'), $content);
+        $url = "/" . $this->client->mapred_prefix;
+        $response = $this->client->httpRequest('POST', $url, array('Content-type: application/json'), $content);
         $result = json_decode($response[1]);
 
         # If the last phase is NOT a link phase, then return the result.

@@ -330,7 +330,7 @@ class Bucket
         $content = json_encode(array("props" => $props));
 
         # Run the request...
-        $response = Utils::httpRequest('PUT', $url, $headers, $content);
+        $response = $this->client->httpRequest('PUT', $url, $headers, $content);
 
         # Handle the response...
         if ($response == null) {
@@ -354,7 +354,7 @@ class Bucket
         # Run the request...
         $params = array('props' => 'true', 'keys' => 'false');
         $url = Utils::buildRestPath($this->client, $this, null, null, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $response = $this->client->httpRequest('GET', $url);
 
         # Use a Object to interpret the response, we are just interested in the value.
         $obj = new Object($this->client, $this, null);
@@ -380,7 +380,7 @@ class Bucket
     {
         $params = array('props' => 'false', 'keys' => 'true');
         $url = Utils::buildRestPath($this->client, $this, null, null, $params);
-        $response = Utils::httpRequest('GET', $url);
+        $response = $this->client->httpRequest('GET', $url);
 
         # Use a Object to interpret the response, we are just interested in the value.
         $obj = new Object($this->client, $this, null);
@@ -407,7 +407,7 @@ class Bucket
     public function indexSearch($indexName, $indexType, $startOrExact, $end = null, $dedupe = false)
     {
         $url = Utils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, null);
-        $response = Utils::httpRequest('GET', $url);
+        $response = $this->client->httpRequest('GET', $url);
 
         $obj = new Object($this->client, $this, null);
 
@@ -444,7 +444,7 @@ class Bucket
     public function hasKey($key)
     {
         $url = Utils::buildRestPath($this->client, $this, $key);
-        $response = Utils::httpRequest('HEAD', $url);
+        $response = $this->client->httpRequest('HEAD', $url);
 
         if ($response == null) {
             throw new Exception("Error checking if key exists.");

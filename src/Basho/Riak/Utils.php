@@ -65,10 +65,8 @@ class Utils
      */
     public static function buildRestPath($client, $bucket = null, $key = null, $spec = null, $params = null)
     {
-        # Build 'http://hostname:port/prefix/bucket'
-        $path = 'http://';
-        $path .= $client->host . ':' . $client->port;
-        $path .= '/' . $client->prefix;
+        # Build '/prefix/bucket'
+        $path = '/' . $client->prefix;
 
         # Add '.../bucket'
         if (!is_null($bucket) && $bucket instanceof Bucket) {
@@ -125,8 +123,8 @@ class Utils
      */
     public static function buildIndexPath(Riak $client, Bucket $bucket, $index, $start, $end = null)
     {
-        # Build 'http://hostname:port/prefix/bucket'
-        $path = array('http:/', $client->host . ':' . $client->port, $client->indexPrefix);
+        # Build '/prefix/bucket'
+        $path = array($client->indexPrefix ? '/'.$client->indexPrefix : '');
 
         # Add '.../bucket'
         $path[] = urlencode($bucket->name);
