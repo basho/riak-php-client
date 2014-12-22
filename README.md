@@ -79,7 +79,7 @@ This quick example assumes that you have a local riak cluster running on port 80
 Connect to a Riak server by specifying the address or hostname and port:
 
     # Connect to Riak
-    $client = Basho\Riak\Riak('127.0.0.1', 8098);
+    $client = new Basho\Riak\Riak('127.0.0.1', 8098);
 
 This method returns a [Riak](http://basho.github.io/riak-php-client/classes/Basho.Riak.Riak.html) object.
 
