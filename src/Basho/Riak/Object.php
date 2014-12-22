@@ -282,7 +282,7 @@ class Object
     {
         if ($explicitValue === null) {
             $this->addAutoIndex($indexName, $indexType);
-            return;
+            return $this;
         }
 
         if ($indexType !== null) {
