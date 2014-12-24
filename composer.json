@@ -13,15 +13,16 @@
     "autoload": {
         "psr-4": {"Basho\\": "src/"}
     },
+    "autoload-dev": {
+        "psr-4": { "Basho\\Tests\\": "tests/" }
+    },
     "require": {
-        "centraldesktop/protobuf-php": "0.6.*",
         "php": ">=5.4",
         "ext-json": "*",
         "ext-mbstring": "*",
-        "ext-curl": "*",
-        "react/socket-client": "0.4.*"
+        "ext-curl": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.3.1"
+        "phpunit/phpunit": "4.3.*"
     }
 }

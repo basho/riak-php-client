@@ -1,22 +1,6 @@
 # Created by .gitignore support plugin (hsz.mobi)
-### JetBrains template
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
-
-## Directory-based project format
+## JetBrains IDE project directory
 .idea/
-/*.iml
-# if you remove the above rule, at least ignore user-specific stuff:
-# .idea/workspace.xml
-# .idea/tasks.xml
-# .idea/dictionaries
-# and these sensitive or high-churn files:
-# .idea/dataSources.ids
-# .idea/dataSources.xml
-# .idea/sqlDataSources.xml
-# .idea/dynamic.xml
-# and, if using gradle::
-# .idea/gradle.xml
-# .idea/libraries
 
 ## File-based project format
 *.ipr
@@ -37,3 +21,6 @@ com_crashlytics_export_strings.xml
 # ignore composer vendor directory and lock file
 vendor
 composer.lock
+
+# ignore mac files
+.DS_Store
