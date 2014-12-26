@@ -68,7 +68,7 @@ class Node
      */
     private function setSignature()
     {
-        $this->signature = md5($this->config);
+        $this->signature = md5(json_encode($this->config));
     }
 
     /**
@@ -126,12 +126,13 @@ class Node
 
     public function execute(Command $command, Api $api)
     {
-        // instantiate API connection
-
         // prepare request
+        $api->prepare($command, $this);
 
         // send request
+        $api->send();
 
         // return object
+        return Object::generateObjectFromResponse($api->getResponseHeaders(), $api->getResponseBody());
     }
 }

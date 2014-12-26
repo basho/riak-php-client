@@ -97,7 +97,7 @@ Here is an example of a class docblock:
  */
 ```
 
-### Unit Tests
+### Unit & Integration Tests
 
 We want to ensure that all code that is included in a release has proper coverage with unit tests. It is expected that
 all pull requests that include new classes or class methods have appropriate unit tests included with the PR.
@@ -106,7 +106,12 @@ all pull requests that include new classes or class methods have appropriate uni
 
 #### Running Tests
 
-We also expect that before submitting a pull request, that you have run the Unit Tests to ensure that all of them
+We also expect that before submitting a pull request, that you have run the tests to ensure that all of them
 continue to pass after your changes.
 
-**TODO: Doesn't make sense to finish now, we have no unit tests...**
+As long as you have a checkout of the client project, you can execute all the tests by simply running
+`php vendor/bin/phpunit` from the client project root.
+
+To execute only the unit tests, run `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
+
+To execute only the integration tests, run `php vendor/bin/phpunit --testsuite 'Integration Tests'`.

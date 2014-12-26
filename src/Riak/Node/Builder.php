@@ -110,7 +110,7 @@ class Builder
     {
         $this->validate();
 
-        return new Node($this->getConfig());
+        return new Node(clone $this->getConfig());
     }
 
     /**
@@ -124,7 +124,7 @@ class Builder
     protected function validate()
     {
         // verify we have a host address and port
-        if (empty($this->host) || empty($this->port)) {
+        if (!$this->getConfig()->getHost() || !$this->getConfig()->getPort()) {
             throw new Exception('Node host address and port number are required.');
         }
         // TODO: Add validation for user authentication
