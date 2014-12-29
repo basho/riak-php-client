@@ -15,6 +15,10 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
+use Basho\Riak\Node;
+use Basho\Riak\Node\Builder;
+use Basho\Riak;
+
 /**
  * Class RiakTest
  *
@@ -28,13 +32,72 @@ namespace Basho\Tests;
  */
 class RiakTest extends \PHPUnit_Framework_TestCase
 {
-    public function setup()
+    /**
+     * Riak Node objects.
+     *
+     * @var Node[]
+     */
+    static $nodes = null;
+
+    /**
+     * setUpBeforeClass
+     *
+     * Sets up the data objects needed by the tests
+     *
+     * @static
+     */
+    public static function setUpBeforeClass()
     {
+        static::$nodes = (new Builder)
+            ->withPort(10018)
+            ->buildCluster(['riak1.company.com','riak2.company.com','riak3.company.com',]);
     }
 
-    public function testRiakConstruct()
+    /**
+     * testNodeCount
+     */
+    public function testNodeCount()
     {
-        $this->assertTrue(true);
+        $riak = new Riak(static::$nodes);
+        $this->assertEquals(count($riak->getNodes()), count(static::$nodes));
+    }
+
+    /**
+     * testClientId
+     */
+    public function testClientId()
+    {
+        $riak = new Riak(static::$nodes);
+        $this->assertNotEmpty($riak->getClientID());
+        $this->assertRegExp('/^php_([a-z0-9])+$/', $riak->getClientID());
+    }
+
+    /**
+     * testConfig
+     */
+    public function testConfig()
+    {
+        $riak = new Riak(static::$nodes, ['max_connect_attempts' => 5]);
+        $this->assertEquals(5, $riak->getConfigValue('max_connect_attempts'));
+    }
+
+    /**
+     * testPickNode
+     */
+    public function testPickNode()
+    {
+        $riak = new Riak(static::$nodes);
+        $this->assertNotFalse($riak->getActiveNodeIndex());
+        $this->assertInstanceOf('Basho\Riak\Node', $riak->getActiveNode());
+    }
+
+    /**
+     * testApi
+     */
+    public function testApi()
+    {
+        $riak = new Riak(static::$nodes);
+        $this->assertInstanceOf('Basho\Riak\Api', $riak->getApi());
     }
 }
  
