@@ -98,7 +98,7 @@ class NodeBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $nodes = (new Builder)
             ->withPort(10018)
-            ->buildCluster(['riak1.company.com','riak2.company.com','riak3.company.com',]);
+            ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
 
         $this->assertTrue(count($nodes) == 3);
         $this->assertTrue($nodes[1]->getHost() == 'riak2.company.com');

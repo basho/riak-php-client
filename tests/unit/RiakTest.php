@@ -15,9 +15,9 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
+use Basho\Riak;
 use Basho\Riak\Node;
 use Basho\Riak\Node\Builder;
-use Basho\Riak;
 
 /**
  * Class RiakTest
@@ -50,7 +50,7 @@ class RiakTest extends \PHPUnit_Framework_TestCase
     {
         static::$nodes = (new Builder)
             ->withPort(10018)
-            ->buildCluster(['riak1.company.com','riak2.company.com','riak3.company.com',]);
+            ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
     }
 
     /**

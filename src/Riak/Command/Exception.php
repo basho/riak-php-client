@@ -26,6 +26,7 @@ namespace Basho\Riak\Command;
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
- class Exception extends \Basho\Riak\Exception {
+class Exception extends \Basho\Riak\Exception
+{
 
 } 

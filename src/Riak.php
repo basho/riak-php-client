@@ -78,7 +78,7 @@ class Riak
         $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
 
         // wash any custom keys if any
-        $this->nodes    = array_values($nodes);
+        $this->nodes = array_values($nodes);
         $this->setActiveNodeIndex($this->pickNode());
 
         if (!empty($config)) {
