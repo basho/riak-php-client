@@ -602,7 +602,7 @@ class Object
         $w = $this->bucket->getW($w);
         $dw = $this->bucket->getDW($w);
 
-        $status_codes = [200, 201, 300];
+        $status_codes = array(200, 201, 300);
         $method = 'POST';
 
         # Construct the URL...
