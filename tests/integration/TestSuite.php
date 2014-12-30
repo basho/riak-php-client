@@ -77,8 +77,8 @@ class TestSuite
         print("Starting Unit Tests\n---\n");
 
         $this->_test('testIsAlive');
-	$this->_test('testNotHasKey');
-	$this->_test('testHasKey');
+        $this->_test('testNotHasKey');
+        $this->_test('testHasKey');
         $this->_test('testStoreAndGet');
         $this->_test('testStoreAndGetWithoutKey');
         $this->_test('testBinaryStoreAndGet');
