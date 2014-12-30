@@ -52,23 +52,32 @@ class TestSuite
         try {
             $this->$method();
             $this->_passed++;
-            print "  [.] TEST PASSED: $method\n";
+            $this->_printLine(" [+] TEST PASSED: $method");
         } catch (Exception $e) {
             $this->_failed++;
-            print "  [X] TEST FAILED: $method\n";
-            echo $e->getMessage();
-            echo $e->getTraceAsString();
+            $this->_printLine("[-] TEST FAILED: $method.", false);
+            $this->_printLine("{$e->getMessage()}", false);
+            $this->_printLine("{$e->getTraceAsString()}\n", false);
         }
     }
 
     private function _summary()
     {
-        if ($this->_failed == 0) {
-            print "\nSUCCESS: Passed all $this->_passed tests.\n";
+        if (!$this->_failed) {
+            $this->_printLine("\nSUCCESS: Passed all $this->_passed tests.");
         } else {
             $test_total = $this->_passed + $this->_failed;
-            print "\nFAILURE: Failed $this->_failed of $this->_passed tests!";
+            $this->_printLine("\nFAILURE: Failed $this->_failed of $this->_passed tests!", false);
+
+            // exit with a 1 to signal to Travis CI that the tests failed
+            exit(1);
         }
+    }
+
+    public function _printLine($msg, $pass = true)
+    {
+        $color = $pass ? '0;32' : '0;31';
+        echo "\033[{$color}m{$msg}\033[0m\n";
     }
 
     public function run()
