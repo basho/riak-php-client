@@ -56,9 +56,8 @@ class TestSuite
         } catch (Exception $e) {
             $this->_failed++;
             print "  [X] TEST FAILED: $method\n";
-            if (self::VERBOSE) {
-                throw $e;
-            }
+            echo $e->getMessage();
+            echo $e->getTraceAsString();
         }
     }
 
@@ -470,32 +469,38 @@ class TestSuite
 
     public function testSearchIntegration()
     {
-        # Create some objects to search across...
-        $client = new Riak(self::HOST, self::PORT);
-        $bucket = $client->bucket("searchbucket");
+        // bucket to use
+        $bucket_name = 'searchbucket';
 
+        // spin up client & grab bucket
+        $client = new Riak(self::HOST, self::PORT);
+        $bucket = $client->bucket($bucket_name);
+
+        // turn on search for this bucket
         $bucket->setProperty('search', true);
 
+        // create searchable objects
         $bucket->newObject("one", array("foo" => "one", "bar" => "red"))->store();
         $bucket->newObject("two", array("foo" => "two", "bar" => "green"))->store();
         $bucket->newObject("three", array("foo" => "three", "bar" => "blue"))->store();
         $bucket->newObject("four", array("foo" => "four", "bar" => "orange"))->store();
         $bucket->newObject("five", array("foo" => "five", "bar" => "yellow"))->store();
 
-        # Run some operations...
-        $results = $client->search("searchbucket", "foo:one OR foo:two")->run();
+        // search test 1
+        $results = $client->search($bucket_name, "foo:one OR foo:two")->run();
         if (count($results) == 0) {
             print "\n\nNot running tests \"testSearchIntegration()\".\n";
             print "Please ensure that you have installed the Riak Search hook on bucket \"searchbucket\" by running \"bin/search-cmd install searchbucket\".\n\n";
             return;
         }
-        $this->_assert(count($results) == 2);
+        $this->_assert(count($results) == 2, "Search integration result = " . count($results) . ' but should be 2.');
 
+        // search test 2
         $results = $client->search(
             "searchbucket",
             "(foo:one OR foo:two OR foo:three OR foo:four) AND (NOT bar:green)"
         )->run();
-        $this->_assert(count($results) == 3);
+        $this->_assert(count($results) == 3, "Search integration result = " . count($results) . ' but should be 3.');
     }
 
     public function testSecondaryIndexes()
@@ -667,10 +672,10 @@ class TestSuite
         $this->_assert($exists);
     }
 
-    private function _assert($bool)
+    private function _assert($bool, $msg = '')
     {
         if (!$bool) {
-            throw new Exception("Test failed.");
+            throw new Exception($msg);
         }
     }
 }
