@@ -109,8 +109,8 @@ all pull requests that include new classes or class methods have appropriate uni
 We also expect that before submitting a pull request, that you have run the tests to ensure that all of them
 continue to pass after your changes.
 
-As long as you have a checkout of the client project, you can execute all the tests by simply running
-`php vendor/bin/phpunit` from the client project root.
+To run the tests, clone this repository and run 'composer update' from the repository root, then you can execute all the tests by simply running
+`php vendor/bin/phpunit`.
 
 To execute only the unit tests, run `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
 
