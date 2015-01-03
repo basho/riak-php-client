@@ -348,6 +348,30 @@ class Object
     }
 
     /**
+     * Get nemes of current defined indexes for that record
+     * @param string $indexName
+     * @param string $indexType
+     */
+    public function getIndexes()
+    {
+        $result = array();
+        foreach( array_keys( $this->indexes ) as $index ){
+            $separatorPos = strrpos($index, '_');
+            if ($separatorPos !== false ){
+                $name = substr($index, 0, $separatorPos);
+                $type = substr($index, $separatorPos+1);
+                if(!array_key_exists($name, $result)) {
+                    $result[$name] = array();
+                }
+                $result[$name][] = $type;
+            } else {
+                $result[$name] = array();
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Removes a specific value from a given index
      *
      * @param string $indexName
