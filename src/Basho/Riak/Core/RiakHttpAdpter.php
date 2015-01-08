@@ -7,9 +7,9 @@ use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\GetRequest;
 use Basho\Riak\Core\Message\PutRequest;
 use Basho\Riak\Core\Message\DeleteRequest;
-use Basho\Riak\Core\Adapter\HttpGet;
-use Basho\Riak\Core\Adapter\HttpPut;
-use Basho\Riak\Core\Adapter\HttpDelete;
+use Basho\Riak\Core\Adapter\Kv\HttpGet;
+use Basho\Riak\Core\Adapter\Kv\HttpPut;
+use Basho\Riak\Core\Adapter\Kv\HttpDelete;
 use Basho\Riak\RiakException;
 
 /**

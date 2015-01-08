@@ -1,8 +1,9 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter;
+namespace Basho\Riak\Core\Adapter\Kv;
 
 use GuzzleHttp\ClientInterface;
+use Basho\Riak\Core\Adapter\Strategy;
 use GuzzleHttp\Message\ResponseInterface;
 use Basho\Riak\Core\Adapter\Http\MultipartResponseIterator;
 

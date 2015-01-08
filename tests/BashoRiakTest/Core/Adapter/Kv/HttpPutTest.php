@@ -4,13 +4,13 @@ namespace BashoRiakTest\Core\Adapter;
 
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Basho\Riak\Core\Adapter\HttpPut;
+use Basho\Riak\Core\Adapter\Kv\HttpPut;
 use Basho\Riak\Core\Message\PutRequest;
 
 class HttpPutTest extends TestCase
 {
     /**
-     * @var \GuzzleHttp\ClientInterface 
+     * @var \GuzzleHttp\ClientInterface
      */
     private $client;
 
@@ -125,7 +125,7 @@ class HttpPutTest extends TestCase
             ->method('getHeader')
             ->with($this->equalTo('X-Riak-Vclock'))
             ->willReturn('vclock-hash');
-        
+
         $httpRequest->expects($this->exactly(3))
             ->method('setHeader')
             ->will($this->returnValueMap([

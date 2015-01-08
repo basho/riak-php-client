@@ -1,12 +1,11 @@
 <?php
 
-namespace BashoRiakTest\Core\Adapter;
+namespace BashoRiakTest\Core\Adapter\Kv;
 
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Basho\Riak\Core\Adapter\HttpDelete;
+use Basho\Riak\Core\Adapter\Kv\HttpDelete;
 use Basho\Riak\Core\Message\DeleteRequest;
-use GuzzleHttp\Exception\ClientException;
 
 class HttpDeleteTest extends TestCase
 {

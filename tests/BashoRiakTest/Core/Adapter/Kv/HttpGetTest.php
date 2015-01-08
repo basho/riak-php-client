@@ -4,7 +4,7 @@ namespace BashoRiakTest\Core\Adapter;
 
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Basho\Riak\Core\Adapter\HttpGet;
+use Basho\Riak\Core\Adapter\Kv\HttpGet;
 use Basho\Riak\Core\Message\GetRequest;
 use GuzzleHttp\Exception\ClientException;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter;
+namespace Basho\Riak\Core\Adapter\Kv;
 
 use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;

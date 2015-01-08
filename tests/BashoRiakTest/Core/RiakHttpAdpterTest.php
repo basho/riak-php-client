@@ -11,7 +11,7 @@ use Basho\Riak\Core\Message\DeleteRequest;
 class RiakHttpAdpterTest extends TestCase
 {
     /**
-     * @var \GuzzleHttp\ClientInterface 
+     * @var \GuzzleHttp\ClientInterface
      */
     private $client;
 
@@ -34,8 +34,8 @@ class RiakHttpAdpterTest extends TestCase
         $put    = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new PutRequest()]);
         $delete = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new DeleteRequest()]);
 
-        $this->assertInstanceOf('Basho\Riak\Core\Adapter\HttpGet', $get);
-        $this->assertInstanceOf('Basho\Riak\Core\Adapter\HttpPut', $put);
-        $this->assertInstanceOf('Basho\Riak\Core\Adapter\HttpDelete', $delete);
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Kv\HttpGet', $get);
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Kv\HttpPut', $put);
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Kv\HttpDelete', $delete);
     }
 }

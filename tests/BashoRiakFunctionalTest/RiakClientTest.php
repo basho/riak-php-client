@@ -18,7 +18,7 @@ class RiakClientTest extends TestCase
         parent::setUp();
 
         $client  = new \GuzzleHttp\Client();
-        $request = $client->createRequest('PUT', 'http://localhost:8098/buckets/test_bucket/props');
+        $request = $client->createRequest('PUT', 'http://127.0.0.1:8098/buckets/test_bucket/props');
 
         $request->addHeader('Content-Type', 'application/json');
         $request->setBody(\GuzzleHttp\Stream\Stream::factory(json_encode([

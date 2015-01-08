@@ -12,13 +12,13 @@ abstract class TestCase extends \BashoRiakTest\TestCase
     {
         parent::setUp();
 
-        if (@fsockopen('localhost', 8098) === false) {
+        if (@fsockopen('127.0.0.1', 8098) === false) {
             $this->markTestSkipped('The ' . __CLASS__ .' cannot connect to riak');
         }
 
         $builder = new RiakClientBuilder();
         $client  = $builder
-            ->withNodeUri('http://localhost:8098')
+            ->withNodeUri('http://127.0.0.1:8098')
             ->build();
 
         $this->client = $client;
