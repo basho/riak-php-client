@@ -1,7 +1,6 @@
 # Riak Client for PHP [![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
 
-A rich PHP client/toolkit for [Riak](http://basho.com/riak/), Basho's distributed database, that uses
-[Google's protocol buffers](https://code.google.com/p/protobuf/). This client library is officially supported and
+A PHP client/toolkit for [Riak](http://basho.com/riak/), Basho's distributed database. This client library is officially supported and
 maintained by the Basho engineering team.
 
 **NOTICE: THE 2.0.X BRANCH IS UNDER ACTIVE DEVELOPMENT AND SHOULD NOT BE USED IN PRODUCTION AT THIS TIME**
@@ -29,14 +28,14 @@ are using version 1.4.9 of Riak, then you will want the latest 1.4.* version of 
 Run the following `composer` command:
 
 ```console
-$ composer require "basho/riak-php-client:~1.0-dev"
+$ composer require "basho/riak-php-client:1.4.*"
 ```
 
 Alternately, manually add the following to your `composer.json`, in the `require` section:
 
 ```javascript
 "require": {
-    "basho/riak-php-client": "~1.0-dev"
+    "basho/riak-php-client": "1.4.*"
 }
 ```
 
@@ -109,8 +108,8 @@ all pull requests that include new classes or class methods have appropriate uni
 We also expect that before submitting a pull request, that you have run the tests to ensure that all of them
 continue to pass after your changes.
 
-As long as you have a checkout of the client project, you can execute all the tests by simply running
-`php vendor/bin/phpunit` from the client project root.
+To run the tests, clone this repository and run `composer update` from the repository root, then you can execute all the tests by simply running
+`php vendor/bin/phpunit`.
 
 To execute only the unit tests, run `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
 
