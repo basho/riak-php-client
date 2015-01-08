@@ -36,11 +36,11 @@ class Phase
      */
     public function __construct($type, $function, $language, $keep, $arg)
     {
-        $this->type = $type;
+        $this->type     = $type;
         $this->language = $language;
         $this->function = $function;
-        $this->keep = $keep;
-        $this->arg  = $arg;
+        $this->keep     = $keep;
+        $this->arg      = $arg;
     }
 
     /**
@@ -49,15 +49,15 @@ class Phase
      */
     public function to_array()
     {
-        $stepdef            = [
-            "keep" => $this->keep,
+        $stepdef = [
+            "keep"     => $this->keep,
             "language" => $this->language,
-            "arg"  => $this->arg
+            "arg"      => $this->arg
         ];
 
         if ($this->language == "javascript" && is_array($this->function)) {
             $stepdef["bucket"] = $this->function[0];
-            $stepdef["key"] = $this->function[1];
+            $stepdef["key"]    = $this->function[1];
         } else {
             if ($this->language == "javascript" && is_string($this->function)) {
                 if (strpos($this->function, "{") == false) {
@@ -67,7 +67,7 @@ class Phase
                 }
             } else {
                 if ($this->language == "erlang" && is_array($this->function)) {
-                    $stepdef["module"] = $this->function[0];
+                    $stepdef["module"]   = $this->function[0];
                     $stepdef["function"] = $this->function[1];
                 }
             }

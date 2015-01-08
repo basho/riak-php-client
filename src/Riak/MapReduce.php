@@ -104,7 +104,7 @@ class MapReduce
     private function add_bucket($bucket)
     {
         $this->input_mode = "bucket";
-        $this->inputs = $bucket;
+        $this->inputs     = $bucket;
 
         return $this;
     }
@@ -121,9 +121,9 @@ class MapReduce
     public function search($bucket, $query)
     {
         $this->inputs = [
-            "module" => "riak_search",
+            "module"   => "riak_search",
             "function" => "mapred_search",
-            "arg"    => [$bucket, $query]
+            "arg"      => [$bucket, $query]
         ];
 
         return $this;
@@ -239,7 +239,7 @@ class MapReduce
      * to combine with the existing filters.
      *
      * @param string $operator - Operator (usually "and" or "or")
-     * @param array $filter
+     * @param array  $filter
      * @return $this
      */
     public function key_filter_operator($operator, $filter /*. ,$filter .*/)
@@ -298,13 +298,13 @@ class MapReduce
         if ($end === null) {
             $this->index = [
                 'index' => "{$indexName}_{$indexType}",
-                'key' => urlencode($startOrExact)
+                'key'   => urlencode($startOrExact)
             ];
         } else {
             $this->index = [
                 'index' => "{$indexName}_{$indexType}",
                 'start' => urlencode($startOrExact),
-                'end' => urlencode($end)
+                'end'   => urlencode($end)
             ];
         }
 
@@ -329,7 +329,7 @@ class MapReduce
         # If there are no phases, then just echo the inputs back to the user.
         if ($num_phases == 0) {
             $this->reduce(["riak_kv_mapreduce", "reduce_identity"]);
-            $num_phases = 1;
+            $num_phases      = 1;
             $linkResultsFlag = true;
         }
 
@@ -337,7 +337,7 @@ class MapReduce
         # if none of the phases are accumulating, then set the last one to
         # accumulate.
         $keep_flag = false;
-        $query = [];
+        $query     = [];
         for ($i = 0; $i < $num_phases; $i++) {
             $phase = $this->phases[$i];
             if ($i == ($num_phases - 1) && !$keep_flag) {
@@ -352,7 +352,7 @@ class MapReduce
         # Add key filters if applicable
         if ($this->input_mode == 'bucket' && count($this->key_filters) > 0) {
             $this->inputs = [
-                'bucket' => $this->inputs,
+                'bucket'      => $this->inputs,
                 'key_filters' => $this->key_filters
             ];
         }
@@ -386,10 +386,10 @@ class MapReduce
         # results to Link objects.
         $a = [];
         foreach ($result as $r) {
-            $tag  = isset($r[2]) ? $r[2] : null;
-            $link = new Link($r[0], $r[1], $tag);
+            $tag          = isset($r[2]) ? $r[2] : null;
+            $link         = new Link($r[0], $r[1], $tag);
             $link->client = $this->client;
-            $a[]  = $link;
+            $a[]          = $link;
         }
 
         return $a;

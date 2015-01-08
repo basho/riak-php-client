@@ -15,8 +15,6 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
-use Basho\Riak\Bucket\Properties;
-
 /**
  * Class Bucket
  *
@@ -31,11 +29,11 @@ use Basho\Riak\Bucket\Properties;
 class Bucket
 {
     /**
-     * Bucket properties object
+     * Bucket properties
      *
-     * @var Properties
+     * @var array
      */
-    protected $properties = null;
+    protected $properties = [];
 
     /**
      * Name of bucket
@@ -53,10 +51,10 @@ class Bucket
      */
     protected $type = '';
 
-    public function __construct()
+    public function __construct($name = '', $type = '')
     {
-        // initialize an empty properties object
-        $this->properties = new Properties();
+        $this->setName($name);
+        $this->setType($type);
     }
 
     public function __toString()
@@ -81,18 +79,45 @@ class Bucket
     }
 
     /**
-     * @return Properties
+     * If properties are not already loaded, fetch them from Riak
+     *
+     * @return array
      */
     public function getProperties()
     {
+        if (!$this->properties) {
+            // TODO: Fetch properties from Riak
+
+            // TODO: Set property result to properties member
+        }
+
         return $this->properties;
     }
 
     /**
-     * @param Properties $properties
+     * getProperty
+     *
+     * @param $key
+     * @return null
+     */
+    public function getProperty($key)
+    {
+        $properties = $this->getProperties();
+        if (!empty($properties[$key])) {
+            return $properties[$key];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $properties
      */
     public function setProperties($properties)
     {
+        // TODO: If there is a difference, store it in Riak
+        // qualify the difference using array_diff_assoc
+
         $this->properties = $properties;
     }
 

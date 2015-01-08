@@ -17,6 +17,9 @@ namespace Basho\Riak\Command;
 
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
+use Basho\Riak\DataType\Counter;
+use Basho\Riak\DataType\Map;
+use Basho\Riak\DataType\Set;
 use Basho\Riak\Object;
 
 /**
@@ -104,23 +107,23 @@ class Builder
         return $this;
     }
 
-    public function withCounter(Object $object)
+    public function withCounter(Counter $counter)
     {
-        $this->getCommand()->setObject($object);
+        $this->getCommand()->setCounter($counter);
 
         return $this;
     }
 
-    public function withSet(Object $object)
+    public function withSet(Set $set)
     {
-        $this->getCommand()->setObject($object);
+        $this->getCommand()->setSet($set);
 
         return $this;
     }
 
-    public function withMap(Object $object)
+    public function withMap(Map $map)
     {
-        $this->getCommand()->setObject($object);
+        $this->getCommand()->setMap($map);
 
         return $this;
     }

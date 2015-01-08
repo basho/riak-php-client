@@ -20,7 +20,7 @@ use Basho\Riak\DataType;
 /**
  * Class Counter
  *
- * [summary]
+ * Data structure for counter crdt
  *
  * @package     Basho\Riak\DataType
  * @author      Christopher Mancini <cmancini at basho d0t com>
@@ -30,7 +30,7 @@ use Basho\Riak\DataType;
  */
 class Counter extends DataType
 {
-    protected $type = 'counter';
+    const TYPE = 'counter';
 
     protected $data = 0;
 }

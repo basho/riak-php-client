@@ -13,32 +13,45 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak;
+namespace Basho\Tests\Riak\Command;
+
+use Basho\Riak\Command\Builder;
+use Basho\Riak\Command\Object\Store;
+use Basho\Riak\Object;
 
 /**
- * Interface Command
+ * Class BuilderTest
  *
- * The interface for implementing a new Riak Command class.
+ * Tests the configuration of Riak commands via the Command Builder class
  *
- * @package     Basho\Riak
+ * @package     Basho\Tests\RiakTest
  * @author      Christopher Mancini <cmancini at basho d0t com>
  * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-interface CommandInterface
+class BuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function getMethod();
+    /**
+     * testConstruct
+     *
+     * Test command builder construct
+     *
+     * @covers Builder::__construct
+     */
+    public function testConstruct()
+    {
+        $builder = new Builder(new Store());
 
-    public function getBucket();
+        $this->assertInstanceOf('Basho\Riak\Command\Builder', $builder);
+        $this->assertInstanceOf('Basho\Riak\Command\Object\Store', $builder->build());
+    }
 
-    public function setBucket(Bucket $bucket);
+    public function testWithObject()
+    {
+        $builder = (new Builder(new Store()))->withObject(new Object('test_key'));
+        $command = $builder->build();
 
-    public function getObject();
-
-    public function setObject(Object $object);
-
-    public function hasParameters();
-
-    public function validate();
+        $this->assertEquals('test_key', $command->getObject()->getKey());
+    }
 }

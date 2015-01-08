@@ -1,10 +1,13 @@
-language: "php"
+language: php
 php:
-  - "5.4"
-  - "5.5"
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+sudo: false # enables docker
 install:
   - composer install
 notifications:
   webhooks: http://basho-engbot.herokuapp.com/travis?key=8d594c660ec46f616e37e24fd941c0ea1fc67963
-  email: "clients@basho.com"
+  email: clients@basho.com
 script: "php vendor/bin/phpunit --testsuite 'Unit Tests'"

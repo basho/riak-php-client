@@ -30,7 +30,7 @@ use Basho\Riak\DataType;
  */
 class Set extends DataType
 {
-    protected $type = 'set';
+    const TYPE = 'set';
 
     protected $data = [];
 } 

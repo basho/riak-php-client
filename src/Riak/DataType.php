@@ -26,30 +26,16 @@ namespace Basho\Riak;
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class DataType
+abstract class DataType
 {
+    use ObjectTrait;
+
     /**
-     * DataType type
-     *
-     * Options: byte, counter, map, set
+     * DataType::TYPE
      *
      * @var string
      */
-    protected $type = '';
-
-    /**
-     * Value stored by the data type
-     *
-     * @var mixed|null
-     */
-    protected $data = null;
-
-    /**
-     * [short description]
-     *
-     * @var string
-     */
-    protected $key = '';
+    const TYPE = '';
 
     public function __construct($key = '')
     {
@@ -57,35 +43,13 @@ class DataType
     }
 
     /**
-     * @return mixed|null
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * @param mixed|null $data
-     */
-    public function setData($data)
-    {
-        $this->data = $data;
-    }
-
-    /**
+     * __toString
+     *
      * @return string
      */
-    public function getKey()
+    public function __toString()
     {
-        return $this->key;
-    }
-
-    /**
-     * @param string $key
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
+        return $this->getKey();
     }
 
     /**
@@ -93,6 +57,6 @@ class DataType
      */
     public function getType()
     {
-        return $this->type;
+        return static::TYPE;
     }
 }

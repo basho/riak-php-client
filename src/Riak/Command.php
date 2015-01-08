@@ -42,18 +42,19 @@ abstract class Command
     protected $method = 'GET';
 
     /**
-     * Riak Bucket
-     *
      * @var Bucket|null
      */
     protected $bucket = null;
 
     /**
-     * Riak DataType
-     *
-     * @var \Basho\Riak\Object|null
+     * @var Object|null
      */
     protected $object = null;
+
+    /**
+     * @var DataType|null
+     */
+    protected $dataType = null;
 
     /**
      * Command parameters
@@ -68,16 +69,17 @@ abstract class Command
     }
 
     /**
+     * @param $key string
      * @return mixed
      */
     public function getParameter($key)
     {
-        return $this->parameter[$key];
+        return $this->parameters[$key];
     }
 
     /**
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed  $value
      * @return $this
      */
     public function setParameter($key, $value)
@@ -125,7 +127,7 @@ abstract class Command
     }
 
     /**
-     * @param Bucket|null $bucket
+     * @param Bucket $bucket
      * @return $this
      */
     public function setBucket(Bucket $bucket)
@@ -136,7 +138,7 @@ abstract class Command
     }
 
     /**
-     * @return \Basho\Riak\Object|null
+     * @return Object|null
      */
     public function getObject()
     {
@@ -144,7 +146,7 @@ abstract class Command
     }
 
     /**
-     * @param \Basho\Riak\Object|null $object
+     * @param \Basho\Riak\Object $object
      * @return $this
      */
     public function setObject(Object $object)
@@ -157,6 +159,22 @@ abstract class Command
     public function getMethod()
     {
         return $this->method;
+    }
+
+    /**
+     * @return DataType|null
+     */
+    public function getDataType()
+    {
+        return $this->dataType;
+    }
+
+    /**
+     * @param DataType|null $dataType
+     */
+    public function setDataType($dataType)
+    {
+        $this->dataType = $dataType;
     }
 
     /**

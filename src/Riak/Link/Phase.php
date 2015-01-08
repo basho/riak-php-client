@@ -33,8 +33,8 @@ class Phase
     public function __construct($bucket, $tag, $keep)
     {
         $this->bucket = $bucket;
-        $this->tag = $tag;
-        $this->keep = $keep;
+        $this->tag    = $tag;
+        $this->keep   = $keep;
     }
 
     /**
@@ -45,8 +45,8 @@ class Phase
     {
         $stepdef = [
             "bucket" => $this->bucket,
-            "tag"  => $this->tag,
-            "keep" => $this->keep
+            "tag"    => $this->tag,
+            "keep"   => $this->keep
         ];
 
         return ["link" => $stepdef];

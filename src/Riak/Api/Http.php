@@ -23,7 +23,7 @@ use Basho\Riak\Node;
 /**
  * Class Http
  *
- * [summary]
+ * Handles communications between end user app & Riak via Riak HTTP API using cURL
  *
  * @package     Basho\Riak\Api
  * @author      Christopher Mancini <cmancini at basho d0t com>
@@ -194,29 +194,30 @@ class Http extends Api implements ApiInterface
     protected function setPath()
     {
         $bucket        = $this->getCommand()->getBucket();
-        $typeSegment   = $bucket->getType() ? '/types/' . $bucket->getType() : '';
+        $bucketTypeSegment   = $bucket->getType() ? '/types/' . $bucket->getType() : '';
         $bucketSegment = '/buckets/' . $bucket->getName();
 
         switch (get_class($this->getCommand())) {
             case 'Basho\Riak\Command\Bucket\List':
-                $this->path = $typeSegment . '/buckets';
+                $this->path = $bucketTypeSegment . '/buckets';
                 break;
             case 'Basho\Riak\Command\Bucket\Fetch':
             case 'Basho\Riak\Command\Bucket\Store':
             case 'Basho\Riak\Command\Bucket\Reset':
-                $this->path = $typeSegment . $bucketSegment . '/props';
+                $this->path = $bucketTypeSegment . $bucketSegment . '/props';
                 break;
             case 'Basho\Riak\Command\Bucket\Keys':
-                $this->path = $typeSegment . $bucketSegment . '/keys';
+                $this->path = $bucketTypeSegment . $bucketSegment . '/keys';
                 break;
             case 'Basho\Riak\Command\Object\Fetch':
             case 'Basho\Riak\Command\Object\Store':
             case 'Basho\Riak\Command\Object\Delete':
-                $this->path = $typeSegment . $bucketSegment . '/keys/' . $this->getCommand()->getObject();
+                $this->path = $bucketTypeSegment . $bucketSegment . '/keys/' . $this->getCommand()->getObject();
                 break;
             case 'Basho\Riak\Command\DateType\Fetch':
             case 'Basho\Riak\Command\DateType\Store':
-                $this->path = $typeSegment . $bucketSegment . '/counters/' . $this->getCommand()->getCounter();
+                $crdt = $this->getCommand()->getDataType();
+                $this->path = $bucketTypeSegment . $bucketSegment . '/' . $crdt->getType() . 's/' . $crdt;
                 break;
             default:
                 $this->path = '';

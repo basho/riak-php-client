@@ -18,9 +18,9 @@ namespace Basho\Tests\Riak\Node;
 use Basho\Riak\Node\Builder;
 
 /**
- * Class NodeTest
+ * Class BuilderTest
  *
- * Main class for testing Riak clustering
+ * Tests the configuration of Riak nodes via the Node Builder class
  *
  * @package     Basho\Tests\RiakTest
  * @author      Christopher Mancini <cmancini at basho d0t com>
@@ -28,7 +28,7 @@ use Basho\Riak\Node\Builder;
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-class NodeBuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * testConstruct
@@ -41,7 +41,7 @@ class NodeBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new Builder();
 
-        $this->assertEquals(get_class($builder), 'Basho\Riak\Node\Builder');
+        $this->assertInstanceOf('Basho\Riak\Node\Builder', $builder);
     }
 
     /**

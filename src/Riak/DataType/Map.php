@@ -30,7 +30,7 @@ use Basho\Riak\DataType;
  */
 class Map extends DataType
 {
-    protected $type = 'map';
+    const TYPE = 'map';
 
     protected $data = [];
 } 

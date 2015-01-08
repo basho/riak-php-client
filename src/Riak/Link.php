@@ -27,14 +27,14 @@ class Link
      * Construct a Link object.
      *
      * @param string $bucket - The bucket name.
-     * @param string $key - The key.
-     * @param string $tag - The tag.
+     * @param string $key    - The key.
+     * @param string $tag    - The tag.
      */
     public function __construct($bucket, $key, $tag = null)
     {
         $this->bucket = $bucket;
-        $this->key = $key;
-        $this->tag = $tag;
+        $this->key    = $key;
+        $this->tag    = $tag;
         $this->client = null;
     }
 

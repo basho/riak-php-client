@@ -21,7 +21,7 @@ use Basho\Riak\CommandInterface;
 /**
  * Class Store
  *
- * [summary]
+ * Riak key value object store
  *
  * @package     Basho\Riak\Command\DataType
  * @author      Christopher Mancini <cmancini at basho d0t com>

@@ -13,32 +13,28 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak;
+namespace Basho\Tests\Riak;
+
+use Basho\Riak\DataType\Counter;
 
 /**
- * Interface Command
+ * Class CounterTest
  *
- * The interface for implementing a new Riak Command class.
+ * Test set for counter crdt
  *
- * @package     Basho\Riak
+ * @package     Basho\Tests\RiakTest
  * @author      Christopher Mancini <cmancini at basho d0t com>
  * @copyright   2011-2014 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */
-interface CommandInterface
+class CounterTest extends \PHPUnit_Framework_TestCase
 {
-    public function getMethod();
+    public function testType()
+    {
+        $this->assertEquals('counter', Counter::TYPE);
 
-    public function getBucket();
-
-    public function setBucket(Bucket $bucket);
-
-    public function getObject();
-
-    public function setObject(Object $object);
-
-    public function hasParameters();
-
-    public function validate();
+        $crdt = new Counter();
+        $this->assertEquals('counter', $crdt->getType());
+    }
 }
