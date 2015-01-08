@@ -18,7 +18,7 @@ install:
 
 script:
     - ./vendor/bin/phpunit -v --coverage-clover ./build/logs/clover.xml
-    - ./vendor/bin/phpcs -p --extensions=php  --standard=ruleset.xml src
+    - ./vendor/bin/phpcs -p --extensions=php  --standard=ruleset.xml src --ignore=src/Riak/*,src/Riak.php
 
 after_script:
     - php ./vendor/bin/coveralls -v
