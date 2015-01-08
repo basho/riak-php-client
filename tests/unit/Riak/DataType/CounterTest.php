@@ -30,6 +30,11 @@ use Basho\Riak\DataType\Counter;
  */
 class CounterTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestIncomplete();
+    }
+
     public function testType()
     {
         $this->assertEquals('counter', Counter::TYPE);

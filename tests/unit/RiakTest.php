@@ -37,18 +37,17 @@ class RiakTest extends \PHPUnit_Framework_TestCase
      *
      * @var Node[]
      */
-    static $nodes = null;
+    private $nodes = null;
 
     /**
-     * setUpBeforeClass
      *
      * Sets up the data objects needed by the tests
-     *
-     * @static
      */
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        static::$nodes = (new Builder)
+        $this->markTestIncomplete();
+
+        $this->nodes = (new Builder)
             ->withPort(10018)
             ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
     }
@@ -58,7 +57,7 @@ class RiakTest extends \PHPUnit_Framework_TestCase
      */
     public function testNodeCount()
     {
-        $riak = new Riak(static::$nodes);
+        $riak = new Riak($this->nodes);
         $this->assertEquals(count($riak->getNodes()), count(static::$nodes));
     }
 
@@ -67,7 +66,7 @@ class RiakTest extends \PHPUnit_Framework_TestCase
      */
     public function testClientId()
     {
-        $riak = new Riak(static::$nodes);
+        $riak = new Riak($this->nodes);
         $this->assertNotEmpty($riak->getClientID());
         $this->assertRegExp('/^php_([a-z0-9])+$/', $riak->getClientID());
     }
@@ -77,7 +76,7 @@ class RiakTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfig()
     {
-        $riak = new Riak(static::$nodes, ['max_connect_attempts' => 5]);
+        $riak = new Riak($this->nodes, ['max_connect_attempts' => 5]);
         $this->assertEquals(5, $riak->getConfigValue('max_connect_attempts'));
     }
 
@@ -86,7 +85,7 @@ class RiakTest extends \PHPUnit_Framework_TestCase
      */
     public function testPickNode()
     {
-        $riak = new Riak(static::$nodes);
+        $riak = new Riak($this->nodes);
         $this->assertNotFalse($riak->getActiveNodeIndex());
         $this->assertInstanceOf('Basho\Riak\Node', $riak->getActiveNode());
     }
@@ -96,8 +95,7 @@ class RiakTest extends \PHPUnit_Framework_TestCase
      */
     public function testApi()
     {
-        $riak = new Riak(static::$nodes);
+        $riak = new Riak($this->nodes);
         $this->assertInstanceOf('Basho\Riak\Api', $riak->getApi());
     }
 }
- 

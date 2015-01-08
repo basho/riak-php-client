@@ -30,6 +30,11 @@ use Basho\Riak\DataType\Set;
  */
 class SetTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestIncomplete();
+    }
+
     public function testType()
     {
         $this->assertEquals('set', Set::TYPE);

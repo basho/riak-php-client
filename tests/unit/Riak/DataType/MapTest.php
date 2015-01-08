@@ -30,6 +30,11 @@ use Basho\Riak\DataType\Map;
  */
 class MapTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestIncomplete();
+    }
+
     public function testType()
     {
         $this->assertEquals('map', Map::TYPE);

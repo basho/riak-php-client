@@ -30,6 +30,11 @@ use Basho\Riak\Object;
  */
 class ObjectTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestIncomplete();
+    }
+
     public function testConstruct()
     {
         // simple new object

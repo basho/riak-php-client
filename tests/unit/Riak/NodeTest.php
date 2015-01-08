@@ -35,18 +35,13 @@ class NodeTest extends \PHPUnit_Framework_TestCase
      *
      * @var Node
      */
-    static $node = null;
+    private $node = null;
 
-    /**
-     * setUpBeforeClass
-     *
-     * Sets up the data objects needed by the tests
-     *
-     * @static
-     */
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        static::$node = (new Builder)
+        $this->markTestIncomplete();
+
+        $this->node = (new Builder)
             ->withHost('localhost')
             ->withPort(10018)
             ->build();
@@ -61,9 +56,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfig()
     {
-        $this->assertEquals('localhost', static::$node->getHost());
-        $this->assertEquals(10018, static::$node->getPort());
-        $this->assertNotEmpty(static::$node->getSignature());
+        $this->assertEquals('localhost', $this->node->getHost());
+        $this->assertEquals(10018, $this->node->getPort());
+        $this->assertNotEmpty($this->node->getSignature());
     }
 }
- 

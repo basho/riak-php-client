@@ -30,6 +30,11 @@ use Basho\Riak\Node\Builder;
  */
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestIncomplete();
+    }
+
     /**
      * testConstruct
      *
