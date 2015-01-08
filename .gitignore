@@ -1,6 +1,11 @@
 # Created by .gitignore support plugin (hsz.mobi)
 ## JetBrains IDE project directory
 .idea/
+nbproject
+
+## phpunit
+build
+phpunit.xml
 
 ## File-based project format
 *.ipr
@@ -20,6 +25,7 @@ com_crashlytics_export_strings.xml
 
 # ignore composer vendor directory and lock file
 vendor
+composer.phar
 composer.lock
 
 # ignore mac files

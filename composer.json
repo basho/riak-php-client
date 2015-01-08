@@ -1,28 +1,36 @@
+
 {
-    "name": "basho/riak",
-    "description": "Official Riak client for PHP",
-    "keywords": ["riak", "client", "driver", "database", "nosql"],
-    "homepage": "http://basho.com/riak/",
-    "license": "Apache-2.0",
+    "name":         "basho/riak",
+    "license":      "Apache-2.0",
+    "homepage":     "http://basho.com/riak/",
+    "description":  "Official Riak PHP client for PHP 5.3",
+    "keywords":     ["riak", "client", "driver", "database", "nosql"],
     "authors": [
         {
-            "name": "Riak Team & Contributors",
+            "name":     "Riak Team & Contributors",
             "homepage": "https://github.com/basho/riak-php-client/contributors"
         }
     ],
     "autoload": {
-        "psr-4": {"Basho\\": "src/"}
-    },
-    "autoload-dev": {
-        "psr-4": { "Basho\\Tests\\": "tests/" }
+        "psr-0": { "Basho": "src/" }
     },
     "require": {
-        "php": ">=5.4",
-        "ext-json": "*",
-        "ext-mbstring": "*",
-        "ext-curl": "*"
+        "php":                  ">=5.4.0",
+        "doctrine/annotations": "~1.2",
+        "guzzlehttp/guzzle":    "~5.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.3.*"
+        "phpunit/phpunit":                       "~4",
+        "instaclick/coding-standard":            "~1.1",
+        "squizlabs/php_codesniffer":             "~1.5",
+        "satooshi/php-coveralls":                "~0.6.1",
+        "instaclick/object-calisthenics-sniffs": "dev-master",
+        "instaclick/symfony2-coding-standard":   "dev-remaster"
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "BashoRiakTest\\": "tests",
+            "BashoRiakFunctionalTest\\": "tests"
+        }
     }
 }
