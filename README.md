@@ -116,7 +116,7 @@ development experience. It is expected that any new code in the library is commi
 This includes:
 
 * Short & long descriptions for all new classes and all class members, properties and constants.
-* @package, @author, @copyright, @license, and @since need to be included on all new classes.
+* @author, @copyright, @license, and @since need to be included on all new classes.
 * @var tag on every class property
 * A @param tag for every parameter on a class method
 * A @return tag for every class method that returns a value
@@ -128,9 +128,8 @@ Here is an example of a class docblock:
  *
  * A more elaborate description of what this class does. It may include warnings, limitations or examples.
  *
- * @package     Basho\Riak
  * @author      Author Name <author@domain.com>
- * @copyright   2011-2014 Basho Technologies, Inc.
+ * @copyright   2011-2015 Basho Technologies, Inc.
  * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since       2.0
  */

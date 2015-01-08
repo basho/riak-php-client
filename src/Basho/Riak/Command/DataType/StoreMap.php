@@ -16,8 +16,11 @@ use Basho\Riak\Command\DataType\Builder\StoreMapBuilder;
 /**
  * Command used to update or create a map datatype in Riak.
  *
- * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
- * @author Christopher Mancini <cmancini@basho.com>
+ * @author    Christopher Mancini <cmancini@basho.com>
+ * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @copyright 2011-2015 Basho Technologies, Inc.
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
+ * @since     2.0
  */
 class StoreMap implements RiakCommand
 {

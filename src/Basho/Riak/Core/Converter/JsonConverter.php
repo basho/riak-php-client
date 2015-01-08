@@ -7,7 +7,10 @@ use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
 /**
  * The default Converter used when storing and fetching domain objects from Riak.
  *
- * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @copyright 2011-2015 Basho Technologies, Inc.
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
+ * @since     2.0
  */
 class JsonConverter extends BaseConverter
 {

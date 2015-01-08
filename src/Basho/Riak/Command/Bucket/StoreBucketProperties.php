@@ -10,7 +10,10 @@ use Basho\Riak\Command\Bucket\Builder\StoreBucketPropertiesBuilder;
 /**
  * Command used to store the properties of a bucket in Riak.
  *
- * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @copyright 2011-2015 Basho Technologies, Inc.
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
+ * @since     2.0
  */
 class StoreBucketProperties implements RiakCommand
 {

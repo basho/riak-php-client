@@ -13,7 +13,10 @@ use Basho\Riak\Core\RiakAdapter;
 /**
  * An operation used to fetch an object from Riak.
  *
- * @author Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @copyright 2011-2015 Basho Technologies, Inc.
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
+ * @since     2.0
  */
 class FetchOperation implements RiakOperation
 {
