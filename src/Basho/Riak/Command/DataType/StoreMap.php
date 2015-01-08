@@ -6,6 +6,11 @@ use Basho\Riak\RiakCommand;
 use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Command\Kv\RiakLocation;
+use Basho\Riak\Core\Query\Crdt\RiakSet;
+use Basho\Riak\Core\Query\Crdt\RiakMap;
+use Basho\Riak\Core\Query\Crdt\RiakFlag;
+use Basho\Riak\Core\Query\Crdt\RiakCounter;
+use Basho\Riak\Core\Query\Crdt\RiakRegister;
 use Basho\Riak\Command\DataType\Builder\StoreMapBuilder;
 
 /**
@@ -79,12 +84,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the map mapped to the provided key.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param string                               $key
+     * @param \Basho\Riak\Core\Query\Crdt\RiakMap  $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateMap($key, $value)
+    public function updateMap($key, RiakMap $value)
     {
         return $this;
     }
@@ -92,12 +97,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the set mapped to the provided key.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param string                               $key
+     * @param \Basho\Riak\Core\Query\Crdt\RiakSet  $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateSet($key, $value)
+    public function updateSet($key, RiakSet $value)
     {
         return $this;
     }
@@ -105,12 +110,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the counter mapped to the provided key.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param string                                  $key
+     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateCounter($key, $value)
+    public function updateCounter($key, RiakCounter $value)
     {
         return $this;
     }
@@ -118,12 +123,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the register mapped to the provided key.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param string                                   $key
+     * @param \Basho\Riak\Core\Query\Crdt\RiakRegister $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateRegister($key, $value)
+    public function updateRegister($key, RiakRegister $value)
     {
         return $this;
     }
@@ -131,12 +136,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the flag mapped to the provided key.
      *
-     * @param string $key
-     * @param mixed  $value
+     * @param string                               $key
+     * @param \Basho\Riak\Core\Query\Crdt\RiakFlag $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateFlag($key, $value)
+    public function updateFlag($key, RiakFlag $value)
     {
         return $this;
     }
