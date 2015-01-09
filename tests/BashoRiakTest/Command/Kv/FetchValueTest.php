@@ -9,7 +9,7 @@ use Basho\Riak\RiakClientBuilder;
 use Basho\Riak\Command\Kv\FetchValue;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\Core\Message\GetResponse;
+use Basho\Riak\Core\Message\Kv\GetResponse;
 
 class FetchValueTest extends TestCase
 {

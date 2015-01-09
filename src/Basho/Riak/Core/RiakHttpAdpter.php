@@ -4,12 +4,6 @@ namespace Basho\Riak\Core;
 
 use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;
-use Basho\Riak\Core\Message\GetRequest;
-use Basho\Riak\Core\Message\PutRequest;
-use Basho\Riak\Core\Message\DeleteRequest;
-use Basho\Riak\Core\Adapter\Kv\HttpGet;
-use Basho\Riak\Core\Adapter\Kv\HttpPut;
-use Basho\Riak\Core\Adapter\Kv\HttpDelete;
 use Basho\Riak\RiakException;
 
 /**
@@ -50,16 +44,12 @@ class RiakHttpAdpter implements RiakAdapter
      */
     private function createAdapterStrategyFor(Request $request)
     {
-        if ($request instanceof GetRequest) {
-            return new HttpGet($this->client);
-        }
+        $requestClass  = get_class($request);
+        $strategyName  = str_replace('Request', '', substr($requestClass, strrpos($requestClass, '\\') + 1));
+        $strategyClass = sprintf('\Basho\Riak\Core\Adapter\Kv\Http%s', $strategyName);
 
-        if ($request instanceof PutRequest) {
-            return new HttpPut($this->client);
-        }
-
-        if ($request instanceof DeleteRequest) {
-            return new HttpDelete($this->client);
+        if (class_exists($strategyClass)) {
+            return new $strategyClass($this->client);
         }
 
         throw new RiakException(sprintf("Unknown message : %s", get_class($request)));

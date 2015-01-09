@@ -5,7 +5,7 @@ namespace Basho\Riak\Command\Kv;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Operation\StoreOperation;
+use Basho\Riak\Core\Operation\Kv\StoreOperation;
 use Basho\Riak\Command\Kv\Builder\StoreValueBuilder;
 
 /**
@@ -34,7 +34,7 @@ class StoreValue implements RiakCommand
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation       $location
+     * @param \Basho\Riak\Core\Query\RiakLocation       $location
      * @param \Basho\Riak\Core\Query\RiakObject|mixed   $value
      * @param array                                     $options
      */
@@ -60,7 +60,7 @@ class StoreValue implements RiakCommand
     }
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
+     * @param \Basho\Riak\Core\Query\RiakLocation     $location
      * @param \Basho\Riak\Core\Query\RiakObject|mixed $value
      *
      * @return \Basho\Riak\Command\Kv\Builder\StoreValueBuilder

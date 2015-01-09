@@ -1,6 +1,6 @@
 <?php
 
-namespace BashoRiakFunctionalTest;
+namespace BashoRiakFunctionalTest\Command\Kv;
 
 use BashoRiakFunctionalTest\TestCase;
 use Basho\Riak\Cap\RiakOption;
@@ -11,7 +11,7 @@ use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
 
-class RiakClientTest extends TestCase
+class RiakClientCommandsTest extends TestCase
 {
     protected function setUp()
     {

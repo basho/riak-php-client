@@ -4,8 +4,8 @@ namespace Basho\Riak\Core\Adapter\Kv;
 
 use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;
-use Basho\Riak\Core\Message\DeleteRequest;
-use Basho\Riak\Core\Message\DeleteResponse;
+use Basho\Riak\Core\Message\Kv\DeleteRequest;
+use Basho\Riak\Core\Message\Kv\DeleteResponse;
 
 /**
  * Http delete implementation.
@@ -35,7 +35,7 @@ class HttpDelete extends BaseHttpStrategy
     }
 
     /**
-     * @param \Basho\Riak\Core\Message\DeleteRequest $deleteRequest
+     * @param \Basho\Riak\Core\Message\Kv\DeleteRequest $deleteRequest
      *
      * @return \GuzzleHttp\Message\RequestInterface
      */
@@ -74,9 +74,9 @@ class HttpDelete extends BaseHttpStrategy
     }
 
     /**
-     * @param \Basho\Riak\Core\Message\DeleteRequest $request
+     * @param \Basho\Riak\Core\Message\Kv\DeleteRequest $request
      *
-     * @return \Basho\Riak\Core\Message\DeleteResponse
+     * @return \Basho\Riak\Core\Message\Kv\DeleteResponse
      */
     public function send(Request $request)
     {

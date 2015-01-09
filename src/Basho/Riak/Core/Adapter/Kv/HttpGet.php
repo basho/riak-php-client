@@ -4,8 +4,8 @@ namespace Basho\Riak\Core\Adapter\Kv;
 
 use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;
-use Basho\Riak\Core\Message\GetRequest;
-use Basho\Riak\Core\Message\GetResponse;
+use Basho\Riak\Core\Message\Kv\GetRequest;
+use Basho\Riak\Core\Message\Kv\GetResponse;
 use GuzzleHttp\Exception\RequestException;
 
 /**
@@ -35,7 +35,7 @@ class HttpGet extends BaseHttpStrategy
     }
 
     /**
-     * @param \Basho\Riak\Core\Message\GetRequest $getRequest
+     * @param \Basho\Riak\Core\Message\Kv\GetRequest $getRequest
      *
      * @return \GuzzleHttp\Message\RequestInterface
      */
@@ -66,9 +66,9 @@ class HttpGet extends BaseHttpStrategy
     }
 
     /**
-     * @param \Basho\Riak\Core\Message\GetRequest $request
+     * @param \Basho\Riak\Core\Message\Kv\GetRequest $request
      *
-     * @return \Basho\Riak\Core\Message\GetResponse
+     * @return \Basho\Riak\Core\Message\Kv\GetResponse
      */
     public function send(Request $request)
     {

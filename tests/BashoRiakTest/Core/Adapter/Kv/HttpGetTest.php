@@ -5,7 +5,7 @@ namespace BashoRiakTest\Core\Adapter;
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
 use Basho\Riak\Core\Adapter\Kv\HttpGet;
-use Basho\Riak\Core\Message\GetRequest;
+use Basho\Riak\Core\Message\Kv\GetRequest;
 use GuzzleHttp\Exception\ClientException;
 
 class HttpGetTest extends TestCase
@@ -122,7 +122,7 @@ class HttpGetTest extends TestCase
 
         $response = $this->instance->send($request);
 
-        $this->assertInstanceOf('Basho\Riak\Core\Message\GetResponse', $response);
+        $this->assertInstanceOf('Basho\Riak\Core\Message\Kv\GetResponse', $response);
         $this->assertEquals('vclock-hash', $response->vClock);
         $this->assertCount(1, $response->contentList);
 

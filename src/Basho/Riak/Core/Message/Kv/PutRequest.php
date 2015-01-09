@@ -1,6 +1,8 @@
 <?php
 
-namespace Basho\Riak\Core\Message;
+namespace Basho\Riak\Core\Message\Kv;
+
+use Basho\Riak\Core\Message\Request;
 
 /**
  * This class represents a put request.

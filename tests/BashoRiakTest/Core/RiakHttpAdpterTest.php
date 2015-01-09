@@ -4,9 +4,9 @@ namespace BashoRiakTest\Core;
 
 use BashoRiakTest\TestCase;
 use Basho\Riak\Core\RiakHttpAdpter;
-use Basho\Riak\Core\Message\GetRequest;
-use Basho\Riak\Core\Message\PutRequest;
-use Basho\Riak\Core\Message\DeleteRequest;
+use Basho\Riak\Core\Message\Kv\GetRequest;
+use Basho\Riak\Core\Message\Kv\PutRequest;
+use Basho\Riak\Core\Message\Kv\DeleteRequest;
 
 class RiakHttpAdpterTest extends TestCase
 {

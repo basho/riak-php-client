@@ -1,12 +1,12 @@
 <?php
 
-namespace Basho\Riak\Core\Operation;
+namespace Basho\Riak\Core\Operation\Kv;
 
 use Basho\Riak\Command\Kv\Response\StoreValueResponse;
 use Basho\Riak\Core\Converter\DomainObjectReference;
 use Basho\Riak\Core\Converter\RiakObjectConverter;
 use Basho\Riak\Core\Converter\ConverterFactory;
-use Basho\Riak\Core\Message\PutRequest;
+use Basho\Riak\Core\Message\Kv\PutRequest;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Core\RiakOperation;
@@ -50,7 +50,7 @@ class StoreOperation implements RiakOperation
     /**
      * @param \Basho\Riak\Core\Converter\ConverterFactory    $converterFactory
      * @param \Basho\Riak\Core\Converter\RiakObjectConverter $objectConverter
-     * @param \Basho\Riak\Command\Kv\RiakLocation            $location
+     * @param \Basho\Riak\Core\Query\RiakLocation            $location
      * @param \Basho\Riak\Core\Query\RiakObject|mixed        $value
      * @param array                                          $options
      */
@@ -83,7 +83,7 @@ class StoreOperation implements RiakOperation
     }
 
     /**
-     * @return \Basho\Riak\Core\Message\PutRequest
+     * @return \Basho\Riak\Core\Message\Kv\PutRequest
      */
     private function createPutRequest()
     {

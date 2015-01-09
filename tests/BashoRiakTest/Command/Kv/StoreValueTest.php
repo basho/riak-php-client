@@ -10,7 +10,7 @@ use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Command\Kv\StoreValue;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\Core\Message\PutResponse;
+use Basho\Riak\Core\Message\Kv\PutResponse;
 
 class StoreValueTest extends TestCase
 {

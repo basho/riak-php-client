@@ -5,7 +5,7 @@ namespace Basho\Riak\Command\Kv;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Operation\FetchOperation;
+use Basho\Riak\Core\Operation\Kv\FetchOperation;
 use Basho\Riak\Command\Kv\Builder\FetchValueBuilder;
 
 /**

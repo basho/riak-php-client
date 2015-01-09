@@ -5,7 +5,7 @@ namespace BashoRiakTest\Core\Adapter;
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
 use Basho\Riak\Core\Adapter\Kv\HttpPut;
-use Basho\Riak\Core\Message\PutRequest;
+use Basho\Riak\Core\Message\Kv\PutRequest;
 
 class HttpPutTest extends TestCase
 {
@@ -157,7 +157,7 @@ class HttpPutTest extends TestCase
 
         $response = $this->instance->send($putRequest);
 
-        $this->assertInstanceOf('Basho\Riak\Core\Message\PutResponse', $response);
+        $this->assertInstanceOf('Basho\Riak\Core\Message\Kv\PutResponse', $response);
         $this->assertEquals('vclock-hash', $response->vClock);
         $this->assertCount(1, $response->contentList);
 

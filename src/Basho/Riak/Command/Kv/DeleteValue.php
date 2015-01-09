@@ -6,7 +6,7 @@ use Basho\Riak\Cap\VClock;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Operation\DeleteOperation;
+use Basho\Riak\Core\Operation\Kv\DeleteOperation;
 use Basho\Riak\Command\Kv\Builder\DeleteValueBuilder;
 
 /**

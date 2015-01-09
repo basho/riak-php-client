@@ -9,7 +9,7 @@ use Basho\Riak\RiakClientBuilder;
 use Basho\Riak\Command\Kv\DeleteValue;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\Core\Message\DeleteResponse;
+use Basho\Riak\Core\Message\Kv\DeleteResponse;
 
 class DeleteValueTest extends TestCase
 {
