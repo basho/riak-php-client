@@ -45,6 +45,14 @@ abstract class Response implements RiakResponse
     }
 
     /**
+     * @return \Basho\Riak\Core\Query\RiakLocation
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
      * Determine if this response contains any returned values.
      *
      * @return boolean.

@@ -8,7 +8,6 @@ use Basho\Riak\Cap\RiakOption;
 use Basho\Riak\RiakClientBuilder;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\DataType\FetchCounter;
 
 class FetchCounterTest extends TestCase
@@ -40,20 +39,6 @@ class FetchCounterTest extends TestCase
         $this->client   = $builder
             ->withNode($this->node)
             ->build();
-    }
-
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecute()
-    {
-        $command = FetchCounter::builder()
-            ->withOption(RiakOption::R, 1)
-            ->withLocation($this->location)
-            ->build();
-
-        $this->client->execute($command);
     }
 
     public function testBuildCommand()

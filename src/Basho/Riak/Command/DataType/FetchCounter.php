@@ -3,10 +3,10 @@
 namespace Basho\Riak\Command\DataType;
 
 use Basho\Riak\RiakCommand;
-use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Command\DataType\Builder\FetchCounterBuilder;
+use Basho\Riak\Core\Operation\DataType\FetchCounterOperation;
 
 /**
  * Command used to fetch a counter datatype from Riak.
@@ -44,7 +44,10 @@ class FetchCounter implements RiakCommand
      */
     public function execute(RiakCluster $cluster)
     {
-        throw new RiakException("Not implemented");
+        $operation = new FetchCounterOperation($this->location, $this->options);
+        $response  = $cluster->execute($operation);
+
+        return $response;
     }
 
     /**

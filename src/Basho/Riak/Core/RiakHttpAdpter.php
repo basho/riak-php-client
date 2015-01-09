@@ -16,6 +16,13 @@ use Basho\Riak\RiakException;
  */
 class RiakHttpAdpter implements RiakAdapter
 {
+    private $strategyMap = [
+        'Basho\Riak\Core\Message\Kv\GetRequest'       => 'Basho\Riak\Core\Adapter\Http\Kv\HttpGet',
+        'Basho\Riak\Core\Message\Kv\PutRequest'       => 'Basho\Riak\Core\Adapter\Http\Kv\HttpPut',
+        'Basho\Riak\Core\Message\Kv\DeleteRequest'    => 'Basho\Riak\Core\Adapter\Http\Kv\HttpDelete',
+        'Basho\Riak\Core\Message\DataType\GetRequest' => 'Basho\Riak\Core\Adapter\Http\DataType\HttpGet',
+    ];
+
     /**
      * @var \GuzzleHttp\ClientInterface
      */
@@ -45,10 +52,11 @@ class RiakHttpAdpter implements RiakAdapter
     private function createAdapterStrategyFor(Request $request)
     {
         $requestClass  = get_class($request);
-        $strategyName  = str_replace('Request', '', substr($requestClass, strrpos($requestClass, '\\') + 1));
-        $strategyClass = sprintf('\Basho\Riak\Core\Adapter\Http\Kv\Http%s', $strategyName);
+        $strategyClass = isset($this->strategyMap[$requestClass])
+            ? $this->strategyMap[$requestClass]
+            : null;
 
-        if (class_exists($strategyClass)) {
+        if ($strategyClass !== null) {
             return new $strategyClass($this->client);
         }
 

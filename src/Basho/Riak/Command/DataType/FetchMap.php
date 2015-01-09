@@ -6,7 +6,6 @@ use Basho\Riak\RiakCommand;
 use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\Crdt\RiakMap;
 use Basho\Riak\Command\DataType\Builder\FetchMapBuilder;
 
 /**

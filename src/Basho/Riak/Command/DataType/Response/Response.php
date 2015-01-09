@@ -3,6 +3,7 @@
 namespace Basho\Riak\Command\DataType\Response;
 
 use Basho\Riak\RiakResponse;
+use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\Crdt\DataType;
 
 /**
@@ -16,16 +17,31 @@ use Basho\Riak\Core\Query\Crdt\DataType;
 abstract class Response implements RiakResponse
 {
     /**
+     * @var \Basho\Riak\Core\Query\RiakLocation
+     */
+    private $location;
+
+    /**
      * @var \Basho\Riak\Core\Query\Crdt\DataType
      */
     private $datatype;
 
     /**
+     * @param \Basho\Riak\Core\Query\RiakLocation  $location
      * @param \Basho\Riak\Core\Query\Crdt\DataType $datatype
      */
-    public function __construct(DataType $datatype)
+    public function __construct(RiakLocation $location = null, DataType $datatype = null)
     {
         $this->datatype = $datatype;
+        $this->location = $location;
+    }
+
+    /**
+     * @return \Basho\Riak\Core\Query\RiakLocation
+     */
+    public function getLocation()
+    {
+        return $this->location;
     }
 
     /**
