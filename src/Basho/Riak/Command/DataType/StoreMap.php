@@ -5,7 +5,7 @@ namespace Basho\Riak\Command\DataType;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
-use Basho\Riak\Command\Kv\RiakLocation;
+use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\Crdt\RiakSet;
 use Basho\Riak\Core\Query\Crdt\RiakMap;
 use Basho\Riak\Core\Query\Crdt\RiakFlag;
@@ -24,6 +24,33 @@ use Basho\Riak\Command\DataType\Builder\StoreMapBuilder;
  */
 class StoreMap implements RiakCommand
 {
+    /**
+     * @var \Basho\Riak\Core\Query\RiakLocation
+     */
+    private $location;
+
+    /**
+     * @var array
+     */
+    private $options = [];
+
+    /**
+     * @var \Basho\Riak\Core\Query\Crdt\RiakMap
+     */
+    private $map;
+
+    /**
+     * @param \Basho\Riak\Core\Query\RiakLocation $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakMap $map
+     * @param array                               $options
+     */
+    public function __construct(RiakLocation $location = null, RiakMap $map = null, array $options = [])
+    {
+        $this->location = $location;
+        $this->options  = $options;
+        $this->map      = $map;
+    }
+
     /**
      * Update the map in Riak by removing the counter mapped to the provided key.
      *
@@ -158,12 +185,14 @@ class StoreMap implements RiakCommand
     }
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation $location
+     * @param \Basho\Riak\Core\Query\RiakLocation $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakMap $map
+     * @param array                               $options
      *
      * @return \Basho\Riak\Command\DataType\Builder\StoreMapBuilder
      */
-    public static function builder(RiakLocation $location = null)
+    public static function builder(RiakLocation $location = null, RiakMap $map = null, array $options = [])
     {
-        return new StoreMapBuilder($location);
+        return new StoreMapBuilder($location, $map, $options);
     }
 }

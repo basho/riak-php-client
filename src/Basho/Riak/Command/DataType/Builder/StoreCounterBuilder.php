@@ -2,6 +2,8 @@
 
 namespace Basho\Riak\Command\DataType\Builder;
 
+use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\DataType\StoreCounter;
 
 /**
@@ -15,12 +17,41 @@ use Basho\Riak\Command\DataType\StoreCounter;
 class StoreCounterBuilder extends Builder
 {
     /**
+     * @var \Basho\Riak\Core\Query\Crdt\RiakCounter
+     */
+    private $counter;
+
+    /**
+     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $counter
+     * @param array                                   $options
+     */
+    public function __construct(RiakLocation $location = null, RiakCounter $counter = null, array $options = [])
+    {
+        parent::__construct($location, $options);
+
+        $this->counter  = $counter;
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $counter
+     *
+     * @return \Basho\Riak\Command\DataType\Builder\StoreCounterBuilder
+     */
+    public function withCounter(RiakCounter $counter)
+    {
+        $this->counter = $counter;
+
+        return $this;
+    }
+
+    /**
      * Build a command object
      *
      * @return \Basho\Riak\Command\DataType\StoreCounter
      */
     public function build()
     {
-        return new StoreCounter($this->location, $this->options);
+        return new StoreCounter($this->location, $this->counter, $this->options);
     }
 }

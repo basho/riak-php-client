@@ -2,6 +2,8 @@
 
 namespace Basho\Riak\Command\DataType\Builder;
 
+use Basho\Riak\Core\Query\RiakLocation;
+
 /**
  * Used to construct a command.
  *
@@ -20,14 +22,16 @@ abstract class Builder
     /**
      * @var \Basho\Riak\Core\Query\RiakLocation
      */
-    private $location;
+    protected $location;
 
     /**
      * @param \Basho\Riak\Core\Query\RiakLocation $location
+     * @param array                               $options
      */
-    public function __construct(RiakLocation $location = null)
+    public function __construct(RiakLocation $location = null, array $options = [])
     {
         $this->location = $location;
+        $this->options  = $options;
     }
 
     /**

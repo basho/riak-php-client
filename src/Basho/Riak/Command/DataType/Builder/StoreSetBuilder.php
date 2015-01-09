@@ -2,6 +2,8 @@
 
 namespace Basho\Riak\Command\DataType\Builder;
 
+use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\Crdt\RiakSet;
 use Basho\Riak\Command\DataType\StoreSet;
 
 /**
@@ -15,12 +17,41 @@ use Basho\Riak\Command\DataType\StoreSet;
 class StoreSetBuilder extends Builder
 {
     /**
+     * @var \Basho\Riak\Core\Query\Crdt\RiakSet
+     */
+    private $set;
+
+    /**
+     * @param \Basho\Riak\Core\Query\RiakLocation $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $set
+     * @param array                               $options
+     */
+    public function __construct(RiakLocation $location = null, RiakMap $set = null, array $options = [])
+    {
+        parent::__construct($location, $options);
+
+        $this->set = $set;
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $set
+     *
+     * @return \Basho\Riak\Command\DataType\Builder\StoreSetBuilder
+     */
+    public function withSet(RiakSet $set)
+    {
+        $this->set = $set;
+
+        return $this;
+    }
+
+    /**
      * Build a command object
      *
      * @return \Basho\Riak\Command\DataType\StoreSet
      */
     public function build()
     {
-        return new StoreSet($this->location, $this->options);
+        return new StoreSet($this->location, $this->set, $this->options);
     }
 }

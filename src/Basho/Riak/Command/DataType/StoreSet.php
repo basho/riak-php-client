@@ -5,7 +5,9 @@ namespace Basho\Riak\Command\DataType;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
-use Basho\Riak\Command\Kv\RiakLocation;
+use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\Crdt\RiakSet;
+use Basho\Riak\Core\Query\Crdt\DataType;
 use Basho\Riak\Command\DataType\Builder\StoreSetBuilder;
 
 /**
@@ -20,13 +22,40 @@ use Basho\Riak\Command\DataType\Builder\StoreSetBuilder;
 class StoreSet implements RiakCommand
 {
     /**
+     * @var \Basho\Riak\Core\Query\RiakLocation
+     */
+    private $location;
+
+    /**
+     * @var array
+     */
+    private $options = [];
+
+    /**
+     * @var \Basho\Riak\Core\Query\Crdt\RiakSet
+     */
+    private $set;
+
+    /**
+     * @param \Basho\Riak\Core\Query\RiakLocation $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $set
+     * @param array                               $options
+     */
+    public function __construct(RiakLocation $location = null, RiakSet $set = null, array $options = [])
+    {
+        $this->location = $location;
+        $this->options  = $options;
+        $this->set      = $set;
+    }
+
+    /**
      * Add the provided value to the set in Riak.
      *
-     * @param mixed $value
+     * @param \Basho\Riak\Core\Query\Crdt\DataType $value
      *
      * @return \Basho\Riak\Command\DataType\StoreSet
      */
-    public function add($value)
+    public function add(DataType $value)
     {
         return $this;
     }
@@ -34,11 +63,11 @@ class StoreSet implements RiakCommand
     /**
      * Remove the provided value from the set in Riak.
      *
-     * @param mixed $value
+     * @param \Basho\Riak\Core\Query\Crdt\DataType $value
      *
      * @return \Basho\Riak\Command\DataType\StoreSet
      */
-    public function remove($value)
+    public function remove(DataType $value)
     {
         return $this;
     }
@@ -52,12 +81,14 @@ class StoreSet implements RiakCommand
     }
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation $location
+     * @param \Basho\Riak\Core\Query\RiakLocation $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $set
+     * @param array                               $options
      *
-     * @return \Basho\Riak\Command\DataType\Builder\StoreSetBuilder
+     * @return \Basho\Riak\Command\DataType\Builder\FetchSetBuilder
      */
-    public static function builder(RiakLocation $location = null)
+    public static function builder(RiakLocation $location = null, RiakSet $set = null, array $options = [])
     {
-        return new StoreSetBuilder($location);
+        return new StoreSetBuilder($location, $set, $options);
     }
 }

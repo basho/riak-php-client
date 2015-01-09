@@ -5,7 +5,8 @@ namespace Basho\Riak\Command\DataType;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
-use Basho\Riak\Command\Kv\RiakLocation;
+use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\DataType\Builder\StoreCounterBuilder;
 
 /**
@@ -20,6 +21,33 @@ use Basho\Riak\Command\DataType\Builder\StoreCounterBuilder;
 class StoreCounter implements RiakCommand
 {
     /**
+     * @var \Basho\Riak\Core\Query\RiakLocation
+     */
+    private $location;
+
+    /**
+     * @var array
+     */
+    private $options = [];
+
+    /**
+     * @var \Basho\Riak\Core\Query\Crdt\RiakCounter
+     */
+    private $counter;
+
+    /**
+     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $counter
+     * @param array                                   $options
+     */
+    public function __construct(RiakLocation $location, RiakCounter $counter, array $options = [])
+    {
+        $this->location = $location;
+        $this->options  = $options;
+        $this->counter  = $counter;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute(RiakCluster $cluster)
@@ -28,12 +56,14 @@ class StoreCounter implements RiakCommand
     }
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation $location
+     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $counter
+     * @param array                                   $options
      *
      * @return \Basho\Riak\Command\DataType\Builder\StoreCounterBuilder
      */
-    public static function builder(RiakLocation $location = null)
+    public static function builder(RiakLocation $location = null, RiakCounter $counter = null, array $options = [])
     {
-        return new StoreCounterBuilder($location);
+        return new StoreCounterBuilder($location, $counter, $options);
     }
 }

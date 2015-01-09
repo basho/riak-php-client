@@ -5,7 +5,7 @@ namespace Basho\Riak\Command\DataType;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
-use Basho\Riak\Command\Kv\RiakLocation;
+use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Command\DataType\Builder\FetchCounterBuilder;
 
 /**
@@ -20,6 +20,26 @@ use Basho\Riak\Command\DataType\Builder\FetchCounterBuilder;
 class FetchCounter implements RiakCommand
 {
     /**
+     * @var \Basho\Riak\Core\Query\RiakLocation
+     */
+    private $location;
+
+    /**
+     * @var array
+     */
+    private $options = [];
+
+    /**
+     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
+     * @param array                                   $options
+     */
+    public function __construct(RiakLocation $location, array $options = [])
+    {
+        $this->location = $location;
+        $this->options  = $options;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute(RiakCluster $cluster)
@@ -28,12 +48,13 @@ class FetchCounter implements RiakCommand
     }
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation $location
+     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
+     * @param array                                   $options
      *
      * @return \Basho\Riak\Command\DataType\Builder\FetchCounterBuilder
      */
-    public static function builder(RiakLocation $location = null)
+    public static function builder(RiakLocation $location = null, array $options = [])
     {
-        return new FetchCounterBuilder($location);
+        return new FetchCounterBuilder($location, $options);
     }
 }
