@@ -1,10 +1,10 @@
 <?php
 
-namespace BashoRiakTest\Core\Adapter;
+namespace BashoRiakTest\Core\Adapter\Http\Kv;
 
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Basho\Riak\Core\Adapter\Kv\HttpGet;
+use Basho\Riak\Core\Adapter\Http\Kv\HttpGet;
 use Basho\Riak\Core\Message\Kv\GetRequest;
 use GuzzleHttp\Exception\ClientException;
 
@@ -16,7 +16,7 @@ class HttpGetTest extends TestCase
     private $client;
 
     /**
-     * @var \Basho\Riak\Core\Adapter\HttpGet
+     * @var \Basho\Riak\Core\Adapter\Http\Kv\HttpGet
      */
     private $instance;
 

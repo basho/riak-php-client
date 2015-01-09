@@ -46,7 +46,7 @@ class RiakHttpAdpter implements RiakAdapter
     {
         $requestClass  = get_class($request);
         $strategyName  = str_replace('Request', '', substr($requestClass, strrpos($requestClass, '\\') + 1));
-        $strategyClass = sprintf('\Basho\Riak\Core\Adapter\Kv\Http%s', $strategyName);
+        $strategyClass = sprintf('\Basho\Riak\Core\Adapter\Http\Kv\Http%s', $strategyName);
 
         if (class_exists($strategyClass)) {
             return new $strategyClass($this->client);

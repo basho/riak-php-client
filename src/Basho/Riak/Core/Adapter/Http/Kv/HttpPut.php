@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Kv;
+namespace Basho\Riak\Core\Adapter\Http\Kv;
 
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\ClientInterface;

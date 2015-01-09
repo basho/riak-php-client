@@ -34,8 +34,8 @@ class RiakHttpAdpterTest extends TestCase
         $put    = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new PutRequest()]);
         $delete = $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [new DeleteRequest()]);
 
-        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Kv\HttpGet', $get);
-        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Kv\HttpPut', $put);
-        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Kv\HttpDelete', $delete);
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Http\Kv\HttpGet', $get);
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Http\Kv\HttpPut', $put);
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Http\Kv\HttpDelete', $delete);
     }
 }

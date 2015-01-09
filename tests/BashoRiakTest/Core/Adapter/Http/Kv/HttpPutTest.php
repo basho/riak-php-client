@@ -1,10 +1,10 @@
 <?php
 
-namespace BashoRiakTest\Core\Adapter;
+namespace BashoRiakTest\Core\Adapter\Http\Kv;
 
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
-use Basho\Riak\Core\Adapter\Kv\HttpPut;
+use Basho\Riak\Core\Adapter\Http\Kv\HttpPut;
 use Basho\Riak\Core\Message\Kv\PutRequest;
 
 class HttpPutTest extends TestCase
@@ -15,7 +15,7 @@ class HttpPutTest extends TestCase
     private $client;
 
     /**
-     * @var \Basho\Riak\Core\Adapter\HttpPut
+     * @var \Basho\Riak\Core\Adapter\Http\Kv\HttpPut
      */
     private $instance;
 

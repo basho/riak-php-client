@@ -1,6 +1,6 @@
 <?php
 
-namespace BashoRiakTest\Core\Adapter\Kv;
+namespace BashoRiakTest\Core\Adapter\Http\Kv;
 
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
@@ -13,7 +13,7 @@ class BaseHttpStrategyTest extends TestCase
     private $client;
 
     /**
-     * @var \Basho\Riak\Core\Adapter\BaseHttpStrategy
+     * @var \Basho\Riak\Core\Adapter\Http\Kv\BaseHttpStrategy
      */
     private $instance;
 
@@ -22,7 +22,7 @@ class BaseHttpStrategyTest extends TestCase
         parent::setUp();
 
         $this->client   = $this->getMock('GuzzleHttp\ClientInterface');
-        $this->instance = $this->getMockForAbstractClass('Basho\Riak\Core\Adapter\Kv\BaseHttpStrategy', [$this->client]);
+        $this->instance = $this->getMockForAbstractClass('Basho\Riak\Core\Adapter\Http\Kv\BaseHttpStrategy', [$this->client]);
     }
 
     public function testBuildPath()
