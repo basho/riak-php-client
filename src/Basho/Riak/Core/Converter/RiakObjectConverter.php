@@ -6,7 +6,7 @@ use Basho\Riak\Cap\VClock;
 use Basho\Riak\Core\Query\RiakObject;
 
 /**
- * This class represents a get request.
+ * Riak object convertert.
  *
  * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
  * @copyright 2011-2015 Basho Technologies, Inc.

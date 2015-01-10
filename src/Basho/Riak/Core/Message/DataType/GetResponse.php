@@ -2,8 +2,6 @@
 
 namespace Basho\Riak\Core\Message\DataType;
 
-use Basho\Riak\Core\Message\Response;
-
 /**
  * This class represents a get response.
  *

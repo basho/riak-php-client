@@ -2,8 +2,6 @@
 
 namespace Basho\Riak\Core\Message\Kv;
 
-use Basho\Riak\Core\Message\Response;
-
 /**
  * This class represents a put response.
  *
@@ -15,6 +13,4 @@ use Basho\Riak\Core\Message\Response;
 class PutResponse extends Response
 {
     public $key;
-    public $vClock;
-    public $contentList = [];
 }

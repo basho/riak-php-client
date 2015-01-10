@@ -44,7 +44,9 @@ class FetchCounter implements RiakCommand
      */
     public function execute(RiakCluster $cluster)
     {
-        $operation = new FetchCounterOperation($this->location, $this->options);
+        $config    = $cluster->getRiakConfig();
+        $converter = $config->getCrdtResponseConverter();
+        $operation = new FetchCounterOperation($converter, $this->location, $this->options);
         $response  = $cluster->execute($operation);
 
         return $response;

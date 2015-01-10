@@ -42,21 +42,6 @@ class StoreCounterTest extends TestCase
             ->build();
     }
 
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecute()
-    {
-        $command = StoreCounter::builder()
-            ->withCounter(new RiakCounter(1))
-            ->withLocation($this->location)
-            ->withOption(RiakOption::W, 1)
-            ->build();
-
-        $this->client->execute($command);
-    }
-
     public function testBuildCommand()
     {
         $builder = StoreCounter::builder()

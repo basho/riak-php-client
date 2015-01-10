@@ -17,10 +17,13 @@ use Basho\Riak\RiakException;
 class RiakHttpAdpter implements RiakAdapter
 {
     private $strategyMap = [
+        // kv
         'Basho\Riak\Core\Message\Kv\GetRequest'       => 'Basho\Riak\Core\Adapter\Http\Kv\HttpGet',
         'Basho\Riak\Core\Message\Kv\PutRequest'       => 'Basho\Riak\Core\Adapter\Http\Kv\HttpPut',
         'Basho\Riak\Core\Message\Kv\DeleteRequest'    => 'Basho\Riak\Core\Adapter\Http\Kv\HttpDelete',
+        // crdt
         'Basho\Riak\Core\Message\DataType\GetRequest' => 'Basho\Riak\Core\Adapter\Http\DataType\HttpGet',
+        'Basho\Riak\Core\Message\DataType\PutRequest' => 'Basho\Riak\Core\Adapter\Http\DataType\HttpPut',
     ];
 
     /**

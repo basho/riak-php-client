@@ -12,6 +12,5 @@ namespace Basho\Riak\Core\Message;
  */
 class Response
 {
-    public $vClock;
-    public $contentList = [];
+
 }

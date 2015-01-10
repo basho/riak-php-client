@@ -3,11 +3,11 @@
 namespace Basho\Riak\Command\DataType;
 
 use Basho\Riak\RiakCommand;
-use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\DataType\Builder\StoreCounterBuilder;
+use Basho\Riak\Core\Operation\DataType\StoreCounterOperation;
 
 /**
  * Command used to update or create a counter datatype in Riak.
@@ -52,7 +52,12 @@ class StoreCounter implements RiakCommand
      */
     public function execute(RiakCluster $cluster)
     {
-        throw new RiakException("Not implemented");
+        $config    = $cluster->getRiakConfig();
+        $converter = $config->getCrdtResponseConverter();
+        $operation = new StoreCounterOperation($converter, $this->location, $this->counter, $this->options);
+        $response  = $cluster->execute($operation);
+
+        return $response;
     }
 
     /**

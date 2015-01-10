@@ -2,8 +2,6 @@
 
 namespace Basho\Riak\Core\Message\Kv;
 
-use Basho\Riak\Core\Message\Response;
-
 /**
  * This class represents a delete response.
  *
@@ -14,6 +12,5 @@ use Basho\Riak\Core\Message\Response;
  */
 class DeleteResponse extends Response
 {
-    public $vClock;
-    public $contentList = [];
+
 }

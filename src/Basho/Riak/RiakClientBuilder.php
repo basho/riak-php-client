@@ -9,6 +9,7 @@ use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\RiakNodeBuilder;
 use Basho\Riak\Core\Converter\ConverterFactory;
 use Basho\Riak\Core\Converter\RiakObjectConverter;
+use Basho\Riak\Core\Converter\CrdtResponseConverter;
 use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
 use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
 
@@ -28,6 +29,11 @@ class RiakClientBuilder
      * @var \Basho\Riak\Core\Converter\RiakObjectConverter
      */
     private $riakObjectConverter;
+
+    /**
+     * @var \Basho\Riak\Core\Converter\CrdtResponseConverter
+     */
+    private $crdtResponseConverter;
 
     /**
      * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
@@ -79,6 +85,30 @@ class RiakClientBuilder
     public function withRiakObjectConverter(RiakObjectConverter $converter)
     {
         $this->riakObjectConverter = $converter;
+
+        return $this;
+    }
+
+    /**
+     * @return \Basho\Riak\Core\Converter\CrdtResponseConverter
+     */
+    public function getCrdtResponseConverter()
+    {
+        if ($this->crdtResponseConverter === null) {
+            $this->crdtResponseConverter = new CrdtResponseConverter();
+        }
+
+        return $this->crdtResponseConverter;
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Converter\CrdtResponseConverter $converter
+     *
+     * @return \Basho\Riak\RiakClientBuilder
+     */
+    public function withCrdtResponseConverter(CrdtResponseConverter $converter)
+    {
+        $this->crdtResponseConverter = $converter;
 
         return $this;
     }
@@ -200,6 +230,7 @@ class RiakClientBuilder
             $this->config = new RiakConfig(
                 $this->getConverterFactory(),
                 $this->getRiakObjectConverter(),
+                $this->getCrdtResponseConverter(),
                 $this->getDomainMetadataReader(),
                 $this->getDomainHydrator()
             );

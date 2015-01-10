@@ -4,6 +4,7 @@ namespace Basho\Riak;
 
 use Basho\Riak\Core\Converter\ConverterFactory;
 use Basho\Riak\Core\Converter\RiakObjectConverter;
+use Basho\Riak\Core\Converter\CrdtResponseConverter;
 use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
 use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
 
@@ -23,6 +24,11 @@ class RiakConfig
     private $riakObjectConverter;
 
     /**
+     * @var \Basho\Riak\Core\Converter\CrdtResponseConverter
+     */
+    private $crdtResponseConverter;
+
+    /**
      * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
      */
     private $domainHydrator;
@@ -40,19 +46,22 @@ class RiakConfig
     /**
      * @param \Basho\Riak\Core\Converter\ConverterFactory               $converterFactory
      * @param \Basho\Riak\Core\Converter\RiakObjectConverter            $riakObjectConverter
+     * @param \Basho\Riak\Core\Converter\CrdtResponseConverter          $crdtResponseConverter
      * @param \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader  $domainMetadataReader
      * @param \Basho\Riak\Core\Converter\ConverterFactory               $domainHydrator
      */
     public function __construct(
-        ConverterFactory     $converterFactory,
-        RiakObjectConverter  $riakObjectConverter,
-        DomainMetadataReader $domainMetadataReader,
-        DomainHydrator       $domainHydrator
+        ConverterFactory      $converterFactory,
+        RiakObjectConverter   $riakObjectConverter,
+        CrdtResponseConverter $crdtResponseConverter,
+        DomainMetadataReader  $domainMetadataReader,
+        DomainHydrator        $domainHydrator
     ) {
-        $this->converterFactory     = $converterFactory;
-        $this->riakObjectConverter  = $riakObjectConverter;
-        $this->domainMetadataReader = $domainMetadataReader;
-        $this->domainHydrator       = $domainHydrator;
+        $this->converterFactory      = $converterFactory;
+        $this->riakObjectConverter   = $riakObjectConverter;
+        $this->crdtResponseConverter = $crdtResponseConverter;
+        $this->domainMetadataReader  = $domainMetadataReader;
+        $this->domainHydrator        = $domainHydrator;
     }
 
     /**
@@ -61,6 +70,14 @@ class RiakConfig
     public function getRiakObjectConverter()
     {
         return $this->riakObjectConverter;
+    }
+
+    /**
+     * @return \Basho\Riak\Core\Converter\CrdtResponseConverter
+     */
+    public function getCrdtResponseConverter()
+    {
+        return $this->crdtResponseConverter;
     }
 
     /**
