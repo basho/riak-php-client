@@ -5,8 +5,8 @@ namespace Basho\Riak\Command\Kv\Response;
 use Basho\Riak\RiakResponse;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakObjectList;
-use Basho\Riak\Core\Converter\ConverterFactory;
-use Basho\Riak\Core\Converter\RiakObjectReference;
+use Basho\Riak\Converter\ConverterFactory;
+use Basho\Riak\Converter\RiakObjectReference;
 
 /**
  * Base Response.
@@ -19,7 +19,7 @@ use Basho\Riak\Core\Converter\RiakObjectReference;
 abstract class Response implements RiakResponse
 {
     /**
-     * @var \Basho\Riak\Core\Converter\ConverterFactory
+     * @var \Basho\Riak\Converter\ConverterFactory
      */
     private $converterFactory;
 
@@ -34,9 +34,9 @@ abstract class Response implements RiakResponse
     private $values;
 
     /**
-     * @param \Basho\Riak\Core\Converter\ConverterFactory $converterFactory
-     * @param \Basho\Riak\Core\Query\RiakLocation         $location
-     * @param \Basho\Riak\Core\Query\RiakObjectList       $values
+     * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
+     * @param \Basho\Riak\Core\Query\RiakLocation    $location
+     * @param \Basho\Riak\Core\Query\RiakObjectList  $values
      */
     public function __construct(ConverterFactory $converterFactory, RiakLocation $location, RiakObjectList $values)
     {

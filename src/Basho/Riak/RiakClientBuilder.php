@@ -7,11 +7,11 @@ use Basho\Riak\RiakConfig;
 use Basho\Riak\Core\RiakNode;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\RiakNodeBuilder;
-use Basho\Riak\Core\Converter\ConverterFactory;
-use Basho\Riak\Core\Converter\RiakObjectConverter;
-use Basho\Riak\Core\Converter\CrdtResponseConverter;
-use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
-use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
+use Basho\Riak\Converter\ConverterFactory;
+use Basho\Riak\Converter\RiakObjectConverter;
+use Basho\Riak\Converter\CrdtResponseConverter;
+use Basho\Riak\Converter\Hydrator\DomainHydrator;
+use Basho\Riak\Converter\Hydrator\DomainMetadataReader;
 
 /**
  * Build a riak client
@@ -26,27 +26,27 @@ use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
 class RiakClientBuilder
 {
     /**
-     * @var \Basho\Riak\Core\Converter\RiakObjectConverter
+     * @var \Basho\Riak\Converter\RiakObjectConverter
      */
     private $riakObjectConverter;
 
     /**
-     * @var \Basho\Riak\Core\Converter\CrdtResponseConverter
+     * @var \Basho\Riak\Converter\CrdtResponseConverter
      */
     private $crdtResponseConverter;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @var \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private $domainHydrator;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader
+     * @var \Basho\Riak\Converter\Hydrator\DomainMetadataReader
      */
     private $domainMetadataReader;
 
     /**
-     * @var \Basho\Riak\Core\Converter\ConverterFactory
+     * @var \Basho\Riak\Converter\ConverterFactory
      */
     private $converterFactory;
 
@@ -66,7 +66,7 @@ class RiakClientBuilder
     private $nodes = [];
 
     /**
-     * @return \Basho\Riak\Core\Converter\RiakObjectConverter
+     * @return \Basho\Riak\Converter\RiakObjectConverter
      */
     private function getRiakObjectConverter()
     {
@@ -78,7 +78,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @param \Basho\Riak\Core\Converter\RiakObjectConverter $converter
+     * @param \Basho\Riak\Converter\RiakObjectConverter $converter
      *
      * @return \Basho\Riak\RiakClientBuilder
      */
@@ -90,7 +90,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\CrdtResponseConverter
+     * @return \Basho\Riak\Converter\CrdtResponseConverter
      */
     public function getCrdtResponseConverter()
     {
@@ -102,7 +102,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @param \Basho\Riak\Core\Converter\CrdtResponseConverter $converter
+     * @param \Basho\Riak\Converter\CrdtResponseConverter $converter
      *
      * @return \Basho\Riak\RiakClientBuilder
      */
@@ -114,7 +114,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @return \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private function getDomainHydrator()
     {
@@ -126,7 +126,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @param \Basho\Riak\Core\Converter\Hydrator\DomainHydrator $hydrator
+     * @param \Basho\Riak\Converter\Hydrator\DomainHydrator $hydrator
      *
      * @return \Basho\Riak\RiakClientBuilder
      */
@@ -138,7 +138,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader
+     * @return \Basho\Riak\Converter\Hydrator\DomainMetadataReader
      */
     private function getDomainMetadataReader()
     {
@@ -150,7 +150,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @param \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader $reader
+     * @param \Basho\Riak\Converter\Hydrator\DomainMetadataReader $reader
      *
      * @return \Basho\Riak\RiakClientBuilder
      */
@@ -162,7 +162,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\ConverterFactory
+     * @return \Basho\Riak\Converter\ConverterFactory
      */
     private function getConverterFactory()
     {
@@ -174,7 +174,7 @@ class RiakClientBuilder
     }
 
     /**
-     * @param \Basho\Riak\Core\Converter\ConverterFactory $converterFactory
+     * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
      *
      * @return \Basho\Riak\RiakClientBuilder
      */

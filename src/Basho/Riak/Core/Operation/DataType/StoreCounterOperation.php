@@ -3,7 +3,7 @@
 namespace Basho\Riak\Core\Operation\DataType;
 
 use Basho\Riak\Command\DataType\Response\StoreCounterResponse;
-use Basho\Riak\Core\Converter\CrdtResponseConverter;
+use Basho\Riak\Converter\CrdtResponseConverter;
 use Basho\Riak\Core\Message\DataType\PutRequest;
 use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
 use Basho\Riak\Core\Query\Crdt\RiakCounter;
@@ -22,7 +22,7 @@ use Basho\Riak\Core\RiakAdapter;
 class StoreCounterOperation implements RiakOperation
 {
     /**
-     * @var \Basho\Riak\Core\Converter\CrdtResponseConverter
+     * @var \Basho\Riak\Converter\CrdtResponseConverter
      */
     private $converter;
 
@@ -42,10 +42,10 @@ class StoreCounterOperation implements RiakOperation
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Core\Converter\CrdtResponseConverter $converter
-     * @param \Basho\Riak\Core\Query\RiakLocation              $location
-     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter          $counter
-     * @param array                                            $options
+     * @param \Basho\Riak\Converter\CrdtResponseConverter $converter
+     * @param \Basho\Riak\Core\Query\RiakLocation         $location
+     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter     $counter
+     * @param array                                       $options
      */
     public function __construct(CrdtResponseConverter $converter, RiakLocation $location, RiakCounter $counter, array $options)
     {

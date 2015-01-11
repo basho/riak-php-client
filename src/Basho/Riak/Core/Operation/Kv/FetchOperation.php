@@ -3,8 +3,8 @@
 namespace Basho\Riak\Core\Operation\Kv;
 
 use Basho\Riak\Command\Kv\Response\FetchValueResponse;
-use Basho\Riak\Core\Converter\RiakObjectConverter;
-use Basho\Riak\Core\Converter\ConverterFactory;
+use Basho\Riak\Converter\RiakObjectConverter;
+use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Core\Message\Kv\GetRequest;
 use Basho\Riak\Core\Query\RiakObjectList;
 use Basho\Riak\Core\Query\RiakLocation;
@@ -22,12 +22,12 @@ use Basho\Riak\Core\RiakAdapter;
 class FetchOperation implements RiakOperation
 {
     /**
-     * @var \Basho\Riak\Core\Converter\RiakObjectConverter
+     * @var \Basho\Riak\Converter\RiakObjectConverter
      */
     private $objectConverter;
 
     /**
-     * @var \Basho\Riak\Core\Converter\ConverterFactory
+     * @var \Basho\Riak\Converter\ConverterFactory
      */
     private $converterFactory;
 
@@ -42,10 +42,10 @@ class FetchOperation implements RiakOperation
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Core\Converter\ConverterFactory    $converterFactory
-     * @param \Basho\Riak\Core\Converter\RiakObjectConverter $objectConverter
-     * @param \Basho\Riak\Command\Kv\RiakLocation            $location
-     * @param array                                          $options
+     * @param \Basho\Riak\Converter\ConverterFactory    $converterFactory
+     * @param \Basho\Riak\Converter\RiakObjectConverter $objectConverter
+     * @param \Basho\Riak\Core\Query\RiakLocation       $location
+     * @param array                                     $options
      */
     public function __construct(ConverterFactory $converterFactory, RiakObjectConverter $objectConverter, RiakLocation $location, $options)
     {

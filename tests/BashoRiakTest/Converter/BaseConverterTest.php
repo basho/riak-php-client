@@ -1,25 +1,25 @@
 <?php
 
-namespace BashoRiakTest\Core\Converter;
+namespace BashoRiakTest\Converter;
 
 use BashoRiakTest\TestCase;
 use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\Core\Converter\RiakObjectReference;
-use Basho\Riak\Core\Converter\DomainObjectReference;
+use Basho\Riak\Converter\RiakObjectReference;
+use Basho\Riak\Converter\DomainObjectReference;
 use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
 
 
 class BaseConverterTest extends TestCase
 {
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @var \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private $hydrator;
 
     /**
-     * @var \Basho\Riak\Core\Converter\BaseConverter
+     * @var \Basho\Riak\Converter\BaseConverter
      */
     private $instance;
 
@@ -27,11 +27,11 @@ class BaseConverterTest extends TestCase
     {
         parent::setUp();
 
-        $this->hydrator = $this->getMockBuilder('Basho\Riak\Core\Converter\Hydrator\DomainHydrator')
+        $this->hydrator = $this->getMockBuilder('Basho\Riak\Converter\Hydrator\DomainHydrator')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->instance = $this->getMockForAbstractClass('Basho\Riak\Core\Converter\BaseConverter', [$this->hydrator]);
+        $this->instance = $this->getMockForAbstractClass('Basho\Riak\Converter\BaseConverter', [$this->hydrator]);
     }
 
     public function testFromDomain()

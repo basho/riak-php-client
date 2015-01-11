@@ -1,8 +1,8 @@
 <?php
 
-namespace Basho\Riak\Core\Converter;
+namespace Basho\Riak\Converter;
 
-use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
+use Basho\Riak\Converter\Hydrator\DomainHydrator;
 
 /**
  * Holds instances of converters to be used for serialization / deserialization  of objects stored and fetched from Riak.
@@ -15,17 +15,17 @@ use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
 class ConverterFactory
 {
     /**
-     * @var \Basho\Riak\Core\Converter\Converter[]
+     * @var \Basho\Riak\Converter\Converter[]
      */
     private $converters;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @var \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private $domainHydrator;
 
     /**
-     * @param \Basho\Riak\Core\Converter\Hydrator\DomainHydrator $domainHydrator
+     * @param \Basho\Riak\Converter\Hydrator\DomainHydrator $domainHydrator
      */
     public function __construct(DomainHydrator $domainHydrator)
     {
@@ -33,7 +33,7 @@ class ConverterFactory
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\Converter[]
+     * @return \Basho\Riak\Converter\Converter[]
      */
     public function getConverters()
     {
@@ -43,7 +43,7 @@ class ConverterFactory
     /**
      * @param string $type
      *
-     * @return \Basho\Riak\Core\Converter\Converter
+     * @return \Basho\Riak\Converter\Converter
      */
     public function getConverter($type)
     {
@@ -55,8 +55,8 @@ class ConverterFactory
     }
 
     /**
-     * @param type                                  $type
-     * @param \Basho\Riak\Core\Converter\Converter  $converter
+     * @param string                           $type
+     * @param \Basho\Riak\Converter\Converter  $converter
      */
     public function addConverter($type, Converter $converter)
     {

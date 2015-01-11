@@ -1,8 +1,8 @@
 <?php
 
-namespace Basho\Riak\Core\Converter;
+namespace Basho\Riak\Converter;
 
-use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
+use Basho\Riak\Converter\Hydrator\DomainHydrator;
 use Basho\Riak\Core\Query\RiakObject;
 
 /**
@@ -16,12 +16,12 @@ use Basho\Riak\Core\Query\RiakObject;
 abstract class BaseConverter implements Converter
 {
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @var \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private $domainHydrator;
 
     /**
-     * @param \Basho\Riak\Core\Converter\Hydrator\DomainHydrator $domainHydrator
+     * @param \Basho\Riak\Converter\Hydrator\DomainHydrator $domainHydrator
      */
     public function __construct(DomainHydrator $domainHydrator)
     {

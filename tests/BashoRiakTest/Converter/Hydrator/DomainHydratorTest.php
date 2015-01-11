@@ -1,6 +1,6 @@
 <?php
 
-namespace BashoRiakTest\Core\Converter\Hydrator;
+namespace BashoRiakTest\Converter\Hydrator;
 
 use BashoRiakTest\TestCase;
 use Basho\Riak\Cap\VClock;
@@ -9,8 +9,8 @@ use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 use Doctrine\Common\Annotations\AnnotationReader;
 use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
-use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
-use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
+use Basho\Riak\Converter\Hydrator\DomainHydrator;
+use Basho\Riak\Converter\Hydrator\DomainMetadataReader;
 
 class DomainHydratorTest extends TestCase
 {
@@ -20,12 +20,12 @@ class DomainHydratorTest extends TestCase
     private $reader;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader
+     * @var \Basho\Riak\Converter\Hydrator\DomainMetadataReader
      */
     private $metadata;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @var \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private $instance;
 

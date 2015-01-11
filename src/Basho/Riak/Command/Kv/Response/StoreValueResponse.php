@@ -4,7 +4,7 @@ namespace Basho\Riak\Command\Kv\Response;
 
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakObjectList;
-use Basho\Riak\Core\Converter\ConverterFactory;
+use Basho\Riak\Converter\ConverterFactory;
 
 /**
  * Store Value Response.
@@ -22,9 +22,9 @@ class StoreValueResponse extends Response
     private $generatedKey;
 
     /**
-     * @param \Basho\Riak\Core\Converter\ConverterFactory $converterFactory
-     * @param \Basho\Riak\Core\Query\RiakLocation         $location
-     * @param \Basho\Riak\Core\Query\RiakObjectList       $values
+     * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
+     * @param \Basho\Riak\Core\Query\RiakLocation    $location
+     * @param \Basho\Riak\Core\Query\RiakObjectList  $values
      */
     public function __construct(ConverterFactory $converterFactory, RiakLocation $location, RiakObjectList $values)
     {

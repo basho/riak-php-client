@@ -1,11 +1,11 @@
 <?php
 
-namespace BashoRiakTest\Core\Converter\Hydrator;
+namespace BashoRiakTest\Converter\Hydrator;
 
 use BashoRiakTest\TestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
 use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
-use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
+use Basho\Riak\Converter\Hydrator\DomainMetadataReader;
 
 class DomainMetadataReaderTest extends TestCase
 {
@@ -15,7 +15,7 @@ class DomainMetadataReaderTest extends TestCase
     private $reader;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader
+     * @var \Basho\Riak\Converter\Hydrator\DomainMetadataReader
      */
     private $instance;
 

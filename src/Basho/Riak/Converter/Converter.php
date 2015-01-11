@@ -1,9 +1,9 @@
 <?php
 
-namespace Basho\Riak\Core\Converter;
+namespace Basho\Riak\Converter;
 
-use Basho\Riak\Core\Converter\RiakObjectReference;
-use Basho\Riak\Core\Converter\DomainObjectReference;
+use Basho\Riak\Converter\RiakObjectReference;
+use Basho\Riak\Converter\DomainObjectReference;
 
 /**
  * The Converter acts as a bridge between the core and the user level API.
@@ -18,7 +18,7 @@ interface Converter
     /**
      * Convert from a riak objet object reference to a domain object reference.
      *
-     * @param \Basho\Riak\Core\Converter\DomainObjectReference $reference
+     * @param \Basho\Riak\Converter\DomainObjectReference $reference
      *
      * @return object
      */
@@ -27,7 +27,7 @@ interface Converter
     /**
      * Convert from a domain object reference to a riak objet object reference.
      *
-     * @param \Basho\Riak\Core\Converter\RiakObjectReference $reference
+     * @param \Basho\Riak\Converter\RiakObjectReference $reference
      *
      * @return \Basho\Riak\Core\Query\RiakObject
      */

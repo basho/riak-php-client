@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Converter\Hydrator;
+namespace Basho\Riak\Converter\Hydrator;
 
 use Basho\Riak\Annotation\RiakAnnotation;
 use Doctrine\Common\Annotations\Reader;

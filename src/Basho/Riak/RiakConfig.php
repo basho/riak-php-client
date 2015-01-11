@@ -2,11 +2,11 @@
 
 namespace Basho\Riak;
 
-use Basho\Riak\Core\Converter\ConverterFactory;
-use Basho\Riak\Core\Converter\RiakObjectConverter;
-use Basho\Riak\Core\Converter\CrdtResponseConverter;
-use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
-use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
+use Basho\Riak\Converter\ConverterFactory;
+use Basho\Riak\Converter\RiakObjectConverter;
+use Basho\Riak\Converter\CrdtResponseConverter;
+use Basho\Riak\Converter\Hydrator\DomainHydrator;
+use Basho\Riak\Converter\Hydrator\DomainMetadataReader;
 
 /**
  * Riak client config.
@@ -19,36 +19,36 @@ use Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader;
 class RiakConfig
 {
     /**
-     * @var \Basho\Riak\Core\Converter\RiakObjectConverter
+     * @var \Basho\Riak\Converter\RiakObjectConverter
      */
     private $riakObjectConverter;
 
     /**
-     * @var \Basho\Riak\Core\Converter\CrdtResponseConverter
+     * @var \Basho\Riak\Converter\CrdtResponseConverter
      */
     private $crdtResponseConverter;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @var \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private $domainHydrator;
 
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader
+     * @var \Basho\Riak\Converter\Hydrator\DomainMetadataReader
      */
     private $domainMetadataReader;
 
     /**
-     * @var \Basho\Riak\Core\Converter\ConverterFactory
+     * @var \Basho\Riak\Converter\ConverterFactory
      */
     private $converterFactory;
 
     /**
-     * @param \Basho\Riak\Core\Converter\ConverterFactory               $converterFactory
-     * @param \Basho\Riak\Core\Converter\RiakObjectConverter            $riakObjectConverter
-     * @param \Basho\Riak\Core\Converter\CrdtResponseConverter          $crdtResponseConverter
-     * @param \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader  $domainMetadataReader
-     * @param \Basho\Riak\Core\Converter\ConverterFactory               $domainHydrator
+     * @param \Basho\Riak\Converter\ConverterFactory               $converterFactory
+     * @param \Basho\Riak\Converter\RiakObjectConverter            $riakObjectConverter
+     * @param \Basho\Riak\Converter\CrdtResponseConverter          $crdtResponseConverter
+     * @param \Basho\Riak\Converter\Hydrator\DomainMetadataReader  $domainMetadataReader
+     * @param \Basho\Riak\Converter\ConverterFactory               $domainHydrator
      */
     public function __construct(
         ConverterFactory      $converterFactory,
@@ -65,7 +65,7 @@ class RiakConfig
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\RiakObjectConverter
+     * @return \Basho\Riak\Converter\RiakObjectConverter
      */
     public function getRiakObjectConverter()
     {
@@ -73,7 +73,7 @@ class RiakConfig
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\CrdtResponseConverter
+     * @return \Basho\Riak\Converter\CrdtResponseConverter
      */
     public function getCrdtResponseConverter()
     {
@@ -81,7 +81,7 @@ class RiakConfig
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @return \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     public function getDomainHydrator()
     {
@@ -89,7 +89,7 @@ class RiakConfig
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader
+     * @return \Basho\Riak\Converter\Hydrator\DomainMetadataReader
      */
     public function getDomainMetadataReader()
     {
@@ -97,7 +97,7 @@ class RiakConfig
     }
 
     /**
-     * @return \Basho\Riak\Core\Converter\ConverterFactory
+     * @return \Basho\Riak\Converter\ConverterFactory
      */
     public function getConverterFactory()
     {

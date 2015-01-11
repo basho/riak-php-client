@@ -4,7 +4,7 @@ namespace Basho\Riak\Command\Kv\Response;
 
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakObjectList;
-use Basho\Riak\Core\Converter\ConverterFactory;
+use Basho\Riak\Converter\ConverterFactory;
 
 /**
  * Fetch Value Response.
@@ -27,9 +27,9 @@ class FetchValueResponse extends Response
     private $unchanged;
 
     /**
-     * @param \Basho\Riak\Core\Converter\ConverterFactory $converterFactory
-     * @param \Basho\Riak\Core\Query\RiakLocation         $location
-     * @param \Basho\Riak\Core\Query\RiakObjectList       $values
+     * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
+     * @param \Basho\Riak\Core\Query\RiakLocation    $location
+     * @param \Basho\Riak\Core\Query\RiakObjectList  $values
      */
     public function __construct(ConverterFactory $converterFactory, RiakLocation $location, RiakObjectList $values)
     {

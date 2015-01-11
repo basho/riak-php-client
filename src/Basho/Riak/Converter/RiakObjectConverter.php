@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Converter;
+namespace Basho\Riak\Converter;
 
 use Basho\Riak\Cap\VClock;
 use Basho\Riak\Core\Query\RiakObject;

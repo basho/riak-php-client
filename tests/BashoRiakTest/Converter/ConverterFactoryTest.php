@@ -1,20 +1,20 @@
 <?php
 
-namespace BashoRiakTest\Core\Converter;
+namespace BashoRiakTest\Converter;
 
 use BashoRiakTest\TestCase;
-use Basho\Riak\Core\Converter\ConverterFactory;
+use Basho\Riak\Converter\ConverterFactory;
 use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
 
 class ConverterFactoryTest extends TestCase
 {
     /**
-     * @var \Basho\Riak\Core\Converter\Hydrator\DomainHydrator
+     * @var \Basho\Riak\Converter\Hydrator\DomainHydrator
      */
     private $hydrator;
 
     /**
-     * @var \Basho\Riak\Core\Converter\ConverterFactory
+     * @var \Basho\Riak\Converter\ConverterFactory
      */
     private $instance;
 
@@ -22,7 +22,7 @@ class ConverterFactoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->hydrator = $this->getMockBuilder('Basho\Riak\Core\Converter\Hydrator\DomainHydrator')
+        $this->hydrator = $this->getMockBuilder('Basho\Riak\Converter\Hydrator\DomainHydrator')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -36,7 +36,7 @@ class ConverterFactoryTest extends TestCase
         $converter  = $this->instance->getConverter(SimpleObject::CLASS_NAME);
         $converters = $this->instance->getConverters();
 
-        $this->assertInstanceOf('Basho\Riak\Core\Converter\Converter', $converter);
+        $this->assertInstanceOf('Basho\Riak\Converter\Converter', $converter);
         $this->assertArrayHasKey(SimpleObject::CLASS_NAME, $converters);
         $this->assertSame($converter, $converters[SimpleObject::CLASS_NAME]);
     }
@@ -45,14 +45,14 @@ class ConverterFactoryTest extends TestCase
     {
         $this->assertEmpty($this->instance->getConverters());
 
-        $mock = $this->getMock('Basho\Riak\Core\Converter\Converter');
+        $mock = $this->getMock('Basho\Riak\Converter\Converter');
 
         $this->instance->addConverter(SimpleObject::CLASS_NAME, $mock);
 
         $converter  = $this->instance->getConverter(SimpleObject::CLASS_NAME);
         $converters = $this->instance->getConverters();
 
-        $this->assertInstanceOf('Basho\Riak\Core\Converter\Converter', $converter);
+        $this->assertInstanceOf('Basho\Riak\Converter\Converter', $converter);
         $this->assertArrayHasKey(SimpleObject::CLASS_NAME, $converters);
         $this->assertSame($converter, $converters[SimpleObject::CLASS_NAME]);
     }

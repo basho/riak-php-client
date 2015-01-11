@@ -36,20 +36,20 @@ class RiakClientBuilderTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Core\RiakNode', $nodes[0]);
         $this->assertInstanceOf('Basho\Riak\Core\RiakCluster', $cluster);
         $this->assertInstanceOf('Basho\Riak\Core\RiakHttpAdpter', $nodes[0]->getAdapter());
-        $this->assertInstanceOf('Basho\Riak\Core\Converter\ConverterFactory', $config->getConverterFactory());
-        $this->assertInstanceOf('Basho\Riak\Core\Converter\Hydrator\DomainHydrator', $config->getDomainHydrator());
-        $this->assertInstanceOf('Basho\Riak\Core\Converter\RiakObjectConverter', $config->getRiakObjectConverter());
-        $this->assertInstanceOf('Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader', $config->getDomainMetadataReader());
+        $this->assertInstanceOf('Basho\Riak\Converter\ConverterFactory', $config->getConverterFactory());
+        $this->assertInstanceOf('Basho\Riak\Converter\Hydrator\DomainHydrator', $config->getDomainHydrator());
+        $this->assertInstanceOf('Basho\Riak\Converter\RiakObjectConverter', $config->getRiakObjectConverter());
+        $this->assertInstanceOf('Basho\Riak\Converter\Hydrator\DomainMetadataReader', $config->getDomainMetadataReader());
     }
 
     public function testBuildWithNode()
     {
         $node                 = $this->getMock('Basho\Riak\Core\RiakNode', [], [], '', false);
         $cluster              = $this->getMock('Basho\Riak\Core\RiakCluster', [], [], '', false);
-        $converterFactory     = $this->getMock('Basho\Riak\Core\Converter\ConverterFactory', [], [], '', false);
-        $objectConverter      = $this->getMock('Basho\Riak\Core\Converter\RiakObjectConverter', [], [], '', false);
-        $domainHydrator       = $this->getMock('Basho\Riak\Core\Converter\Hydrator\DomainHydrator', [], [], '', false);
-        $domainMetadataReader = $this->getMock('Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader', [], [], '', false);
+        $converterFactory     = $this->getMock('Basho\Riak\Converter\ConverterFactory', [], [], '', false);
+        $objectConverter      = $this->getMock('Basho\Riak\Converter\RiakObjectConverter', [], [], '', false);
+        $domainHydrator       = $this->getMock('Basho\Riak\Converter\Hydrator\DomainHydrator', [], [], '', false);
+        $domainMetadataReader = $this->getMock('Basho\Riak\Converter\Hydrator\DomainMetadataReader', [], [], '', false);
 
         $cluster->expects($this->once())
             ->method('setNodes')

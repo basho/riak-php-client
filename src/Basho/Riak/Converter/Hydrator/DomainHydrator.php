@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Converter\Hydrator;
+namespace Basho\Riak\Converter\Hydrator;
 
 use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Core\Query\RiakLocation;
@@ -16,12 +16,12 @@ use Basho\Riak\Core\Query\RiakLocation;
 class DomainHydrator
 {
     /**
-     * @var Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader
+     * @var Basho\Riak\Converter\Hydrator\DomainMetadataReader
      */
     private $metadataReader;
 
     /**
-     * @param \Basho\Riak\Core\Converter\Hydrator\DomainMetadataReader $metadataReader
+     * @param \Basho\Riak\Converter\Hydrator\DomainMetadataReader $metadataReader
      */
     public function __construct(DomainMetadataReader $metadataReader)
     {

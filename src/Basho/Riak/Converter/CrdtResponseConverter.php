@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Converter;
+namespace Basho\Riak\Converter;
 
 use Basho\Riak\Core\Message\DataType\Response;
 use Basho\Riak\Core\Query\Crdt\RiakCounter;

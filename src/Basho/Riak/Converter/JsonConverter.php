@@ -1,8 +1,8 @@
 <?php
 
-namespace Basho\Riak\Core\Converter;
+namespace Basho\Riak\Converter;
 
-use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
+use Basho\Riak\Converter\Hydrator\DomainHydrator;
 
 /**
  * The default Converter used when storing and fetching domain objects from Riak.
@@ -15,7 +15,7 @@ use Basho\Riak\Core\Converter\Hydrator\DomainHydrator;
 class JsonConverter extends BaseConverter
 {
     /**
-     * @param \Basho\Riak\Core\Converter\Hydrator\DomainHydrator $domainHydrator
+     * @param \Basho\Riak\Converter\Hydrator\DomainHydrator $domainHydrator
      */
     public function __construct(DomainHydrator $domainHydrator)
     {

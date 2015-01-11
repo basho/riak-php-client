@@ -3,9 +3,9 @@
 namespace Basho\Riak\Core\Operation\Kv;
 
 use Basho\Riak\Command\Kv\Response\StoreValueResponse;
-use Basho\Riak\Core\Converter\DomainObjectReference;
-use Basho\Riak\Core\Converter\RiakObjectConverter;
-use Basho\Riak\Core\Converter\ConverterFactory;
+use Basho\Riak\Converter\DomainObjectReference;
+use Basho\Riak\Converter\RiakObjectConverter;
+use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Core\Message\Kv\PutRequest;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakObject;
@@ -23,12 +23,12 @@ use Basho\Riak\Core\RiakAdapter;
 class StoreOperation implements RiakOperation
 {
     /**
-     * @var \Basho\Riak\Core\Converter\RiakObjectConverter
+     * @var \Basho\Riak\Converter\RiakObjectConverter
      */
     private $objectConverter;
 
     /**
-     * @var \Basho\Riak\Core\Converter\ConverterFactory
+     * @var \Basho\Riak\Converter\ConverterFactory
      */
     private $converterFactory;
 
@@ -48,11 +48,11 @@ class StoreOperation implements RiakOperation
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Core\Converter\ConverterFactory    $converterFactory
-     * @param \Basho\Riak\Core\Converter\RiakObjectConverter $objectConverter
-     * @param \Basho\Riak\Core\Query\RiakLocation            $location
-     * @param \Basho\Riak\Core\Query\RiakObject|mixed        $value
-     * @param array                                          $options
+     * @param \Basho\Riak\Converter\ConverterFactory    $converterFactory
+     * @param \Basho\Riak\Converter\RiakObjectConverter $objectConverter
+     * @param \Basho\Riak\Core\Query\RiakLocation       $location
+     * @param \Basho\Riak\Core\Query\RiakObject|mixed   $value
+     * @param array                                     $options
      */
     public function __construct(ConverterFactory $converterFactory, RiakObjectConverter $objectConverter, RiakLocation $location, $value, array $options)
     {
