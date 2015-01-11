@@ -2,6 +2,7 @@
 
 namespace Basho\Riak\Command\Bucket;
 
+use Basho\Riak\RiakException;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakNamespace;
