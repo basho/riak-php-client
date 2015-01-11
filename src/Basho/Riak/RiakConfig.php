@@ -2,6 +2,7 @@
 
 namespace Basho\Riak;
 
+use Basho\Riak\Resolver\ResolverFactory;
 use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Converter\RiakObjectConverter;
 use Basho\Riak\Converter\CrdtResponseConverter;
@@ -44,7 +45,13 @@ class RiakConfig
     private $converterFactory;
 
     /**
+     * @var \Basho\Riak\Resolver\ResolverFactory
+     */
+    private $resolverFactory;
+
+    /**
      * @param \Basho\Riak\Converter\ConverterFactory              $converterFactory
+     * @param \Basho\Riak\Resolver\ResolverFactory                $resolverFactory
      * @param \Basho\Riak\Converter\RiakObjectConverter           $riakObjectConverter
      * @param \Basho\Riak\Converter\CrdtResponseConverter         $crdtResponseConverter
      * @param \Basho\Riak\Converter\Hydrator\DomainMetadataReader $domainMetadataReader
@@ -52,12 +59,14 @@ class RiakConfig
      */
     public function __construct(
         ConverterFactory      $converterFactory,
+        ResolverFactory       $resolverFactory,
         RiakObjectConverter   $riakObjectConverter,
         CrdtResponseConverter $crdtResponseConverter,
         DomainMetadataReader  $domainMetadataReader,
         DomainHydrator        $domainHydrator
     ) {
         $this->converterFactory      = $converterFactory;
+        $this->resolverFactory       = $resolverFactory;
         $this->riakObjectConverter   = $riakObjectConverter;
         $this->crdtResponseConverter = $crdtResponseConverter;
         $this->domainMetadataReader  = $domainMetadataReader;
@@ -102,5 +111,13 @@ class RiakConfig
     public function getConverterFactory()
     {
         return $this->converterFactory;
+    }
+
+    /**
+     * @return \Basho\Riak\Resolver\ResolverFactory
+     */
+    public function getResolverFactory()
+    {
+        return $this->resolverFactory;
     }
 }

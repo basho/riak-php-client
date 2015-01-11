@@ -2,10 +2,6 @@
 
 namespace Basho\Riak\Command\Kv\Response;
 
-use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\RiakObjectList;
-use Basho\Riak\Converter\ConverterFactory;
-
 /**
  * Delete Value Response.
  *
@@ -16,13 +12,5 @@ use Basho\Riak\Converter\ConverterFactory;
  */
 class DeleteValueResponse extends Response
 {
-    /**
-     * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
-     * @param \Basho\Riak\Core\Query\RiakLocation    $location
-     * @param \Basho\Riak\Core\Query\RiakObjectList  $values
-     */
-    public function __construct(ConverterFactory $converterFactory, RiakLocation $location, RiakObjectList $values)
-    {
-        parent::__construct($converterFactory, $location, $values);
-    }
+
 }

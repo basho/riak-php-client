@@ -5,6 +5,7 @@ namespace Basho\Riak\Command\Kv\Response;
 use Basho\Riak\RiakResponse;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakObjectList;
+use Basho\Riak\Resolver\ResolverFactory;
 use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Converter\RiakObjectReference;
 
@@ -24,6 +25,11 @@ abstract class Response implements RiakResponse
     private $converterFactory;
 
     /**
+     * @var \Basho\Riak\Resolver\ResolverFactory
+     */
+    private $resolverFactory;
+
+    /**
      * @var \Basho\Riak\Core\Query\RiakLocation
      */
     private $location;
@@ -35,12 +41,14 @@ abstract class Response implements RiakResponse
 
     /**
      * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
+     * @param \Basho\Riak\Resolver\ResolverFactory   $resolverFactory
      * @param \Basho\Riak\Core\Query\RiakLocation    $location
      * @param \Basho\Riak\Core\Query\RiakObjectList  $values
      */
-    public function __construct(ConverterFactory $converterFactory, RiakLocation $location, RiakObjectList $values)
+    public function __construct(ConverterFactory $converterFactory, ResolverFactory $resolverFactory, RiakLocation $location, RiakObjectList $values)
     {
         $this->converterFactory = $converterFactory;
+        $this->resolverFactory  = $resolverFactory;
         $this->location         = $location;
         $this->values           = $values;
     }
@@ -81,6 +89,21 @@ abstract class Response implements RiakResponse
     public function getValues()
     {
         return $this->values;
+    }
+
+    /**
+     * Get a single, resolved object from this response.
+     *
+     * @return \Basho\Riak\Core\Query\RiakObject
+     *
+     * @throws \Basho\Riak\Resolver\UnresolvedConflictException
+     */
+    public function getValue()
+    {
+        $resolver = $this->resolverFactory->getResolver('Basho\Riak\Core\Query\RiakObject');
+        $siblings = $this->getValues();
+
+        return $resolver->resolve($siblings);
     }
 
     /**

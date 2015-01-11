@@ -44,9 +44,7 @@ class FetchValue implements RiakCommand
     public function execute(RiakCluster $cluster)
     {
         $config    = $cluster->getRiakConfig();
-        $factory   = $config->getConverterFactory();
-        $converter = $config->getRiakObjectConverter();
-        $operation = new FetchOperation($factory, $converter, $this->location, $this->options);
+        $operation = new FetchOperation($config, $this->location, $this->options);
         $response  = $cluster->execute($operation);
 
         return $response;

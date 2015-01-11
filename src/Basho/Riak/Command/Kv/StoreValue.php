@@ -51,9 +51,7 @@ class StoreValue implements RiakCommand
     public function execute(RiakCluster $cluster)
     {
         $config    = $cluster->getRiakConfig();
-        $factory   = $config->getConverterFactory();
-        $converter = $config->getRiakObjectConverter();
-        $operation = new StoreOperation($factory, $converter, $this->location, $this->value, $this->options);
+        $operation = new StoreOperation($config, $this->location, $this->value, $this->options);
         $response  = $cluster->execute($operation);
 
         return $response;

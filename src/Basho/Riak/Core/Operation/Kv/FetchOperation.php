@@ -3,13 +3,11 @@
 namespace Basho\Riak\Core\Operation\Kv;
 
 use Basho\Riak\Command\Kv\Response\FetchValueResponse;
-use Basho\Riak\Converter\RiakObjectConverter;
-use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Core\Message\Kv\GetRequest;
-use Basho\Riak\Core\Query\RiakObjectList;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\RiakOperation;
 use Basho\Riak\Core\RiakAdapter;
+use Basho\Riak\RiakConfig;
 
 /**
  * An operation used to fetch an object from Riak.
@@ -22,14 +20,9 @@ use Basho\Riak\Core\RiakAdapter;
 class FetchOperation implements RiakOperation
 {
     /**
-     * @var \Basho\Riak\Converter\RiakObjectConverter
+     * @var \Basho\Riak\RiakConfig
      */
-    private $objectConverter;
-
-    /**
-     * @var \Basho\Riak\Converter\ConverterFactory
-     */
-    private $converterFactory;
+    private $config;
 
     /**
      * @var \Basho\Riak\Core\Query\RiakLocation
@@ -42,17 +35,15 @@ class FetchOperation implements RiakOperation
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Converter\ConverterFactory    $converterFactory
-     * @param \Basho\Riak\Converter\RiakObjectConverter $objectConverter
+     * @param \Basho\Riak\RiakConfig                    $config
      * @param \Basho\Riak\Core\Query\RiakLocation       $location
      * @param array                                     $options
      */
-    public function __construct(ConverterFactory $converterFactory, RiakObjectConverter $objectConverter, RiakLocation $location, $options)
+    public function __construct(RiakConfig $config, RiakLocation $location, array $options)
     {
-        $this->converterFactory = $converterFactory;
-        $this->objectConverter  = $objectConverter;
-        $this->location         = $location;
-        $this->options          = $options;
+        $this->location = $location;
+        $this->options  = $options;
+        $this->config   = $config;
     }
 
     /**
@@ -60,15 +51,18 @@ class FetchOperation implements RiakOperation
      */
     public function execute(RiakAdapter $adapter)
     {
-        $getRequest  = $this->createGetRequest();
-        $getResponse = $adapter->send($getRequest);
+        $getRequest       = $this->createGetRequest();
+        $getResponse      = $adapter->send($getRequest);
+        $resolverFactory  = $this->config->getResolverFactory();
+        $converterFactory = $this->config->getConverterFactory();
+        $objectConverter  = $this->config->getRiakObjectConverter();
 
         $vClock      = $getResponse->vClock;
         $unchanged   = $getResponse->unchanged;
         $contentList = $getResponse->contentList;
         $notFound    = empty($getResponse->contentList);
-        $objectList  = $this->objectConverter->convertToRiakObjectList($contentList, $vClock);
-        $response    = new FetchValueResponse($this->converterFactory, $this->location, $objectList);
+        $objectList  = $objectConverter->convertToRiakObjectList($contentList, $vClock);
+        $response    = new FetchValueResponse($converterFactory, $resolverFactory, $this->location, $objectList);
 
         $response->setNotFound($notFound);
         $response->setUnchanged($unchanged);

@@ -11,14 +11,14 @@ use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
 
-class RiakClientCommandsTest extends TestCase
+class BasicTest extends TestCase
 {
     protected function setUp()
     {
         parent::setUp();
 
         $client  = new \GuzzleHttp\Client();
-        $request = $client->createRequest('PUT', 'http://127.0.0.1:8098/buckets/test_bucket/props');
+        $request = $client->createRequest('PUT', 'http://127.0.0.1:8098/buckets/bucket/props');
 
         $request->addHeader('Content-Type', 'application/json');
         $request->setBody(\GuzzleHttp\Stream\Stream::factory(json_encode([
@@ -31,12 +31,42 @@ class RiakClientCommandsTest extends TestCase
         $client->send($request);
     }
 
+    public function testStoreAndFetchSingleValue()
+    {
+        $key      = uniqid();
+        $object   = new SimpleObject('[1,1,1]');
+        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+
+        $store = StoreValue::builder($location, $object)
+            ->withOption(RiakOption::PW, 1)
+            ->withOption(RiakOption::W, 2)
+            ->build();
+
+        $fetch  = FetchValue::builder($location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->withOption(RiakOption::R, 1)
+            ->build();
+
+        $this->client->execute($store);
+
+        $result = $this->client->execute($fetch);
+
+        $this->assertFalse($result->getNotFound());
+        $this->assertInstanceOf('Basho\Riak\Command\Kv\Response\FetchValueResponse', $result);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $result->getValue());
+        $this->assertEquals('{"value":"[1,1,1]"}', $result->getValue()->getValue());
+
+        $this->client->execute(DeleteValue::builder($location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->build());
+    }
+
     public function testStoreAndFetchValueWithSiblings()
     {
         $key      = uniqid();
         $object1  = new SimpleObject('[1,1,1]');
         $object2  = new SimpleObject('[2,2,2]');
-        $location = new RiakLocation(new RiakNamespace('test_bucket', 'default'), $key);
+        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
 
         $store1 = StoreValue::builder($location, $object1)
             ->withOption(RiakOption::PW, 1)
@@ -88,8 +118,8 @@ class RiakClientCommandsTest extends TestCase
         $this->assertEquals($key, $domainObjects[1]->getRiakKey());
         $this->assertEquals('default', $domainObjects[0]->getRiakBucketType());
         $this->assertEquals('default', $domainObjects[1]->getRiakBucketType());
-        $this->assertEquals('test_bucket', $domainObjects[0]->getRiakBucketName());
-        $this->assertEquals('test_bucket', $domainObjects[1]->getRiakBucketName());
+        $this->assertEquals('bucket', $domainObjects[0]->getRiakBucketName());
+        $this->assertEquals('bucket', $domainObjects[1]->getRiakBucketName());
 
         $this->assertEquals('[1,1,1]', $domainObjects[0]->getValue());
         $this->assertEquals('[2,2,2]', $domainObjects[1]->getValue());

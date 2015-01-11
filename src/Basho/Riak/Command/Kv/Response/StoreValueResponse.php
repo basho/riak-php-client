@@ -22,16 +22,6 @@ class StoreValueResponse extends Response
     private $generatedKey;
 
     /**
-     * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
-     * @param \Basho\Riak\Core\Query\RiakLocation    $location
-     * @param \Basho\Riak\Core\Query\RiakObjectList  $values
-     */
-    public function __construct(ConverterFactory $converterFactory, RiakLocation $location, RiakObjectList $values)
-    {
-        parent::__construct($converterFactory, $location, $values);
-    }
-
-    /**
      * @return string
      */
     public function getGeneratedKey()

@@ -4,13 +4,12 @@ namespace Basho\Riak\Core\Operation\Kv;
 
 use Basho\Riak\Command\Kv\Response\StoreValueResponse;
 use Basho\Riak\Converter\DomainObjectReference;
-use Basho\Riak\Converter\RiakObjectConverter;
-use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Core\Message\Kv\PutRequest;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Core\RiakOperation;
 use Basho\Riak\Core\RiakAdapter;
+use Basho\Riak\RiakConfig;
 
 /**
  * An operation used to fetch an object from Riak.
@@ -23,14 +22,9 @@ use Basho\Riak\Core\RiakAdapter;
 class StoreOperation implements RiakOperation
 {
     /**
-     * @var \Basho\Riak\Converter\RiakObjectConverter
+     * @var \Basho\Riak\RiakConfig
      */
-    private $objectConverter;
-
-    /**
-     * @var \Basho\Riak\Converter\ConverterFactory
-     */
-    private $converterFactory;
+    private $config;
 
     /**
      * @var \Basho\Riak\Core\Query\RiakLocation
@@ -48,20 +42,17 @@ class StoreOperation implements RiakOperation
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Converter\ConverterFactory    $converterFactory
-     * @param \Basho\Riak\Converter\RiakObjectConverter $objectConverter
+     * @param \Basho\Riak\RiakConfig                    $config
      * @param \Basho\Riak\Core\Query\RiakLocation       $location
      * @param \Basho\Riak\Core\Query\RiakObject|mixed   $value
      * @param array                                     $options
      */
-    public function __construct(ConverterFactory $converterFactory, RiakObjectConverter $objectConverter, RiakLocation $location, $value, array $options)
+    public function __construct(RiakConfig $config, RiakLocation $location, $value, array $options)
     {
-        $this->converterFactory = $converterFactory;
-        $this->objectConverter  = $objectConverter;
-        $this->location         = $location;
-        $this->location         = $location;
-        $this->options          = $options;
-        $this->value            = $value;
+        $this->location = $location;
+        $this->options  = $options;
+        $this->config   = $config;
+        $this->value    = $value;
     }
 
     /**
@@ -69,13 +60,16 @@ class StoreOperation implements RiakOperation
      */
     public function execute(RiakAdapter $adapter)
     {
-        $putRequest  = $this->createPutRequest();
-        $putResponse = $adapter->send($putRequest);
+        $putRequest       = $this->createPutRequest();
+        $putResponse      = $adapter->send($putRequest);
+        $resolverFactory  = $this->config->getResolverFactory();
+        $converterFactory = $this->config->getConverterFactory();
+        $objectConverter  = $this->config->getRiakObjectConverter();
 
         $vClock      = $putResponse->vClock;
         $contentList = $putResponse->contentList;
-        $values      = $this->objectConverter->convertToRiakObjectList($contentList, $vClock);
-        $response    = new StoreValueResponse($this->converterFactory, $this->location, $values);
+        $values      = $objectConverter->convertToRiakObjectList($contentList, $vClock);
+        $response    = new StoreValueResponse($converterFactory, $resolverFactory, $this->location, $values);
 
         $response->setGeneratedKey($putResponse->key);
 
@@ -87,10 +81,11 @@ class StoreOperation implements RiakOperation
      */
     private function createPutRequest()
     {
-        $request     = new PutRequest();
-        $riakObject  = $this->getConvertedValue();
-        $namespace   = $this->location->getNamespace();
-        $vClockValue = $riakObject->getVClock() ? $riakObject->getVClock()->getValue() : null;
+        $request          = new PutRequest();
+        $riakObject       = $this->getConvertedValue();
+        $namespace        = $this->location->getNamespace();
+        $objectConverter  = $this->config->getRiakObjectConverter();
+        $vClockValue      = $riakObject->getVClock() ? $riakObject->getVClock()->getValue() : null;
 
         foreach ($this->options as $name => $value) {
             $request->{$name} = $value;
@@ -100,7 +95,7 @@ class StoreOperation implements RiakOperation
         $request->key     = $this->location->getKey();
         $request->type    = $namespace->getBucketType();
         $request->bucket  = $namespace->getBucketName();
-        $request->content = $this->objectConverter->convertToRiakContent($riakObject);
+        $request->content = $objectConverter->convertToRiakContent($riakObject);
 
         return $request;
     }
@@ -119,7 +114,8 @@ class StoreOperation implements RiakOperation
         }
 
         $type      = $this->getValueType();
-        $converter = $this->converterFactory->getConverter($type);
+        $factory   = $this->config->getConverterFactory();
+        $converter = $factory->getConverter($type);
         $reference = new DomainObjectReference($this->value, $this->location);
 
         return $converter->fromDomain($reference);

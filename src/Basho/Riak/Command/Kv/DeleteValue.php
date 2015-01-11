@@ -62,9 +62,7 @@ class DeleteValue implements RiakCommand
     public function execute(RiakCluster $cluster)
     {
         $config    = $cluster->getRiakConfig();
-        $factory   = $config->getConverterFactory();
-        $converter = $config->getRiakObjectConverter();
-        $operation = new DeleteOperation($factory, $converter, $this->location, $this->options, $this->vClock);
+        $operation = new DeleteOperation($config, $this->location, $this->options, $this->vClock);
         $response  = $cluster->execute($operation);
 
         return $response;

@@ -6,6 +6,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Basho\Riak\Core\RiakNode;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\RiakNodeBuilder;
+use Basho\Riak\Resolver\ResolverFactory;
 use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Converter\RiakObjectConverter;
 use Basho\Riak\Converter\CrdtResponseConverter;
@@ -48,6 +49,11 @@ class RiakClientBuilder
      * @var \Basho\Riak\Converter\ConverterFactory
      */
     private $converterFactory;
+
+    /**
+     * @var \Basho\Riak\Resolver\ResolverFactory
+     */
+    private $resolverFactory;
 
     /**
      * @var \Basho\Riak\Core\RiakCluster
@@ -173,13 +179,37 @@ class RiakClientBuilder
     }
 
     /**
-     * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
+     * @param \Basho\Riak\Converter\ConverterFactory $factory
      *
      * @return \Basho\Riak\RiakClientBuilder
      */
-    public function withConverterFactory(ConverterFactory $converterFactory)
+    public function withConverterFactory(ConverterFactory $factory)
     {
-        $this->converterFactory = $converterFactory;
+        $this->converterFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * @return \Basho\Riak\Resolver\ResolverFactory
+     */
+    private function getResolverFactoryy()
+    {
+        if ($this->resolverFactory === null) {
+            $this->resolverFactory = new ResolverFactory();
+        }
+
+        return $this->resolverFactory;
+    }
+
+    /**
+     * @param \Basho\Riak\Resolver\ResolverFactory $factory
+     *
+     * @return \Basho\Riak\RiakClientBuilder
+     */
+    public function withResolverFactoryy(ConverterFactory $factory)
+    {
+        $this->resolverFactory = $factory;
 
         return $this;
     }
@@ -228,6 +258,7 @@ class RiakClientBuilder
         if ($this->config === null) {
             $this->config = new RiakConfig(
                 $this->getConverterFactory(),
+                $this->getResolverFactoryy(),
                 $this->getRiakObjectConverter(),
                 $this->getCrdtResponseConverter(),
                 $this->getDomainMetadataReader(),
