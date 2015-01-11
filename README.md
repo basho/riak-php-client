@@ -78,7 +78,7 @@ use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 
-$object   = new RiakObject();
+$object    = new RiakObject();
 $namespace = new RiakNamespace('bucket_name', 'bucket_type');
 $location  = new RiakLocation($namespace, 'object_key');
 
@@ -135,6 +135,58 @@ $delete  = DeleteValue::builder($location)
     ->build();
 
 $this->client->execute($delete);
+```
+
+## Merging siblings
+
+Siblings are an important feature in Riak,
+for this purpose we have the interface `Basho\Riak\Resolver\ConflictResolver`,
+you implement this interface to resolve  siblings into a single object.
+
+Below is a simple example that will just merge the content of siblings :
+```php
+use \Basho\Riak\Resolver\ConflictResolver;
+use \Basho\Riak\Core\Query\RiakObject;
+use \Basho\Riak\Core\Query\RiakList;
+
+class MySimpleResolver implements ConflictResolver
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function resolve(RiakList $siblings)
+    {
+        $result  = new MyDomainObject();
+        $content = "";
+
+        /** @var $object \MyDomainObject */
+        foreach ($siblings as $object) {
+            $content .= $object->getValue();
+        }
+
+        $result->setValue($content);
+
+        return $result;
+    }
+}
+
+// register your resolver during the application start up
+/** @var $client \Basho\Riak\RiakClient */
+$client->getConfig()
+    ->getResolverFactory()
+    ->addResolver('MyDomainObject' new MySimpleResolver());
+
+// fetch the object and resolve any possible conflict
+$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$location  = new RiakLocation($namespace, 'object_key');
+$fetch     = FetchValue::builder($location)
+    ->withOption(RiakOption::NOTFOUND_OK, true)
+    ->withOption(RiakOption::R, 1)
+    ->build();
+
+/** @var $domain \MySimpleResolver */
+$result = $client->execute($fetch);
+$domain = $result->getValue('MyDomainObject');
 ```
 
 ## Contributing
