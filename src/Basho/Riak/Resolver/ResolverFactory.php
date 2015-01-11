@@ -31,6 +31,14 @@ class ResolverFactory
     }
 
     /**
+     * @param \Basho\Riak\Resolver\ConflictResolver[] $resolvers
+     */
+    public function setResolvers(array $resolvers)
+    {
+        $this->resolvers = $resolvers;
+    }
+
+    /**
      * @return \Basho\Riak\Resolver\ConflictResolver[]
      */
     public function getResolvers()

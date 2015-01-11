@@ -171,10 +171,11 @@ class MySimpleResolver implements ConflictResolver
 }
 
 // register your resolver during the application start up
-/** @var $client \Basho\Riak\RiakClient */
-$client->getConfig()
-    ->getResolverFactory()
-    ->addResolver('MyDomainObject' new MySimpleResolver());
+/** @var $builder \Basho\Riak\RiakClientBuilder */
+$client = $builder
+    ->withConflictResolver('MyDomainObject' new MySimpleResolver())
+    ->withNodeUri('http://localhost:8098')
+    ->build();
 
 // fetch the object and resolve any possible conflict
 $namespace = new RiakNamespace('bucket_name', 'bucket_type');

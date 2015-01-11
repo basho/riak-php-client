@@ -76,4 +76,21 @@ class RiakClientBuilderTest extends TestCase
         $this->assertSame($objectConverter, $riakConfig->getRiakObjectConverter());
         $this->assertSame($domainMetadataReader, $riakConfig->getDomainMetadataReader());
     }
+
+    public function testBuildWithConflictResolver()
+    {
+        $resolver = $this->getMock('Basho\Riak\Resolver\ConflictResolver');
+        $client   = $this->builder
+            ->withConflictResolver('stdClass', $resolver)
+            ->withNodeUri('http://localhost:8098')
+            ->build();
+
+        $this->assertInstanceOf('Basho\Riak\RiakClient', $client);
+
+        $config  = $client->getConfig();
+        $factory = $config->getResolverFactory();
+
+        $this->assertInstanceOf('Basho\Riak\Resolver\ResolverFactory', $factory);
+        $this->assertSame($resolver, $factory->getResolver('stdClass'));
+    }
 }

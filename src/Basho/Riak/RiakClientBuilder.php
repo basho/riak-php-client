@@ -7,6 +7,7 @@ use Basho\Riak\Core\RiakNode;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\RiakNodeBuilder;
 use Basho\Riak\Resolver\ResolverFactory;
+use Basho\Riak\Resolver\ConflictResolver;
 use Basho\Riak\Converter\ConverterFactory;
 use Basho\Riak\Converter\RiakObjectConverter;
 use Basho\Riak\Converter\CrdtResponseConverter;
@@ -71,7 +72,12 @@ class RiakClientBuilder
     private $nodes = [];
 
     /**
-     * @return \Basho\Riak\Converter\RiakObjectConverter
+     * @var \Basho\Riak\Resolver\ConflictResolver[]
+     */
+    private $resolvers = [];
+
+    /**
+     *@return \Basho\Riak\Converter\RiakObjectConverter
      */
     private function getRiakObjectConverter()
     {
@@ -305,16 +311,31 @@ class RiakClientBuilder
     }
 
     /**
+     * @param string                                $type
+     * @param \Basho\Riak\Resolver\ConflictResolver $resolver
+     *
+     * @return \Basho\Riak\RiakClientBuilder
+     */
+    public function withConflictResolver($type, ConflictResolver $resolver)
+    {
+        $this->resolvers[$type] = $resolver;
+
+        return $this;
+    }
+
+    /**
      * Create a riak client
      *
      * @return \Basho\Riak\RiakClient
      */
     public function build()
     {
-        $config  = $this->getConfig();
-        $cluster = $this->getCluster();
+        $config          = $this->getConfig();
+        $cluster         = $this->getCluster();
+        $resolverFactory = $config->getResolverFactory();
 
         $cluster->setNodes($this->nodes);
+        $resolverFactory->setResolvers($this->resolvers);
 
         return new RiakClient($config, $cluster);
     }
