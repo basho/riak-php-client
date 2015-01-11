@@ -84,7 +84,7 @@ class HttpDelete extends BaseHttpStrategy
             $code         = $httpResponse->getStatusCode();
         } catch (RequestException $e) {
             if ($e->getCode() == 404 && $request->notfoundOk) {
-                return;
+                return $response;
             }
 
             throw $e;

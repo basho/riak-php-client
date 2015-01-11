@@ -46,35 +46,65 @@ API documentation for this library can be found on [Github Pages](http://basho.g
 To see other clients available for use with Riak visit our
 [Documentation Site](http://docs.basho.com/riak/latest/dev/using/libraries)
 
-## Examples
+## Overview
 
-This quick example assumes that you have a local riak cluster running on port 8098
+Version 2.0 of the Riak PHP client is a completely new codebase.
+
+## Getting started with the 2.0 client.
+
+The easiest way to get started with the client is using a `RiakClientBuilder` :
 
 ```php
-
-use Basho\Riak\Cap\RiakOption;
-use Basho\Riak\Command\Kv\FetchValue;
-use Basho\Riak\Command\Kv\StoreValue;
-use Basho\Riak\Command\Kv\DeleteValue;
-use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\RiakClientBuilder;
-
 $builder = new RiakClientBuilder();
 $client  = $builder
-    ->withNodeUri('http://localhost:8098')
+    ->withNodeUri('http://192.168.1.1:8098')
+    ->withNodeUri('http://192.168.1.2:8098')
+    ->withNodeUri('http://192.168.1.3:8098')
     ->build();
 
-$object   = new SimpleObject('[1,1,1]');
-$location = new RiakLocation(new RiakNamespace('bucket_name', 'bucket_type'), $key);
+```
+
+Once you have a $client, commands from the `Basho\Riak\Command*` namespace are built then executed by the client.
+
+Some basic examples of building and executing these commands is shown
+below.
+
+## Getting Data In
+
+```php
+use Basho\Riak\Cap\RiakOption;
+use Basho\Riak\Command\Kv\StoreValue;
+use Basho\Riak\Core\Query\RiakObject;
+use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\RiakNamespace;
+
+$object   = new RiakObject();
+$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$location  = new RiakLocation($namespace, 'object_key');
+
+$object->setValue('[1,1,1]');
+$object->setContentType('application/json');
 
 // store object
-$store    = StoreValue::builder($location, $object1)
+$store    = StoreValue::builder($location, $object)
     ->withOption(RiakOption::PW, 1)
     ->withOption(RiakOption::W, 2)
     ->build();
 
-$this->client->execute($store);
+$client->execute($store);
+```
+
+## Getting Data Out
+
+```php
+use Basho\Riak\Cap\RiakOption;
+use Basho\Riak\Command\Kv\FetchValue;
+use Basho\Riak\Core\Query\RiakObject;
+use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\RiakNamespace;
+
+$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$location  = new RiakLocation($namespace, 'object_key');
 
 // fetch object
 $fetch  = FetchValue::builder($location)
@@ -82,8 +112,21 @@ $fetch  = FetchValue::builder($location)
     ->withOption(RiakOption::R, 1)
     ->build();
 
-$fetchResult = $this->client->execute($fetch);
-$siblings    = $fetchResult->getValues();
+$result = $client->execute($fetch);
+$object = $result->getValue();
+```
+
+## Removing Data
+
+```php
+use Basho\Riak\Cap\RiakOption;
+use Basho\Riak\Command\Kv\DeleteValue;
+use Basho\Riak\Core\Query\RiakObject;
+use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\RiakNamespace;
+
+$namespace = new RiakNamespace('bucket_name', 'bucket_type');
+$location  = new RiakLocation($namespace, 'object_key');
 
 // delete object
 $delete  = DeleteValue::builder($location)
@@ -92,7 +135,6 @@ $delete  = DeleteValue::builder($location)
     ->build();
 
 $this->client->execute($delete);
-
 ```
 
 ## Contributing
