@@ -13,8 +13,8 @@ namespace Basho\Riak\Core\Query;
 class RiakNamespace
 {
     /**
-    * The default bucket type in Riak.
-    */
+     * The default bucket type in Riak.
+     */
     const DEFAULT_TYPE = "default";
 
     /**

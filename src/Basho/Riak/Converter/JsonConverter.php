@@ -37,7 +37,7 @@ class JsonConverter extends BaseConverter
     {
         $data = json_decode($value, true);
 
-        if ( ! is_array($data)) {
+        if (! is_array($data)) {
             return new $type($data);
         }
 

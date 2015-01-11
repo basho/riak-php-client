@@ -12,5 +12,4 @@ namespace Basho\Riak\Core\Query\Crdt;
  */
 class RiakFlag implements DataType
 {
-
 }

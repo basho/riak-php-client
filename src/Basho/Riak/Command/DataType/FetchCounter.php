@@ -30,8 +30,8 @@ class FetchCounter implements RiakCommand
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
-     * @param array                                   $options
+     * @param \Basho\Riak\Command\Kv\RiakLocation $location
+     * @param array                               $options
      */
     public function __construct(RiakLocation $location, array $options = [])
     {
@@ -53,8 +53,8 @@ class FetchCounter implements RiakCommand
     }
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
-     * @param array                                   $options
+     * @param \Basho\Riak\Command\Kv\RiakLocation $location
+     * @param array                               $options
      *
      * @return \Basho\Riak\Command\DataType\Builder\FetchCounterBuilder
      */

@@ -60,20 +60,15 @@ class FetchOperation implements RiakOperation
      */
     public function execute(RiakAdapter $adapter)
     {
-        $objectList  = new RiakObjectList([]);
         $getRequest  = $this->createGetRequest();
         $getResponse = $adapter->send($getRequest);
-        $notFound    = $getResponse === null;
-        $unchanged   = false;
 
-        if ( ! $notFound) {
-            $vClock      = $getResponse->vClock;
-            $unchanged   = $getResponse->unchanged;
-            $contentList = $getResponse->contentList;
-            $objectList      = $this->objectConverter->convertToRiakObjectList($contentList, $vClock);
-        }
-
-        $response = new FetchValueResponse($this->converterFactory, $this->location, $objectList);
+        $vClock      = $getResponse->vClock;
+        $unchanged   = $getResponse->unchanged;
+        $contentList = $getResponse->contentList;
+        $notFound    = empty($getResponse->contentList);
+        $objectList  = $this->objectConverter->convertToRiakObjectList($contentList, $vClock);
+        $response    = new FetchValueResponse($this->converterFactory, $this->location, $objectList);
 
         $response->setNotFound($notFound);
         $response->setUnchanged($unchanged);

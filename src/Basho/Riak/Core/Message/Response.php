@@ -12,5 +12,4 @@ namespace Basho\Riak\Core\Message;
  */
 class Response
 {
-
 }

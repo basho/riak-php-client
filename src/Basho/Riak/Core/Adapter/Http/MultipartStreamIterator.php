@@ -2,7 +2,7 @@
 
 namespace Basho\Riak\Core\Adapter\Http;
 
-use \Iterator;
+use Iterator;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Stream\StreamInterface;
 
@@ -64,7 +64,6 @@ class MultipartStreamIterator implements Iterator
         $buffer = '';
 
         while ( ! $this->stream->eof()) {
-
             $buffer .= $this->stream->read(1);
 
             if (substr($buffer, -2) !== "\r\n") {
@@ -118,7 +117,6 @@ class MultipartStreamIterator implements Iterator
         $stream = Stream::factory();
 
         while ( ! $this->stream->eof()) {
-
             $line = $this->readLine();
 
             if ($this->isBoundary($line)) {
@@ -135,7 +133,7 @@ class MultipartStreamIterator implements Iterator
         }
 
         if ($line === null) {
-            return null;
+            return;
         }
 
         $stream->seek(0);

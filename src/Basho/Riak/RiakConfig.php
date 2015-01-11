@@ -44,11 +44,11 @@ class RiakConfig
     private $converterFactory;
 
     /**
-     * @param \Basho\Riak\Converter\ConverterFactory               $converterFactory
-     * @param \Basho\Riak\Converter\RiakObjectConverter            $riakObjectConverter
-     * @param \Basho\Riak\Converter\CrdtResponseConverter          $crdtResponseConverter
-     * @param \Basho\Riak\Converter\Hydrator\DomainMetadataReader  $domainMetadataReader
-     * @param \Basho\Riak\Converter\ConverterFactory               $domainHydrator
+     * @param \Basho\Riak\Converter\ConverterFactory              $converterFactory
+     * @param \Basho\Riak\Converter\RiakObjectConverter           $riakObjectConverter
+     * @param \Basho\Riak\Converter\CrdtResponseConverter         $crdtResponseConverter
+     * @param \Basho\Riak\Converter\Hydrator\DomainMetadataReader $domainMetadataReader
+     * @param \Basho\Riak\Converter\ConverterFactory              $domainHydrator
      */
     public function __construct(
         ConverterFactory      $converterFactory,

@@ -53,8 +53,8 @@ class ResolverFactory
     }
 
     /**
-     * @param string                                 $type
-     * @param \Basho\Riak\Resolver\ConflictResolver  $resolver
+     * @param string                                $type
+     * @param \Basho\Riak\Resolver\ConflictResolver $resolver
      */
     public function addResolver($type, ConflictResolver $resolver)
     {

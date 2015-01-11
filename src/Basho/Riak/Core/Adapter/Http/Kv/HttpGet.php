@@ -2,7 +2,6 @@
 
 namespace Basho\Riak\Core\Adapter\Http\Kv;
 
-use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\GetRequest;
 use Basho\Riak\Core\Message\Kv\GetResponse;
@@ -25,14 +24,6 @@ class HttpGet extends BaseHttpStrategy
         200 => true,
         300 => true
     ];
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        parent::__construct($client);
-    }
 
     /**
      * @param \Basho\Riak\Core\Message\Kv\GetRequest $getRequest
@@ -72,14 +63,15 @@ class HttpGet extends BaseHttpStrategy
      */
     public function send(Request $request)
     {
+        $httpRequest  = $this->createHttpRequest($request);
+        $response     = new GetResponse();
+
         try {
-            $httpRequest  = $this->createHttpRequest($request);
             $httpResponse = $this->client->send($httpRequest);
             $code         = $httpResponse->getStatusCode();
-            $response     = new GetResponse();
         } catch (RequestException $e) {
-            if ($e->getCode() == 404) {
-                return null;
+            if ($e->getCode() == 404 && $request->notfoundOk) {
+                return $response;
             }
 
             throw $e;

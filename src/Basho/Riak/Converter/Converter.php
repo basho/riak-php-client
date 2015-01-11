@@ -2,8 +2,6 @@
 
 namespace Basho\Riak\Converter;
 
-use Basho\Riak\Converter\RiakObjectReference;
-use Basho\Riak\Converter\DomainObjectReference;
 
 /**
  * The Converter acts as a bridge between the core and the user level API.

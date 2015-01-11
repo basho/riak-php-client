@@ -3,7 +3,6 @@
 namespace Basho\Riak;
 
 use Basho\Riak\Core\RiakCluster;
-use Basho\Riak\RiakConfig;
 
 /**
  * The client used to perform operations on Riak.

@@ -114,8 +114,8 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the map mapped to the provided key.
      *
-     * @param string                               $key
-     * @param \Basho\Riak\Core\Query\Crdt\RiakMap  $value
+     * @param string                              $key
+     * @param \Basho\Riak\Core\Query\Crdt\RiakMap $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
@@ -127,8 +127,8 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the set mapped to the provided key.
      *
-     * @param string                               $key
-     * @param \Basho\Riak\Core\Query\Crdt\RiakSet  $value
+     * @param string                              $key
+     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */

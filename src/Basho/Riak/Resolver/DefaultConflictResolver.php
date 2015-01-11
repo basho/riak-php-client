@@ -25,7 +25,7 @@ class DefaultConflictResolver implements ConflictResolver
         }
 
         if ($siblings->isEmpty()) {
-            return null;
+            return;
         }
 
         throw new UnresolvedConflictException();

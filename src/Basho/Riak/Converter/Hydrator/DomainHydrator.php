@@ -29,9 +29,9 @@ class DomainHydrator
     }
 
     /**
-     * @param object        $domainObject
-     * @param RiakObject    $riakObject
-     * @param RiakLocation  $location
+     * @param object       $domainObject
+     * @param RiakObject   $riakObject
+     * @param RiakLocation $location
      */
     public function setDomainObjectValues($domainObject, RiakObject $riakObject, RiakLocation $location)
     {
@@ -66,16 +66,12 @@ class DomainHydrator
     }
 
     /**
-     * @param RiakObject    $riakObject
-     * @param mixed         $domainObject
-     * @param RiakLocation  $location
+     * @param RiakObject   $riakObject
+     * @param object       $domainObject
+     * @param RiakLocation $location
      */
     public function setRiakObjectValues(RiakObject $riakObject, $domainObject, RiakLocation $location)
     {
-        if ( ! is_object($domainObject)) {
-            $riakObject->setValue($domainObject);
-        }
-
         $className = get_class($domainObject);
         $metadata  = $this->metadataReader->getRiakPropertiesMapping($className);
 

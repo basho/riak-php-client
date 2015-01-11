@@ -114,7 +114,7 @@ abstract class Response implements RiakResponse
     public function getVectorClock()
     {
         if ($this->values->isEmpty()) {
-            return null;
+            return;
         }
 
         $first  = $this->values->first();

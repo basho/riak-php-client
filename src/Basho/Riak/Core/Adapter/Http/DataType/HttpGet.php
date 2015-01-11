@@ -3,7 +3,6 @@
 namespace Basho\Riak\Core\Adapter\Http\DataType;
 
 use GuzzleHttp\ClientInterface;
-
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\DataType\GetRequest;
 use Basho\Riak\Core\Message\DataType\GetResponse;
@@ -26,14 +25,6 @@ class HttpGet extends BaseHttpStrategy
         200 => true,
         300 => true
     ];
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        parent::__construct($client);
-    }
 
     /**
      * @param \Basho\Riak\Core\Message\DataType\GetRequest $getRequest
@@ -80,7 +71,6 @@ class HttpGet extends BaseHttpStrategy
             $httpResponse = $this->client->send($httpRequest);
             $code         = $httpResponse->getStatusCode();
         } catch (RequestException $e) {
-
             if ($e->getCode() == 404 && $request->notfoundOk) {
                 $response->value = 0;
                 $response->type  = 'counter';

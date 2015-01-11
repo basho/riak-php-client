@@ -34,9 +34,9 @@ class StoreValue implements RiakCommand
     private $options = [];
 
     /**
-     * @param \Basho\Riak\Core\Query\RiakLocation       $location
-     * @param \Basho\Riak\Core\Query\RiakObject|mixed   $value
-     * @param array                                     $options
+     * @param \Basho\Riak\Core\Query\RiakLocation     $location
+     * @param \Basho\Riak\Core\Query\RiakObject|mixed $value
+     * @param array                                   $options
      */
     public function __construct(RiakLocation $location, $value = null, array $options = [])
     {

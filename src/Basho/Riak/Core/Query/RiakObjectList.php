@@ -2,7 +2,6 @@
 
 namespace Basho\Riak\Core\Query;
 
-use BadMethodCallException;
 use OutOfBoundsException;
 use IteratorAggregate;
 use ArrayIterator;
@@ -89,7 +88,11 @@ class RiakObjectList implements IteratorAggregate, Countable, ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        throw new BadMethodCallException();
+        if ($offset) {
+            return $this->list[$offset] = $value;
+        }
+
+        return $this->list[] = $value;
     }
 
     /**
@@ -97,6 +100,10 @@ class RiakObjectList implements IteratorAggregate, Countable, ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        throw new BadMethodCallException();
+        if ( ! isset($this->list[$offset])) {
+            throw new OutOfBoundsException("Undefined key : $offset");
+        }
+
+        unset($this->list[$offset]);
     }
 }

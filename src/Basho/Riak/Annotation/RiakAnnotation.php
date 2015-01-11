@@ -12,5 +12,4 @@ namespace Basho\Riak\Annotation;
  */
 interface RiakAnnotation
 {
-
 }

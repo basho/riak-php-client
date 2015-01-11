@@ -5,7 +5,6 @@ namespace Basho\Riak\Core\Operation\DataType;
 use Basho\Riak\Command\DataType\Response\FetchCounterResponse;
 use Basho\Riak\Converter\CrdtResponseConverter;
 use Basho\Riak\Core\Message\DataType\GetRequest;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\RiakOperation;
 use Basho\Riak\Core\RiakAdapter;

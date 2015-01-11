@@ -136,6 +136,9 @@ class HttpGetTest extends TestCase
         $request      = new GetRequest();
         $httpRequest  = $this->getMock('GuzzleHttp\Message\RequestInterface');
         $httpResponse = $this->getMock('GuzzleHttp\Message\ResponseInterface');
+        $httpQuery    = $this->getMock('GuzzleHttp\Query');
+
+        $request->notfoundOk  = true;
 
         $this->client->expects($this->once())
             ->method('createRequest')
@@ -146,6 +149,10 @@ class HttpGetTest extends TestCase
             ->method('getStatusCode')
             ->willReturn(404);
 
+        $httpRequest->expects($this->once())
+            ->method('getQuery')
+            ->willReturn($httpQuery);
+
         $this->client->expects($this->once())
             ->method('send')
             ->with($this->equalTo($httpRequest))
@@ -155,6 +162,10 @@ class HttpGetTest extends TestCase
         $request->type   = 'default';
         $request->key    = '1';
 
-        $this->assertNull($this->instance->send($request));
+        $response = $this->instance->send($request);
+
+        $this->assertInstanceOf('Basho\Riak\Core\Message\Kv\GetResponse', $response);
+        $this->assertEmpty($response->contentList);
+        $this->assertNull($response->vClock);
     }
 }

@@ -4,7 +4,6 @@ namespace Basho\Riak\Core;
 
 use Basho\Riak\RiakConfig;
 use Basho\Riak\RiakException;
-use Basho\Riak\Core\RiakOperation;
 
 /**
  * This class represents a Riak Cluster upon which operations are executed.

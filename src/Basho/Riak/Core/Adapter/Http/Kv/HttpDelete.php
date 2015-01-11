@@ -2,7 +2,6 @@
 
 namespace Basho\Riak\Core\Adapter\Http\Kv;
 
-use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\DeleteRequest;
 use Basho\Riak\Core\Message\Kv\DeleteResponse;
@@ -25,14 +24,6 @@ class HttpDelete extends BaseHttpStrategy
         204 => true,
         404 => true,
     ];
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        parent::__construct($client);
-    }
 
     /**
      * @param \Basho\Riak\Core\Message\Kv\DeleteRequest $deleteRequest
@@ -92,8 +83,8 @@ class HttpDelete extends BaseHttpStrategy
             $httpResponse = $this->client->send($httpRequest);
             $code         = $httpResponse->getStatusCode();
         } catch (RequestException $e) {
-            if ($e->getCode() == 404) {
-                return null;
+            if ($e->getCode() == 404 && $request->notfoundOk) {
+                return;
             }
 
             throw $e;

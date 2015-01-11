@@ -55,8 +55,8 @@ class ConverterFactory
     }
 
     /**
-     * @param string                           $type
-     * @param \Basho\Riak\Converter\Converter  $converter
+     * @param string                          $type
+     * @param \Basho\Riak\Converter\Converter $converter
      */
     public function addConverter($type, Converter $converter)
     {

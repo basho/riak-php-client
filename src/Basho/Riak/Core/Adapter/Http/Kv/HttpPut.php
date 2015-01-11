@@ -3,7 +3,6 @@
 namespace Basho\Riak\Core\Adapter\Http\Kv;
 
 use GuzzleHttp\Stream\Stream;
-use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\PutRequest;
 use Basho\Riak\Core\Message\Kv\PutResponse;
@@ -27,14 +26,6 @@ class HttpPut extends BaseHttpStrategy
         204 => true,
         300 => true
     ];
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        parent::__construct($client);
-    }
 
     /**
      * @param \Basho\Riak\Core\Message\Kv\PutRequest $putRequest

@@ -14,5 +14,4 @@ use Basho\Riak\RiakException;
  */
 class UnresolvedConflictException extends RiakException
 {
-
 }

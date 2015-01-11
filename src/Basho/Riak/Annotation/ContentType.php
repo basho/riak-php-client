@@ -15,5 +15,4 @@ namespace Basho\Riak\Annotation;
  */
 final class ContentType implements RiakAnnotation
 {
-
 }

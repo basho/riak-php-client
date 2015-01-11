@@ -39,7 +39,7 @@ class MultipartResponseIterator implements Iterator
      */
     private $current;
 
-     /**
+    /**
      * @var \GuzzleHttp\Message\MessageFactoryInterface
      */
     private $factory;

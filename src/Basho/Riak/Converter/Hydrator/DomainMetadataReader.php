@@ -67,7 +67,6 @@ class DomainMetadataReader
         $metadata = [];
 
         foreach ($this->reader->getPropertyAnnotations($property) as $value) {
-
             if ( ! $value instanceof RiakAnnotation) {
                 continue;
             }

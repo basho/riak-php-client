@@ -2,7 +2,6 @@
 
 namespace Basho\Riak\Core;
 
-use Basho\Riak\Core\RiakOperation;
 
 /**
  * This class represents a Riak Node.

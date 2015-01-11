@@ -3,7 +3,6 @@
 namespace Basho\Riak;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Basho\Riak\RiakConfig;
 use Basho\Riak\Core\RiakNode;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\RiakNodeBuilder;
@@ -60,7 +59,7 @@ class RiakClientBuilder
      */
     private $config;
 
-     /**
+    /**
      * @var array
      */
     private $nodes = [];

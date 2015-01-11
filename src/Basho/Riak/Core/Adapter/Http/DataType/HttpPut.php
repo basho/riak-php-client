@@ -2,12 +2,9 @@
 
 namespace Basho\Riak\Core\Adapter\Http\DataType;
 
-use GuzzleHttp\ClientInterface;
-
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\DataType\PutRequest;
 use Basho\Riak\Core\Message\DataType\PutResponse;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Stream\Stream;
 
 /**
@@ -26,14 +23,6 @@ class HttpPut extends BaseHttpStrategy
     protected $validResponseCodes = [
         200 => true
     ];
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        parent::__construct($client);
-    }
 
     /**
      * @param \Basho\Riak\Core\Message\DataType\PutRequest $putRequest

@@ -12,5 +12,4 @@ namespace Basho\Riak\Core\Query\Crdt\Op;
  */
 class RegisterOp implements CrdtOp
 {
-
 }
