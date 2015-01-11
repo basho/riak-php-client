@@ -6,12 +6,12 @@ use BashoRiakFunctionalTest\TestCase;
 use Basho\Riak\Cap\RiakOption;
 use Basho\Riak\Command\Kv\FetchValue;
 use Basho\Riak\Command\Kv\StoreValue;
+use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Command\Kv\DeleteValue;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
 
-class BasicTest extends TestCase
+class RiakObjectTest extends TestCase
 {
     protected function setUp()
     {
@@ -34,8 +34,11 @@ class BasicTest extends TestCase
     public function testStoreAndFetchSingleValue()
     {
         $key      = uniqid();
-        $object   = new SimpleObject('[1,1,1]');
+        $object   = new RiakObject();
         $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+
+        $object->setValue('[1,1,1]');
+        $object->setContentType('application/json');
 
         $store = StoreValue::builder($location, $object)
             ->withOption(RiakOption::PW, 1)
@@ -49,12 +52,13 @@ class BasicTest extends TestCase
 
         $this->client->execute($store);
 
-        $result = $this->client->execute($fetch);
+        $result     = $this->client->execute($fetch);
+        $riakObject = $result->getValue();
 
         $this->assertFalse($result->getNotFound());
         $this->assertInstanceOf('Basho\Riak\Command\Kv\Response\FetchValueResponse', $result);
-        $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $result->getValue());
-        $this->assertEquals('{"value":"[1,1,1]"}', $result->getValue()->getValue());
+        $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $riakObject);
+        $this->assertEquals('[1,1,1]', $riakObject->getValue());
 
         $this->client->execute(DeleteValue::builder($location)
             ->withOption(RiakOption::NOTFOUND_OK, true)
@@ -64,9 +68,14 @@ class BasicTest extends TestCase
     public function testStoreAndFetchValueWithSiblings()
     {
         $key      = uniqid();
-        $object1  = new SimpleObject('[1,1,1]');
-        $object2  = new SimpleObject('[2,2,2]');
+        $object1  = new RiakObject();
+        $object2  = new RiakObject();
         $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+
+        $object1->setValue('[1,1,1]');
+        $object2->setValue('[2,2,2]');
+        $object1->setContentType('application/json');
+        $object2->setContentType('application/json');
 
         $store1 = StoreValue::builder($location, $object1)
             ->withOption(RiakOption::PW, 1)
@@ -103,28 +112,12 @@ class BasicTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Command\Kv\Response\FetchValueResponse', $resultFetch3);
         $this->assertInstanceOf('Basho\Riak\Command\Kv\Response\DeleteValueResponse', $resultDelete);
 
-        $riakObjects   = $resultFetch2->getValues();
-        $domainObjects = $resultFetch2->getValuesAs(SimpleObject::CLASS_NAME);
+        $values = $resultFetch2->getValues();
 
-        $this->assertCount(2, $domainObjects);
-        $this->assertCount(2, $riakObjects);
-
-        $this->assertInstanceOf(SimpleObject::CLASS_NAME, $domainObjects[0]);
-        $this->assertInstanceOf(SimpleObject::CLASS_NAME, $domainObjects[1]);
-        $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $riakObjects[0]);
-        $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $riakObjects[0]);
-
-        $this->assertEquals($key, $domainObjects[0]->getRiakKey());
-        $this->assertEquals($key, $domainObjects[1]->getRiakKey());
-        $this->assertEquals('default', $domainObjects[0]->getRiakBucketType());
-        $this->assertEquals('default', $domainObjects[1]->getRiakBucketType());
-        $this->assertEquals('bucket', $domainObjects[0]->getRiakBucketName());
-        $this->assertEquals('bucket', $domainObjects[1]->getRiakBucketName());
-
-        $this->assertEquals('[1,1,1]', $domainObjects[0]->getValue());
-        $this->assertEquals('[2,2,2]', $domainObjects[1]->getValue());
-
-        $this->assertEquals('{"value":"[1,1,1]"}', $riakObjects[0]->getValue());
-        $this->assertEquals('{"value":"[2,2,2]"}', $riakObjects[1]->getValue());
+        $this->assertCount(2, $values);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $values[0]);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $values[0]);
+        $this->assertEquals('[1,1,1]', (string)$values[0]->getValue());
+        $this->assertEquals('[2,2,2]', (string)$values[1]->getValue());
     }
 }

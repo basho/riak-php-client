@@ -2,6 +2,7 @@
 
 namespace Basho\Riak\Converter;
 
+use ReflectionClass;
 use Basho\Riak\Converter\Hydrator\DomainHydrator;
 
 /**
@@ -35,13 +36,15 @@ class JsonConverter extends BaseConverter
      */
     protected function toDomainObject($value, $type)
     {
-        $data = json_decode($value, true);
+        $reflection = new ReflectionClass($type);
+        $data       = json_decode($value, true);
+        $object     = is_array($data)
+            ? $reflection->newInstance($data)
+            : $reflection->newInstance();
 
         if ( ! is_array($data)) {
-            return new $type($data);
+            return $object;
         }
-
-        $object = new $type();
 
         foreach ($data as $key => $value) {
             call_user_func([$object , 'set'. ucfirst($key)], $value);

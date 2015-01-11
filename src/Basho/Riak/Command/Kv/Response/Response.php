@@ -3,10 +3,11 @@
 namespace Basho\Riak\Command\Kv\Response;
 
 use Basho\Riak\RiakResponse;
+use Basho\Riak\Core\Query\RiakList;
 use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\RiakObjectList;
 use Basho\Riak\Resolver\ResolverFactory;
 use Basho\Riak\Converter\ConverterFactory;
+use Basho\Riak\Core\Query\DomainObjectList;
 use Basho\Riak\Converter\RiakObjectReference;
 
 /**
@@ -35,7 +36,7 @@ abstract class Response implements RiakResponse
     private $location;
 
     /**
-     * @var \Basho\Riak\Core\Query\RiakObjectList
+     * @var \Basho\Riak\Core\Query\RiakList
      */
     private $values;
 
@@ -43,9 +44,9 @@ abstract class Response implements RiakResponse
      * @param \Basho\Riak\Converter\ConverterFactory $converterFactory
      * @param \Basho\Riak\Resolver\ResolverFactory   $resolverFactory
      * @param \Basho\Riak\Core\Query\RiakLocation    $location
-     * @param \Basho\Riak\Core\Query\RiakObjectList  $values
+     * @param \Basho\Riak\Core\Query\RiakList        $values
      */
-    public function __construct(ConverterFactory $converterFactory, ResolverFactory $resolverFactory, RiakLocation $location, RiakObjectList $values)
+    public function __construct(ConverterFactory $converterFactory, ResolverFactory $resolverFactory, RiakLocation $location, RiakList $values)
     {
         $this->converterFactory = $converterFactory;
         $this->resolverFactory  = $resolverFactory;
@@ -83,39 +84,18 @@ abstract class Response implements RiakResponse
 
     /**
      * Get all the objects returned in this response.
-     *
-     * @return \Basho\Riak\Core\Query\RiakObjectList
-     */
-    public function getValues()
-    {
-        return $this->values;
-    }
-
-    /**
-     * Get a single, resolved object from this response.
-     *
-     * @return \Basho\Riak\Core\Query\RiakObject
-     *
-     * @throws \Basho\Riak\Resolver\UnresolvedConflictException
-     */
-    public function getValue()
-    {
-        $resolver = $this->resolverFactory->getResolver('Basho\Riak\Core\Query\RiakObject');
-        $siblings = $this->getValues();
-
-        return $resolver->resolve($siblings);
-    }
-
-    /**
-     * Get all the objects returned in this response.
-     * The values will be converted to the supplied class using the convert api.
+     * If a type is provided will be converted to the supplied class using the convert api.
      *
      * @param string $type
      *
-     * @return array
+     * @return \Basho\Riak\Core\Query\RiakList
      */
-    public function getValuesAs($type)
+    public function getValues($type = null)
     {
+        if ($type == null) {
+            return $this->values;
+        }
+
         $converter  = $this->converterFactory->getConverter($type);
         $resultList = [];
 
@@ -126,7 +106,25 @@ abstract class Response implements RiakResponse
             $resultList[] = $converted;
         }
 
-        return $resultList;
+        return new DomainObjectList($resultList);
+    }
+
+    /**
+     * Get a single, resolved object from this response.
+     *
+     * @param string $type
+     *
+     * @return \Basho\Riak\Core\Query\RiakObject
+     *
+     * @throws \Basho\Riak\Resolver\UnresolvedConflictException
+     */
+    public function getValue($type = null)
+    {
+        $siblings   = $this->getValues($type);
+        $resolver   = $this->resolverFactory->getResolver($type);
+        $riakObject = $resolver->resolve($siblings);
+
+        return $riakObject;
     }
 
     /**

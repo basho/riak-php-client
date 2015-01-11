@@ -2,7 +2,7 @@
 
 namespace Basho\Riak\Resolver;
 
-use Basho\Riak\Core\Query\RiakObjectList;
+use Basho\Riak\Core\Query\RiakList;
 
 /**
  * A conflict resolver that doesn't resolve conflict
@@ -18,7 +18,7 @@ class DefaultConflictResolver implements ConflictResolver
     /**
      * {@inheritdoc}
      */
-    public function resolve(RiakObjectList $siblings)
+    public function resolve(RiakList $siblings)
     {
         if (count($siblings) == 1) {
             return $siblings->first();

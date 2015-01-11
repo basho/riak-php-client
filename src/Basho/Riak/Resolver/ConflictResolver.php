@@ -2,7 +2,7 @@
 
 namespace Basho\Riak\Resolver;
 
-use Basho\Riak\Core\Query\RiakObjectList;
+use Basho\Riak\Core\Query\RiakList;
 
 /**
  * Interface used to resolve siblings.
@@ -17,11 +17,11 @@ interface ConflictResolver
     /**
      * Resolve a set a of siblings to a single object.
      *
-     * @param \Basho\Riak\Core\Query\RiakObjectList $siblings
+     * @param \Basho\Riak\Core\Query\RiakList $siblings
      *
      * @return \Basho\Riak\Core\Query\RiakObject
      *
      * @throws \Basho\Riak\Resolver\UnresolvedConflictException
      */
-    public function resolve(RiakObjectList $siblings);
+    public function resolve(RiakList $siblings);
 }
