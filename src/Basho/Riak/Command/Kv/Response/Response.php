@@ -4,6 +4,7 @@ namespace Basho\Riak\Command\Kv\Response;
 
 use Basho\Riak\RiakResponse;
 use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\RiakObjectList;
 use Basho\Riak\Core\Converter\ConverterFactory;
 use Basho\Riak\Core\Converter\RiakObjectReference;
 
@@ -28,16 +29,16 @@ abstract class Response implements RiakResponse
     private $location;
 
     /**
-     * @var \Basho\Riak\Core\Query\RiakObject[]
+     * @var \Basho\Riak\Core\Query\RiakObjectList
      */
     private $values;
 
     /**
      * @param \Basho\Riak\Core\Converter\ConverterFactory $converterFactory
      * @param \Basho\Riak\Core\Query\RiakLocation         $location
-     * @param array                                       $values
+     * @param \Basho\Riak\Core\Query\RiakObjectList       $values
      */
-    public function __construct(ConverterFactory $converterFactory, RiakLocation $location, array $values)
+    public function __construct(ConverterFactory $converterFactory, RiakLocation $location, RiakObjectList $values)
     {
         $this->converterFactory = $converterFactory;
         $this->location         = $location;
@@ -59,7 +60,7 @@ abstract class Response implements RiakResponse
      */
     public function hasValues()
     {
-        return ! empty($this->values);
+        return ( ! $this->values->isEmpty());
     }
 
     /**
@@ -69,13 +70,13 @@ abstract class Response implements RiakResponse
      */
     public function getNumberOfValues()
     {
-        return count($this->values);
+        return $this->values->count();
     }
 
     /**
      * Get all the objects returned in this response.
      *
-     * @return \Basho\Riak\Core\Query\RiakObject[]
+     * @return \Basho\Riak\Core\Query\RiakObjectList
      */
     public function getValues()
     {
@@ -112,11 +113,11 @@ abstract class Response implements RiakResponse
      */
     public function getVectorClock()
     {
-        if ( ! $this->hasValues()) {
+        if ($this->values->isEmpty()) {
             return null;
         }
 
-        $first  = reset($this->values);
+        $first  = $this->values->first();
         $vclock = $first->getVClock();
 
         return $vclock;

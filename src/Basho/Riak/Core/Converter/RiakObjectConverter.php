@@ -4,6 +4,7 @@ namespace Basho\Riak\Core\Converter;
 
 use Basho\Riak\Cap\VClock;
 use Basho\Riak\Core\Query\RiakObject;
+use Basho\Riak\Core\Query\RiakObjectList;
 
 /**
  * Riak object convertert.
@@ -19,7 +20,7 @@ class RiakObjectConverter
      * @param array  $siblingsList
      * @param string $vClockString
      *
-     * @return \Basho\Riak\Core\Query\RiakObject[]
+     * @return \Basho\Riak\Core\Query\RiakObjectList
      */
     public function convertToRiakObjectList(array $siblingsList, $vClockString)
     {
@@ -30,7 +31,7 @@ class RiakObjectConverter
             $list[] = $this->convertToRiakObject($map, $vClock);
         }
 
-        return $list;
+        return new RiakObjectList($list);
     }
 
     /**

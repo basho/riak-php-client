@@ -6,6 +6,7 @@ use Basho\Riak\Command\Kv\Response\FetchValueResponse;
 use Basho\Riak\Core\Converter\RiakObjectConverter;
 use Basho\Riak\Core\Converter\ConverterFactory;
 use Basho\Riak\Core\Message\Kv\GetRequest;
+use Basho\Riak\Core\Query\RiakObjectList;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\RiakOperation;
 use Basho\Riak\Core\RiakAdapter;
@@ -59,7 +60,7 @@ class FetchOperation implements RiakOperation
      */
     public function execute(RiakAdapter $adapter)
     {
-        $values      = [];
+        $objectList  = new RiakObjectList([]);
         $getRequest  = $this->createGetRequest();
         $getResponse = $adapter->send($getRequest);
         $notFound    = $getResponse === null;
@@ -69,10 +70,10 @@ class FetchOperation implements RiakOperation
             $vClock      = $getResponse->vClock;
             $unchanged   = $getResponse->unchanged;
             $contentList = $getResponse->contentList;
-            $values      = $this->objectConverter->convertToRiakObjectList($contentList, $vClock);
+            $objectList      = $this->objectConverter->convertToRiakObjectList($contentList, $vClock);
         }
 
-        $response = new FetchValueResponse($this->converterFactory, $this->location, $values);
+        $response = new FetchValueResponse($this->converterFactory, $this->location, $objectList);
 
         $response->setNotFound($notFound);
         $response->setUnchanged($unchanged);
