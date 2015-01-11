@@ -5,6 +5,7 @@ namespace Basho\Riak;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Basho\Riak\Core\RiakNode;
 use Basho\Riak\Core\RiakCluster;
+use Basho\Riak\Converter\Converter;
 use Basho\Riak\Core\RiakNodeBuilder;
 use Basho\Riak\Resolver\ResolverFactory;
 use Basho\Riak\Resolver\ConflictResolver;
@@ -77,7 +78,12 @@ class RiakClientBuilder
     private $resolvers = [];
 
     /**
-     *@return \Basho\Riak\Converter\RiakObjectConverter
+     * @var \Basho\Riak\Converter\Converter[]
+     */
+    private $converters = [];
+
+    /**
+     * @return \Basho\Riak\Converter\RiakObjectConverter
      */
     private function getRiakObjectConverter()
     {
@@ -324,18 +330,33 @@ class RiakClientBuilder
     }
 
     /**
+     * @param string                          $type
+     * @param \Basho\Riak\Converter\Converter $converter
+     *
+     * @return \Basho\Riak\RiakClientBuilder
+     */
+    public function withConverter($type, Converter $converter)
+    {
+        $this->converters[$type] = $converter;
+
+        return $this;
+    }
+
+    /**
      * Create a riak client
      *
      * @return \Basho\Riak\RiakClient
      */
     public function build()
     {
-        $config          = $this->getConfig();
-        $cluster         = $this->getCluster();
-        $resolverFactory = $config->getResolverFactory();
+        $config           = $this->getConfig();
+        $cluster          = $this->getCluster();
+        $resolverFactory  = $config->getResolverFactory();
+        $converterFactory = $config->getConverterFactory();
 
         $cluster->setNodes($this->nodes);
         $resolverFactory->setResolvers($this->resolvers);
+        $converterFactory->setConverters($this->converters);
 
         return new RiakClient($config, $cluster);
     }

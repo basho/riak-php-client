@@ -41,6 +41,14 @@ class ConverterFactory
     }
 
     /**
+     * @param \Basho\Riak\Converter\Converter[] $converters
+     */
+    public function setConverters(array $converters)
+    {
+        $this->converters = $converters;
+    }
+
+    /**
      * @param string $type
      *
      * @return \Basho\Riak\Converter\Converter

@@ -93,4 +93,21 @@ class RiakClientBuilderTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Resolver\ResolverFactory', $factory);
         $this->assertSame($resolver, $factory->getResolver('stdClass'));
     }
+
+    public function testBuildWithConverter()
+    {
+        $converter = $this->getMock('Basho\Riak\Converter\Converter');
+        $client    = $this->builder
+            ->withConverter('stdClass', $converter)
+            ->withNodeUri('http://localhost:8098')
+            ->build();
+
+        $this->assertInstanceOf('Basho\Riak\RiakClient', $client);
+
+        $config  = $client->getConfig();
+        $factory = $config->getConverterFactory();
+
+        $this->assertInstanceOf('Basho\Riak\Converter\ConverterFactory', $factory);
+        $this->assertSame($converter, $factory->getConverter('stdClass'));
+    }
 }
