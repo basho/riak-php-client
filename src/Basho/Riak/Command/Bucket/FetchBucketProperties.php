@@ -2,10 +2,10 @@
 
 namespace Basho\Riak\Command\Bucket;
 
-use Basho\Riak\RiakException;
 use Basho\Riak\RiakCommand;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakNamespace;
+use Basho\Riak\Core\Operation\Bucket\FetchPropertiesOperation;
 use Basho\Riak\Command\Bucket\Builder\FetchBucketPropertiesBuilder;
 
 /**
@@ -19,11 +19,27 @@ use Basho\Riak\Command\Bucket\Builder\FetchBucketPropertiesBuilder;
 class FetchBucketProperties implements RiakCommand
 {
     /**
+     * @var \Basho\Riak\Core\Query\RiakNamespace
+     */
+    private $namespace;
+
+    /**
+     * @param \Basho\Riak\Core\Query\RiakNamespace $namespace
+     */
+    public function __construct(RiakNamespace $namespace)
+    {
+        $this->namespace = $namespace;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute(RiakCluster $cluster)
     {
-        throw new RiakException("Not implemented");
+        $operation = new FetchPropertiesOperation($this->namespace);
+        $response  = $cluster->execute($operation);
+
+        return $response;
     }
 
     /**

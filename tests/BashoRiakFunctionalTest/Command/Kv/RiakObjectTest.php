@@ -10,6 +10,8 @@ use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Command\Kv\DeleteValue;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
+use Basho\Riak\Core\Query\BucketProperties;
+use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
 class RiakObjectTest extends TestCase
 {
@@ -17,18 +19,14 @@ class RiakObjectTest extends TestCase
     {
         parent::setUp();
 
-        $client  = new \GuzzleHttp\Client();
-        $request = $client->createRequest('PUT', 'http://127.0.0.1:8098/buckets/bucket/props');
+        $namespace = new RiakNamespace('buckets', 'default');
+        $store     = StoreBucketProperties::builder()
+            ->withProperty(BucketProperties::ALLOW_MULT, true)
+            ->withProperty(BucketProperties::N_VAL, 3)
+            ->withNamespace($namespace)
+            ->build();
 
-        $request->addHeader('Content-Type', 'application/json');
-        $request->setBody(\GuzzleHttp\Stream\Stream::factory(json_encode([
-            'props' => [
-                'allow_mult' => true,
-                'n_val'      => 3,
-            ]
-        ])));
-
-        $client->send($request);
+        $this->client->execute($store);
     }
 
     public function testStoreAndFetchSingleValue()

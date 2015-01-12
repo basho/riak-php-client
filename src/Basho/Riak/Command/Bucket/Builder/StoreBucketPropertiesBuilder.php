@@ -21,11 +21,18 @@ class StoreBucketPropertiesBuilder extends Builder
     private $namespace;
 
     /**
-     * @param \Basho\Riak\Core\Query\RiakNamespace $namespace
+     * @var array
      */
-    public function __construct(RiakNamespace $namespace = null)
+    private $properties;
+
+    /**
+     * @param \Basho\Riak\Core\Query\RiakNamespace $namespace
+     * @param array                                $properties
+     */
+    public function __construct(RiakNamespace $namespace = null, array $properties = [])
     {
-        $this->namespace = $namespace;
+        $this->namespace  = $namespace;
+        $this->properties = $properties;
     }
 
     /**
@@ -41,12 +48,27 @@ class StoreBucketPropertiesBuilder extends Builder
     }
 
     /**
+     * Add an propertu setting for this command.
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return \Basho\Riak\Command\Bucket\Builder\StoreBucketPropertiesBuilder
+     */
+    public function withProperty($name, $value)
+    {
+        $this->properties[$name] = $value;
+
+        return $this;
+    }
+
+    /**
      * Build a command object
      *
      * @return \Basho\Riak\Command\DataType\StoreBucketProperties
      */
     public function build()
     {
-        return new StoreBucketProperties($this->namespace);
+        return new StoreBucketProperties($this->namespace, $this->properties);
     }
 }

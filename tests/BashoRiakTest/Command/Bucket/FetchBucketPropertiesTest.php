@@ -46,15 +46,4 @@ class FetchBucketPropertiesTest extends TestCase
 
         $this->assertInstanceOf('Basho\Riak\Command\Bucket\FetchBucketProperties', $builder->build());
     }
-
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecuteCommand()
-    {
-        $this->client->execute(FetchBucketProperties::builder()
-            ->withNamespace($this->namespace)
-            ->build());
-    }
 }

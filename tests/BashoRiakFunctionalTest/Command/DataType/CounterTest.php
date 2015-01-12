@@ -9,6 +9,8 @@ use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\DataType\FetchCounter;
 use Basho\Riak\Command\DataType\StoreCounter;
+use Basho\Riak\Core\Query\BucketProperties;
+use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
 class CounterTest extends TestCase
 {
@@ -16,18 +18,14 @@ class CounterTest extends TestCase
     {
         parent::setUp();
 
-        $client  = new \GuzzleHttp\Client();
-        $request = $client->createRequest('PUT', 'http://127.0.0.1:8098/types/counters/buckets/counters/props');
+        $namespace = new RiakNamespace('counters', 'counters');
+        $store     = StoreBucketProperties::builder()
+            ->withProperty(BucketProperties::ALLOW_MULT, true)
+            ->withProperty(BucketProperties::N_VAL, 3)
+            ->withNamespace($namespace)
+            ->build();
 
-        $request->addHeader('Content-Type', 'application/json');
-        $request->setBody(\GuzzleHttp\Stream\Stream::factory(json_encode([
-            'props' => [
-                'allow_mult' => true,
-                'n_val'      => 3,
-            ]
-        ])));
-
-        $client->send($request);
+        $this->client->execute($store);
     }
 
     public function testFetchCounter()

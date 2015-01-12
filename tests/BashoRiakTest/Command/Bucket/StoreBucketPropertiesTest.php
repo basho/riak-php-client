@@ -46,15 +46,4 @@ class StoreBucketPropertiesTest extends TestCase
 
         $this->assertInstanceOf('Basho\Riak\Command\Bucket\StoreBucketProperties', $builder->build());
     }
-
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecuteCommand()
-    {
-        $this->client->execute(StoreBucketProperties::builder()
-            ->withNamespace($this->namespace)
-            ->build());
-    }
 }

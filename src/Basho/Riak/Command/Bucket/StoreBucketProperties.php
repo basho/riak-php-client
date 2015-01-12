@@ -3,9 +3,9 @@
 namespace Basho\Riak\Command\Bucket;
 
 use Basho\Riak\RiakCommand;
-use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakNamespace;
+use Basho\Riak\Core\Operation\Bucket\StorePropertiesOperation;
 use Basho\Riak\Command\Bucket\Builder\StoreBucketPropertiesBuilder;
 
 /**
@@ -19,11 +19,34 @@ use Basho\Riak\Command\Bucket\Builder\StoreBucketPropertiesBuilder;
 class StoreBucketProperties implements RiakCommand
 {
     /**
+     * @var \Basho\Riak\Core\Query\RiakNamespace
+     */
+    private $namespace;
+
+    /**
+     * @var array
+     */
+    private $properties;
+
+    /**
+     * @param \Basho\Riak\Core\Query\RiakNamespace $namespace
+     * @param array                                $properties
+     */
+    public function __construct(RiakNamespace $namespace, array $properties)
+    {
+        $this->namespace  = $namespace;
+        $this->properties = $properties;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute(RiakCluster $cluster)
     {
-        throw new RiakException("Not implemented");
+        $operation = new StorePropertiesOperation($this->namespace, $this->properties);
+        $response  = $cluster->execute($operation);
+
+        return $response;
     }
 
     /**

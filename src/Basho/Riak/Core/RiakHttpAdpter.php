@@ -24,6 +24,9 @@ class RiakHttpAdpter implements RiakAdapter
         // crdt
         'Basho\Riak\Core\Message\DataType\GetRequest' => 'Basho\Riak\Core\Adapter\Http\DataType\HttpGet',
         'Basho\Riak\Core\Message\DataType\PutRequest' => 'Basho\Riak\Core\Adapter\Http\DataType\HttpPut',
+        // bucket
+        'Basho\Riak\Core\Message\Bucket\GetRequest'   => 'Basho\Riak\Core\Adapter\Http\Bucket\HttpGet',
+        'Basho\Riak\Core\Message\Bucket\PutRequest'   => 'Basho\Riak\Core\Adapter\Http\Bucket\HttpPut',
     ];
 
     /**
