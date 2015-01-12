@@ -10,7 +10,7 @@ namespace Basho\Riak\Core\Message;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class Request
+abstract class Request
 {
     /**
      * Error handler for unknown property mutator.
@@ -22,7 +22,7 @@ class Request
      */
     public function __set($name, $value)
     {
-        throw new \BadMethodCallException(
+        throw new \InvalidArgumentException(
             sprintf("Unknown property '%s' on '%s'.", $name, get_class($this))
         );
     }

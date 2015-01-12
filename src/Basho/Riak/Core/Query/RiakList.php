@@ -16,7 +16,7 @@ use Countable;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RiakList implements IteratorAggregate, Countable, ArrayAccess
+abstract class RiakList implements IteratorAggregate, Countable, ArrayAccess
 {
     /**
      * @var array
@@ -88,7 +88,7 @@ class RiakList implements IteratorAggregate, Countable, ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        if ($offset) {
+        if (isset($offset)) {
             return $this->list[$offset] = $value;
         }
 

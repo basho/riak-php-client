@@ -10,6 +10,6 @@ namespace Basho\Riak\Core\Message;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class Response
+abstract class Response
 {
 }
