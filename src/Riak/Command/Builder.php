@@ -17,23 +17,21 @@ namespace Basho\Riak\Command;
 
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
-use Basho\Riak\DataType\Counter;
-use Basho\Riak\DataType\Map;
-use Basho\Riak\DataType\Set;
+use Basho\Riak\DataType;
 use Basho\Riak\Object;
 
 /**
  * Class Builder
  *
- * This class follows the Builder design pattern and is the preferred method for creating Basho\Riak\Node objects for
- * connecting to your Riak node cluster.
+ * This class follows the Builder design pattern and is the preferred method for creating Basho\Riak\Command
+ * objects for interacting with your Riak data cluster.
  *
  * <code>
  * use Basho\Riak\Command\Builder as CommandBuilder;
  *
- * $command = (new CommandBuilder)
- *     ->withHost('127.0.0.1')
- *     ->buildLocalhost([10018, 10028, 10038, 10048, 10058]);
+ * $command = (new CommandBuilder(new Store()))
+ *      ->withObject(new Object('test_key'))
+ *      ->build();
  * </code>
  *
  * @package     Basho\Riak\Command
@@ -81,10 +79,14 @@ class Builder
 
     /**
      * @param Command|null $command
+     *
+     * @return $this
      */
     protected function setCommand($command)
     {
         $this->command = $command;
+
+        return $this;
     }
 
     /**
@@ -107,23 +109,9 @@ class Builder
         return $this;
     }
 
-    public function withCounter(Counter $counter)
+    public function withDataType(DataType $dataType)
     {
-        $this->getCommand()->setCounter($counter);
-
-        return $this;
-    }
-
-    public function withSet(Set $set)
-    {
-        $this->getCommand()->setSet($set);
-
-        return $this;
-    }
-
-    public function withMap(Map $map)
-    {
-        $this->getCommand()->setMap($map);
+        $this->getCommand()->setDataType($dataType);
 
         return $this;
     }

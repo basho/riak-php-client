@@ -171,10 +171,14 @@ abstract class Command
 
     /**
      * @param DataType|null $dataType
+     *
+     * @return $this
      */
     public function setDataType($dataType)
     {
         $this->dataType = $dataType;
+
+        return $this;
     }
 
     /**
