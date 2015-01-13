@@ -78,6 +78,51 @@ abstract class BaseHttpStrategy implements Strategy
      *
      * @return array
      */
+    protected function parseIndexHeaders(array $headers)
+    {
+        $values  = [];
+
+        foreach ($headers as $key => $value) {
+
+            if (($part = substr($key, 0, 13)) !== 'x-riak-index-') {
+                continue;
+            }
+
+            $part  = substr($key, 13);
+            $type  = substr($part, -3);
+            $name  = substr($part, 0, -4);
+
+            foreach ($value as $val) {
+                $values[$type][$name][] = $val;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * @param array $indexes
+     *
+     * @return array
+     */
+    protected function createIndexHeaders(array $indexes)
+    {
+        $headers = [];
+
+        foreach ($indexes as $type => $values) {
+            foreach ($values as $name => $val) {
+                $headers['x-riak-index-' . $name . '_' . $type] = $val;
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
+     * @param array $headers
+     *
+     * @return array
+     */
     protected function parseHeaders(array $headers)
     {
         $values = [];
@@ -135,7 +180,13 @@ abstract class BaseHttpStrategy implements Strategy
      */
     protected function createObjectMap(array $headers, $value)
     {
-        return array_merge($this->parseHeaders($headers), ['value' => $value]);
+        $item    = $this->parseHeaders($headers);
+        $indexes = $this->parseIndexHeaders($headers);
+
+        $item['indexes'] = $indexes;
+        $item['value'] = $value;
+
+        return $item;
     }
 
     /**

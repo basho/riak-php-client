@@ -5,6 +5,9 @@ namespace Basho\Riak\Converter;
 use Basho\Riak\Cap\VClock;
 use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Core\Query\RiakObjectList;
+use Basho\Riak\Core\Query\Index\RiakIndexInt;
+use Basho\Riak\Core\Query\Index\RiakIndexBin;
+use Basho\Riak\Core\Query\Index\RiakIndexList;
 
 /**
  * Riak object convertert.
@@ -70,7 +73,10 @@ class RiakObjectConverter
             $object->setLastModified($map['lastModified']);
         }
 
-        // indexes;
+        if ( ! empty($map['indexes'])) {
+            $object->setIndexes($this->createRiakIndexList($map['indexes']));
+        }
+
         // links;
         // meta;
 
@@ -86,6 +92,7 @@ class RiakObjectConverter
     {
         $content = [
             'contentType'  => $riakObject->getContentType() ?: RiakObject::DEFAULT_CONTENT_TYPE,
+            'indexes'      => $this->createIndexes($riakObject->getIndexes()),
             'lastModified' => $riakObject->getLastModified(),
             'isModified'   => $riakObject->getIsModified(),
             'isDeleted'    => $riakObject->getIsDeleted(),
@@ -94,5 +101,50 @@ class RiakObjectConverter
         ];
 
         return $content;
+    }
+
+    /**
+     * @param array $indexes
+     *
+     * @return \Basho\Riak\Core\Query\Index\RiakIndexList
+     */
+    public function createRiakIndexList(array $indexes)
+    {
+        $values     = [];
+        $intIndexes = isset($indexes['int']) ? $indexes['int'] : [];
+        $binIndexes = isset($indexes['bin']) ? $indexes['bin'] : [];
+
+        foreach ($intIndexes as $name => $value) {
+            $values[$name] = new RiakIndexInt($name, $value);
+        }
+
+        foreach ($binIndexes as $name => $value) {
+            $values[$name] = new RiakIndexBin($name, $value);
+        }
+
+        return new RiakIndexList($values);
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Index\RiakIndexList $indexes
+     *
+     * @return array
+     */
+    public function createIndexes(RiakIndexList $indexes = null)
+    {
+        $values = [];
+
+        if ($indexes == null) {
+            return $values;
+        }
+
+        foreach ($indexes as $index) {
+            $type = $index->getType();
+            $name = $index->getName();
+
+            $values[$type][$name] = $index->getValues();
+        }
+
+        return $values;
     }
 }

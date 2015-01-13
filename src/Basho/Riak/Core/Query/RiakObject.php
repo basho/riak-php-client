@@ -2,6 +2,10 @@
 
 namespace Basho\Riak\Core\Query;
 
+use Basho\Riak\Core\Query\Index\RiakIndexList;
+use Basho\Riak\Core\Query\Link\RiakLinkList;
+use Basho\Riak\Core\Query\Meta\RiakMetaList;
+
 /**
  * Represents the data and metadata stored in Riak.
  *
@@ -17,16 +21,55 @@ class RiakObject
      */
     const DEFAULT_CONTENT_TYPE = "application/octet-stream";
 
+    /**
+     * @var string
+     */
     private $value;
+
+    /**
+     * @var string
+     */
     private $contentType;
+
+    /**
+     * @var string
+     */
     private $vtag;
+
+    /**
+     * @var boolean
+     */
     private $isDeleted;
+
+    /**
+     * @var boolean
+     */
     private $isModified;
+
+    /**
+     * @var \Basho\Riak\Cap\VClock
+     */
     private $vClock;
+
+    /**
+     * @var string
+     */
     private $lastModified;
-    private $indexes = [];
-    private $links = [];
-    private $meta = [];
+
+    /**
+     * @var \Basho\Riak\Core\Query\Index\RiakIndexList
+     */
+    private $indexes;
+
+    /**
+     * @var \Basho\Riak\Core\Query\Link\RiakLinkList
+     */
+    private $links;
+
+    /**
+     * @var \Basho\Riak\Core\Query\Meta\RiakMetaList
+     */
+    private $meta;
 
     /**
      * @return string
@@ -37,7 +80,7 @@ class RiakObject
     }
 
     /**
-     * @return array
+     * @return \Basho\Riak\Core\Query\Index\RiakIndexList
      */
     public function getIndexes()
     {
@@ -45,7 +88,7 @@ class RiakObject
     }
 
     /**
-     * @return array
+     * @return \Basho\Riak\Core\Query\Link\RiakLinkList
      */
     public function getLinks()
     {
@@ -53,7 +96,7 @@ class RiakObject
     }
 
     /**
-     * @return array
+     * @return \Basho\Riak\Core\Query\Meta\RiakMetaList
      */
     public function getMeta()
     {
@@ -117,25 +160,25 @@ class RiakObject
     }
 
     /**
-     * @param array $indexes
+     * @param \Basho\Riak\Core\Query\Index\RiakIndexList $indexes
      */
-    public function setIndexes(array $indexes)
+    public function setIndexes(RiakIndexList $indexes)
     {
         $this->indexes = $indexes;
     }
 
     /**
-     * @param array $links
+     * @param \Basho\Riak\Core\Query\Link\RiakLinkList $links
      */
-    public function setLinks(array $links)
+    public function setLinks(RiakLinkList $links)
     {
         $this->links = $links;
     }
 
     /**
-     * @param array $meta
+     * @param \Basho\Riak\Core\Query\Meta\RiakMetaList $meta
      */
-    public function setMeta(array $meta)
+    public function setMeta(RiakMetaList $meta)
     {
         $this->meta = $meta;
     }

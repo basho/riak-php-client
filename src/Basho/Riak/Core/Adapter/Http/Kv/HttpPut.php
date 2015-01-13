@@ -40,6 +40,10 @@ class HttpPut extends BaseHttpStrategy
         $contentType = $content['contentType'];
         $value       = $content['value'];
 
+        if ( ! empty($content['indexes'])) {
+            $request->addHeaders($this->createIndexHeaders($content['indexes']));
+        }
+
         $request->setHeader('Accept', ['multipart/mixed', '*/*']);
         $request->setHeader('Content-Type', $contentType);
         $request->setBody(Stream::factory($value));

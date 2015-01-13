@@ -26,7 +26,7 @@ abstract class RiakList implements IteratorAggregate, Countable, ArrayAccess
     /**
      * @param array $list
      */
-    public function __construct(array $list)
+    public function __construct(array $list = [])
     {
         $this->list = $list;
     }
