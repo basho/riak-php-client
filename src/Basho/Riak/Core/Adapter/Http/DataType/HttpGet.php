@@ -72,9 +72,6 @@ class HttpGet extends BaseHttpStrategy
             $code         = $httpResponse->getStatusCode();
         } catch (RequestException $e) {
             if ($e->getCode() == 404 && $request->notfoundOk) {
-                $response->value = 0;
-                $response->type  = 'counter';
-
                 return $response;
             }
 

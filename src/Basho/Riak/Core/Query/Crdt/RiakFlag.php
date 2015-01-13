@@ -12,4 +12,24 @@ namespace Basho\Riak\Core\Query\Crdt;
  */
 class RiakFlag implements DataType
 {
+    /**
+     * @var boolean
+     */
+    private $value;
+
+    /**
+     * @param boolean $value
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 }

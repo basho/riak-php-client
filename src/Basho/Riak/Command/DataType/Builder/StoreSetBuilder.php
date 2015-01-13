@@ -2,8 +2,7 @@
 
 namespace Basho\Riak\Command\DataType\Builder;
 
-use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\Crdt\RiakSet;
+use Basho\Riak\Core\Query\Crdt\DataType;
 use Basho\Riak\Command\DataType\StoreSet;
 
 /**
@@ -17,30 +16,39 @@ use Basho\Riak\Command\DataType\StoreSet;
 class StoreSetBuilder extends Builder
 {
     /**
-     * @var \Basho\Riak\Core\Query\Crdt\RiakSet
+     * @var array
      */
-    private $set;
+    private $adds = [];
 
     /**
-     * @param \Basho\Riak\Core\Query\RiakLocation $location
-     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $set
-     * @param array                               $options
+     * @var array
      */
-    public function __construct(RiakLocation $location = null, RiakMap $set = null, array $options = [])
-    {
-        parent::__construct($location, $options);
+    private $removes = [];
 
-        $this->set = $set;
+    /**
+     * Add the provided value to the set in Riak.
+     *
+     * @param mixed $value
+     *
+     * @return \Basho\Riak\Command\DataType\StoreSet
+     */
+    public function add($value)
+    {
+        $this->adds[] = $value;
+
+        return $this;
     }
 
     /**
-     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $set
+     * Remove the provided value from the set in Riak.
      *
-     * @return \Basho\Riak\Command\DataType\Builder\StoreSetBuilder
+     * @param mixed $value
+     *
+     * @return \Basho\Riak\Command\DataType\StoreSet
      */
-    public function withSet(RiakSet $set)
+    public function remove($value)
     {
-        $this->set = $set;
+        $this->removes[] = $value;
 
         return $this;
     }
@@ -52,6 +60,11 @@ class StoreSetBuilder extends Builder
      */
     public function build()
     {
-        return new StoreSet($this->location, $this->set, $this->options);
+        $command = new StoreSet($this->location, $this->options);
+
+        array_walk($this->adds, [$command, 'add']);
+        array_walk($this->removes, [$command, 'remove']);
+
+        return $command;
     }
 }

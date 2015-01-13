@@ -6,18 +6,19 @@ use BashoRiakFunctionalTest\TestCase;
 use Basho\Riak\Cap\RiakOption;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\Command\DataType\FetchCounter;
-use Basho\Riak\Command\DataType\StoreCounter;
+use Basho\Riak\Command\DataType\FetchSet;
+use Basho\Riak\Command\DataType\StoreSet;
 use Basho\Riak\Core\Query\BucketProperties;
+use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
-class CounterTest extends TestCase
+class SetTest extends TestCase
 {
     protected function setUp()
     {
         parent::setUp();
 
-        $namespace = new RiakNamespace('counters', 'counters');
+        $namespace = new RiakNamespace('sets', 'sets');
         $store     = StoreBucketProperties::builder()
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
@@ -27,21 +28,22 @@ class CounterTest extends TestCase
         $this->client->execute($store);
     }
 
-    public function testStoreAndFetchCounter()
+    public function testStoreAndFetchSet()
     {
         $key      = uniqid();
-        $location = new RiakLocation(new RiakNamespace('counters', 'counters'), $key);
+        $location = new RiakLocation(new RiakNamespace('sets', 'sets'), $key);
 
-        $store = StoreCounter::builder()
+        $store = StoreSet::builder()
             ->withOption(RiakOption::RETURN_BODY, true)
             ->withOption(RiakOption::PW, 2)
             ->withOption(RiakOption::DW, 1)
             ->withOption(RiakOption::W, 3)
             ->withLocation($location)
-            ->withDelta(10)
+            ->add("Ottawa")
+            ->add("Toronto")
             ->build();
 
-        $fetch = FetchCounter::builder()
+        $fetch = FetchSet::builder()
             ->withOption(RiakOption::BASIC_QUORUM, true)
             ->withOption(RiakOption::NOTFOUND_OK, true)
             ->withOption(RiakOption::PR, 1)
@@ -51,12 +53,12 @@ class CounterTest extends TestCase
 
         $storeResponse = $this->client->execute($store);
         $fetchResponse = $this->client->execute($fetch);
-        $counter       = $fetchResponse->getDatatype();
+        $set           = $fetchResponse->getDatatype();
 
-        $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\StoreCounterResponse', $storeResponse);
-        $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\FetchCounterResponse', $fetchResponse);
-        $this->assertInstanceOf('Basho\Riak\Core\Query\Crdt\RiakCounter', $counter);
+        $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\StoreSetResponse', $storeResponse);
+        $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\FetchSetResponse', $fetchResponse);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Crdt\RiakSet', $set);
         $this->assertEquals($location, $fetchResponse->getLocation());
-        $this->assertEquals(10, $counter->getValue());
+        $this->assertEquals(["Ottawa","Toronto"], $set->getValue());
     }
 }

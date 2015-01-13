@@ -8,7 +8,6 @@ use Basho\Riak\Cap\RiakOption;
 use Basho\Riak\RiakClientBuilder;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\DataType\StoreCounter;
 
 class StoreCounterTest extends TestCase
@@ -45,9 +44,9 @@ class StoreCounterTest extends TestCase
     public function testBuildCommand()
     {
         $builder = StoreCounter::builder()
-            ->withCounter(new RiakCounter(1))
             ->withLocation($this->location)
-            ->withOption(RiakOption::W, 1);
+            ->withOption(RiakOption::W, 1)
+            ->withDelta(1);
 
         $this->assertInstanceOf('Basho\Riak\Command\DataType\StoreCounter', $builder->build());
     }

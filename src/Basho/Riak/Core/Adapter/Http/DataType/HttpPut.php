@@ -31,13 +31,13 @@ class HttpPut extends BaseHttpStrategy
      */
     private function createHttpRequest(PutRequest $putRequest)
     {
-        $request   = $this->createRequest('POST', $putRequest->type, $putRequest->bucket, $putRequest->key);
-        $increment = $putRequest->op->getIncrement();
-        $query     = $request->getQuery();
+        $request = $this->createRequest('POST', $putRequest->type, $putRequest->bucket, $putRequest->key);
+        $body    = $this->createCrdtOpBody($putRequest->op);
+        $query   = $request->getQuery();
 
         $request->setHeader('Accept', ['multipart/mixed', 'application/json']);
         $request->setHeader('Content-Type', 'application/json');
-        $request->setBody(Stream::factory((string) $increment));
+        $request->setBody(Stream::factory($body));
 
         if ($putRequest->w !== null) {
             $query->add('w', $putRequest->w);

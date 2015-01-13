@@ -2,9 +2,6 @@
 
 namespace Basho\Riak\Command\DataType\Response;
 
-use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
-
 /**
  * Store counter response.
  *
@@ -15,12 +12,5 @@ use Basho\Riak\Core\Query\Crdt\RiakCounter;
  */
 class StoreCounterResponse extends Response
 {
-    /**
-     * @param \Basho\Riak\Core\Query\RiakLocation     $location
-     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $datatype
-     */
-    public function __construct(RiakLocation $location = null, RiakCounter $datatype = null)
-    {
-        parent::__construct($location, $datatype);
-    }
+
 }

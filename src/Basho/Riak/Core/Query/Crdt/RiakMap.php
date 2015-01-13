@@ -12,4 +12,24 @@ namespace Basho\Riak\Core\Query\Crdt;
  */
 class RiakMap implements DataType
 {
+    /**
+     * @var array
+     */
+    private $value;
+
+    /**
+     * @param array $value
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 }

@@ -4,6 +4,9 @@ namespace Basho\Riak\Core\Adapter\Http\DataType;
 
 use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Adapter\Strategy;
+use Basho\Riak\Core\Query\Crdt\Op\CrdtOp;
+use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
+use Basho\Riak\Core\Query\Crdt\Op\SetOp;
 
 /**
  * Base http strategy.
@@ -59,5 +62,48 @@ abstract class BaseHttpStrategy implements Strategy
         $httpReq = $this->client->createRequest($method, $path);
 
         return $httpReq;
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\Op\CrdtOp $op
+     *
+     * @return string
+     */
+    protected function createCrdtOpBody(CrdtOp $op)
+    {
+        $map  = $this->createCrdtOpMap($op);
+        $json = json_encode($map);
+
+        return $json;
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\Op\CrdtOp $op
+     *
+     * @return string
+     */
+    protected function createCrdtOpMap(CrdtOp $op)
+    {
+        if ($op instanceof CounterOp) {
+            return $op->getIncrement();
+        }
+
+        if ($op instanceof SetOp) {
+            $map    = [];
+            $add    = $op->getAdds();
+            $remove = $op->getRemoves();
+
+            if ( ! empty($add)) {
+                $map['add_all'] = $add;
+            }
+
+            if ( ! empty($remove)) {
+                $map['remove'] = $remove;
+            }
+
+            return $map;
+        }
+
+        throw new RiakException(sprintf('Unknown crdt op : %s', get_class($op)));
     }
 }

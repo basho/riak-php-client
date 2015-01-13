@@ -2,8 +2,6 @@
 
 namespace Basho\Riak\Command\DataType\Builder;
 
-use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\Crdt\RiakMap;
 use Basho\Riak\Command\DataType\StoreMap;
 
 /**
@@ -17,41 +15,12 @@ use Basho\Riak\Command\DataType\StoreMap;
 class StoreMapBuilder extends Builder
 {
     /**
-     * @var \Basho\Riak\Core\Query\Crdt\RiakMap
-     */
-    private $map;
-
-    /**
-     * @param \Basho\Riak\Core\Query\RiakLocation $location
-     * @param \Basho\Riak\Core\Query\Crdt\RiakMap $map
-     * @param array                               $options
-     */
-    public function __construct(RiakLocation $location = null, RiakMap $map = null, array $options = [])
-    {
-        parent::__construct($location, $options);
-
-        $this->map = $map;
-    }
-
-    /**
-     * @param \Basho\Riak\Core\Query\Crdt\FetchMap $map
-     *
-     * @return \Basho\Riak\Command\DataType\Builder\StoreMapBuilder
-     */
-    public function withMap(RiakMap $map)
-    {
-        $this->map = $map;
-
-        return $this;
-    }
-
-    /**
      * Build a command object
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
     public function build()
     {
-        return new StoreMap($this->location, $this->map, $this->options);
+        return new StoreMap($this->location, $this->options);
     }
 }

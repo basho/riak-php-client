@@ -41,20 +41,6 @@ class FetchSetTest extends TestCase
             ->build();
     }
 
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecute()
-    {
-        $command = FetchSet::builder()
-            ->withOption(RiakOption::N_VAL, 1)
-            ->withLocation($this->location)
-            ->build();
-
-        $this->client->execute($command);
-    }
-
     public function testBuildCommand()
     {
         $builder = FetchSet::builder()

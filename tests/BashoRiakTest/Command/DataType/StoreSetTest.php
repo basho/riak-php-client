@@ -43,35 +43,16 @@ class StoreSetTest extends TestCase
             ->build();
     }
 
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecute()
-    {
-        $command = StoreSet::builder()
-            ->withOption(RiakOption::N_VAL, 1)
-            ->withLocation($this->location)
-            ->withSet(new RiakSet())
-            ->build();
-
-        $this->client->execute($command);
-    }
-
     public function testBuildCommand()
     {
-        $riakSet = new RiakSet();
         $builder = StoreSet::builder()
             ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
-            ->withSet($riakSet);
-
-        $command = $builder->build();
-
-        $command->add(new RiakCounter(1))
+            ->add(new RiakCounter(1))
             ->remove(new RiakCounter(1))
-            ->add(new RiakCounter(2));
+            ->add(new RiakCounter(2))
+            ->build();
 
-        $this->assertInstanceOf('Basho\Riak\Command\DataType\StoreSet', $builder->build());
+        $this->assertInstanceOf('Basho\Riak\Command\DataType\StoreSet', $builder);
     }
 }

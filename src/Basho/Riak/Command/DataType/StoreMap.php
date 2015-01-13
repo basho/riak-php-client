@@ -6,11 +6,6 @@ use Basho\Riak\RiakCommand;
 use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\Crdt\RiakSet;
-use Basho\Riak\Core\Query\Crdt\RiakMap;
-use Basho\Riak\Core\Query\Crdt\RiakFlag;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
-use Basho\Riak\Core\Query\Crdt\RiakRegister;
 use Basho\Riak\Command\DataType\Builder\StoreMapBuilder;
 
 /**
@@ -35,20 +30,13 @@ class StoreMap implements RiakCommand
     private $options = [];
 
     /**
-     * @var \Basho\Riak\Core\Query\Crdt\RiakMap
-     */
-    private $map;
-
-    /**
      * @param \Basho\Riak\Core\Query\RiakLocation $location
-     * @param \Basho\Riak\Core\Query\Crdt\RiakMap $map
      * @param array                               $options
      */
-    public function __construct(RiakLocation $location = null, RiakMap $map = null, array $options = [])
+    public function __construct(RiakLocation $location = null, array $options = [])
     {
         $this->location = $location;
         $this->options  = $options;
-        $this->map      = $map;
     }
 
     /**
@@ -114,12 +102,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the map mapped to the provided key.
      *
-     * @param string                              $key
-     * @param \Basho\Riak\Core\Query\Crdt\RiakMap $value
+     * @param string $key
+     * @param array  $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateMap($key, RiakMap $value)
+    public function updateMap($key, $value)
     {
         return $this;
     }
@@ -127,12 +115,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the set mapped to the provided key.
      *
-     * @param string                              $key
-     * @param \Basho\Riak\Core\Query\Crdt\RiakSet $value
+     * @param string $key
+     * @param array  $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateSet($key, RiakSet $value)
+    public function updateSet($key, $value)
     {
         return $this;
     }
@@ -140,12 +128,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the counter mapped to the provided key.
      *
-     * @param string                                  $key
-     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateCounter($key, RiakCounter $value)
+    public function updateCounter($key, $value)
     {
         return $this;
     }
@@ -153,12 +141,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the register mapped to the provided key.
      *
-     * @param string                                   $key
-     * @param \Basho\Riak\Core\Query\Crdt\RiakRegister $value
+     * @param string $key
+     * @param string $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateRegister($key, RiakRegister $value)
+    public function updateRegister($key, $value)
     {
         return $this;
     }
@@ -166,12 +154,12 @@ class StoreMap implements RiakCommand
     /**
      * Update the map in Riak by adding/updating the flag mapped to the provided key.
      *
-     * @param string                               $key
-     * @param \Basho\Riak\Core\Query\Crdt\RiakFlag $value
+     * @param string  $key
+     * @param boolean $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateFlag($key, RiakFlag $value)
+    public function updateFlag($key, $value)
     {
         return $this;
     }
@@ -186,13 +174,12 @@ class StoreMap implements RiakCommand
 
     /**
      * @param \Basho\Riak\Core\Query\RiakLocation $location
-     * @param \Basho\Riak\Core\Query\Crdt\RiakMap $map
      * @param array                               $options
      *
      * @return \Basho\Riak\Command\DataType\Builder\StoreMapBuilder
      */
-    public static function builder(RiakLocation $location = null, RiakMap $map = null, array $options = [])
+    public static function builder(RiakLocation $location = null, array $options = [])
     {
-        return new StoreMapBuilder($location, $map, $options);
+        return new StoreMapBuilder($location, $options);
     }
 }

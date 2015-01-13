@@ -17,30 +17,18 @@ use Basho\Riak\Command\DataType\StoreCounter;
 class StoreCounterBuilder extends Builder
 {
     /**
-     * @var \Basho\Riak\Core\Query\Crdt\RiakCounter
+     * @var integer
      */
     private $counter;
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
-     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $counter
-     * @param array                                   $options
-     */
-    public function __construct(RiakLocation $location = null, RiakCounter $counter = null, array $options = [])
-    {
-        parent::__construct($location, $options);
-
-        $this->counter  = $counter;
-    }
-
-    /**
-     * @param \Basho\Riak\Core\Query\Crdt\RiakCounter $counter
+     * @param integer $delta
      *
      * @return \Basho\Riak\Command\DataType\Builder\StoreCounterBuilder
      */
-    public function withCounter(RiakCounter $counter)
+    public function withDelta($delta)
     {
-        $this->counter = $counter;
+        $this->counter = $delta;
 
         return $this;
     }
@@ -52,6 +40,12 @@ class StoreCounterBuilder extends Builder
      */
     public function build()
     {
-        return new StoreCounter($this->location, $this->counter, $this->options);
+        $command = new StoreCounter($this->location, $this->options);
+
+        if ($this->counter != null) {
+            $command->withDelta($this->counter);
+        }
+
+        return $command;
     }
 }

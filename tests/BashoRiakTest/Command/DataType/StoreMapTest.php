@@ -55,7 +55,6 @@ class StoreMapTest extends TestCase
         $command = StoreMap::builder()
             ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
-            ->withMap(new RiakMap())
             ->build();
 
         $this->client->execute($command);
@@ -63,19 +62,16 @@ class StoreMapTest extends TestCase
 
     public function testBuildCommand()
     {
-        $riakMap = new RiakMap();
-        $builder = StoreMap::builder()
+        $command = StoreMap::builder()
             ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
-            ->withMap($riakMap);
+            ->build();
 
-        $command = $builder->build();
-
-        $command->updateMap('map_key', new RiakMap([]))
-            ->updateSet('map_key', new RiakSet([]))
-            ->updateFlag('flag_key', new RiakFlag(true))
-            ->updateCounter('map_counter', new RiakCounter(1))
-            ->updateRegister('map_register', new RiakRegister('foo'));
+        $command->updateMap('map_key', [])
+            ->updateSet('map_key', [])
+            ->updateFlag('flag_key', true)
+            ->updateCounter('map_counter', 1)
+            ->updateRegister('map_register', 'foo');
 
         $command->removeMap('map_key')
             ->removeSet('map_key')

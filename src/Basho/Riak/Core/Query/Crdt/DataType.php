@@ -12,4 +12,8 @@ namespace Basho\Riak\Core\Query\Crdt;
  */
 interface DataType
 {
+    /**
+     * @return mixed
+     */
+    public function getValue();
 }
