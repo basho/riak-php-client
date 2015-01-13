@@ -17,6 +17,7 @@ namespace Basho\Tests\Riak\Command;
 
 use Basho\Riak\Command\Builder;
 use Basho\Riak\Command\Object\Store;
+use Basho\Riak\DataType\Counter;
 use Basho\Riak\Object;
 
 /**
@@ -53,5 +54,32 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $command = $builder->build();
 
         $this->assertEquals('test_key', $command->getObject()->getKey());
+    }
+
+    public function testWithDataType()
+    {
+        $builder = (new Builder(new Store()))->withDataType(new Counter('test_key'));
+        $command = $builder->build();
+
+        $this->assertEquals('test_key', $command->getDataType()->getKey());
+    }
+
+    public function testWithParameter()
+    {
+        $builder = (new Builder(new Store()))->withParameter('key', TRUE);
+        $command = $builder->build();
+
+        $this->assertTrue($command->hasParameters());
+        $this->assertTrue($command->getParameter('key'));
+    }
+
+    public function testWithParameters()
+    {
+        $builder = (new Builder(new Store()))->withParameters(['one', 'two', '3']);
+        $command = $builder->build();
+
+        $this->assertTrue($command->hasParameters());
+        $this->assertCount(3, $command->getParameters());
+        $this->assertNotEmpty($command->getParameter(2));
     }
 }
