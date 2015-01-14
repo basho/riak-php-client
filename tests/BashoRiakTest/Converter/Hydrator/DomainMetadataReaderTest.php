@@ -29,20 +29,20 @@ class DomainMetadataReaderTest extends TestCase
 
     public function testRiakPropertiesMapping()
     {
-        $mapping = $this->instance->getRiakPropertiesMapping(SimpleObject::CLASS_NAME);
+        $metadata = $this->instance->getMetadataFor(SimpleObject::CLASS_NAME);
 
-        $this->assertArrayHasKey('key', $mapping);
-        $this->assertArrayHasKey('vClock', $mapping);
-        $this->assertArrayHasKey('bucketName', $mapping);
-        $this->assertArrayHasKey('bucketType', $mapping);
-        $this->assertArrayHasKey('contentType', $mapping);
-        $this->assertArrayHasKey('lastModified', $mapping);
+        $this->assertTrue($metadata->hasRiakField('key'));
+        $this->assertTrue($metadata->hasRiakField('vClock'));
+        $this->assertTrue($metadata->hasRiakField('bucketName'));
+        $this->assertTrue($metadata->hasRiakField('bucketType'));
+        $this->assertTrue($metadata->hasRiakField('contentType'));
+        $this->assertTrue($metadata->hasRiakField('lastModified'));
 
-        $this->assertEquals('riakKey', $mapping['key']);
-        $this->assertEquals('riakVClock', $mapping['vClock']);
-        $this->assertEquals('riakBucketName', $mapping['bucketName']);
-        $this->assertEquals('riakBucketType', $mapping['bucketType']);
-        $this->assertEquals('riakContentType', $mapping['contentType']);
-        $this->assertEquals('riakLastModified', $mapping['lastModified']);
+        $this->assertEquals('riakKey', $metadata->getRiakKeyField());
+        $this->assertEquals('riakVClock', $metadata->getRiakVClockField());
+        $this->assertEquals('riakBucketName', $metadata->getRiakBucketNameField());
+        $this->assertEquals('riakBucketType', $metadata->getRiakBucketTypeField());
+        $this->assertEquals('riakContentType', $metadata->getRiakContentTypeField());
+        $this->assertEquals('riakLastModified', $metadata->getRiakLastModifiedField());
     }
 }

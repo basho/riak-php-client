@@ -36,32 +36,32 @@ class DomainHydrator
     public function setDomainObjectValues($domainObject, RiakObject $riakObject, RiakLocation $location)
     {
         $className = get_class($domainObject);
-        $metadata  = $this->metadataReader->getRiakPropertiesMapping($className);
+        $metadata  = $this->metadataReader->getMetadataFor($className);
 
-        if (isset($metadata['key'])) {
-            $this->setDomainObjectProperty($domainObject, $metadata['key'], $location->getKey());
+        if (($keyField = $metadata->getRiakKeyField())) {
+            $this->setDomainObjectProperty($domainObject, $keyField, $location->getKey());
         }
 
-        if (isset($metadata['bucketName'])) {
+        if (($bucketNameField = $metadata->getRiakBucketNameField())) {
             $bucketName = $location->getNamespace() ? $location->getNamespace()->getBucketName() : null;
-            $this->setDomainObjectProperty($domainObject, $metadata['bucketName'], $bucketName);
+            $this->setDomainObjectProperty($domainObject, $bucketNameField, $bucketName);
         }
 
-        if (isset($metadata['bucketType'])) {
+        if (($bucketTypeField = $metadata->getRiakBucketTypeField())) {
             $bucketName = $location->getNamespace() ? $location->getNamespace()->getBucketType() : null;
-            $this->setDomainObjectProperty($domainObject, $metadata['bucketType'], $bucketName);
+            $this->setDomainObjectProperty($domainObject, $bucketTypeField, $bucketName);
         }
 
-        if (isset($metadata['vClock'])) {
-            $this->setDomainObjectProperty($domainObject, $metadata['vClock'], $riakObject->getVClock());
+        if (($vClockField = $metadata->getRiakVClockField())) {
+            $this->setDomainObjectProperty($domainObject, $vClockField, $riakObject->getVClock());
         }
 
-        if (isset($metadata['lastModified'])) {
-            $this->setDomainObjectProperty($domainObject, $metadata['lastModified'], $riakObject->getLastModified());
+        if (($lastModifiedField = $metadata->getRiakLastModifiedField())) {
+            $this->setDomainObjectProperty($domainObject, $lastModifiedField, $riakObject->getLastModified());
         }
 
-        if (isset($metadata['contentType'])) {
-            $this->setDomainObjectProperty($domainObject, $metadata['contentType'], $riakObject->getContentType());
+        if (($contentTypeField = $metadata->getRiakContentTypeField())) {
+            $this->setDomainObjectProperty($domainObject, $contentTypeField, $riakObject->getContentType());
         }
     }
 
@@ -73,18 +73,18 @@ class DomainHydrator
     public function setRiakObjectValues(RiakObject $riakObject, $domainObject, RiakLocation $location)
     {
         $className = get_class($domainObject);
-        $metadata  = $this->metadataReader->getRiakPropertiesMapping($className);
+        $metadata  = $this->metadataReader->getMetadataFor($className);
 
-        if (isset($metadata['vClock'])) {
-            $riakObject->setVClock($this->getDomainObjectProperty($domainObject, $metadata['vClock']));
+        if (($vClockField = $metadata->getRiakVClockField())) {
+            $riakObject->setVClock($this->getDomainObjectProperty($domainObject, $vClockField));
         }
 
-        if (isset($metadata['lastModified'])) {
-            $riakObject->setLastModified($this->getDomainObjectProperty($domainObject, $metadata['lastModified']));
+        if (($lastModifiedField = $metadata->getRiakLastModifiedField())) {
+            $riakObject->setLastModified($this->getDomainObjectProperty($domainObject, $lastModifiedField));
         }
 
-        if (isset($metadata['contentType'])) {
-            $riakObject->setContentType($this->getDomainObjectProperty($domainObject, $metadata['contentType']));
+        if (($contentTypeField = $metadata->getRiakContentTypeField())) {
+            $riakObject->setContentType($this->getDomainObjectProperty($domainObject, $contentTypeField));
         }
     }
 

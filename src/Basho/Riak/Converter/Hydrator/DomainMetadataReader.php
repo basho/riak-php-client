@@ -23,7 +23,7 @@ class DomainMetadataReader
     private $reader;
 
     /**
-     * @var array
+     * @var \Basho\Riak\Converter\Hydrator\ClassMetadata[]
      */
     private $mapping = [];
 
@@ -38,15 +38,30 @@ class DomainMetadataReader
     /**
      * @param string $className
      *
-     * @return array
+     * @return \Basho\Riak\Converter\Hydrator\ClassMetadata
      */
-    public function getRiakPropertiesMapping($className)
+    public function getMetadataFor($className)
     {
         if (isset($this->mapping[$className])) {
             return $this->mapping[$className];
         }
 
+        $metadata   = new ClassMetadata();
         $reflection = new ReflectionClass($className);
+
+        $metadata->className      = $reflection->name;
+        $metadata->riakProperties = $this->getRiakPropertiesMapping($reflection);
+
+        return $this->mapping[$className] = $metadata;
+    }
+
+    /**
+     * @param \ReflectionClass $reflection
+     *
+     * @return array
+     */
+    private function getRiakPropertiesMapping(ReflectionClass $reflection)
+    {
         $properties = $reflection->getProperties();
         $metadata   = [];
 
@@ -54,7 +69,7 @@ class DomainMetadataReader
             $metadata = array_merge($this->getPropertyMapping($property), $metadata);
         }
 
-        return $this->mapping[$className] = $metadata;
+        return $metadata;
     }
 
     /**
