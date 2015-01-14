@@ -12,6 +12,7 @@ use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Core\Query\BucketProperties;
 use Basho\Riak\Core\Query\Index\RiakIndexBin;
+use Basho\Riak\Core\Query\Index\RiakIndexInt;
 use Basho\Riak\Core\Query\Index\RiakIndexList;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
@@ -35,11 +36,13 @@ class RiakObjectIndexesTest extends TestCase
     {
         $key        = uniqid();
         $object     = new RiakObject();
-        $indexEmail = new RiakIndexBin('email');
-        $indexes    = new RiakIndexList([$indexEmail]);
+        $indexInt   = new RiakIndexInt('key');
+        $indexBin   = new RiakIndexBin('email');
+        $indexes    = new RiakIndexList([$indexBin, $indexInt]);
         $location   = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
 
-        $indexEmail->addValue('fabio.bat.silva@gmail.com');
+        $indexInt->addValue(123);
+        $indexBin->addValue('fabio.bat.silva@gmail.com');
 
         $object->setContentType('application/json');
         $object->setValue('{"name": "fabio"}');
@@ -68,9 +71,17 @@ class RiakObjectIndexesTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Core\Query\RiakObject', $riakObject);
         $this->assertEquals('{"name": "fabio"}', $riakObject->getValue());
 
-        $this->assertCount(1, $riakIndexes);
+        $this->assertCount(2, $riakIndexes);
+        $this->assertTrue(isset($riakIndexes['key']));
         $this->assertTrue(isset($riakIndexes['email']));
+
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Index\RiakIndexInt', $riakIndexes['key']);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Index\RiakIndexBin', $riakIndexes['email']);
+
+        $this->assertEquals('key', $riakIndexes['key']->getName());
         $this->assertEquals('email', $riakIndexes['email']->getName());
+
+        $this->assertEquals([123], $riakIndexes['key']->getValues());
         $this->assertEquals(['fabio.bat.silva@gmail.com'], $riakIndexes['email']->getValues());
 
         $this->client->execute(DeleteValue::builder($location)

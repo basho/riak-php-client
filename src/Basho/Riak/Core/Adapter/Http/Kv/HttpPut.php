@@ -37,11 +37,11 @@ class HttpPut extends BaseHttpStrategy
         $request     = $this->createRequest('PUT', $putRequest->type, $putRequest->bucket, $putRequest->key);
         $query       = $request->getQuery();
         $content     = $putRequest->content;
-        $contentType = $content['contentType'];
-        $value       = $content['value'];
+        $contentType = $content->contentType;
+        $value       = $content->value;
 
-        if ( ! empty($content['indexes'])) {
-            $request->addHeaders($this->createIndexHeaders($content['indexes']));
+        foreach ($content->indexes as $name => $indexes) {
+            $request->addHeader("x-riak-index-$name", $indexes);
         }
 
         $request->setHeader('Accept', ['multipart/mixed', '*/*']);

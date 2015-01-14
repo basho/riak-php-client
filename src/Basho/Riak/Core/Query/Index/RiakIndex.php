@@ -2,6 +2,8 @@
 
 namespace Basho\Riak\Core\Query\Index;
 
+use InvalidArgumentException;
+
 /**
  * Base class for modeling a Riak Secondary Index (2i).
  *
@@ -67,5 +69,35 @@ abstract class RiakIndex
     /**
      * @return string
      */
+    public function getFullName()
+    {
+        return sprintf('%s_%s', $this->name, $this->getType());
+    }
+
+    /**
+     * @return string
+     */
     abstract public function getType();
+
+    /**
+     * @param string $fullName
+     * @param array  $values
+     *
+     * @return \Basho\Riak\Core\Query\Index\RiakIndex
+     */
+    public static function fromFullname($fullName, array $values = [])
+    {
+        $type = substr($fullName, -3);
+        $name = substr($fullName, 0, -4);
+
+        if ($type === 'int') {
+            return new RiakIndexInt($name, $values);
+        }
+
+        if ($type === 'bin') {
+            return new RiakIndexBin($name, $values);
+        }
+
+        throw new InvalidArgumentException("Unknown index type : {$type}");
+    }
 }

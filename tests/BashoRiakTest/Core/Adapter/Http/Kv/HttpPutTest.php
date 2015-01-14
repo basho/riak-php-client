@@ -4,6 +4,7 @@ namespace BashoRiakTest\Core\Adapter\Http\Kv;
 
 use BashoRiakTest\TestCase;
 use GuzzleHttp\Stream\Stream;
+use Basho\Riak\Core\Message\Kv\Content;
 use Basho\Riak\Core\Adapter\Http\Kv\HttpPut;
 use Basho\Riak\Core\Message\Kv\PutRequest;
 
@@ -39,6 +40,7 @@ class HttpPutTest extends TestCase
 
     public function testCreateHttpPutRequest()
     {
+        $content    = new Content();
         $putRequest = new PutRequest();
         $url        = '/types/default/buckets/test_bucket/keys/1';
         $request    = $this->getMock('GuzzleHttp\Message\RequestInterface');
@@ -52,11 +54,11 @@ class HttpPutTest extends TestCase
         $putRequest->pw          = 2;
         $putRequest->dw          = 1;
         $putRequest->returnBody  = true;
+        $putRequest->content     = $content;
         $putRequest->vClock      = 'vclock-hash';
-        $putRequest->content     = [
-            'contentType' => 'application/json',
-            'value'       => '[1,1,1]'
-        ];
+
+        $content->contentType = 'application/json';
+        $content->value       = '[1,1,1]';
 
         $this->client->expects($this->once())
             ->method('createRequest')
@@ -144,16 +146,18 @@ class HttpPutTest extends TestCase
                 'Last-Modified' => 'Sat, 03 Jan 2015 01:46:34 GMT',
             ]);
 
+        $content    = new Content();
+
         $putRequest->bucket = 'test_bucket';
         $putRequest->type   = 'default';
         $putRequest->key    = '1';
 
         $putRequest->returnBody  = true;
+        $putRequest->content     = $content;
         $putRequest->vClock      = 'vclock-hash';
-        $putRequest->content     = [
-            'contentType' => 'application/json',
-            'value'       => '[1,1,1]'
-        ];
+
+        $content->contentType = 'application/json';
+        $content->value       = '[1,1,1]';
 
         $response = $this->instance->send($putRequest);
 
@@ -161,8 +165,8 @@ class HttpPutTest extends TestCase
         $this->assertEquals('vclock-hash', $response->vClock);
         $this->assertCount(1, $response->contentList);
 
-        $this->assertEquals('[1,1,1]', $response->contentList[0]['value']);
-        $this->assertEquals('application/json', $response->contentList[0]['contentType']);
-        $this->assertEquals('Sat, 03 Jan 2015 01:46:34 GMT', $response->contentList[0]['lastModified']);
+        $this->assertEquals('[1,1,1]', $response->contentList[0]->value);
+        $this->assertEquals('application/json', $response->contentList[0]->contentType);
+        $this->assertEquals('Sat, 03 Jan 2015 01:46:34 GMT', $response->contentList[0]->lastModified);
     }
 }

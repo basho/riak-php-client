@@ -126,9 +126,9 @@ class HttpGetTest extends TestCase
         $this->assertEquals('vclock-hash', $response->vClock);
         $this->assertCount(1, $response->contentList);
 
-        $this->assertEquals('[1,1,1]', $response->contentList[0]['value']);
-        $this->assertEquals('application/json', $response->contentList[0]['contentType']);
-        $this->assertEquals('Sat, 03 Jan 2015 01:46:34 GMT', $response->contentList[0]['lastModified']);
+        $this->assertEquals('[1,1,1]', $response->contentList[0]->value);
+        $this->assertEquals('application/json', $response->contentList[0]->contentType);
+        $this->assertEquals('Sat, 03 Jan 2015 01:46:34 GMT', $response->contentList[0]->lastModified);
     }
 
     public function testGetRequestHandl404ExceptioThrownByGuzzle()

@@ -5,7 +5,7 @@ namespace Basho\Riak\Converter;
 use Basho\Riak\Core\Message\DataType\Response;
 use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Core\Query\Crdt\RiakSet;
-use Basho\Riak\RiakException;
+use InvalidArgumentException;
 
 /**
  * Crdt response converter
@@ -36,7 +36,7 @@ class CrdtResponseConverter
             return $this->convertSet($response);
         }
 
-        throw new RiakException("Unknown crdt type : {$response->type}");
+        throw new InvalidArgumentException("Unknown crdt type : {$response->type}");
     }
 
     /**

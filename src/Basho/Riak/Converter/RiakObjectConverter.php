@@ -4,9 +4,9 @@ namespace Basho\Riak\Converter;
 
 use Basho\Riak\Cap\VClock;
 use Basho\Riak\Core\Query\RiakObject;
+use Basho\Riak\Core\Message\Kv\Content;
 use Basho\Riak\Core\Query\RiakObjectList;
-use Basho\Riak\Core\Query\Index\RiakIndexInt;
-use Basho\Riak\Core\Query\Index\RiakIndexBin;
+use Basho\Riak\Core\Query\Index\RiakIndex;
 use Basho\Riak\Core\Query\Index\RiakIndexList;
 
 /**
@@ -30,51 +30,32 @@ class RiakObjectConverter
         $list   = [];
         $vClock = new VClock($vClockString);
 
-        foreach ($siblingsList as $map) {
-            $list[] = $this->convertToRiakObject($map, $vClock);
+        foreach ($siblingsList as $content) {
+            $list[] = $this->convertToRiakObject($content, $vClock);
         }
 
         return new RiakObjectList($list);
     }
 
     /**
-     * @param array                  $map
-     * @param \Basho\Riak\Cap\VClock $vClock
+     * @param \Basho\Riak\Core\Message\Kv\Content $content
+     * @param \Basho\Riak\Cap\VClock              $vClock
      *
      * @return \Basho\Riak\Core\Query\RiakObject
      */
-    private function convertToRiakObject(array $map, VClock $vClock)
+    private function convertToRiakObject(Content $content, VClock $vClock)
     {
         $object = new RiakObject();
 
         $object->setVClock($vClock);
+        $object->setVtag($content->vtag);
+        $object->setValue($content->value);
+        $object->setContentType($content->contentType);
+        $object->setIsDeleted((bool) $content->deleted);
+        $object->setLastModified($content->lastModified);
 
-        if (isset($map['value'])) {
-            $object->setValue($map['value']);
-        }
-
-        if (isset($map['contentType'])) {
-            $object->setContentType($map['contentType']);
-        }
-
-        if (isset($map['vtag'])) {
-            $object->setVtag($map['vtag']);
-        }
-
-        if (isset($map['isDeleted'])) {
-            $object->setIsDeleted((bool) $map['isDeleted']);
-        }
-
-        if (isset($map['isModified'])) {
-            $object->setIsModified((bool) $map['isModified']);
-        }
-
-        if (isset($map['lastModified'])) {
-            $object->setLastModified($map['lastModified']);
-        }
-
-        if ( ! empty($map['indexes'])) {
-            $object->setIndexes($this->createRiakIndexList($map['indexes']));
+        if ($content->indexes) {
+            $object->setIndexes($this->createRiakIndexList($content->indexes));
         }
 
         // links;
@@ -90,15 +71,19 @@ class RiakObjectConverter
      */
     public function convertToRiakContent(RiakObject $riakObject)
     {
-        $content = [
-            'contentType'  => $riakObject->getContentType() ?: RiakObject::DEFAULT_CONTENT_TYPE,
-            'indexes'      => $this->createIndexes($riakObject->getIndexes()),
-            'lastModified' => $riakObject->getLastModified(),
-            'isModified'   => $riakObject->getIsModified(),
-            'isDeleted'    => $riakObject->getIsDeleted(),
-            'value'        => $riakObject->getValue(),
-            'vtag'         => $riakObject->getVtag()
-        ];
+        $content = new Content();
+        $indexes = $riakObject->getIndexes();
+
+        $content->contentType  = $riakObject->getContentType() ?: RiakObject::DEFAULT_CONTENT_TYPE;
+        $content->lastModified = $riakObject->getLastModified();
+        $content->isDeleted    = $riakObject->getIsDeleted();
+        $content->value        = $riakObject->getValue();
+        $content->vtag         = $riakObject->getVtag();
+        $content->indexes      = [];
+
+        if ($indexes != null) {
+            $content->indexes = $indexes->toArray();
+        }
 
         return $content;
     }
@@ -108,43 +93,17 @@ class RiakObjectConverter
      *
      * @return \Basho\Riak\Core\Query\Index\RiakIndexList
      */
-    public function createRiakIndexList(array $indexes)
+    private function createRiakIndexList(array $indexes)
     {
-        $values     = [];
-        $intIndexes = isset($indexes['int']) ? $indexes['int'] : [];
-        $binIndexes = isset($indexes['bin']) ? $indexes['bin'] : [];
+        $list = [];
 
-        foreach ($intIndexes as $name => $value) {
-            $values[$name] = new RiakIndexInt($name, $value);
+        foreach ($indexes as $fullName => $values) {
+            $index = RiakIndex::fromFullname($fullName, $values);
+            $name  = $index->getName();
+
+            $list[$name] = $index;
         }
 
-        foreach ($binIndexes as $name => $value) {
-            $values[$name] = new RiakIndexBin($name, $value);
-        }
-
-        return new RiakIndexList($values);
-    }
-
-    /**
-     * @param \Basho\Riak\Core\Query\Index\RiakIndexList $indexes
-     *
-     * @return array
-     */
-    public function createIndexes(RiakIndexList $indexes = null)
-    {
-        $values = [];
-
-        if ($indexes == null) {
-            return $values;
-        }
-
-        foreach ($indexes as $index) {
-            $type = $index->getType();
-            $name = $index->getName();
-
-            $values[$type][$name] = $index->getValues();
-        }
-
-        return $values;
+        return new RiakIndexList($list);
     }
 }

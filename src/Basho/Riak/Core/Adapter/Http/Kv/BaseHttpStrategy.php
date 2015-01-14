@@ -4,6 +4,7 @@ namespace Basho\Riak\Core\Adapter\Http\Kv;
 
 use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Adapter\Strategy;
+use Basho\Riak\Core\Message\Kv\Content;
 use GuzzleHttp\Message\ResponseInterface;
 use Basho\Riak\Core\Adapter\Http\MultipartResponseIterator;
 
@@ -26,12 +27,6 @@ abstract class BaseHttpStrategy implements Strategy
      * @var array
      */
     protected $validResponseCodes = [];
-
-    private static $headersMap = [
-        'Content-Type'  => 'contentType',
-        'Last-Modified' => 'lastModified',
-        'Etag'          => 'vtag',
-    ];
 
     /**
      * @param \GuzzleHttp\ClientInterface $client
@@ -83,17 +78,12 @@ abstract class BaseHttpStrategy implements Strategy
         $values  = [];
 
         foreach ($headers as $key => $value) {
-
-            if (($part = substr($key, 0, 13)) !== 'x-riak-index-') {
+            if (strpos($key, 'x-riak-index-') !== 0) {
                 continue;
             }
-
-            $part  = substr($key, 13);
-            $type  = substr($part, -3);
-            $name  = substr($part, 0, -4);
 
             foreach ($value as $val) {
-                $values[$type][$name][] = $val;
+                $values[substr($key, 13)][] = $val;
             }
         }
 
@@ -101,43 +91,21 @@ abstract class BaseHttpStrategy implements Strategy
     }
 
     /**
-     * @param array $indexes
+     * @param string $key
+     * @param array  $headers
+     * @param mixed  $default
      *
      * @return array
      */
-    protected function createIndexHeaders(array $indexes)
+    protected function firstHeader($key, array $headers, $default = null)
     {
-        $headers = [];
-
-        foreach ($indexes as $type => $values) {
-            foreach ($values as $name => $val) {
-                $headers['x-riak-index-' . $name . '_' . $type] = $val;
-            }
+        if ( ! isset($headers[$key])) {
+            return $default;
         }
 
-        return $headers;
-    }
-
-    /**
-     * @param array $headers
-     *
-     * @return array
-     */
-    protected function parseHeaders(array $headers)
-    {
-        $values = [];
-
-        foreach (self::$headersMap as $key => $name) {
-            if ( ! isset($headers[$key])) {
-                continue;
-            }
-
-            $values[$name] = is_array($headers[$key])
-                ? reset($headers[$key])
-                : $headers[$key];
-        }
-
-        return $values;
+        return is_array($headers[$key])
+            ? reset($headers[$key])
+            : $headers[$key];
     }
 
     /**
@@ -153,7 +121,7 @@ abstract class BaseHttpStrategy implements Strategy
         $iterator = new MultipartResponseIterator($response);
 
         foreach ($iterator as $response) {
-            $list[] = $this->createObjectMap($response->getHeaders(), $response->getBody());
+            $list[] = $this->createContent($response->getHeaders(), $response->getBody());
         }
 
         return $list;
@@ -169,7 +137,7 @@ abstract class BaseHttpStrategy implements Strategy
         $body    = $response->getBody();
         $headers = $response->getHeaders();
 
-        return $this->createObjectMap($headers, $body);
+        return $this->createContent($headers, $body);
     }
 
     /**
@@ -178,15 +146,18 @@ abstract class BaseHttpStrategy implements Strategy
      *
      * @return array
      */
-    protected function createObjectMap(array $headers, $value)
+    private function createContent(array $headers, $value)
     {
-        $item    = $this->parseHeaders($headers);
+        $content = new Content();
         $indexes = $this->parseIndexHeaders($headers);
 
-        $item['indexes'] = $indexes;
-        $item['value'] = $value;
+        $content->lastModified = $this->firstHeader('Last-Modified', $headers);
+        $content->contentType  = $this->firstHeader('Content-Type', $headers);
+        $content->vtag         = $this->firstHeader('Etag', $headers);
+        $content->indexes      = $indexes;
+        $content->value        = $value;
 
-        return $item;
+        return $content;
     }
 
     /**

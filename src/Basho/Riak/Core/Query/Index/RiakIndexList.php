@@ -14,4 +14,17 @@ use Basho\Riak\Core\Query\RiakList;
  */
 class RiakIndexList extends RiakList
 {
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $values = [];
+
+        foreach ($this->list as $index) {
+            $values[$index->getFullName()] = $index->getValues();
+        }
+
+        return $values;
+    }
 }

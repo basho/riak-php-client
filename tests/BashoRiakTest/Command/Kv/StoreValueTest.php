@@ -8,6 +8,7 @@ use Basho\Riak\Cap\RiakOption;
 use Basho\Riak\RiakClientBuilder;
 use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Command\Kv\StoreValue;
+use Basho\Riak\Core\Message\Kv\Content;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Core\Message\Kv\PutResponse;
@@ -45,19 +46,19 @@ class StoreValueTest extends TestCase
         $riakObject->setContentType('application/json');
         $riakObject->setValue('2,2,2]');
 
-        $putResponse->vClock = 'vclock-hash';
-        $putResponse->contentList = [
-            [
-                'lastModified'  => 'Sat, 01 Jan 2015 01:01:01 GMT',
-                'contentType'   => 'application/json',
-                'value'         => '[1,1,1]'
-            ],
-            [
-                'lastModified'  => 'Sat, 02 Jan 2015 02:02:02 GMT',
-                'contentType'   => 'application/json',
-                'value'         => '[2,2,2]'
-            ]
-        ];
+        $c1 = new Content();
+        $c2 = new Content();
+
+        $putResponse->vClock      = 'vclock-hash';
+        $putResponse->contentList = [$c1, $c2];
+
+        $c1->lastModified  = 'Sat, 01 Jan 2015 01:01:01 GMT';
+        $c1->contentType   = 'application/json';
+        $c1->value         = '[1,1,1]';
+
+        $c2->lastModified  = 'Sat, 02 Jan 2015 02:02:02 GMT';
+        $c2->contentType   = 'application/json';
+        $c2->value         = '[2,2,2]';
 
         $this->adapter->expects($this->once())
             ->method('send')

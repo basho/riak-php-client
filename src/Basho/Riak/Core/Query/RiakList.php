@@ -21,7 +21,7 @@ abstract class RiakList implements IteratorAggregate, Countable, ArrayAccess
     /**
      * @var array
      */
-    private $list;
+    protected $list;
 
     /**
      * @param array $list

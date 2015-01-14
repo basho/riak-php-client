@@ -8,6 +8,7 @@ use Basho\Riak\Cap\RiakOption;
 use Basho\Riak\RiakClientBuilder;
 use Basho\Riak\Command\Kv\FetchValue;
 use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Message\Kv\Content;
 use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Core\Message\Kv\GetResponse;
 
@@ -39,19 +40,19 @@ class FetchValueTest extends TestCase
             ->withLocation($this->location)
             ->build();
 
-        $getResponse->vClock = 'vclick-hash';
-        $getResponse->contentList = [
-            [
-                'lastModified'  => 'Sat, 01 Jan 2015 01:01:01 GMT',
-                'contentType'   => 'application/json',
-                'value'         => '[1,1,1]'
-            ],
-            [
-                'lastModified'  => 'Sat, 02 Jan 2015 02:02:02 GMT',
-                'contentType'   => 'application/json',
-                'value'         => '[2,2,2]'
-            ]
-        ];
+        $c1 = new Content();
+        $c2 = new Content();
+
+        $getResponse->vClock      = 'vclock-hash';
+        $getResponse->contentList = [$c1, $c2];
+
+        $c1->lastModified  = 'Sat, 01 Jan 2015 01:01:01 GMT';
+        $c1->contentType   = 'application/json';
+        $c1->value         = '[1,1,1]';
+
+        $c2->lastModified  = 'Sat, 02 Jan 2015 02:02:02 GMT';
+        $c2->contentType   = 'application/json';
+        $c2->value         = '[2,2,2]';
 
         $this->adapter->expects($this->once())
             ->method('send')
@@ -66,7 +67,7 @@ class FetchValueTest extends TestCase
         $this->assertFalse($result->getNotFound());
         $this->assertCount(2, $result->getValues());
         $this->assertEquals(2, $result->getNumberOfValues());
-        $this->assertEquals('vclick-hash', $result->getVectorClock()->getValue());
+        $this->assertEquals('vclock-hash', $result->getVectorClock()->getValue());
 
         $values = $result->getValues();
 
