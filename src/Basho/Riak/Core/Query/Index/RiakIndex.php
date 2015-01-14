@@ -30,8 +30,9 @@ abstract class RiakIndex
      */
     public function __construct($name, array $values = [])
     {
-        $this->name   = $name;
-        $this->values = $values;
+        $this->name = $name;
+
+        $this->setValues($values);
     }
 
     /**
@@ -55,15 +56,9 @@ abstract class RiakIndex
      */
     public function setValues(array $values)
     {
-        $this->values = $values;
-    }
+        $this->values = [];
 
-    /**
-     * @param mixed $value
-     */
-    public function addValue($value)
-    {
-        $this->values[] = $value;
+        array_walk($values, [$this, 'addValue']);
     }
 
     /**
@@ -78,6 +73,11 @@ abstract class RiakIndex
      * @return string
      */
     abstract public function getType();
+
+    /**
+     * @param mixed $value
+     */
+    abstract public function addValue($value);
 
     /**
      * @param string $fullName

@@ -15,9 +15,33 @@ use Basho\Riak\Core\Query\RiakList;
 class RiakIndexList extends RiakList
 {
     /**
+     * @param \Basho\Riak\Core\Query\Index\RiakIndex[] $list
+     */
+    public function __construct(array $list = [])
+    {
+        array_walk($list, [$this, 'addIndex']);
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Index\RiakIndex $index
+     */
+    public function addIndex(RiakIndex $index)
+    {
+        $this->list[$index->getName()] = $index;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->addIndex($value);
+    }
+
+    /**
      * @return array
      */
-    public function toArray()
+    public function toFullNameArray()
     {
         $values = [];
 

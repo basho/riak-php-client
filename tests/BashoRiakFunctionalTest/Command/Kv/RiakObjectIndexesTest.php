@@ -36,13 +36,14 @@ class RiakObjectIndexesTest extends TestCase
     {
         $key        = uniqid();
         $object     = new RiakObject();
-        $indexInt   = new RiakIndexInt('key');
-        $indexBin   = new RiakIndexBin('email');
-        $indexes    = new RiakIndexList([$indexBin, $indexInt]);
+        $indexes    = new RiakIndexList([]);
         $location   = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
 
-        $indexInt->addValue(123);
-        $indexBin->addValue('fabio.bat.silva@gmail.com');
+        $indexes['key']   = new RiakIndexInt('key');
+        $indexes['email'] = new RiakIndexBin('email');
+
+        $indexes['key']->addValue(123);
+        $indexes['email']->addValue('fabio.bat.silva@gmail.com');
 
         $object->setContentType('application/json');
         $object->setValue('{"name": "fabio"}');

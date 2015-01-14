@@ -82,7 +82,7 @@ class RiakObjectConverter
         $content->indexes      = [];
 
         if ($indexes != null) {
-            $content->indexes = $indexes->toArray();
+            $content->indexes = $indexes->toFullNameArray();
         }
 
         return $content;
@@ -98,10 +98,7 @@ class RiakObjectConverter
         $list = [];
 
         foreach ($indexes as $fullName => $values) {
-            $index = RiakIndex::fromFullname($fullName, $values);
-            $name  = $index->getName();
-
-            $list[$name] = $index;
+            $list[] = RiakIndex::fromFullname($fullName, $values);
         }
 
         return new RiakIndexList($list);

@@ -15,6 +15,14 @@ class RiakIndexInt extends RiakIndex
     /**
      * {@inheritdoc}
      */
+    public function addValue($value)
+    {
+        $this->values[] = (int) $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
         return 'int';

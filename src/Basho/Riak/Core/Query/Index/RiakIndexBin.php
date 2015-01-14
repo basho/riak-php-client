@@ -15,6 +15,14 @@ class RiakIndexBin extends RiakIndex
     /**
      * {@inheritdoc}
      */
+    public function addValue($value)
+    {
+        $this->values[] = (string) $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
         return 'bin';
