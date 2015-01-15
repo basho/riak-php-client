@@ -16,7 +16,7 @@ use Basho\Riak\Core\Query\Index\RiakIndexInt;
 use Basho\Riak\Core\Query\Index\RiakIndexList;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
-class RiakObjectIndexesTest extends TestCase
+class RiakIndexTest extends TestCase
 {
     protected function setUp()
     {

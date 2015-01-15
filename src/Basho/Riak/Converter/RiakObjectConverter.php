@@ -7,6 +7,7 @@ use Basho\Riak\Core\Query\RiakObject;
 use Basho\Riak\Core\Message\Kv\Content;
 use Basho\Riak\Core\Query\RiakObjectList;
 use Basho\Riak\Core\Query\Index\RiakIndex;
+use Basho\Riak\Core\Query\Meta\RiakUsermeta;
 use Basho\Riak\Core\Query\Index\RiakIndexList;
 
 /**
@@ -58,8 +59,11 @@ class RiakObjectConverter
             $object->setIndexes($this->createRiakIndexList($content->indexes));
         }
 
+        if ($content->metas) {
+            $object->setMeta(new RiakUsermeta($content->metas));
+        }
+
         // links;
-        // meta;
 
         return $object;
     }
@@ -72,6 +76,7 @@ class RiakObjectConverter
     public function convertToRiakContent(RiakObject $riakObject)
     {
         $content = new Content();
+        $metas   = $riakObject->getMeta();
         $indexes = $riakObject->getIndexes();
 
         $content->contentType  = $riakObject->getContentType() ?: RiakObject::DEFAULT_CONTENT_TYPE;
@@ -80,9 +85,14 @@ class RiakObjectConverter
         $content->value        = $riakObject->getValue();
         $content->vtag         = $riakObject->getVtag();
         $content->indexes      = [];
+        $content->metas        = [];
 
         if ($indexes != null) {
             $content->indexes = $indexes->toFullNameArray();
+        }
+
+        if ($metas != null) {
+            $content->metas = $metas->toArray();
         }
 
         return $content;

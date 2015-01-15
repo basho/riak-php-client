@@ -73,21 +73,37 @@ abstract class BaseHttpStrategy implements Strategy
      *
      * @return array
      */
-    protected function parseIndexHeaders(array $headers)
+    private function parseHeaders(array $headers)
     {
-        $values  = [];
+        $indexes = [];
+        $metas   = [];
 
         foreach ($headers as $key => $value) {
-            if (strpos($key, 'x-riak-index-') !== 0) {
-                continue;
+            $key = strtolower($key);
+
+            if (strpos($key, 'x-riak-index-') === 0) {
+                $name  = substr($key, 13);
+                $value = isset($indexes[$name])
+                    ? array_merge($indexes[$name], $value)
+                    : $value;
+
+                $indexes[$name] = $value;
             }
 
-            foreach ($value as $val) {
-                $values[substr($key, 13)][] = $val;
+            if (strpos($key, 'x-riak-meta-') === 0) {
+                $name  = strtolower(substr($key, 12));
+                $value = is_array($value)
+                    ? reset($value)
+                    : $value;
+
+                $metas[$name] = $value;
             }
         }
 
-        return $values;
+        return [
+            'indexes' => $indexes,
+            'metas'   => $metas
+        ];
     }
 
     /**
@@ -149,12 +165,13 @@ abstract class BaseHttpStrategy implements Strategy
     private function createContent(array $headers, $value)
     {
         $content = new Content();
-        $indexes = $this->parseIndexHeaders($headers);
+        $result  = $this->parseHeaders($headers);
 
         $content->lastModified = $this->firstHeader('Last-Modified', $headers);
         $content->contentType  = $this->firstHeader('Content-Type', $headers);
         $content->vtag         = $this->firstHeader('Etag', $headers);
-        $content->indexes      = $indexes;
+        $content->indexes      = $result['indexes'];
+        $content->metas        = $result['metas'];
         $content->value        = $value;
 
         return $content;

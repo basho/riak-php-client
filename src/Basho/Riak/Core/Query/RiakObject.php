@@ -4,7 +4,7 @@ namespace Basho\Riak\Core\Query;
 
 use Basho\Riak\Core\Query\Index\RiakIndexList;
 use Basho\Riak\Core\Query\Link\RiakLinkList;
-use Basho\Riak\Core\Query\Meta\RiakMetaList;
+use Basho\Riak\Core\Query\Meta\RiakUsermeta;
 
 /**
  * Represents the data and metadata stored in Riak.
@@ -67,7 +67,7 @@ class RiakObject
     private $links;
 
     /**
-     * @var \Basho\Riak\Core\Query\Meta\RiakMetaList
+     * @var \Basho\Riak\Core\Query\Meta\RiakUsermeta
      */
     private $meta;
 
@@ -96,7 +96,7 @@ class RiakObject
     }
 
     /**
-     * @return \Basho\Riak\Core\Query\Meta\RiakMetaList
+     * @return \Basho\Riak\Core\Query\Meta\RiakUsermeta
      */
     public function getMeta()
     {
@@ -176,9 +176,9 @@ class RiakObject
     }
 
     /**
-     * @param \Basho\Riak\Core\Query\Meta\RiakMetaList $meta
+     * @param \Basho\Riak\Core\Query\Meta\RiakUsermeta $meta
      */
-    public function setMeta(RiakMetaList $meta)
+    public function setMeta(RiakUsermeta $meta)
     {
         $this->meta = $meta;
     }

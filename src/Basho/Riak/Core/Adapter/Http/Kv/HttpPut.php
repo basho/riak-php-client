@@ -41,7 +41,11 @@ class HttpPut extends BaseHttpStrategy
         $value       = $content->value;
 
         foreach ($content->indexes as $name => $indexes) {
-            $request->addHeader("x-riak-index-$name", $indexes);
+            $request->addHeader("X-Riak-Index-$name", $indexes);
+        }
+
+        foreach ($content->metas as $name => $meta) {
+            $request->addHeader("X-Riak-Meta-$name", $meta);
         }
 
         $request->setHeader('Accept', ['multipart/mixed', '*/*']);
