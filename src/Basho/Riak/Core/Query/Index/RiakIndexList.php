@@ -19,6 +19,8 @@ class RiakIndexList extends RiakList
      */
     public function __construct(array $list = [])
     {
+        parent::__construct([]);
+
         array_walk($list, [$this, 'addIndex']);
     }
 

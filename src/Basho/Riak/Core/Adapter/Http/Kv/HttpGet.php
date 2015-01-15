@@ -63,8 +63,8 @@ class HttpGet extends BaseHttpStrategy
      */
     public function send(Request $request)
     {
-        $httpRequest  = $this->createHttpRequest($request);
-        $response     = new GetResponse();
+        $httpRequest = $this->createHttpRequest($request);
+        $response    = new GetResponse();
 
         try {
             $httpResponse = $this->client->send($httpRequest);

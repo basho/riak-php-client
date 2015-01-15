@@ -60,7 +60,7 @@ class RiakObjectConverter
         }
 
         if ($content->metas) {
-            $object->setMeta(new RiakUsermeta($content->metas));
+            $object->setUserMeta(new RiakUsermeta($content->metas));
         }
 
         // links;
@@ -76,7 +76,7 @@ class RiakObjectConverter
     public function convertToRiakContent(RiakObject $riakObject)
     {
         $content = new Content();
-        $metas   = $riakObject->getMeta();
+        $metas   = $riakObject->getUserMeta();
         $indexes = $riakObject->getIndexes();
 
         $content->contentType  = $riakObject->getContentType() ?: RiakObject::DEFAULT_CONTENT_TYPE;

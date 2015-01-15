@@ -30,7 +30,7 @@ class RiakUserMetaTest extends TestCase
         $this->client->execute($store);
     }
 
-    public function testStoreAndFetchSingleValueWithIndexes()
+    public function testObjectWithUserMeta()
     {
         $key        = uniqid();
         $object     = new RiakObject();
@@ -46,7 +46,7 @@ class RiakUserMetaTest extends TestCase
 
         $object->setContentType('application/json');
         $object->setValue('{"name": "fabio"}');
-        $object->setMeta($meta);
+        $object->setUserMeta($meta);
 
         $store = StoreValue::builder($location, $object)
             ->withOption(RiakOption::RETURN_BODY, true)
@@ -63,7 +63,7 @@ class RiakUserMetaTest extends TestCase
 
         $result     = $this->client->execute($fetch);
         $riakObject = $result->getValue();
-        $riakMeta   = $riakObject->getMeta();
+        $riakMeta   = $riakObject->getUserMeta();
 
         $this->assertFalse($result->getNotFound());
         $this->assertInstanceOf('Basho\Riak\Command\Kv\Response\FetchValueResponse', $result);
@@ -78,6 +78,56 @@ class RiakUserMetaTest extends TestCase
         $this->assertEquals('content', $riakMeta['meta']);
         $this->assertEquals('value', $riakMeta->get('key'));
         $this->assertEquals('content', $riakMeta->get('meta'));
+
+        $this->client->execute(DeleteValue::builder($location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->build());
+    }
+
+    public function testSiblingsWithUserMeta()
+    {
+        $key      = uniqid();
+        $object1  = new RiakObject();
+        $object2  = new RiakObject();
+        $location = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+
+        $object1->setContentType('application/json');
+        $object1->setValue('{"name": "fabio"}');
+        $object1->addMeta('group', 'guest');
+
+        $object2->setContentType('application/json');
+        $object2->setValue('{"name": "fabio"}');
+        $object2->addMeta('group', 'admin');
+
+        $this->client->execute(StoreValue::builder($location, $object1)
+            ->withOption(RiakOption::W, 3)
+            ->build());
+
+        $this->client->execute(StoreValue::builder($location, $object2)
+            ->withOption(RiakOption::W, 3)
+            ->build());
+
+        $result = $this->client->execute(FetchValue::builder($location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->withOption(RiakOption::R, 1)
+            ->build());
+
+        $this->assertInstanceOf('Basho\Riak\Command\Kv\Response\FetchValueResponse', $result);
+        $this->assertCount(2, $result->getValues());
+
+        $riakObject1 = $result->getValues()->offsetGet(0);
+        $riakObject2 = $result->getValues()->offsetGet(1);
+        $riakMeta1   = $riakObject1->getUserMeta();
+        $riakMeta2   = $riakObject2->getUserMeta();
+
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Meta\RiakUserMeta', $riakMeta1);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Meta\RiakUserMeta', $riakMeta2);
+
+        $this->assertCount(1, $riakMeta1);
+        $this->assertTrue(isset($riakMeta1['group']));
+        $this->assertTrue(isset($riakMeta2['group']));
+        $this->assertEquals('guest', $riakMeta1['group']);
+        $this->assertEquals('admin', $riakMeta2['group']);
 
         $this->client->execute(DeleteValue::builder($location)
             ->withOption(RiakOption::NOTFOUND_OK, true)

@@ -2,6 +2,7 @@
 
 namespace Basho\Riak\Core\Query;
 
+use Basho\Riak\Core\Query\Index\RiakIndex;
 use Basho\Riak\Core\Query\Index\RiakIndexList;
 use Basho\Riak\Core\Query\Link\RiakLinkList;
 use Basho\Riak\Core\Query\Meta\RiakUsermeta;
@@ -98,7 +99,7 @@ class RiakObject
     /**
      * @return \Basho\Riak\Core\Query\Meta\RiakUsermeta
      */
-    public function getMeta()
+    public function getUserMeta()
     {
         return $this->meta;
     }
@@ -168,6 +169,18 @@ class RiakObject
     }
 
     /**
+     * @param \Basho\Riak\Core\Query\Index\RiakIndex $index
+     */
+    public function addIndex(RiakIndex $index)
+    {
+        if ($this->indexes === null) {
+            $this->indexes = new RiakIndexList();
+        }
+
+        $this->indexes->addIndex($index);
+    }
+
+    /**
      * @param \Basho\Riak\Core\Query\Link\RiakLinkList $links
      */
     public function setLinks(RiakLinkList $links)
@@ -178,9 +191,22 @@ class RiakObject
     /**
      * @param \Basho\Riak\Core\Query\Meta\RiakUsermeta $meta
      */
-    public function setMeta(RiakUsermeta $meta)
+    public function setUserMeta(RiakUsermeta $meta)
     {
         $this->meta = $meta;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function addMeta($key, $value)
+    {
+        if ($this->meta === null) {
+            $this->meta = new RiakUsermeta();
+        }
+
+        $this->meta->put($key, $value);
     }
 
     /**

@@ -32,7 +32,7 @@ class RiakIndexTest extends TestCase
         $this->client->execute($store);
     }
 
-    public function testStoreAndFetchSingleValueWithIndexes()
+    public function testObjectWithIndexes()
     {
         $key        = uniqid();
         $object     = new RiakObject();
@@ -84,6 +84,61 @@ class RiakIndexTest extends TestCase
 
         $this->assertEquals([123], $riakIndexes['key']->getValues());
         $this->assertEquals(['fabio.bat.silva@gmail.com'], $riakIndexes['email']->getValues());
+
+        $this->client->execute(DeleteValue::builder($location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->build());
+    }
+
+    public function testSiblingsWithIndexes()
+    {
+        $key        = uniqid();
+        $object1    = new RiakObject();
+        $object2    = new RiakObject();
+        $location   = new RiakLocation(new RiakNamespace('bucket', 'default'), $key);
+
+        $object1->addIndex(new RiakIndexBin('group', ['guest']));
+        $object1->setContentType('application/json');
+        $object1->setValue('{"name": "fabio"}');
+
+        $object2->addIndex(new RiakIndexBin('group', ['admin']));
+        $object2->setContentType('application/json');
+        $object2->setValue('{"name": "fabio"}');
+
+        $this->client->execute(StoreValue::builder($location, $object1)
+            ->withOption(RiakOption::W, 3)
+            ->build());
+
+        $this->client->execute(StoreValue::builder($location, $object2)
+            ->withOption(RiakOption::W, 3)
+            ->build());
+
+        $result = $this->client->execute(FetchValue::builder($location)
+            ->withOption(RiakOption::NOTFOUND_OK, true)
+            ->withOption(RiakOption::R, 1)
+            ->build());
+
+        $this->assertInstanceOf('Basho\Riak\Command\Kv\Response\FetchValueResponse', $result);
+        $this->assertCount(2, $result->getValues());
+
+        $riakObject1  = $result->getValues()->offsetGet(0);
+        $riakObject2  = $result->getValues()->offsetGet(1);
+        $riakIndexes1 = $riakObject1->getIndexes();
+        $riakIndexes2 = $riakObject2->getIndexes();
+
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Index\RiakIndexList', $riakIndexes1);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Index\RiakIndexList', $riakIndexes2);
+
+        $this->assertCount(1, $riakIndexes1);
+        $this->assertTrue(isset($riakIndexes1['group']));
+        $this->assertTrue(isset($riakIndexes2['group']));
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Index\RiakIndexBin', $riakIndexes1['group']);
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Index\RiakIndexBin', $riakIndexes2['group']);
+
+        $this->assertEquals('group', $riakIndexes1['group']->getName());
+        $this->assertEquals('group', $riakIndexes2['group']->getName());
+        $this->assertEquals(['guest'], $riakIndexes1['group']->getValues());
+        $this->assertEquals(['admin'], $riakIndexes2['group']->getValues());
 
         $this->client->execute(DeleteValue::builder($location)
             ->withOption(RiakOption::NOTFOUND_OK, true)
