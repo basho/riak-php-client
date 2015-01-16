@@ -88,10 +88,9 @@ class RpbClient
     }
 
     /**
-     * @param  string $code
-     * @return string
+     * @param string $code
      *
-     * @throws \InvalidArgumentException
+     * @return string
      */
     protected function classForCode($code)
     {
