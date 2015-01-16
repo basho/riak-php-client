@@ -60,7 +60,7 @@ class RpbGet extends BaseRpbStrategy
     {
         $response   = new GetResponse();
         $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_GETREQ, 'Basho\Riak\ProtoBuf\RpbGetResp');
+        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_GETREQ, RiakMessageCodes::MSG_GETRESP);
 
         if ( ! $rpbGetResp instanceof RpbGetResp) {
             return $response;

@@ -72,7 +72,7 @@ class RpbDelete extends BaseRpbStrategy
         $response   = new DeleteResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
 
-        $this->client->send($rpbPutReq, RiakMessageCodes::MSG_DELREQ);
+        $this->client->send($rpbPutReq, RiakMessageCodes::MSG_DELREQ, RiakMessageCodes::MSG_DELRESP);
 
         return $response;
     }

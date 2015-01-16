@@ -8,6 +8,7 @@ use Basho\Riak\Core\Message\Kv\PutResponse;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
 use Basho\Riak\ProtoBuf\RpbPutReq;
 use Basho\Riak\ProtoBuf\RpbContent;
+use Basho\Riak\ProtoBuf\RpbPair;
 
 /**
  * rpb put implementation.
@@ -32,14 +33,6 @@ class RpbPut extends BaseRpbStrategy
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);
         $rpbPutReq->setKey($request->key);
-
-        foreach ($request->content->indexes as $name => $indexes) {
-            //
-        }
-
-        foreach ($request->content->metas as $name => $meta) {
-            //
-        }
 
         if ($request->w !== null) {
             $rpbPutReq->setW($request->w);
@@ -71,6 +64,19 @@ class RpbPut extends BaseRpbStrategy
         $rpbContent->setValue($request->content->value);
         $rpbContent->setContentType($request->content->contentType);
 
+        foreach ($request->content->indexes as $name => $values) {
+            // @TODO
+        }
+
+        foreach ($request->content->metas as $name => $meta) {
+            $value = new RpbPair();
+
+            $value->setKey($name);
+            $value->setValue($meta);
+
+            $rpbContent->addUsermeta($value);
+        }
+
         $rpbPutReq->setContent($rpbContent);
 
         return $rpbPutReq;
@@ -85,7 +91,7 @@ class RpbPut extends BaseRpbStrategy
     {
         $response   = new PutResponse();
         $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_PUTREQ, 'Basho\Riak\ProtoBuf\RpbPutResp');
+        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_PUTREQ, RiakMessageCodes::MSG_PUTRESP);
 
         if ( ! $rpbGetResp instanceof RpbGetResp) {
             return $response;

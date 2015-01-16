@@ -4,6 +4,7 @@ namespace Basho\Riak\Core\Adapter\Rpb;
 
 use DrSlump\Protobuf\Message;
 use DrSlump\Protobuf\Protobuf;
+use Basho\Riak\ProtoBuf\RiakMessageCodes;
 
 /**
  * RPB socket connection
@@ -31,6 +32,29 @@ class RpbClient
     private $port;
 
     /**
+     * Mapping of message code to PB class names
+     *
+     * @var array
+     */
+    private static $classMap = array(
+        RiakMessageCodes::MSG_ERRORRESP         => 'Basho\Riak\ProtoBuf\RpbErrorResp',
+        RiakMessageCodes::MSG_GETSERVERINFORESP => 'Basho\Riak\ProtoBuf\RpbGetServerInfoResp',
+        RiakMessageCodes::MSG_GETREQ            => 'Basho\Riak\ProtoBuf\RpbGetReq',
+        RiakMessageCodes::MSG_GETRESP           => 'Basho\Riak\ProtoBuf\RpbGetResp',
+        RiakMessageCodes::MSG_PUTREQ            => 'Basho\Riak\ProtoBuf\RpbPutReq',
+        RiakMessageCodes::MSG_PUTRESP           => 'Basho\Riak\ProtoBuf\RpbPutResp',
+        RiakMessageCodes::MSG_DELREQ            => 'Basho\Riak\ProtoBuf\RpbDelReq',
+        RiakMessageCodes::MSG_LISTBUCKETSREQ    => 'Basho\Riak\ProtoBuf\RpbListBucketsReq',
+        RiakMessageCodes::MSG_LISTBUCKETSRESP   => 'Basho\Riak\ProtoBuf\RpbListBucketsResp',
+        RiakMessageCodes::MSG_LISTKEYSREQ       => 'Basho\Riak\ProtoBuf\RpbListKeysReq',
+        RiakMessageCodes::MSG_LISTKEYSRESP      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
+        RiakMessageCodes::MSG_GETBUCKETREQ      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
+        RiakMessageCodes::MSG_GETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbGetBucketReq',
+        RiakMessageCodes::MSG_SETBUCKETREQ      => 'Basho\Riak\ProtoBuf\RpbGetBucketResp',
+        RiakMessageCodes::MSG_SETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbSetBucketReq'
+    );
+
+    /**
      * @param string $host
      * @param string $port
      */
@@ -42,20 +66,40 @@ class RpbClient
 
     /**
      * @param \DrSlump\Protobuf\Message $message
-     * @param integer                   $code
-     * @param string                    $responseClass
+     * @param integer                   $messageCode
+     * @param integer                   $expectedResponseCode
      *
      * @return \DrSlump\Protobuf\Message
      */
-    public function send(Message $message, $code, $responseClass = null)
+    public function send(Message $message, $messageCode, $expectedResponseCode)
     {
-        $this->sendData($this->encodeMessage($message, $code));
+        $payload        = $this->encodeMessage($message, $messageCode);
+        $responseClass  = $this->classForCode($expectedResponseCode);
+
+        $this->sendData($payload);
 
         if ($responseClass == null) {
+            $this->receive($expectedResponseCode);
+
             return;
         }
 
-        return $this->receiveMessage($responseClass);
+        return $this->receiveMessage($responseClass, $expectedResponseCode);
+    }
+
+    /**
+     * @param  string $code
+     * @return string
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function classForCode($code)
+    {
+        if (isset(self::$classMap[$code])) {
+            return self::$classMap[$code];
+        }
+
+        return null;
     }
 
     /**
@@ -116,11 +160,11 @@ class RpbClient
     }
 
     /**
-     * @param string $class
+     * @param integer $expectedCode
      *
-     * @return \DrSlump\Protobuf\Message
+     * @return array
      */
-    private function receiveMessage($class)
+    private function receive($expectedCode)
     {
         $message  = '';
         $resource = $this->getConnection();
@@ -134,7 +178,8 @@ class RpbClient
             throw new \Exception('Short read on header, read ' . strlen($header) . ' bytes');
         }
 
-        list($length) = array_values(unpack("N", $header));
+        $unpackHeaders = array_values(unpack("N", $header));
+        $length        = isset($unpackHeaders[0]) ? $unpackHeaders[0] : 0;
 
         while (strlen($message) !== $length) {
 
@@ -147,9 +192,24 @@ class RpbClient
             $message .= $buffer;
         }
 
-        // $messageCodeString = substr($message, 0, 1);
-        // list($messageCode) = array_values(unpack("C", $messageCodeString));
+        $messageBodyString = substr($message, 1);
+        $messageCodeString = substr($message, 0, 1);
+        list($messageCode) = array_values(unpack("C", $messageCodeString));
 
-        return Protobuf::decode($class, substr($message, 1));
+        return [$messageCode, $messageBodyString];
+    }
+
+    /**
+     * @param string  $class
+     * @param integer $expectedCode
+     *
+     * @return \DrSlump\Protobuf\Message
+     */
+    private function receiveMessage($class, $expectedCode)
+    {
+        $response = $this->receive($expectedCode);
+        $message  = Protobuf::decode($class, $response[1]);
+
+        return $message;
     }
 }

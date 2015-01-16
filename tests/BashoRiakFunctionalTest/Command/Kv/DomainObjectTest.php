@@ -23,11 +23,6 @@ class DomainObjectTest extends TestCase
     {
         parent::setUp();
 
-        // not yet implemented for proto
-        if (parse_url($this->nodeUri, PHP_URL_SCHEME) != 'http') {
-            return;
-        }
-
         $this->client->execute(StoreBucketProperties::builder()
             ->withNamespace(new RiakNamespace('buckets', 'default'))
             ->withProperty(BucketProperties::ALLOW_MULT, true)

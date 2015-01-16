@@ -48,10 +48,18 @@ abstract class BaseRpbStrategy implements Strategy
 
         /** @var $index \Basho\Riak\ProtoBuf\RpbPair */
         foreach ($rpbcontent->getIndexes() as $index) {
-            $key   = $index->getKey()->get();
+            $key   = $index->getKey();
             $value = $index->getValue()->get();
 
             $content->indexes[$key] = $value;
+        }
+
+        /** @var $index \Basho\Riak\ProtoBuf\RpbPair */
+        foreach ($rpbcontent->getUsermeta() as $meta) {
+            $key   = $meta->getKey();
+            $value = $meta->getValue()->get();
+
+            $content->metas[$key] = $value;
         }
 
         return $content;
