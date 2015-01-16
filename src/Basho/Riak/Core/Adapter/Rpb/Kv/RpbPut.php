@@ -5,6 +5,7 @@ namespace Basho\Riak\Core\Adapter\Rpb\Kv;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\PutRequest;
 use Basho\Riak\Core\Message\Kv\PutResponse;
+use Basho\Riak\ProtoBuf\RiakMessageCodes;
 use Basho\Riak\ProtoBuf\RpbPutReq;
 use Basho\Riak\ProtoBuf\RpbContent;
 
@@ -84,7 +85,7 @@ class RpbPut extends BaseRpbStrategy
     {
         $response   = new PutResponse();
         $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, 11, 'Basho\Riak\ProtoBuf\RpbPutResp');
+        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_PUTREQ, 'Basho\Riak\ProtoBuf\RpbPutResp');
 
         if ( ! $rpbGetResp instanceof RpbGetResp) {
             return $response;

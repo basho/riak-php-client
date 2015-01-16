@@ -8,6 +8,8 @@ abstract class TestCase extends \BashoRiakTest\TestCase
 {
     protected $client;
 
+    protected $nodeUri;
+
     protected function setUp()
     {
         parent::setUp();
@@ -25,6 +27,7 @@ abstract class TestCase extends \BashoRiakTest\TestCase
             ->withNodeUri($nodeUri)
             ->build();
 
-        $this->client = $client;
+        $this->client  = $client;
+        $this->nodeUri = $nodeUri;
     }
 }

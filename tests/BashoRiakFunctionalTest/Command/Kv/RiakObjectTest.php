@@ -13,22 +13,26 @@ use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Core\Query\BucketProperties;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
+/**
+ * @group proto
+ * @group http
+ */
 class RiakObjectTest extends TestCase
 {
     protected function setUp()
     {
         parent::setUp();
 
-        return;
+        // not yet implemented for proto
+        if (parse_url($this->nodeUri, PHP_URL_SCHEME) != 'http') {
+            return;
+        }
 
-        $namespace = new RiakNamespace('buckets', 'default');
-        $store     = StoreBucketProperties::builder()
+        $this->client->execute(StoreBucketProperties::builder()
+            ->withNamespace(new RiakNamespace('buckets', 'default'))
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
-            ->withNamespace($namespace)
-            ->build();
-
-        $this->client->execute($store);
+            ->build());
     }
 
     public function testStoreAndFetchSingleValue()

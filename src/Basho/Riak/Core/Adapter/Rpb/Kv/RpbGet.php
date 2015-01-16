@@ -5,6 +5,7 @@ namespace Basho\Riak\Core\Adapter\Rpb\Kv;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\GetRequest;
 use Basho\Riak\Core\Message\Kv\GetResponse;
+use Basho\Riak\ProtoBuf\RiakMessageCodes;
 use Basho\Riak\ProtoBuf\RpbGetReq;
 use Basho\Riak\ProtoBuf\RpbGetResp;
 
@@ -59,7 +60,7 @@ class RpbGet extends BaseRpbStrategy
     {
         $response   = new GetResponse();
         $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, 9, 'Basho\Riak\ProtoBuf\RpbGetResp');
+        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_GETREQ, 'Basho\Riak\ProtoBuf\RpbGetResp');
 
         if ( ! $rpbGetResp instanceof RpbGetResp) {
             return $response;

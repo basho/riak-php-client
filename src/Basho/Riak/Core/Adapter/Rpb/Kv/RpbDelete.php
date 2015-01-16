@@ -5,8 +5,8 @@ namespace Basho\Riak\Core\Adapter\Rpb\Kv;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\DeleteRequest;
 use Basho\Riak\Core\Message\Kv\DeleteResponse;
+use Basho\Riak\ProtoBuf\RiakMessageCodes;
 use Basho\Riak\ProtoBuf\RpbDelReq;
-use Basho\Riak\ProtoBuf\RpbDelResp;
 
 /**
  * rpb delete implementation.
@@ -72,7 +72,7 @@ class RpbDelete extends BaseRpbStrategy
         $response   = new DeleteResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
 
-        $this->client->send($rpbPutReq, 13);
+        $this->client->send($rpbPutReq, RiakMessageCodes::MSG_DELREQ);
 
         return $response;
     }
