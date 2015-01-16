@@ -2,7 +2,7 @@
 
 namespace Basho\Riak\Core;
 
-use React\SocketClient\ConnectorInterface;
+use Basho\Riak\Core\Adapter\Rpb\RpbClient;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\RiakException;
 
@@ -18,36 +18,30 @@ class RiakPbAdpter implements RiakAdapter
 {
     private $strategyMap = [
         // kv
-        'Basho\Riak\Core\Message\Kv\GetRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\HttpGet',
-        'Basho\Riak\Core\Message\Kv\PutRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\HttpPut',
-        'Basho\Riak\Core\Message\Kv\DeleteRequest'    => 'Basho\Riak\Core\Adapter\Rpb\Kv\HttpDelete',
-        // crdt
-        'Basho\Riak\Core\Message\DataType\GetRequest' => 'Basho\Riak\Core\Adapter\Rpb\DataType\HttpGet',
-        'Basho\Riak\Core\Message\DataType\PutRequest' => 'Basho\Riak\Core\Adapter\Rpb\DataType\HttpPut',
-        // bucket
-        'Basho\Riak\Core\Message\Bucket\GetRequest'   => 'Basho\Riak\Core\Adapter\Rpb\Bucket\HttpGet',
-        'Basho\Riak\Core\Message\Bucket\PutRequest'   => 'Basho\Riak\Core\Adapter\Rpb\Bucket\HttpPut',
+        'Basho\Riak\Core\Message\Kv\GetRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbGet',
+        'Basho\Riak\Core\Message\Kv\PutRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbPut',
+        'Basho\Riak\Core\Message\Kv\DeleteRequest'    => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbDelete',
     ];
 
     /**
-     * @var \React\SocketClient\ConnectorInterface
+     * @var \Basho\Riak\Core\Adapter\Rpb\RpbClient
      */
-    private $connector;
+    private $client;
 
     /**
-     * @param \React\SocketClient\ConnectorInterface $connector
+     * @param \Basho\Riak\Core\Adapter\Rpb\RpbClient $client
      */
-    public function __construct(ConnectorInterface $connector)
+    public function __construct(RpbClient $client)
     {
-        $this->connector = $connector;
+        $this->client = $client;
     }
 
     /**
-     * @return \React\SocketClient\ConnectorInterface
+     * @return \Basho\Riak\Core\Adapter\Rpb\Client
      */
-    public function getConnector()
+    public function getClient()
     {
-        return $this->connector;
+        return $this->client;
     }
 
     /**
@@ -63,7 +57,7 @@ class RiakPbAdpter implements RiakAdapter
             : null;
 
         if ($strategyClass !== null) {
-            return new $strategyClass($this->connector);
+            return new $strategyClass($this->client);
         }
 
         throw new RiakException(sprintf("Unknown message : %s", get_class($request)));
