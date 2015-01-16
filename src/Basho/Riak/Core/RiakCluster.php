@@ -46,7 +46,7 @@ class RiakCluster
     /**
      * Removes the provided node from the cluster.
      *
-     * @param RiakNode $node
+     * @param \Basho\Riak\Core\RiakNode $node
      *
      * @return \Basho\Riak\Core\RiakNode|null
      */

@@ -16,7 +16,7 @@ interface RiakOperation
     /**
      * Execute the operation.
      *
-     * @param Basho\Riak\Core\RiakAdapter $adapter
+     * @param \Basho\Riak\Core\RiakAdapter $adapter
      *
      * @return \Basho\Riak\RiakResponse
      */
