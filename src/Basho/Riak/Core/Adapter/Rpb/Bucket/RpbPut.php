@@ -22,7 +22,7 @@ class RpbPut extends BaseRpbStrategy
     /**
      * @param \Basho\Riak\Core\Message\Bucket\PutRequest $request
      *
-     * @return \Basho\Riak\ProtoBuf\RpbGetBucketReq
+     * @return \Basho\Riak\ProtoBuf\RpbSetBucketReq
      */
     private function createRpbMessage(PutRequest $request)
     {
@@ -51,7 +51,7 @@ class RpbPut extends BaseRpbStrategy
     }
 
     /**
-     * @param \Basho\Riak\Core\Message\Bucket\GetRequest $request
+     * @param \Basho\Riak\Core\Message\Bucket\PutRequest $request
      *
      * @return \Basho\Riak\Core\Message\Bucket\PutResponse
      */

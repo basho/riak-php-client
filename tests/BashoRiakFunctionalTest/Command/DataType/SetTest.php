@@ -9,9 +9,11 @@ use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Command\DataType\FetchSet;
 use Basho\Riak\Command\DataType\StoreSet;
 use Basho\Riak\Core\Query\BucketProperties;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
+/**
+ * @group non-proto
+ */
 class SetTest extends TestCase
 {
     protected function setUp()

@@ -65,7 +65,14 @@ class RpbPut extends BaseRpbStrategy
         $rpbContent->setContentType($request->content->contentType);
 
         foreach ($request->content->indexes as $name => $values) {
-            // @TODO
+            foreach ($values as $v) {
+                $value = new RpbPair();
+
+                $value->setKey($name);
+                $value->setValue($v);
+
+                $rpbContent->addIndexes($value);
+            }
         }
 
         foreach ($request->content->metas as $name => $meta) {

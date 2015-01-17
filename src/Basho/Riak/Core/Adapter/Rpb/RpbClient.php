@@ -2,6 +2,7 @@
 
 namespace Basho\Riak\Core\Adapter\Rpb;
 
+use Basho\Riak\RiakException;
 use DrSlump\Protobuf\Message;
 use DrSlump\Protobuf\Protobuf;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
@@ -49,8 +50,7 @@ class RpbClient
         RiakMessageCodes::MSG_LISTKEYSREQ       => 'Basho\Riak\ProtoBuf\RpbListKeysReq',
         RiakMessageCodes::MSG_LISTKEYSRESP      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
         RiakMessageCodes::MSG_GETBUCKETREQ      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
-        RiakMessageCodes::MSG_GETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbGetBucketReq',
-        RiakMessageCodes::MSG_SETBUCKETREQ      => 'Basho\Riak\ProtoBuf\RpbGetBucketResp',
+        RiakMessageCodes::MSG_GETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbGetBucketResp',
         RiakMessageCodes::MSG_SETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbSetBucketReq'
     );
 
@@ -73,18 +73,21 @@ class RpbClient
      */
     public function send(Message $message, $messageCode, $expectedResponseCode)
     {
-        $payload        = $this->encodeMessage($message, $messageCode);
-        $responseClass  = $this->classForCode($expectedResponseCode);
+        $payload  = $this->encodeMessage($message, $messageCode);
+        $class    = $this->classForCode($expectedResponseCode);
+        $response = $this->sendData($payload);
+        $respCode = $response[0];
+        $respBody = $response[1];
 
-        $this->sendData($payload);
+        if ($respCode != $expectedResponseCode) {
+            $this->throwResponseException($respCode, $respBody);
+        }
 
-        if ($responseClass == null) {
-            $this->receive($expectedResponseCode);
-
+        if ($class == null) {
             return;
         }
 
-        return $this->receiveMessage($responseClass, $expectedResponseCode);
+        return Protobuf::decode($class, $respBody);
     }
 
     /**
@@ -102,6 +105,26 @@ class RpbClient
     }
 
     /**
+     * @param integer $actualCode
+     * @param string  $respBody
+     *
+     * @throws \Basho\Riak\RiakException
+     */
+    protected function throwResponseException($actualCode, $respBody)
+    {
+        if ($actualCode !== RiakMessageCodes::MSG_ERRORRESP) {
+            throw new RiakException("Unexpected rpb response code: " . $actualCode);
+        }
+
+        $errorClass   = self::$classMap[$actualCode];
+        $errorMessage = Protobuf::decode($errorClass, $respBody);
+
+        if ($errorMessage->hasErrmsg()) {
+            throw new RiakException($errorMessage->getErrmsg(), $actualCode);
+        }
+    }
+
+    /**
      * @return resource
      */
     protected function getConnection()
@@ -116,7 +139,7 @@ class RpbClient
         $resource = stream_socket_client($uri, $errno, $errstr, 30);
 
         if ( ! is_resource($resource)) {
-            throw new \Exception('Error creating socket. Error number :' . $errno . ' error string: '. $errstr);
+            throw new RiakException(sprintf('Fail to connect to : %s [%s %s]', $uri, $errno, $errstr));
         }
 
         stream_set_timeout($resource, 86400);
@@ -153,28 +176,28 @@ class RpbClient
             $fwrite = fwrite($resource, substr($payload, $written));
 
             if ($fwrite === false) {
-                throw new \Exception('Failed to write message');
+                throw new RiakException('Failed to write message');
             }
         }
+
+        return $this->receive();
     }
 
     /**
-     * @param integer $expectedCode
-     *
      * @return array
      */
-    private function receive($expectedCode)
+    private function receive()
     {
         $message  = '';
         $resource = $this->getConnection();
         $header   = fread($resource, 4);
 
         if ($header === false) {
-            throw new \Exception('Fail to read response headers');
+            throw new RiakException('Fail to read response headers');
         }
 
         if (strlen($header) !== 4) {
-            throw new \Exception('Short read on header, read ' . strlen($header) . ' bytes');
+            throw new RiakException('Short read on header, read ' . strlen($header) . ' bytes');
         }
 
         $unpackHeaders = array_values(unpack("N", $header));
@@ -185,7 +208,7 @@ class RpbClient
             $buffer = fread($resource, min(8192, $length - strlen($message)));
 
             if ( ! strlen($buffer) || $buffer === false) {
-                throw new \Exception('Fail to read socket response');
+                throw new RiakException('Fail to read socket response');
             }
 
             $message .= $buffer;
@@ -196,19 +219,5 @@ class RpbClient
         list($messageCode) = array_values(unpack("C", $messageCodeString));
 
         return [$messageCode, $messageBodyString];
-    }
-
-    /**
-     * @param string  $class
-     * @param integer $expectedCode
-     *
-     * @return \DrSlump\Protobuf\Message
-     */
-    private function receiveMessage($class, $expectedCode)
-    {
-        $response = $this->receive($expectedCode);
-        $message  = Protobuf::decode($class, $response[1]);
-
-        return $message;
     }
 }

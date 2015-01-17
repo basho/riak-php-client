@@ -11,6 +11,9 @@ use Basho\Riak\Command\DataType\StoreCounter;
 use Basho\Riak\Core\Query\BucketProperties;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
+/**
+ * @group non-proto
+ */
 class CounterTest extends TestCase
 {
     protected function setUp()

@@ -13,10 +13,6 @@ use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Core\Query\BucketProperties;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
-/**
- * @group proto
- * @group http
- */
 class RiakObjectTest extends TestCase
 {
     protected function setUp()

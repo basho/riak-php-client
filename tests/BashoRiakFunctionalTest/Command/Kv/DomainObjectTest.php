@@ -13,10 +13,6 @@ use Basho\Riak\Core\Query\BucketProperties;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 use BashoRiakFunctionalTest\DomainFixture\SimpleObject;
 
-/**
- * @group proto
- * @group http
- */
 class DomainObjectTest extends TestCase
 {
     protected function setUp()
