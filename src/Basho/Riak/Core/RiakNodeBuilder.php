@@ -122,7 +122,10 @@ class RiakNodeBuilder
      */
     private function buildPbAdapter()
     {
-        return new RiakPbAdpter(new RpbClient($this->host, $this->port));
+        $rpbClient    = new RpbClient($this->host, $this->port, $this->user, $this->pass);
+        $riakPbAdpter = new RiakPbAdpter($rpbClient);
+
+        return $riakPbAdpter;
     }
 
     /**
@@ -134,7 +137,7 @@ class RiakNodeBuilder
             return $this->buildHttpAdapter();
         }
 
-        if ($this->protocol == 'proto' || $this->protocol == 'protos') {
+        if ($this->protocol == 'proto') {
             return $this->buildPbAdapter();
         }
 

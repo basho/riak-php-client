@@ -37,6 +37,19 @@ class RiakNodeBuilderTest extends TestCase
         $this->assertNull($auth);
     }
 
+    public function testBuildProtoNode()
+    {
+        $node = $this->builder
+            ->withProtocol('proto')
+            ->withHost('localhost')
+            ->withPort('8087')
+            ->build();
+
+        $this->assertInstanceOf('Basho\Riak\Core\RiakNode', $node);
+        $this->assertInstanceOf('Basho\Riak\Core\RiakPbAdpter', $node->getAdapter());
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Rpb\RpbClient', $node->getAdapter()->getClient());
+    }
+
     public function testBuildHttpNodeWithAuth()
     {
         $node = $this->builder
