@@ -1,29 +1,29 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb\Bucket;
+namespace Basho\Riak\Core\Adapter\Http;
 
+use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Adapter\Strategy;
-use Basho\Riak\Core\Adapter\Rpb\RpbClient;
 
 /**
- * Base rpb strategy.
+ * Base http strategy.
  *
  * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
  * @copyright 2011-2015 Basho Technologies, Inc.
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-abstract class BaseRpbStrategy implements Strategy
+abstract class HttpStrategy implements Strategy
 {
     /**
-     * @var \Basho\Riak\Core\Adapter\Rpb\RpbClient
+     * @var \GuzzleHttp\ClientInterface
      */
     protected $client;
 
     /**
-     * @param \Basho\Riak\Core\Adapter\Rpb\RpbClient $client
+     * @param \GuzzleHttp\ClientInterface $client
      */
-    public function __construct(RpbClient $client)
+    public function __construct(ClientInterface $client)
     {
         $this->client = $client;
     }

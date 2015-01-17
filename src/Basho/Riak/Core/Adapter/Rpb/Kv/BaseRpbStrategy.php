@@ -3,9 +3,8 @@
 namespace Basho\Riak\Core\Adapter\Rpb\Kv;
 
 use Basho\Riak\ProtoBuf\RpbContent;
-use Basho\Riak\Core\Adapter\Strategy;
 use Basho\Riak\Core\Message\Kv\Content;
-use Basho\Riak\Core\Adapter\Rpb\RpbClient;
+use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
 
 /**
  * Base rpb strategy.
@@ -15,21 +14,8 @@ use Basho\Riak\Core\Adapter\Rpb\RpbClient;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-abstract class BaseRpbStrategy implements Strategy
+abstract class BaseRpbStrategy extends RpbStrategy
 {
-    /**
-     * @var \Basho\Riak\Core\Adapter\Rpb\RpbClient
-     */
-    protected $client;
-
-    /**
-     * @param \Basho\Riak\Core\Adapter\Rpb\RpbClient $client
-     */
-    public function __construct(RpbClient $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * @param \Basho\Riak\ProtoBuf\RpbContent $rpbcontent
      *

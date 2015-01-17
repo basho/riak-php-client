@@ -20,14 +20,11 @@ class CounterTest extends TestCase
     {
         parent::setUp();
 
-        $namespace = new RiakNamespace('counters', 'counters');
-        $store     = StoreBucketProperties::builder()
+        $this->client->execute(StoreBucketProperties::builder()
+            ->withNamespace(new RiakNamespace('counters', 'counters'))
             ->withProperty(BucketProperties::ALLOW_MULT, true)
             ->withProperty(BucketProperties::N_VAL, 3)
-            ->withNamespace($namespace)
-            ->build();
-
-        $this->client->execute($store);
+            ->build());
     }
 
     public function testStoreAndFetchCounter()
@@ -52,14 +49,18 @@ class CounterTest extends TestCase
             ->withLocation($location)
             ->build();
 
-        $storeResponse = $this->client->execute($store);
-        $fetchResponse = $this->client->execute($fetch);
-        $counter       = $fetchResponse->getDatatype();
+        $fetchResponse1 = $this->client->execute($fetch);
+        $storeResponse  = $this->client->execute($store);
+        $fetchResponse2 = $this->client->execute($fetch);
 
+        $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\FetchCounterResponse', $fetchResponse1);
         $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\StoreCounterResponse', $storeResponse);
-        $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\FetchCounterResponse', $fetchResponse);
-        $this->assertInstanceOf('Basho\Riak\Core\Query\Crdt\RiakCounter', $counter);
-        $this->assertEquals($location, $fetchResponse->getLocation());
-        $this->assertEquals(10, $counter->getValue());
+        $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\FetchCounterResponse', $fetchResponse2);
+
+        $this->assertNull($fetchResponse1->getDatatype());
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Crdt\RiakCounter', $fetchResponse2->getDatatype());
+
+        $this->assertEquals($location, $fetchResponse2->getLocation());
+        $this->assertEquals(10, $fetchResponse2->getDatatype()->getValue());
     }
 }

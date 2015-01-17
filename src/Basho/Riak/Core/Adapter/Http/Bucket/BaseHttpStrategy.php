@@ -2,8 +2,7 @@
 
 namespace Basho\Riak\Core\Adapter\Http\Bucket;
 
-use GuzzleHttp\ClientInterface;
-use Basho\Riak\Core\Adapter\Strategy;
+use Basho\Riak\Core\Adapter\Http\HttpStrategy;
 
 /**
  * Base http strategy.
@@ -13,21 +12,8 @@ use Basho\Riak\Core\Adapter\Strategy;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-abstract class BaseHttpStrategy implements Strategy
+abstract class BaseHttpStrategy extends HttpStrategy
 {
-    /**
-     * @var \GuzzleHttp\ClientInterface
-     */
-    protected $client;
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        $this->client = $client;
-    }
-
     /**
      * @param string $type
      * @param string $bucket

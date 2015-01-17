@@ -2,11 +2,10 @@
 
 namespace Basho\Riak\Core\Adapter\Http\DataType;
 
-use GuzzleHttp\ClientInterface;
-use Basho\Riak\Core\Adapter\Strategy;
+use Basho\Riak\Core\Query\Crdt\Op\SetOp;
 use Basho\Riak\Core\Query\Crdt\Op\CrdtOp;
 use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
-use Basho\Riak\Core\Query\Crdt\Op\SetOp;
+use Basho\Riak\Core\Adapter\Http\HttpStrategy;
 
 /**
  * Base http strategy.
@@ -16,25 +15,12 @@ use Basho\Riak\Core\Query\Crdt\Op\SetOp;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-abstract class BaseHttpStrategy implements Strategy
+abstract class BaseHttpStrategy extends HttpStrategy
 {
-    /**
-     * @var \GuzzleHttp\ClientInterface
-     */
-    protected $client;
-
     /**
      * @var array
      */
     protected $validResponseCodes = [];
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        $this->client = $client;
-    }
 
     /**
      * @param string $type

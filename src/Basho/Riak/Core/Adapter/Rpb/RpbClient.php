@@ -112,6 +112,8 @@ class RpbClient
      */
     protected function throwResponseException($actualCode, $respBody)
     {
+        $this->resource = null;
+
         if ($actualCode !== RiakMessageCodes::MSG_ERRORRESP) {
             throw new RiakException("Unexpected rpb response code: " . $actualCode);
         }

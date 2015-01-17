@@ -2,10 +2,9 @@
 
 namespace Basho\Riak\Core\Adapter\Http\Kv;
 
-use GuzzleHttp\ClientInterface;
-use Basho\Riak\Core\Adapter\Strategy;
 use Basho\Riak\Core\Message\Kv\Content;
 use GuzzleHttp\Message\ResponseInterface;
+use Basho\Riak\Core\Adapter\Http\HttpStrategy;
 use Basho\Riak\Core\Adapter\Http\MultipartResponseIterator;
 
 /**
@@ -16,25 +15,12 @@ use Basho\Riak\Core\Adapter\Http\MultipartResponseIterator;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-abstract class BaseHttpStrategy implements Strategy
+abstract class BaseHttpStrategy extends HttpStrategy
 {
-    /**
-     * @var \GuzzleHttp\ClientInterface
-     */
-    protected $client;
-
     /**
      * @var array
      */
     protected $validResponseCodes = [];
-
-    /**
-     * @param \GuzzleHttp\ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
-    {
-        $this->client = $client;
-    }
 
     /**
      * @param string $type

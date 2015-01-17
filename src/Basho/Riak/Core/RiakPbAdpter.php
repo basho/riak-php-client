@@ -21,6 +21,9 @@ class RiakPbAdpter implements RiakAdapter
         'Basho\Riak\Core\Message\Kv\GetRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbGet',
         'Basho\Riak\Core\Message\Kv\PutRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbPut',
         'Basho\Riak\Core\Message\Kv\DeleteRequest'    => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbDelete',
+        // crdt
+        'Basho\Riak\Core\Message\DataType\GetRequest' => 'Basho\Riak\Core\Adapter\Rpb\DataType\RpbGet',
+        'Basho\Riak\Core\Message\DataType\PutRequest' => 'Basho\Riak\Core\Adapter\Rpb\DataType\RpbPut',
         // bucket
         'Basho\Riak\Core\Message\Bucket\GetRequest'   => 'Basho\Riak\Core\Adapter\Rpb\Bucket\RpbGet',
         'Basho\Riak\Core\Message\Bucket\PutRequest'   => 'Basho\Riak\Core\Adapter\Rpb\Bucket\RpbPut',
