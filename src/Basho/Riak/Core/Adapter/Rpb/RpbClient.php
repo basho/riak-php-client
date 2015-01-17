@@ -164,6 +164,8 @@ class RpbClient
     /**
      * @param string $payload
      *
+     * @return array
+     *
      * @throws \Exception
      */
     private function sendData($payload)
