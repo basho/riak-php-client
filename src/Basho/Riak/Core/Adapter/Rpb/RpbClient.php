@@ -33,6 +33,11 @@ class RpbClient
     private $port;
 
     /**
+     * @var integer
+     */
+    private $timeout;
+
+    /**
      * Mapping of message code to PB class names
      *
      * @var array
@@ -62,6 +67,22 @@ class RpbClient
     {
         $this->host = $host;
         $this->port = $port;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param integer $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
     }
 
     /**
@@ -138,13 +159,15 @@ class RpbClient
         $errno    = null;
         $errstr   = null;
         $uri      = sprintf('tcp://%s:%s', $this->host, $this->port);
-        $resource = stream_socket_client($uri, $errno, $errstr, 30);
+        $resource = stream_socket_client($uri, $errno, $errstr);
 
         if ( ! is_resource($resource)) {
             throw new RiakException(sprintf('Fail to connect to : %s [%s %s]', $uri, $errno, $errstr));
         }
 
-        stream_set_timeout($resource, 86400);
+        if ($this->timeout !== null) {
+            stream_set_timeout($resource, $this->timeout);
+        }
 
         return $this->resource = $resource;
     }

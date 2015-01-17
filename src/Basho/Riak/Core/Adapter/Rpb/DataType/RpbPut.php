@@ -4,10 +4,10 @@ namespace Basho\Riak\Core\Adapter\Rpb\DataType;
 
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
+use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
 use Basho\Riak\ProtoBuf\RpbCounterUpdateReq;
 use Basho\Riak\Core\Message\DataType\PutRequest;
 use Basho\Riak\Core\Message\DataType\PutResponse;
-use Basho\Riak\Core\Adapter\Rpb\DataType\RpbStrategy;
 
 /**
  * rpb put implementation.
@@ -31,6 +31,7 @@ class RpbPut extends RpbStrategy
 
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);
+        $rpbPutReq->setKey($request->key);
 
         if ($request->w !== null) {
             $rpbPutReq->setW($request->w);

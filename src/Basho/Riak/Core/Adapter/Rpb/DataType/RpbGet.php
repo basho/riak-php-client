@@ -4,10 +4,11 @@ namespace Basho\Riak\Core\Adapter\Rpb\DataType;
 
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\ProtoBuf\RpbCounterGetReq;
+use Basho\Riak\ProtoBuf\RpbCounterGetResp;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
+use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
 use Basho\Riak\Core\Message\DataType\GetRequest;
 use Basho\Riak\Core\Message\DataType\GetResponse;
-use Basho\Riak\Core\Adapter\Rpb\DataType\RpbStrategy;
 
 /**
  * rpb get implementation.
@@ -30,6 +31,7 @@ class RpbGet extends RpbStrategy
 
         $rpbRequest->setBucket($request->bucket);
         $rpbRequest->setType($request->type);
+        $rpbRequest->setKey($request->key);
 
         if ($request->r !== null) {
             $rpbRequest->setR($request->r);
@@ -60,6 +62,10 @@ class RpbGet extends RpbStrategy
         $response    = new GetResponse();
         $rpbRequest  = $this->createRpbMessage($request);
         $rpbResponse = $this->client->send($rpbRequest, RiakMessageCodes::MSG_COUNTERGETREQ, RiakMessageCodes::MSG_COUNTERGETRESP);
+
+        if ( ! $rpbResponse instanceof RpbCounterGetResp) {
+            return $response;
+        }
 
         $response->value = $rpbResponse->getValue()->get();
         $response->type  = 'counter';
