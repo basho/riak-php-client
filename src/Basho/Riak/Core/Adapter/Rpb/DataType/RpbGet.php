@@ -3,8 +3,9 @@
 namespace Basho\Riak\Core\Adapter\Rpb\DataType;
 
 use Basho\Riak\Core\Message\Request;
-use Basho\Riak\ProtoBuf\RpbCounterGetReq;
-use Basho\Riak\ProtoBuf\RpbCounterGetResp;
+use Basho\Riak\ProtoBuf\DtFetchReq;
+use Basho\Riak\ProtoBuf\DtFetchResp;
+use Basho\Riak\ProtoBuf\DtFetchResp\DataType;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
 use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
 use Basho\Riak\Core\Message\DataType\GetRequest;
@@ -23,11 +24,11 @@ class RpbGet extends RpbStrategy
     /**
      * @param \Basho\Riak\Core\Message\DataType\GetRequest $request
      *
-     * @return \Basho\Riak\ProtoBuf\RpbCounterUpdateReq
+     * @return \Basho\Riak\ProtoBuf\DtFetchReq
      */
     private function createRpbMessage(GetRequest $request)
     {
-        $rpbRequest = new RpbCounterGetReq();
+        $rpbRequest = new DtFetchReq();
 
         $rpbRequest->setBucket($request->bucket);
         $rpbRequest->setType($request->type);
@@ -61,14 +62,29 @@ class RpbGet extends RpbStrategy
     {
         $response    = new GetResponse();
         $rpbRequest  = $this->createRpbMessage($request);
-        $rpbResponse = $this->client->send($rpbRequest, RiakMessageCodes::MSG_COUNTERGETREQ, RiakMessageCodes::MSG_COUNTERGETRESP);
+        $rpbResponse = $this->client->send($rpbRequest, RiakMessageCodes::MSG_DTFETCHREQ, RiakMessageCodes::MSG_DTFETCHRESP);
 
-        if ( ! $rpbResponse instanceof RpbCounterGetResp) {
+        if ( ! $rpbResponse instanceof DtFetchResp) {
             return $response;
         }
 
-        $response->value = $rpbResponse->getValue()->get();
-        $response->type  = 'counter';
+        $dtType  = $rpbResponse->getType();
+        $dtValue = $rpbResponse->getValue()->getOrElse(null);
+
+        if (DataType::COUNTER == $dtType && $dtValue != null) {
+            $response->value = $dtValue->getCounterValue()->get();
+            $response->type  = 'counter';
+        }
+
+        if (DataType::SET == $dtType && $dtValue != null) {
+            $response->value = $dtValue->getSetValue()->get();
+            $response->type  = 'set';
+        }
+
+        if (DataType::MAP == $dtType && $dtValue != null) {
+            $response->value = $dtValue->getMapValue()->get();
+            $response->type  = 'map';
+        }
 
         return $response;
     }

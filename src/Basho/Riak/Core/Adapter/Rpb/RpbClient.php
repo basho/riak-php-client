@@ -56,7 +56,8 @@ class RpbClient
         RiakMessageCodes::MSG_LISTKEYSRESP      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
         RiakMessageCodes::MSG_GETBUCKETREQ      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
         RiakMessageCodes::MSG_GETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbGetBucketResp',
-        RiakMessageCodes::MSG_SETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbSetBucketReq'
+        RiakMessageCodes::MSG_DTFETCHRESP       => 'Basho\Riak\ProtoBuf\DtFetchResp',
+        RiakMessageCodes::MSG_DTUPDATERESP      => 'Basho\Riak\ProtoBuf\DtUpdateResp',
     );
 
     /**

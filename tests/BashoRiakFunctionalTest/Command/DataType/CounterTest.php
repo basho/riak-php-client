@@ -55,9 +55,11 @@ abstract class CounterTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Command\DataType\Response\FetchCounterResponse', $fetchResponse2);
 
         $this->assertNull($fetchResponse1->getDatatype());
+        $this->assertInstanceOf('Basho\Riak\Core\Query\Crdt\RiakCounter', $storeResponse->getDatatype());
         $this->assertInstanceOf('Basho\Riak\Core\Query\Crdt\RiakCounter', $fetchResponse2->getDatatype());
 
         $this->assertEquals($location, $fetchResponse2->getLocation());
+        $this->assertEquals(10, $storeResponse->getDatatype()->getValue());
         $this->assertEquals(10, $fetchResponse2->getDatatype()->getValue());
     }
 }

@@ -2,8 +2,11 @@
 
 namespace Basho\Riak\Core\Adapter\Rpb;
 
+use Basho\Riak\ProtoBuf;
 use Basho\Riak\Core\Adapter\Strategy;
+use Basho\Riak\Core\Query\Crdt\Op\CrdtOp;
 use Basho\Riak\Core\Adapter\Rpb\RpbClient;
+use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
 
 /**
  * Base rpb strategy.
@@ -26,5 +29,27 @@ abstract class RpbStrategy implements Strategy
     public function __construct(RpbClient $client)
     {
         $this->client = $client;
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\Op\CrdtOp $op
+     *
+     * @return \Basho\Riak\ProtoBuf\DtOp
+     */
+    protected function createCrdtOp(CrdtOp $op)
+    {
+        $crdtOp = new ProtoBuf\DtOp();
+
+        if ($op instanceof CounterOp) {
+            $counterOp = new ProtoBuf\CounterOp();
+            $increment = $op->getIncrement();
+
+            $counterOp->setIncrement($increment);
+            $crdtOp->setCounterOp($counterOp);
+
+            return $crdtOp;
+        }
+
+        throw new RiakException(sprintf('Unknown crdt op : %s', get_class($op)));
     }
 }

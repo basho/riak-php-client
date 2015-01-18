@@ -3,9 +3,10 @@
 namespace Basho\Riak\Core\Adapter\Rpb\DataType;
 
 use Basho\Riak\Core\Message\Request;
+use Basho\Riak\ProtoBuf\DtUpdateReq;
+use Basho\Riak\ProtoBuf\DtUpdateResp;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
 use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
-use Basho\Riak\ProtoBuf\RpbCounterUpdateReq;
 use Basho\Riak\Core\Message\DataType\PutRequest;
 use Basho\Riak\Core\Message\DataType\PutResponse;
 
@@ -22,12 +23,12 @@ class RpbPut extends RpbStrategy
     /**
      * @param \Basho\Riak\Core\Message\DataType\PutRequest $request
      *
-     * @return \Basho\Riak\ProtoBuf\RpbCounterUpdateReq
+     * @return \Basho\Riak\ProtoBuf\DtUpdateReq
      */
     private function createRpbMessage(PutRequest $request)
     {
-        $rpbPutReq = new RpbCounterUpdateReq();
-        $value     = $request->op->getIncrement();
+        $rpbPutReq = new DtUpdateReq();
+        $crdtOp    = $this->createCrdtOp($request->op);
 
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);
@@ -46,10 +47,10 @@ class RpbPut extends RpbStrategy
         }
 
         if ($request->returnBody !== null) {
-            $rpbPutReq->setReturnvalue($request->returnBody);
+            $rpbPutReq->setReturnBody($request->returnBody);
         }
 
-        $rpbPutReq->setAmount($value);
+        $rpbPutReq->setOp($crdtOp);
 
         return $rpbPutReq;
     }
@@ -63,10 +64,26 @@ class RpbPut extends RpbStrategy
     {
         $response   = new PutResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
-        $rpbPutResp = $this->client->send($rpbPutReq, RiakMessageCodes::MSG_COUNTERUPDATEREQ, RiakMessageCodes::MSG_COUNTERUPDATERESP);
+        $rpbPutResp = $this->client->send($rpbPutReq, RiakMessageCodes::MSG_DTUPDATEREQ, RiakMessageCodes::MSG_DTUPDATERESP);
 
-        $response->value = $rpbPutResp->getValue()->get();
-        $response->type  = 'counter';
+        if ( ! $rpbPutResp instanceof DtUpdateResp) {
+            return $response;
+        }
+
+        if ($rpbPutResp->hasCounterValue()) {
+            $response->value = $rpbPutResp->getCounterValue()->get();
+            $response->type  = 'counter';
+        }
+
+        if ($rpbPutResp->hasSetValue()) {
+            $response->value = $rpbPutResp->getSetValue()->get();
+            $response->type  = 'set';
+        }
+
+        if ($rpbPutResp->hasMapValue()) {
+            $response->value = $rpbPutResp->getMapValue()->get();
+            $response->type  = 'map';
+        }
 
         return $response;
     }
