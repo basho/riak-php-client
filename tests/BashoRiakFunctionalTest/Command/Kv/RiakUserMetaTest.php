@@ -14,7 +14,7 @@ use Basho\Riak\Core\Query\BucketProperties;
 use Basho\Riak\Core\Query\Meta\RiakUsermeta;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
-class RiakUserMetaTest extends TestCase
+abstract class RiakUserMetaTest extends TestCase
 {
     protected function setUp()
     {

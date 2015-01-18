@@ -6,15 +6,46 @@ use Basho\Riak\RiakClientBuilder;
 
 abstract class TestCase extends \BashoRiakTest\TestCase
 {
+    /**
+     * @var \Basho\Riak\RiakClient
+     */
     protected $client;
 
-    protected $nodeUri;
+    /**
+     * @return \Basho\Riak\RiakClient
+     */
+    abstract protected function createClient();
 
     protected function setUp()
     {
         parent::setUp();
 
-        $nodeUri  = getenv('RIAK_NODE_URI') ?: 'http://127.0.0.1:8098';
+        $this->client = $this->createClient();
+    }
+
+    /**
+     * @return \Basho\Riak\RiakClient
+     */
+    protected function createRiakProtoClient()
+    {
+        return $this->createRiakClient('proto://127.0.0.1:8087');
+    }
+
+    /**
+     * @return \Basho\Riak\RiakClient
+     */
+    protected function createRiakHttpClient()
+    {
+        return $this->createRiakClient('http://127.0.0.1:8098');
+    }
+
+    /**
+     * @param string $nodeUri
+     *
+     * @return \Basho\Riak\RiakClient
+     */
+    protected function createRiakClient($nodeUri)
+    {
         $nodeHost = parse_url($nodeUri, PHP_URL_HOST);
         $nodePort = parse_url($nodeUri, PHP_URL_PORT);
 
@@ -27,7 +58,6 @@ abstract class TestCase extends \BashoRiakTest\TestCase
             ->withNodeUri($nodeUri)
             ->build();
 
-        $this->client  = $client;
-        $this->nodeUri = $nodeUri;
+        return $client;
     }
 }

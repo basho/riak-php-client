@@ -1,6 +1,6 @@
 <?php
 
-namespace BashoRiakFunctionalTest\Command\Kv;
+namespace BashoRiakFunctionalTest\Command\DataType;
 
 use BashoRiakFunctionalTest\TestCase;
 use Basho\Riak\Cap\RiakOption;
@@ -14,7 +14,7 @@ use Basho\Riak\Command\Bucket\StoreBucketProperties;
 /**
  * @group non-proto
  */
-class SetTest extends TestCase
+abstract class SetTest extends TestCase
 {
     protected function setUp()
     {

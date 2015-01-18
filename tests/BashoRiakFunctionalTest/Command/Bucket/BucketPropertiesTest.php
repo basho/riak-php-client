@@ -8,9 +8,9 @@ use Basho\Riak\Core\Query\BucketProperties;
 use Basho\Riak\Command\Bucket\FetchBucketProperties;
 use Basho\Riak\Command\Bucket\StoreBucketProperties;
 
-class BucketPropertiesTest extends TestCase
+abstract class BucketPropertiesTest extends TestCase
 {
-    public function testFetchBucketProperties()
+    public function testStoreAndFetchBucketProperties()
     {
         $namespace = new RiakNamespace('bucket', 'default');
 

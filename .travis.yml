@@ -20,7 +20,6 @@ before_script:
     - ./tests/travis/setup-riak.sh
 
 script:
-    - RIAK_NODE_URI='proto://127.0.0.1:8087' ./vendor/bin/phpunit -v --exclude-group non-proto
     - ./vendor/bin/phpunit -v --coverage-clover ./build/logs/clover.xml
     - ./vendor/bin/phpcs -p --extensions=php  --standard=ruleset.xml src/Basho
 
