@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb;
+namespace Basho\Riak\Core\Adapter\Proto;
 
 use Basho\Riak\RiakException;
 use DrSlump\Protobuf\Message;
@@ -15,7 +15,7 @@ use Basho\Riak\ProtoBuf\RiakMessageCodes;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RpbClient
+class ProtoClient
 {
     /**
      * @var resource

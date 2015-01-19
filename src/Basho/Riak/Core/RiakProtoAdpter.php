@@ -2,7 +2,7 @@
 
 namespace Basho\Riak\Core;
 
-use Basho\Riak\Core\Adapter\Rpb\RpbClient;
+use Basho\Riak\Core\Adapter\Proto\ProtoClient;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\RiakException;
 
@@ -14,36 +14,36 @@ use Basho\Riak\RiakException;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RiakPbAdpter implements RiakAdapter
+class RiakProtoAdpter implements RiakAdapter
 {
     private $strategyMap = [
         // kv
-        'Basho\Riak\Core\Message\Kv\GetRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbGet',
-        'Basho\Riak\Core\Message\Kv\PutRequest'       => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbPut',
-        'Basho\Riak\Core\Message\Kv\DeleteRequest'    => 'Basho\Riak\Core\Adapter\Rpb\Kv\RpbDelete',
+        'Basho\Riak\Core\Message\Kv\GetRequest'       => 'Basho\Riak\Core\Adapter\Proto\Kv\ProtoGet',
+        'Basho\Riak\Core\Message\Kv\PutRequest'       => 'Basho\Riak\Core\Adapter\Proto\Kv\ProtoPut',
+        'Basho\Riak\Core\Message\Kv\DeleteRequest'    => 'Basho\Riak\Core\Adapter\Proto\Kv\ProtoDelete',
         // crdt
-        'Basho\Riak\Core\Message\DataType\GetRequest' => 'Basho\Riak\Core\Adapter\Rpb\DataType\RpbGet',
-        'Basho\Riak\Core\Message\DataType\PutRequest' => 'Basho\Riak\Core\Adapter\Rpb\DataType\RpbPut',
+        'Basho\Riak\Core\Message\DataType\GetRequest' => 'Basho\Riak\Core\Adapter\Proto\DataType\ProtoGet',
+        'Basho\Riak\Core\Message\DataType\PutRequest' => 'Basho\Riak\Core\Adapter\Proto\DataType\ProtoPut',
         // bucket
-        'Basho\Riak\Core\Message\Bucket\GetRequest'   => 'Basho\Riak\Core\Adapter\Rpb\Bucket\RpbGet',
-        'Basho\Riak\Core\Message\Bucket\PutRequest'   => 'Basho\Riak\Core\Adapter\Rpb\Bucket\RpbPut',
+        'Basho\Riak\Core\Message\Bucket\GetRequest'   => 'Basho\Riak\Core\Adapter\Proto\Bucket\ProtoGet',
+        'Basho\Riak\Core\Message\Bucket\PutRequest'   => 'Basho\Riak\Core\Adapter\Proto\Bucket\ProtoPut',
     ];
 
     /**
-     * @var \Basho\Riak\Core\Adapter\Rpb\RpbClient
+     * @var \Basho\Riak\Core\Adapter\Proto\ProtoClient
      */
     private $client;
 
     /**
-     * @param \Basho\Riak\Core\Adapter\Rpb\RpbClient $client
+     * @param \Basho\Riak\Core\Adapter\Proto\ProtoClient $client
      */
-    public function __construct(RpbClient $client)
+    public function __construct(ProtoClient $client)
     {
         $this->client = $client;
     }
 
     /**
-     * @return \Basho\Riak\Core\Adapter\Rpb\Client
+     * @return \Basho\Riak\Core\Adapter\Proto\Client
      */
     public function getClient()
     {

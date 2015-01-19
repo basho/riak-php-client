@@ -1,10 +1,10 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb\Kv;
+namespace Basho\Riak\Core\Adapter\Proto\Kv;
 
 use Basho\Riak\ProtoBuf\RpbContent;
 use Basho\Riak\Core\Message\Kv\Content;
-use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
+use Basho\Riak\Core\Adapter\Proto\ProtoStrategy;
 
 /**
  * Base rpb strategy.
@@ -14,7 +14,7 @@ use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-abstract class BaseRpbStrategy extends RpbStrategy
+abstract class BaseProtoStrategy extends ProtoStrategy
 {
     /**
      * @param \Basho\Riak\ProtoBuf\RpbContent $rpbcontent

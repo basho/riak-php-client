@@ -46,8 +46,8 @@ class RiakNodeBuilderTest extends TestCase
             ->build();
 
         $this->assertInstanceOf('Basho\Riak\Core\RiakNode', $node);
-        $this->assertInstanceOf('Basho\Riak\Core\RiakPbAdpter', $node->getAdapter());
-        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Rpb\RpbClient', $node->getAdapter()->getClient());
+        $this->assertInstanceOf('Basho\Riak\Core\RiakProtoAdpter', $node->getAdapter());
+        $this->assertInstanceOf('Basho\Riak\Core\Adapter\Proto\ProtoClient', $node->getAdapter()->getClient());
     }
 
     public function testBuildHttpNodeWithAuth()

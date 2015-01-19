@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb\Kv;
+namespace Basho\Riak\Core\Adapter\Proto\Kv;
 
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\DeleteRequest;
@@ -16,7 +16,7 @@ use Basho\Riak\ProtoBuf\RpbDelReq;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RpbDelete extends BaseRpbStrategy
+class ProtoDelete extends BaseProtoStrategy
 {
     /**
      * @param \Basho\Riak\Core\Message\Kv\DeleteRequest $request

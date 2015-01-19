@@ -1,12 +1,12 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb\DataType;
+namespace Basho\Riak\Core\Adapter\Proto\DataType;
 
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\ProtoBuf\DtUpdateReq;
 use Basho\Riak\ProtoBuf\DtUpdateResp;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
-use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
+use Basho\Riak\Core\Adapter\Proto\ProtoStrategy;
 use Basho\Riak\Core\Message\DataType\PutRequest;
 use Basho\Riak\Core\Message\DataType\PutResponse;
 
@@ -18,7 +18,7 @@ use Basho\Riak\Core\Message\DataType\PutResponse;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RpbPut extends RpbStrategy
+class ProtoPut extends ProtoStrategy
 {
     /**
      * @param \Basho\Riak\Core\Message\DataType\PutRequest $request

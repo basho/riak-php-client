@@ -1,13 +1,13 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb\DataType;
+namespace Basho\Riak\Core\Adapter\Proto\DataType;
 
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\ProtoBuf\DtFetchReq;
 use Basho\Riak\ProtoBuf\DtFetchResp;
 use Basho\Riak\ProtoBuf\DtFetchResp\DataType;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
-use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
+use Basho\Riak\Core\Adapter\Proto\ProtoStrategy;
 use Basho\Riak\Core\Message\DataType\GetRequest;
 use Basho\Riak\Core\Message\DataType\GetResponse;
 
@@ -19,7 +19,7 @@ use Basho\Riak\Core\Message\DataType\GetResponse;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RpbGet extends RpbStrategy
+class ProtoGet extends ProtoStrategy
 {
     /**
      * @param \Basho\Riak\Core\Message\DataType\GetRequest $request

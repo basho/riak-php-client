@@ -1,12 +1,12 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb\Bucket;
+namespace Basho\Riak\Core\Adapter\Proto\Bucket;
 
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\ProtoBuf\RpbGetBucketReq;
 use Basho\Riak\ProtoBuf\RpbBucketProps;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
-use Basho\Riak\Core\Adapter\Rpb\RpbStrategy;
+use Basho\Riak\Core\Adapter\Proto\ProtoStrategy;
 use Basho\Riak\Core\Message\Bucket\GetRequest;
 use Basho\Riak\Core\Message\Bucket\GetResponse;
 
@@ -18,7 +18,7 @@ use Basho\Riak\Core\Message\Bucket\GetResponse;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RpbGet extends RpbStrategy
+class ProtoGet extends ProtoStrategy
 {
     /**
      * @param \Basho\Riak\Core\Message\Bucket\GetRequest $request

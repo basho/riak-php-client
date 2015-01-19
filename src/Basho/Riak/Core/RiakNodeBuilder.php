@@ -4,7 +4,7 @@ namespace Basho\Riak\Core;
 
 use GuzzleHttp\Client;
 use Basho\Riak\RiakException;
-use Basho\Riak\Core\Adapter\Rpb\RpbClient;
+use Basho\Riak\Core\Adapter\Proto\ProtoClient;
 
 /**
  * Riak Node builder.
@@ -120,10 +120,10 @@ class RiakNodeBuilder
     /**
      * @return \Basho\Riak\Core\RiakPbAdpter
      */
-    private function buildPbAdapter()
+    private function buildProtoAdapter()
     {
-        $rpbClient    = new RpbClient($this->host, $this->port, $this->user, $this->pass);
-        $riakPbAdpter = new RiakPbAdpter($rpbClient);
+        $rpbClient    = new ProtoClient($this->host, $this->port, $this->user, $this->pass);
+        $riakPbAdpter = new RiakProtoAdpter($rpbClient);
 
         return $riakPbAdpter;
     }
@@ -138,7 +138,7 @@ class RiakNodeBuilder
         }
 
         if ($this->protocol == 'proto') {
-            return $this->buildPbAdapter();
+            return $this->buildProtoAdapter();
         }
 
         throw new RiakException("Unknown protocol : {$this->protocol}");

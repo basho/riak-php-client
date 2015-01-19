@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Rpb\Kv;
+namespace Basho\Riak\Core\Adapter\Proto\Kv;
 
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\Core\Message\Kv\PutRequest;
@@ -18,7 +18,7 @@ use Basho\Riak\ProtoBuf\RpbPair;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class RpbPut extends BaseRpbStrategy
+class ProtoPut extends BaseProtoStrategy
 {
     /**
      * @param \Basho\Riak\Core\Message\Kv\PutRequest $request
