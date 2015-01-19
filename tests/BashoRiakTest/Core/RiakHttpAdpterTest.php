@@ -38,4 +38,14 @@ class RiakHttpAdpterTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Core\Adapter\Http\Kv\HttpPut', $put);
         $this->assertInstanceOf('Basho\Riak\Core\Adapter\Http\Kv\HttpDelete', $delete);
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testUnknownMessageException()
+    {
+        $mock = $this->getMock('Basho\Riak\Core\Message\Request');
+
+        $this->invokeMethod($this->instance, 'createAdapterStrategyFor', [$mock]);
+    }
 }

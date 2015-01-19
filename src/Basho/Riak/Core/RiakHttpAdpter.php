@@ -2,9 +2,9 @@
 
 namespace Basho\Riak\Core;
 
+use InvalidArgumentException;
 use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Message\Request;
-use Basho\Riak\RiakException;
 
 /**
  * Http adapter for riak.
@@ -66,7 +66,7 @@ class RiakHttpAdpter implements RiakAdapter
             return new $strategyClass($this->client);
         }
 
-        throw new RiakException(sprintf("Unknown message : %s", get_class($request)));
+        throw new InvalidArgumentException(sprintf("Unknown message : %s", get_class($request)));
     }
 
     /**

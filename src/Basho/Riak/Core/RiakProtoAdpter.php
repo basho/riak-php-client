@@ -4,7 +4,7 @@ namespace Basho\Riak\Core;
 
 use Basho\Riak\Core\Adapter\Proto\ProtoClient;
 use Basho\Riak\Core\Message\Request;
-use Basho\Riak\RiakException;
+use InvalidArgumentException;
 
 /**
  * Proto buf adapter for riak.
@@ -66,7 +66,7 @@ class RiakProtoAdpter implements RiakAdapter
             return new $strategyClass($this->client);
         }
 
-        throw new RiakException(sprintf("Unknown message : %s", get_class($request)));
+        throw new InvalidArgumentException(sprintf("Unknown message : %s", get_class($request)));
     }
 
     /**

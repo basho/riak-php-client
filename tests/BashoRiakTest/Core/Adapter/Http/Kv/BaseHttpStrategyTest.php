@@ -22,7 +22,10 @@ class BaseHttpStrategyTest extends TestCase
         parent::setUp();
 
         $this->client   = $this->getMock('GuzzleHttp\ClientInterface');
-        $this->instance = $this->getMockForAbstractClass('Basho\Riak\Core\Adapter\Http\Kv\BaseHttpStrategy', [$this->client]);
+        $this->instance = $this->getMockForAbstractClass(
+            'Basho\Riak\Core\Adapter\Http\Kv\BaseHttpStrategy',
+            [$this->client], '', true, true, true, ['send']
+        );
     }
 
     public function testBuildPath()
