@@ -33,7 +33,7 @@ abstract class BaseProtoStrategy extends ProtoStrategy
         $content->metas        = [];
 
         /** @var $index \Basho\Riak\ProtoBuf\RpbPair */
-        foreach ($rpbcontent->indexes as $index) {
+        foreach ($rpbcontent->getIndexesList() as $index) {
             $key   = $index->getKey();
             $value = $index->getValue()->get();
 
@@ -41,7 +41,7 @@ abstract class BaseProtoStrategy extends ProtoStrategy
         }
 
         /** @var $index \Basho\Riak\ProtoBuf\RpbPair */
-        foreach ($rpbcontent->usermeta as $meta) {
+        foreach ($rpbcontent->getUsermetaList() as $meta) {
             $key   = $meta->getKey();
             $value = $meta->getValue()->get();
 

@@ -53,7 +53,7 @@ class RiakObject
     private $vClock;
 
     /**
-     * @var string
+     * @var integer
      */
     private $lastModified;
 
@@ -145,7 +145,7 @@ class RiakObject
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getLastModified()
     {
@@ -250,7 +250,7 @@ class RiakObject
     }
 
     /**
-     * @param string $lastModified
+     * @param integer $lastModified
      */
     public function setLastModified($lastModified)
     {

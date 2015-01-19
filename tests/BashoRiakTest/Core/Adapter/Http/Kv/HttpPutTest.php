@@ -166,7 +166,7 @@ class HttpPutTest extends TestCase
         $this->assertCount(1, $response->contentList);
 
         $this->assertEquals('[1,1,1]', $response->contentList[0]->value);
+        $this->assertEquals(1420249594, $response->contentList[0]->lastModified);
         $this->assertEquals('application/json', $response->contentList[0]->contentType);
-        $this->assertEquals('Sat, 03 Jan 2015 01:46:34 GMT', $response->contentList[0]->lastModified);
     }
 }

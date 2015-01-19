@@ -96,9 +96,9 @@ class BaseHttpStrategyTest extends TestCase
         $this->assertCount(2, $contentList);
         $this->assertEquals('[1,1,1]', $contentList[0]->value);
         $this->assertEquals('[2,2,2]', $contentList[1]->value);
+        $this->assertEquals(1420229377, $contentList[0]->lastModified);
+        $this->assertEquals(1420229384, $contentList[1]->lastModified);
         $this->assertEquals('application/json', $contentList[0]->contentType);
         $this->assertEquals('application/json', $contentList[1]->contentType);
-        $this->assertEquals('Fri, 02 Jan 2015 20:09:37 GMT', $contentList[0]->lastModified);
-        $this->assertEquals('Fri, 02 Jan 2015 20:09:44 GMT', $contentList[1]->lastModified);
     }
 }

@@ -153,7 +153,7 @@ abstract class BaseHttpStrategy extends HttpStrategy
         $content = new Content();
         $result  = $this->parseHeaders($headers);
 
-        $content->lastModified = $this->firstHeader('Last-Modified', $headers);
+        $content->lastModified = strtotime($this->firstHeader('Last-Modified', $headers));
         $content->contentType  = $this->firstHeader('Content-Type', $headers);
         $content->vtag         = $this->firstHeader('Etag', $headers);
         $content->indexes      = $result['indexes'];

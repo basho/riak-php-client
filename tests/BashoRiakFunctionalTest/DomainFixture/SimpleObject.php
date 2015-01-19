@@ -9,7 +9,7 @@ class SimpleObject implements \JsonSerializable
     const CLASS_NAME = __CLASS__;
 
     /**
-     * @var string
+     * @var integer
      *
      * @Riak\LastModified
      */
