@@ -3,7 +3,9 @@
 namespace Basho\Riak\Core\Adapter\Rpb;
 
 use Basho\Riak\ProtoBuf;
+use Basho\Riak\RiakException;
 use Basho\Riak\Core\Adapter\Strategy;
+use Basho\Riak\Core\Query\Crdt\Op\SetOp;
 use Basho\Riak\Core\Query\Crdt\Op\CrdtOp;
 use Basho\Riak\Core\Adapter\Rpb\RpbClient;
 use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
@@ -46,6 +48,16 @@ abstract class RpbStrategy implements Strategy
 
             $counterOp->setIncrement($increment);
             $crdtOp->setCounterOp($counterOp);
+
+            return $crdtOp;
+        }
+
+        if ($op instanceof SetOp) {
+            $setOp = new ProtoBuf\SetOp();
+
+            $setOp->setRemoves($op->getRemoves());
+            $setOp->setAdds($op->getAdds());
+            $crdtOp->setSetOp($setOp);
 
             return $crdtOp;
         }

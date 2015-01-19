@@ -72,17 +72,17 @@ class RpbGet extends RpbStrategy
         $dtValue = $rpbResponse->getValue()->getOrElse(null);
 
         if (DataType::COUNTER == $dtType && $dtValue != null) {
-            $response->value = $dtValue->getCounterValue()->get();
+            $response->value = $dtValue->counter_value;
             $response->type  = 'counter';
         }
 
         if (DataType::SET == $dtType && $dtValue != null) {
-            $response->value = $dtValue->getSetValue()->get();
+            $response->value = $dtValue->set_value;
             $response->type  = 'set';
         }
 
         if (DataType::MAP == $dtType && $dtValue != null) {
-            $response->value = $dtValue->getMapValue()->get();
+            $response->value = $dtValue->map_value;
             $response->type  = 'map';
         }
 

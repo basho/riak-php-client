@@ -71,17 +71,17 @@ class RpbPut extends RpbStrategy
         }
 
         if ($rpbPutResp->hasCounterValue()) {
-            $response->value = $rpbPutResp->getCounterValue()->get();
+            $response->value = $rpbPutResp->counter_value;
             $response->type  = 'counter';
         }
 
         if ($rpbPutResp->hasSetValue()) {
-            $response->value = $rpbPutResp->getSetValue()->get();
+            $response->value = $rpbPutResp->set_value;
             $response->type  = 'set';
         }
 
         if ($rpbPutResp->hasMapValue()) {
-            $response->value = $rpbPutResp->getMapValue()->get();
+            $response->value = $rpbPutResp->map_value;
             $response->type  = 'map';
         }
 
