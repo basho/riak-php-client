@@ -32,4 +32,16 @@ class RiakMap implements DataType
     {
         return $this->value;
     }
+
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function get($name)
+    {
+        return isset($this->value[$name])
+            ? $this->value[$name]
+            : null;
+    }
 }

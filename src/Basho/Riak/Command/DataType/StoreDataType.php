@@ -35,4 +35,9 @@ abstract class StoreDataType implements RiakCommand
         $this->location = $location;
         $this->options  = $options;
     }
+
+    /**
+     * @return \Basho\Riak\Core\Query\Crdt\Op\CrdtOp
+     */
+    abstract public function getOp();
 }

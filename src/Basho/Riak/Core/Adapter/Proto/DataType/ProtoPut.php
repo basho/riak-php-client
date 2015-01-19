@@ -28,7 +28,7 @@ class ProtoPut extends ProtoStrategy
     private function createRpbMessage(PutRequest $request)
     {
         $rpbPutReq = new DtUpdateReq();
-        $crdtOp    = $this->createCrdtOp($request->op);
+        $crdtOp    = $this->opConverter->convert($request->op);
 
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);

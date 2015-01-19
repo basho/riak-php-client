@@ -42,20 +42,6 @@ class FetchMapTest extends TestCase
             ->build();
     }
 
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecute()
-    {
-        $command = FetchMap::builder()
-            ->withOption(RiakOption::R, 1)
-            ->withLocation($this->location)
-            ->build();
-
-        $this->client->execute($command);
-    }
-
     public function testBuildCommand()
     {
         $builder = FetchMap::builder()

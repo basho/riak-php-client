@@ -4,7 +4,6 @@ namespace Basho\Riak\Command\DataType;
 
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
 use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
 use Basho\Riak\Command\DataType\Builder\StoreCounterBuilder;
 use Basho\Riak\Core\Operation\DataType\StoreCounterOperation;
@@ -44,11 +43,18 @@ class StoreCounter extends StoreDataType
     {
         $config    = $cluster->getRiakConfig();
         $converter = $config->getCrdtResponseConverter();
-        $op        = new CounterOp($this->delta);
-        $operation = new StoreCounterOperation($converter, $this->location, $op, $this->options);
+        $operation = new StoreCounterOperation($converter, $this->location, $this->getOp(), $this->options);
         $response  = $cluster->execute($operation);
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOp()
+    {
+        return new CounterOp($this->delta);
     }
 
     /**

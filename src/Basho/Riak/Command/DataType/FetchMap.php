@@ -3,10 +3,10 @@
 namespace Basho\Riak\Command\DataType;
 
 use Basho\Riak\RiakCommand;
-use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Command\DataType\Builder\FetchMapBuilder;
+use Basho\Riak\Core\Operation\DataType\FetchMapOperation;
 
 /**
  * Command used to fetch a counter datatype from Riak.
@@ -30,11 +30,6 @@ class FetchMap implements RiakCommand
     private $options = [];
 
     /**
-     * @var \Basho\Riak\Core\Query\Crdt\RiakMap
-     */
-    private $map;
-
-    /**
      * @param \Basho\Riak\Core\Query\RiakLocation $location
      * @param array                               $options
      */
@@ -49,7 +44,12 @@ class FetchMap implements RiakCommand
      */
     public function execute(RiakCluster $cluster)
     {
-        throw new RiakException("Not implemented");
+        $config    = $cluster->getRiakConfig();
+        $converter = $config->getCrdtResponseConverter();
+        $operation = new FetchMapOperation($converter, $this->location, $this->options);
+        $response  = $cluster->execute($operation);
+
+        return $response;
     }
 
     /**

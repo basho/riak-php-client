@@ -92,5 +92,5 @@ abstract class StoreDataTypeOperation implements RiakOperation
      *
      * @return \Basho\Riak\Command\DataType\Response\Response
      */
-    abstract protected function createDataTypeResponse(DataType $datatype);
+    abstract protected function createDataTypeResponse(DataType $datatype = null);
 }

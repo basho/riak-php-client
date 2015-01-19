@@ -6,14 +6,10 @@ use BashoRiakTest\TestCase;
 use Basho\Riak\Core\RiakNode;
 use Basho\Riak\Cap\RiakOption;
 use Basho\Riak\RiakClientBuilder;
-use Basho\Riak\Core\Query\Crdt\RiakFlag;
-use Basho\Riak\Core\Query\Crdt\RiakSet;
-use Basho\Riak\Core\Query\Crdt\RiakMap;
-use Basho\Riak\Core\Query\Crdt\RiakCounter;
-use Basho\Riak\Core\Query\Crdt\RiakRegister;
 use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Command\DataType\StoreMap;
+use Basho\Riak\Command\DataType\StoreSet;
 
 class StoreMapTest extends TestCase
 {
@@ -46,35 +42,34 @@ class StoreMapTest extends TestCase
             ->build();
     }
 
-    /**
-     * @expectedException \Basho\Riak\RiakException
-     * @expectedExceptionMessage Not implemented
-     */
-    public function testExecute()
-    {
-        $command = StoreMap::builder()
-            ->withOption(RiakOption::N_VAL, 1)
-            ->withLocation($this->location)
-            ->build();
-
-        $this->client->execute($command);
-    }
 
     public function testBuildCommand()
     {
+        $subMap = StoreMap::builder()
+            ->withOption(RiakOption::N_VAL, 1)
+            ->withLocation($this->location)
+            ->build();
+
+        $subSet = StoreSet::builder()
+            ->withOption(RiakOption::N_VAL, 1)
+            ->withLocation($this->location)
+            ->build();
+
         $command = StoreMap::builder()
             ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
             ->build();
 
-        $command->updateMap('map_key', [])
-            ->updateSet('map_key', [])
+        $command
+            ->updateMap('map_key', $subMap)
+            ->updateSet('set_key', $subSet)
             ->updateFlag('flag_key', true)
             ->updateCounter('map_counter', 1)
             ->updateRegister('map_register', 'foo');
 
-        $command->removeMap('map_key')
-            ->removeSet('map_key')
+        $command
+            ->removeMap('map_key')
+            ->removeSet('set_key')
             ->removeFlag('flag_key')
             ->removeCounter('map_counter')
             ->removeRegister('map_register');

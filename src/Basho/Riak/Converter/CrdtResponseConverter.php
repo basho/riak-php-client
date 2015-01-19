@@ -4,6 +4,7 @@ namespace Basho\Riak\Converter;
 
 use Basho\Riak\Core\Message\DataType\Response;
 use Basho\Riak\Core\Query\Crdt\RiakCounter;
+use Basho\Riak\Core\Query\Crdt\RiakMap;
 use Basho\Riak\Core\Query\Crdt\RiakSet;
 use InvalidArgumentException;
 
@@ -36,6 +37,10 @@ class CrdtResponseConverter
             return $this->convertSet($response);
         }
 
+        if ($response->type == 'map') {
+            return $this->convertMap($response);
+        }
+
         throw new InvalidArgumentException("Unknown crdt type : {$response->type}");
     }
 
@@ -63,5 +68,18 @@ class CrdtResponseConverter
         $set   = new RiakSet($value);
 
         return $set;
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Message\DataType\Response $response
+     *
+     * @return \Basho\Riak\Core\Query\Crdt\RiakMap
+     */
+    public function convertMap(Response $response)
+    {
+        $value = $response->value;
+        $map   = new RiakMap($value);
+
+        return $map;
     }
 }

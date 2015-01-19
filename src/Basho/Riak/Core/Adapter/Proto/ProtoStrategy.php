@@ -26,42 +26,16 @@ abstract class ProtoStrategy implements Strategy
     protected $client;
 
     /**
+     * @var \Basho\Riak\Core\Adapter\Proto\CrdtOpConverter
+     */
+    protected $opConverter;
+
+    /**
      * @param \Basho\Riak\Core\Adapter\Proto\ProtoClient $client
      */
     public function __construct(ProtoClient $client)
     {
-        $this->client = $client;
-    }
-
-    /**
-     * @param \Basho\Riak\Core\Query\Crdt\Op\CrdtOp $op
-     *
-     * @return \Basho\Riak\ProtoBuf\DtOp
-     */
-    protected function createCrdtOp(CrdtOp $op)
-    {
-        $crdtOp = new ProtoBuf\DtOp();
-
-        if ($op instanceof CounterOp) {
-            $counterOp = new ProtoBuf\CounterOp();
-            $increment = $op->getIncrement();
-
-            $counterOp->setIncrement($increment);
-            $crdtOp->setCounterOp($counterOp);
-
-            return $crdtOp;
-        }
-
-        if ($op instanceof SetOp) {
-            $setOp = new ProtoBuf\SetOp();
-
-            $setOp->setRemoves($op->getRemoves());
-            $setOp->setAdds($op->getAdds());
-            $crdtOp->setSetOp($setOp);
-
-            return $crdtOp;
-        }
-
-        throw new RiakException(sprintf('Unknown crdt op : %s', get_class($op)));
+        $this->client       = $client;
+        $this->opConverter  = new CrdtOpConverter();
     }
 }

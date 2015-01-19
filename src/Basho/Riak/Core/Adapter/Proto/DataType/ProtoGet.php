@@ -82,7 +82,7 @@ class ProtoGet extends ProtoStrategy
         }
 
         if (DataType::MAP == $dtType && $dtValue != null) {
-            $response->value = $dtValue->map_value;
+            $response->value = $this->opConverter->convertMapEntries($dtValue->map_value);
             $response->type  = 'map';
         }
 

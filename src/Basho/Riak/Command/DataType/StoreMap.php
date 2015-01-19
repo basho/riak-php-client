@@ -2,11 +2,14 @@
 
 namespace Basho\Riak\Command\DataType;
 
-use Basho\Riak\RiakCommand;
-use Basho\Riak\RiakException;
 use Basho\Riak\Core\RiakCluster;
 use Basho\Riak\Core\Query\RiakLocation;
+use Basho\Riak\Core\Query\Crdt\Op\MapOp;
+use Basho\Riak\Core\Query\Crdt\Op\FlagOp;
+use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
+use Basho\Riak\Core\Query\Crdt\Op\RegisterOp;
 use Basho\Riak\Command\DataType\Builder\StoreMapBuilder;
+use Basho\Riak\Core\Operation\DataType\StoreMapOperation;
 
 /**
  * Command used to update or create a map datatype in Riak.
@@ -17,26 +20,23 @@ use Basho\Riak\Command\DataType\Builder\StoreMapBuilder;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class StoreMap implements RiakCommand
+class StoreMap extends StoreDataType
 {
     /**
-     * @var \Basho\Riak\Core\Query\RiakLocation
+     * @var \Basho\Riak\Core\Query\Crdt\Op\MapOp
      */
-    private $location;
+    private $op;
 
     /**
-     * @var array
+     * {@inheritdoc}
      */
-    private $options = [];
-
-    /**
-     * @param \Basho\Riak\Core\Query\RiakLocation $location
-     * @param array                               $options
-     */
-    public function __construct(RiakLocation $location = null, array $options = [])
+    public function getOp()
     {
-        $this->location = $location;
-        $this->options  = $options;
+        if ($this->op === null) {
+            $this->op = new MapOp();
+        }
+
+        return $this->op;
     }
 
     /**
@@ -48,6 +48,8 @@ class StoreMap implements RiakCommand
      */
     public function removeCounter($key)
     {
+        $this->getOp()->removeCounter($key);
+
         return $this;
     }
 
@@ -60,6 +62,8 @@ class StoreMap implements RiakCommand
      */
     public function removeRegister($key)
     {
+        $this->getOp()->removeRegister($key);
+
         return $this;
     }
 
@@ -72,6 +76,8 @@ class StoreMap implements RiakCommand
      */
     public function removeFlag($key)
     {
+        $this->getOp()->removeFlag($key);
+
         return $this;
     }
 
@@ -84,6 +90,8 @@ class StoreMap implements RiakCommand
      */
     public function removeSet($key)
     {
+        $this->getOp()->removeSet($key);
+
         return $this;
     }
 
@@ -96,32 +104,38 @@ class StoreMap implements RiakCommand
      */
     public function removeMap($key)
     {
+        $this->getOp()->removeMap($key);
+
         return $this;
     }
 
     /**
      * Update the map in Riak by adding/updating the map mapped to the provided key.
      *
-     * @param string $key
-     * @param array  $value
+     * @param string                                $key
+     * @param \Basho\Riak\Command\DataType\StoreMap $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateMap($key, $value)
+    public function updateMap($key, StoreMap $value)
     {
+        $this->getOp()->updateMap($key, $value->getOp());
+
         return $this;
     }
 
     /**
      * Update the map in Riak by adding/updating the set mapped to the provided key.
      *
-     * @param string $key
-     * @param array  $value
+     * @param string                                $key
+     * @param \Basho\Riak\Command\DataType\StoreSet $value
      *
      * @return \Basho\Riak\Command\DataType\StoreMap
      */
-    public function updateSet($key, $value)
+    public function updateSet($key, StoreSet $value)
     {
+        $this->getOp()->updateSet($key, $value->getOp());
+
         return $this;
     }
 
@@ -135,6 +149,8 @@ class StoreMap implements RiakCommand
      */
     public function updateCounter($key, $value)
     {
+        $this->getOp()->updateCounter($key, new CounterOp($value));
+
         return $this;
     }
 
@@ -148,6 +164,8 @@ class StoreMap implements RiakCommand
      */
     public function updateRegister($key, $value)
     {
+        $this->getOp()->updateRegister($key, new RegisterOp($value));
+
         return $this;
     }
 
@@ -161,6 +179,8 @@ class StoreMap implements RiakCommand
      */
     public function updateFlag($key, $value)
     {
+        $this->getOp()->updateFlag($key, new FlagOp($value));
+
         return $this;
     }
 
@@ -169,7 +189,12 @@ class StoreMap implements RiakCommand
      */
     public function execute(RiakCluster $cluster)
     {
-        throw new RiakException("Not implemented");
+        $config    = $cluster->getRiakConfig();
+        $converter = $config->getCrdtResponseConverter();
+        $operation = new StoreMapOperation($converter, $this->location, $this->getOp(), $this->options);
+        $response  = $cluster->execute($operation);
+
+        return $response;
     }
 
     /**
