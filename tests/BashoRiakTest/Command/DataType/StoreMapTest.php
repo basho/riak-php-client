@@ -10,6 +10,8 @@ use Basho\Riak\Core\Query\RiakLocation;
 use Basho\Riak\Core\Query\RiakNamespace;
 use Basho\Riak\Command\DataType\StoreMap;
 use Basho\Riak\Command\DataType\StoreSet;
+use Basho\Riak\Command\DataType\MapUpdate;
+use Basho\Riak\Command\DataType\SetUpdate;
 
 class StoreMapTest extends TestCase
 {
@@ -45,27 +47,15 @@ class StoreMapTest extends TestCase
 
     public function testBuildCommand()
     {
-        $subMap = StoreMap::builder()
-            ->withOption(RiakOption::N_VAL, 1)
-            ->withLocation($this->location)
-            ->build();
-
-        $subSet = StoreSet::builder()
-            ->withOption(RiakOption::N_VAL, 1)
-            ->withLocation($this->location)
-            ->build();
-
         $command = StoreMap::builder()
             ->withOption(RiakOption::N_VAL, 1)
             ->withLocation($this->location)
-            ->build();
-
-        $command
-            ->updateMap('map_key', $subMap)
-            ->updateSet('set_key', $subSet)
-            ->updateFlag('flag_key', true)
+            ->updateMap('map_key', MapUpdate::create())
+            ->updateSet('set_key', SetUpdate::create())
+            ->updateRegister('map_register', 'foo')
             ->updateCounter('map_counter', 1)
-            ->updateRegister('map_register', 'foo');
+            ->updateFlag('flag_key', true)
+            ->build();
 
         $command
             ->removeMap('map_key')

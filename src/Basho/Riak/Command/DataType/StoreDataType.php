@@ -8,7 +8,6 @@ use Basho\Riak\Core\Query\RiakLocation;
 /**
  * Command used to update or create a counter datatype in Riak.
  *
- * @author    Christopher Mancini <cmancini@basho.com>
  * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
  * @copyright 2011-2015 Basho Technologies, Inc.
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
@@ -27,17 +26,18 @@ abstract class StoreDataType implements RiakCommand
     protected $options = [];
 
     /**
+     * @var \Basho\Riak\Command\DataType\DataTypeUpdate
+     */
+    protected $update;
+
+    /**
      * @param \Basho\Riak\Command\Kv\RiakLocation     $location
      * @param array                                   $options
      */
-    public function __construct(RiakLocation $location, array $options = [])
+    public function __construct(RiakLocation $location, DataTypeUpdate $update, array $options = [])
     {
         $this->location = $location;
         $this->options  = $options;
+        $this->update   = $update;
     }
-
-    /**
-     * @return \Basho\Riak\Core\Query\Crdt\Op\CrdtOp
-     */
-    abstract public function getOp();
 }

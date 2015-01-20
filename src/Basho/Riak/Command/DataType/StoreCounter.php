@@ -11,7 +11,6 @@ use Basho\Riak\Core\Operation\DataType\StoreCounterOperation;
 /**
  * Command used to update or create a counter datatype in Riak.
  *
- * @author    Christopher Mancini <cmancini@basho.com>
  * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
  * @copyright 2011-2015 Basho Technologies, Inc.
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
@@ -20,9 +19,13 @@ use Basho\Riak\Core\Operation\DataType\StoreCounterOperation;
 class StoreCounter extends StoreDataType
 {
     /**
-     * @var integer
+     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
+     * @param array                                   $options
      */
-    private $delta;
+    public function __construct(RiakLocation $location, array $options = [])
+    {
+        parent::__construct($location, new CounterUpdate(), $options);
+    }
 
     /**
      * @param integer $delta
@@ -31,7 +34,7 @@ class StoreCounter extends StoreDataType
      */
     public function withDelta($delta)
     {
-        $this->delta = $delta;
+        $this->update->withDelta($delta);
 
         return $this;
     }
@@ -41,20 +44,13 @@ class StoreCounter extends StoreDataType
      */
     public function execute(RiakCluster $cluster)
     {
+        $op        = $this->update->getOp();
         $config    = $cluster->getRiakConfig();
         $converter = $config->getCrdtResponseConverter();
-        $operation = new StoreCounterOperation($converter, $this->location, $this->getOp(), $this->options);
+        $operation = new StoreCounterOperation($converter, $this->location, $op, $this->options);
         $response  = $cluster->execute($operation);
 
         return $response;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOp()
-    {
-        return new CounterOp($this->delta);
     }
 
     /**

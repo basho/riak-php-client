@@ -3,6 +3,8 @@
 namespace Basho\Riak\Command\DataType\Builder;
 
 use Basho\Riak\Command\DataType\StoreMap;
+use Basho\Riak\Command\DataType\SetUpdate;
+use Basho\Riak\Command\DataType\MapUpdate;
 
 /**
  * Used to construct a StoreMap command.
@@ -109,12 +111,12 @@ class StoreMapBuilder extends Builder
     /**
      * Update the map in Riak by adding/updating the map mapped to the provided key.
      *
-     * @param string                                $key
-     * @param \Basho\Riak\Command\DataType\StoreMap $value
+     * @param string                                 $key
+     * @param \Basho\Riak\Command\DataType\MapUpdate $value
      *
      * @return \Basho\Riak\Command\DataType\Builder\StoreMapBuilder
      */
-    public function updateMap($key, StoreMap $value)
+    public function updateMap($key, MapUpdate $value)
     {
         $this->updates['map'][$key] = $value;
 
@@ -124,12 +126,12 @@ class StoreMapBuilder extends Builder
     /**
      * Update the map in Riak by adding/updating the set mapped to the provided key.
      *
-     * @param string                                $key
-     * @param \Basho\Riak\Command\DataType\StoreSet $value
+     * @param string                                 $key
+     * @param \Basho\Riak\Command\DataType\SetUpdate $value
      *
      * @return \Basho\Riak\Command\DataType\Builder\StoreMapBuilder
      */
-    public function updateSet($key, StoreSet $value)
+    public function updateSet($key, SetUpdate $value)
     {
         $this->updates['set'][$key] = $value;
 
