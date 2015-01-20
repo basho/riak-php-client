@@ -194,7 +194,7 @@ class MapUpdate implements DataTypeUpdate
      */
     private function reomoveCrdt($key, $type)
     {
-        $this->removes[$type] = $key;
+        $this->removes[$type][$key] = $key;
 
         return $this;
     }

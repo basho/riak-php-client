@@ -33,18 +33,106 @@ class MapOp implements CrdtOp
     }
 
     /**
+     * @param string $type
+     *
      * @return array
      */
-    public function getRemoves()
+    private function getRemoves($type)
     {
-        return $this->removes;
+        return isset($this->removes[$type])
+            ? $this->removes[$type]
+            : [];
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return array
+     */
+    private function getUpdates($type)
+    {
+        return isset($this->updates[$type])
+            ? $this->updates[$type]
+            : [];
     }
 
     /**
      * @return array
      */
-    public function getUpdates()
+    public function getMapRemoves()
     {
-        return $this->updates;
+        return $this->getRemoves('map');
+    }
+
+    /**
+     * @return array
+     */
+    public function getSetRemoves()
+    {
+        return $this->getRemoves('set');
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlagRemoves()
+    {
+        return $this->getRemoves('flag');
+    }
+
+    /**
+     * @return array
+     */
+    public function getCounterRemoves()
+    {
+        return $this->getRemoves('counter');
+    }
+
+    /**
+     * @return array
+     */
+    public function getRegisterRemoves()
+    {
+        return $this->getRemoves('register');
+    }
+
+    /**
+     * @return array
+     */
+    public function getMapUpdates()
+    {
+        return $this->getUpdates('map');
+    }
+
+    /**
+     * @return array
+     */
+    public function getSetUpdates()
+    {
+        return $this->getUpdates('set');
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlagUpdates()
+    {
+        return $this->getUpdates('flag');
+    }
+
+    /**
+     * @return array
+     */
+    public function getCounterUpdates()
+    {
+        return $this->getUpdates('counter');
+    }
+
+    /**
+     * @return array
+     */
+    public function getRegisterUpdates()
+    {
+        return $this->getUpdates('register');
     }
 }

@@ -149,62 +149,60 @@ class CrdtOpConverter
     protected function convertMap(Op\MapOp $op)
     {
         $setOp   = new ProtoBuf\MapOp();
-        $updates = $op->getUpdates();
-        $removes = $op->getRemoves();
 
-        foreach ($updates['map'] as $key => $value) {
-            $op     = $this->convertMap($value);
-            $update = $this->createMapUpdate($key, MapFieldType::MAP, $op);
+        foreach ($op->getMapUpdates() as $key => $value) {
+            $map    = $this->convertMap($value);
+            $update = $this->createMapUpdate($key, MapFieldType::MAP, $map);
 
             $setOp->addUpdates($update);
         }
 
-        foreach ($updates['set'] as $key => $value) {
-            $op     = $this->convertSet($value);
-            $update = $this->createMapUpdate($key, MapFieldType::SET, $op);
+        foreach ($op->getSetUpdates() as $key => $value) {
+            $set    = $this->convertSet($value);
+            $update = $this->createMapUpdate($key, MapFieldType::SET, $set);
 
             $setOp->addUpdates($update);
         }
 
-        foreach ($updates['flag'] as $key => $value) {
-            $op     = $this->convertFlag($value);
-            $update = $this->createMapUpdate($key, MapFieldType::FLAG, $op);
+        foreach ($op->getFlagUpdates() as $key => $value) {
+            $flag   = $this->convertFlag($value);
+            $update = $this->createMapUpdate($key, MapFieldType::FLAG, $flag);
 
             $setOp->addUpdates($update);
         }
 
-        foreach ($updates['counter'] as $key => $value) {
-            $op     = $this->convertCounter($value);
-            $update = $this->createMapUpdate($key, MapFieldType::COUNTER, $op);
+        foreach ($op->getCounterUpdates() as $key => $value) {
+            $counter = $this->convertCounter($value);
+            $update  = $this->createMapUpdate($key, MapFieldType::COUNTER, $counter);
 
             $setOp->addUpdates($update);
         }
 
-        foreach ($updates['register'] as $key => $value) {
-            $op     = $value->getValue();
-            $update = $this->createMapUpdate($key, MapFieldType::REGISTER, $op);
+        foreach ($op->getRegisterUpdates() as $key => $value) {
+            $register = $value->getValue();
+            $update   = $this->createMapUpdate($key, MapFieldType::REGISTER, $register);
 
             $setOp->addUpdates($update);
         }
 
-        foreach ($removes['map'] as $key => $value) {
-            $setOp->addUpdates($this->createMapField($key, MapFieldType::MAP));
+        foreach ($op->getMapRemoves() as $key => $value) {
+            $setOp->addRemoves($this->createMapField($key, MapFieldType::MAP));
         }
 
-        foreach ($removes['set'] as $key => $value) {
-            $setOp->addUpdates($this->createMapField($key, MapFieldType::SET));
+        foreach ($op->getSetRemoves() as $key => $value) {
+            $setOp->addRemoves($this->createMapField($key, MapFieldType::SET));
         }
 
-        foreach ($removes['flag'] as $key => $value) {
-            $setOp->addUpdates($this->createMapField($key, MapFieldType::FLAG));
+        foreach ($op->getFlagRemoves() as $key => $value) {
+            $setOp->addRemoves($this->createMapField($key, MapFieldType::FLAG));
         }
 
-        foreach ($removes['counter'] as $key => $value) {
-            $setOp->addUpdates($this->createMapField($key, MapFieldType::COUNTER));
+        foreach ($op->getCounterRemoves() as $key => $value) {
+            $setOp->addRemoves($this->createMapField($key, MapFieldType::COUNTER));
         }
 
-        foreach ($removes['register'] as $key => $value) {
-            $setOp->addUpdates($this->createMapField($key, MapFieldType::REGISTER));
+        foreach ($op->getRegisterRemoves() as $key => $value) {
+            $setOp->addRemoves($this->createMapField($key, MapFieldType::REGISTER));
         }
 
         return $setOp;
