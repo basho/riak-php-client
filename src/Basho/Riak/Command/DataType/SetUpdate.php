@@ -63,7 +63,7 @@ class SetUpdate implements DataTypeUpdate
     /**
      * @return \Basho\Riak\Command\DataType\SetUpdate
      */
-    static public function create()
+    public static function create()
     {
         return new SetUpdate();
     }

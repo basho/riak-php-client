@@ -31,8 +31,9 @@ abstract class StoreDataType implements RiakCommand
     protected $update;
 
     /**
-     * @param \Basho\Riak\Command\Kv\RiakLocation     $location
-     * @param array                                   $options
+     * @param \Basho\Riak\Core\Query\RiakLocation         $location
+     * @param \Basho\Riak\Command\DataType\DataTypeUpdate $update
+     * @param array                                       $options
      */
     public function __construct(RiakLocation $location, DataTypeUpdate $update, array $options = [])
     {

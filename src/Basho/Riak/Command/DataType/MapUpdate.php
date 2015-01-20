@@ -140,7 +140,7 @@ class MapUpdate implements DataTypeUpdate
     }
 
     /**
-     * @param string                               $key
+     * @param string                                 $key
      * @param \Basho\Riak\Command\DataType\MapUpdate $op
      *
      * @return \Basho\Riak\Command\DataType\MapUpdate
@@ -210,7 +210,7 @@ class MapUpdate implements DataTypeUpdate
     /**
      * @return \Basho\Riak\Command\DataType\MapUpdate
      */
-    static public function create()
+    public static function create()
     {
         return new MapUpdate();
     }
