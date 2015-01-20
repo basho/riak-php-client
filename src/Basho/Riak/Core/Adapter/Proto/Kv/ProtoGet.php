@@ -60,7 +60,7 @@ class ProtoGet extends BaseProtoStrategy
     {
         $response   = new GetResponse();
         $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_GETREQ, RiakMessageCodes::MSG_GETRESP);
+        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::GET_REQ, RiakMessageCodes::GET_RESP);
 
         if ( ! $rpbGetResp instanceof RpbGetResp) {
             return $response;

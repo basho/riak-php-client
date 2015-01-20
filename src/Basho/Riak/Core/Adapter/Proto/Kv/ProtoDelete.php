@@ -52,7 +52,7 @@ class ProtoDelete extends BaseProtoStrategy
         }
 
         if ($request->pw !== null) {
-            $rpbDelReq->setPw($request->dw);
+            $rpbDelReq->setPw($request->pw);
         }
 
         if ($request->vClock !== null) {
@@ -72,7 +72,7 @@ class ProtoDelete extends BaseProtoStrategy
         $response   = new DeleteResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
 
-        $this->client->send($rpbPutReq, RiakMessageCodes::MSG_DELREQ, RiakMessageCodes::MSG_DELRESP);
+        $this->client->send($rpbPutReq, RiakMessageCodes::DEL_REQ, RiakMessageCodes::DEL_RESP);
 
         return $response;
     }

@@ -44,11 +44,28 @@ class ProtoGet extends ProtoStrategy
     {
         $response = new GetResponse();
 
-        $response->nVal       = $props->getNVal()->get();
-        $response->allowMult  = $props->getAllowMult()->get();
-        $response->notfoundOk = $props->getNotfoundOk()->get();
+        $response->allowMult     = $props->allow_mult;
+        $response->basicQuorum   = $props->basic_quorum;
+        $response->bigVclock     = $props->big_vclock;
+        $response->dw            = $props->dw;
+        $response->lastWriteWins = $props->last_write_wins;
+        $response->notfoundOk    = $props->notfound_ok;
+        $response->nVal          = $props->n_val;
+        $response->oldVclock     = $props->old_vclock;
+        $response->pr            = $props->pr;
+        $response->pw            = $props->pw;
+        $response->r             = $props->r;
+        $response->rw            = $props->rw;
+        $response->w             = $props->w;
+        $response->smallVclock   = $props->small_vclock;
+        $response->youngVclock   = $props->young_vclock;
 
-        // @TODO - add properties
+        // optional values
+        $response->search       = $props->search;
+        $response->searchIndex  = $props->search_index;
+        $response->backend      = $props->backend;
+        $response->consistent   = $props->consistent;
+        $response->datatype     = $props->datatype;
 
         return $response;
     }
@@ -61,7 +78,7 @@ class ProtoGet extends ProtoStrategy
     public function send(Request $request)
     {
         $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_GETBUCKETREQ, RiakMessageCodes::MSG_GETBUCKETRESP);
+        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::GET_BUCKET_REQ, RiakMessageCodes::GET_BUCKET_RESP);
         $rpbProps   = $rpbGetResp->getProps();
 
         return $this->createGetResponse($rpbProps);

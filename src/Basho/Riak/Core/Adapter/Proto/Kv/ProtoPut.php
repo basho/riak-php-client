@@ -43,7 +43,7 @@ class ProtoPut extends BaseProtoStrategy
         }
 
         if ($request->pw !== null) {
-            $rpbPutReq->setPw($request->dw);
+            $rpbPutReq->setPw($request->pw);
         }
 
         if ($request->returnBody !== null) {
@@ -98,7 +98,7 @@ class ProtoPut extends BaseProtoStrategy
     {
         $response   = new PutResponse();
         $rpbGetReq  = $this->createRpbMessage($request);
-        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::MSG_PUTREQ, RiakMessageCodes::MSG_PUTRESP);
+        $rpbGetResp = $this->client->send($rpbGetReq, RiakMessageCodes::PUT_REQ, RiakMessageCodes::PUT_RESP);
 
         if ( ! $rpbGetResp instanceof RpbGetResp) {
             return $response;

@@ -38,26 +38,20 @@ class ProtoClient
     private $timeout;
 
     /**
-     * Mapping of message code to PB class names
+     * Mapping of message code to PB response class names
      *
      * @var array
      */
-    private static $classMap = array(
-        RiakMessageCodes::MSG_ERRORRESP         => 'Basho\Riak\ProtoBuf\RpbErrorResp',
-        RiakMessageCodes::MSG_GETSERVERINFORESP => 'Basho\Riak\ProtoBuf\RpbGetServerInfoResp',
-        RiakMessageCodes::MSG_GETREQ            => 'Basho\Riak\ProtoBuf\RpbGetReq',
-        RiakMessageCodes::MSG_GETRESP           => 'Basho\Riak\ProtoBuf\RpbGetResp',
-        RiakMessageCodes::MSG_PUTREQ            => 'Basho\Riak\ProtoBuf\RpbPutReq',
-        RiakMessageCodes::MSG_PUTRESP           => 'Basho\Riak\ProtoBuf\RpbPutResp',
-        RiakMessageCodes::MSG_DELREQ            => 'Basho\Riak\ProtoBuf\RpbDelReq',
-        RiakMessageCodes::MSG_LISTBUCKETSREQ    => 'Basho\Riak\ProtoBuf\RpbListBucketsReq',
-        RiakMessageCodes::MSG_LISTBUCKETSRESP   => 'Basho\Riak\ProtoBuf\RpbListBucketsResp',
-        RiakMessageCodes::MSG_LISTKEYSREQ       => 'Basho\Riak\ProtoBuf\RpbListKeysReq',
-        RiakMessageCodes::MSG_LISTKEYSRESP      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
-        RiakMessageCodes::MSG_GETBUCKETREQ      => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
-        RiakMessageCodes::MSG_GETBUCKETRESP     => 'Basho\Riak\ProtoBuf\RpbGetBucketResp',
-        RiakMessageCodes::MSG_DTFETCHRESP       => 'Basho\Riak\ProtoBuf\DtFetchResp',
-        RiakMessageCodes::MSG_DTUPDATERESP      => 'Basho\Riak\ProtoBuf\DtUpdateResp',
+    private static $respClassMap = array(
+        RiakMessageCodes::DT_FETCH_RESP         => 'Basho\Riak\ProtoBuf\DtFetchResp',
+        RiakMessageCodes::DT_UPDATE_RESP        => 'Basho\Riak\ProtoBuf\DtUpdateResp',
+        RiakMessageCodes::ERROR_RESP            => 'Basho\Riak\ProtoBuf\RpbErrorResp',
+        RiakMessageCodes::GET_BUCKET_RESP       => 'Basho\Riak\ProtoBuf\RpbGetBucketResp',
+        RiakMessageCodes::GET_RESP              => 'Basho\Riak\ProtoBuf\RpbGetResp',
+        RiakMessageCodes::GET_SERVER_INFO_RESP  => 'Basho\Riak\ProtoBuf\RpbGetServerInfoResp',
+        RiakMessageCodes::LIST_BUCKETS_RESP     => 'Basho\Riak\ProtoBuf\RpbListBucketsResp',
+        RiakMessageCodes::LIST_KEYS_RESP        => 'Basho\Riak\ProtoBuf\RpbListKeysResp',
+        RiakMessageCodes::PUT_RESP              => 'Basho\Riak\ProtoBuf\RpbPutResp',
     );
 
     /**
@@ -119,8 +113,8 @@ class ProtoClient
      */
     protected function classForCode($code)
     {
-        if (isset(self::$classMap[$code])) {
-            return self::$classMap[$code];
+        if (isset(self::$respClassMap[$code])) {
+            return self::$respClassMap[$code];
         }
 
         return null;
@@ -140,7 +134,7 @@ class ProtoClient
             throw new RiakException("Unexpected rpb response code: " . $actualCode);
         }
 
-        $errorClass   = self::$classMap[$actualCode];
+        $errorClass   = self::$respClassMap[$actualCode];
         $errorMessage = Protobuf::decode($errorClass, $respBody);
 
         if ($errorMessage->hasErrmsg()) {

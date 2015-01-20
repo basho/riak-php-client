@@ -58,27 +58,29 @@ class HttpPut extends BaseHttpStrategy
      */
     public function requestToArray(Request $request)
     {
-        $values = [];
+        $values = [
+            'allow_mult'      => $request->allowMult,
+            'backend'         => $request->backend,
+            'basic_quorum'    => $request->basicQuorum,
+            'big_vclock'      => $request->bigVclock,
+            'consistent'      => $request->consistent,
+            'datatype'        => $request->datatype,
+            'dw'              => $request->dw,
+            'last_write_wins' => $request->lastWriteWins,
+            'notfound_ok'     => $request->notfoundOk,
+            'n_val'           => $request->nVal,
+            'old_vclock'      => $request->oldVclock,
+            'pr'              => $request->pr,
+            'pw'              => $request->pw,
+            'r'               => $request->r,
+            'rw'              => $request->rw,
+            'w'               => $request->w,
+            'search'          => $request->search,
+            'search_index'    => $request->searchIndex,
+            'small_vclock'    => $request->smallVclock,
+            'young_vclock'    => $request->youngVclock,
+        ];
 
-        foreach ($request as $key => $value) {
-            if ($value === null) {
-                continue;
-            }
-
-            $unde = preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $key);
-            $name = strtolower($unde);
-
-            $values[$name] = $value;
-        }
-
-        if (isset($values['bucket'])) {
-            unset($values['bucket']);
-        }
-
-        if (isset($values['type'])) {
-            unset($values['type']);
-        }
-
-        return $values;
+        return array_filter($values);
     }
 }

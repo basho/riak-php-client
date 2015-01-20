@@ -64,7 +64,7 @@ class ProtoPut extends ProtoStrategy
     {
         $response   = new PutResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
-        $rpbPutResp = $this->client->send($rpbPutReq, RiakMessageCodes::MSG_DTUPDATEREQ, RiakMessageCodes::MSG_DTUPDATERESP);
+        $rpbPutResp = $this->client->send($rpbPutReq, RiakMessageCodes::DT_UPDATE_REQ, RiakMessageCodes::DT_UPDATE_RESP);
 
         if ( ! $rpbPutResp instanceof DtUpdateResp) {
             return $response;

@@ -30,23 +30,30 @@ class ProtoPut extends ProtoStrategy
         $rpbPutReq = new RpbSetBucketReq();
         $rpbProps  = new RpbBucketProps();
 
+        $rpbProps->n_val           = $request->nVal;
+        $rpbProps->allow_mult      = $request->allowMult;
+        $rpbProps->last_write_wins = $request->lastWriteWins;
+        $rpbProps->old_vclock      = $request->oldVclock;
+        $rpbProps->young_vclock    = $request->youngVclock;
+        $rpbProps->big_vclock      = $request->bigVclock;
+        $rpbProps->small_vclock    = $request->smallVclock;
+        $rpbProps->pr              = $request->pr;
+        $rpbProps->r               = $request->r;
+        $rpbProps->w               = $request->w;
+        $rpbProps->pw              = $request->pw;
+        $rpbProps->dw              = $request->dw;
+        $rpbProps->rw              = $request->rw;
+        $rpbProps->basic_quorum    = $request->basicQuorum;
+        $rpbProps->notfound_ok     = $request->notfoundOk;
+        $rpbProps->backend         = $request->backend;
+        $rpbProps->search          = $request->search;
+        $rpbProps->search_index    = $request->searchIndex;
+        $rpbProps->datatype        = $request->datatype;
+        $rpbProps->consistent      = $request->consistent;
+
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);
         $rpbPutReq->setProps($rpbProps);
-
-        if ($request->nVal) {
-            $rpbProps->setNVal($request->nVal);
-        }
-
-        if ($request->notfoundOk) {
-            $rpbProps->setNotfoundOk($request->notfoundOk);
-        }
-
-        if ($request->allowMult) {
-            $rpbProps->setAllowMult($request->allowMult);
-        }
-
-        // @todo - add properties
 
         return $rpbPutReq;
     }
@@ -61,7 +68,7 @@ class ProtoPut extends ProtoStrategy
         $response   = new PutResponse();
         $rpbPutReq  = $this->createRpbMessage($request);
 
-        $this->client->send($rpbPutReq, RiakMessageCodes::MSG_SETBUCKETREQ, RiakMessageCodes::MSG_SETBUCKETRESP);
+        $this->client->send($rpbPutReq, RiakMessageCodes::SET_BUCKET_REQ, RiakMessageCodes::SET_BUCKET_RESP);
 
         return $response;
     }

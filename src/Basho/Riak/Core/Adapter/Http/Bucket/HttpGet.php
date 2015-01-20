@@ -66,15 +66,29 @@ class HttpGet extends BaseHttpStrategy
     public function createGetResponse(array $props)
     {
         $response = new GetResponse();
-        $callback = function ($c) {
-            return strtoupper($c[1]);
-        };
 
-        foreach ($props as $key => $value) {
-            $name  = preg_replace_callback('/_([a-z])/', $callback, $key);
+        $response->allowMult     = $props['allow_mult'];
+        $response->basicQuorum   = $props['basic_quorum'];
+        $response->bigVclock     = $props['big_vclock'];
+        $response->dw            = $props['dw'];
+        $response->lastWriteWins = $props['last_write_wins'];
+        $response->notfoundOk    = $props['notfound_ok'];
+        $response->nVal          = $props['n_val'];
+        $response->oldVclock     = $props['old_vclock'];
+        $response->pr            = $props['pr'];
+        $response->pw            = $props['pw'];
+        $response->r             = $props['r'];
+        $response->rw            = $props['rw'];
+        $response->w             = $props['w'];
+        $response->smallVclock   = $props['small_vclock'];
+        $response->youngVclock   = $props['young_vclock'];
 
-            $response->{$name} = $value;
-        }
+        // optional values
+        $response->search      = isset($props['search']) ? $props['search'] : null;
+        $response->backend     = isset($props['backend']) ? $props['backend'] : null;
+        $response->datatype    = isset($props['datatype']) ? $props['datatype'] : null;
+        $response->consistent  = isset($props['consistent']) ? $props['consistent'] : null;
+        $response->searchIndex = isset($props['search_index']) ? $props['search_index'] : null;
 
         return $response;
     }

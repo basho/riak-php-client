@@ -35,4 +35,7 @@ class PutRequest extends Request
     public $notfoundOk;
     public $backend;
     public $search;
+    public $searchIndex;
+    public $datatype;
+    public $consistent;
 }

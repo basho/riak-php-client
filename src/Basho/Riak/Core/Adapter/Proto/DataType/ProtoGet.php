@@ -62,7 +62,7 @@ class ProtoGet extends ProtoStrategy
     {
         $response    = new GetResponse();
         $rpbRequest  = $this->createRpbMessage($request);
-        $rpbResponse = $this->client->send($rpbRequest, RiakMessageCodes::MSG_DTFETCHREQ, RiakMessageCodes::MSG_DTFETCHRESP);
+        $rpbResponse = $this->client->send($rpbRequest, RiakMessageCodes::DT_FETCH_REQ, RiakMessageCodes::DT_FETCH_RESP);
 
         if ( ! $rpbResponse instanceof DtFetchResp) {
             return $response;
