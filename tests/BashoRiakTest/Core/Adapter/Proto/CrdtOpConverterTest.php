@@ -3,6 +3,7 @@
 namespace BashoRiakTest\Core\Adapter\Proto;
 
 use Basho\Riak\Core\Adapter\Proto\CrdtOpConverter;
+use Basho\Riak\ProtoBuf\MapField\MapFieldType;
 use Basho\Riak\Core\Query\Crdt\Op;
 use BashoRiakTest\TestCase;
 use Basho\Riak\ProtoBuf;
@@ -115,5 +116,74 @@ class CrdtOpConverterTest extends TestCase
         $this->assertEquals('flag_remove', $result->removes[2]->name);
         $this->assertEquals('counter_remove', $result->removes[3]->name);
         $this->assertEquals('register_remove', $result->removes[4]->name);
+    }
+
+    public function testConvert()
+    {
+        $setResult      = $this->instance->convert(new Op\SetOp([],[]));
+        $mapResult      = $this->instance->convert(new Op\MapOp([],[]));
+        $counterResult  = $this->instance->convert(new Op\CounterOp(0));
+
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\DtOp', $setResult);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\DtOp', $mapResult);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\DtOp', $counterResult);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\SetOp', $setResult->set_op);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapOp', $mapResult->map_op);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\CounterOp', $counterResult->counter_op);
+    }
+
+    public function testConvertMapEntry()
+    {
+        $setEntry = new ProtoBuf\MapEntry();
+        $setField = new ProtoBuf\MapField();
+
+        $flagEntry = new ProtoBuf\MapEntry();
+        $flagField = new ProtoBuf\MapField();
+
+        $counterEntry = new ProtoBuf\MapEntry();
+        $counterField = new ProtoBuf\MapField();
+
+        $registerEntry = new ProtoBuf\MapEntry();
+        $registerField = new ProtoBuf\MapField();
+
+        $setEntry->setField($setField);
+        $setEntry->setSetValue([1,2,3]);
+        $setField->setName('set_field');
+        $setField->setType(MapFieldType::SET);
+
+        $flagEntry->setField($flagField);
+        $flagEntry->setFlagValue(ProtoBuf\MapUpdate\FlagOp::ENABLE);
+        $flagField->setName('flag_field');
+        $flagField->setType(MapFieldType::FLAG);
+
+        $counterEntry->setField($counterField);
+        $counterEntry->setCounterValue(10);
+        $counterField->setName('counter_field');
+        $counterField->setType(MapFieldType::COUNTER);
+
+        $registerEntry->setField($registerField);
+        $registerEntry->setRegisterValue('register-val');
+        $registerField->setName('register_field');
+        $registerField->setType(MapFieldType::REGISTER);
+
+        $setResult      = $this->instance->convertMapEntry($setEntry);
+        $flagResult     = $this->instance->convertMapEntry($flagEntry);
+        $counterResult  = $this->instance->convertMapEntry($counterEntry);
+        $registerResult = $this->instance->convertMapEntry($registerEntry);
+
+        $this->assertTrue($flagResult);
+        $this->assertEquals(10, $counterResult);
+        $this->assertEquals([1,2,3], $setResult);
+        $this->assertEquals('register-val', $registerResult);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testConvertUnknownDataTypeOpException()
+    {
+        $crdtOp = $this->getMock('Basho\Riak\Core\Query\Crdt\Op\CrdtOp');
+
+        $this->instance->convert($crdtOp);
     }
 }

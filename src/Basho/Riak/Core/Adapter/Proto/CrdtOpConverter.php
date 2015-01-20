@@ -2,8 +2,8 @@
 
 namespace Basho\Riak\Core\Adapter\Proto;
 
+use InvalidArgumentException;
 use Basho\Riak\ProtoBuf;
-use Basho\Riak\RiakException;
 use Basho\Riak\Core\Query\Crdt\Op;
 use Basho\Riak\ProtoBuf\MapField\MapFieldType;
 
@@ -52,22 +52,22 @@ class CrdtOpConverter
         }
 
         if ($type === MapFieldType::SET) {
-            return $entry->getSetValueList();
+            return $entry->set_value;
         }
 
         if ($type === MapFieldType::FLAG) {
-            return ($entry->getFlagValue()->get() == ProtoBuf\MapUpdate\FlagOp::ENABLE);
+            return ($entry->flag_value == ProtoBuf\MapUpdate\FlagOp::ENABLE);
         }
 
         if ($type === MapFieldType::COUNTER) {
-            return $entry->getCounterValue()->get();
+            return $entry->counter_value;
         }
 
         if ($type === MapFieldType::REGISTER) {
-            return $entry->getRegisterValue()->get();
+            return $entry->register_value;
         }
 
-        throw new RiakException(sprintf('Unknown crdt field type : %s', $type));
+        throw new InvalidArgumentException(sprintf('Unknown crdt field type : %s', $type));
     }
 
     /**
@@ -97,7 +97,7 @@ class CrdtOpConverter
             return $crdtOp;
         }
 
-        throw new RiakException(sprintf('Unknown crdt op : %s', get_class($op)));
+        throw new InvalidArgumentException(sprintf('Unknown data type op : %s', get_class($op)));
     }
 
     /**
