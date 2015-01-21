@@ -1,0 +1,19 @@
+<?php
+
+namespace Basho\Riak\Core\Message\Kv;
+
+use Basho\Riak\Core\Message\Response as BaseResponse;
+
+/**
+ * Base class for all responses.
+ *
+ * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @copyright 2011-2015 Basho Technologies, Inc.
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
+ * @since     2.0
+ */
+class Response extends BaseResponse
+{
+    public $vClock;
+    public $contentList = [];
+}

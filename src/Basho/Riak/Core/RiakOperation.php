@@ -1,0 +1,24 @@
+<?php
+
+namespace Basho\Riak\Core;
+
+
+/**
+ * Riak Operation
+ *
+ * @author    Fabio B. Silva <fabio.bat.silva@gmail.com>
+ * @copyright 2011-2015 Basho Technologies, Inc.
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
+ * @since     2.0
+ */
+interface RiakOperation
+{
+    /**
+     * Execute the operation.
+     *
+     * @param \Basho\Riak\Core\RiakAdapter $adapter
+     *
+     * @return \Basho\Riak\RiakResponse
+     */
+    public function execute(RiakAdapter $adapter);
+}

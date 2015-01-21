@@ -1,13 +1,32 @@
 language: php
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - hhvm
-sudo: false # enables docker
-install:
-  - composer install
+    - 5.4
+    - 5.5
+    - 5.6
+    - hhvm
+
 notifications:
   webhooks: http://basho-engbot.herokuapp.com/travis?key=8d594c660ec46f616e37e24fd941c0ea1fc67963
   email: clients@basho.com
-script: "php vendor/bin/phpunit --testsuite 'Unit Tests'"
+
+install:
+    - sudo curl https://packagecloud.io/install/repositories/basho/riak/script.deb | sudo bash
+    - sudo apt-get install riak=2.0.0-1
+    - sudo service riak start
+    - composer self-update
+    - composer --prefer-source --dev install
+
+before_script:
+    - ./tests/travis/setup-riak.sh
+
+script:
+    - ./vendor/bin/phpunit -v --coverage-clover ./build/logs/clover.xml
+    - ./vendor/bin/phpcs -p --extensions=php  --standard=ruleset.xml src/Basho
+
+after_script:
+    - php ./vendor/bin/coveralls -v
+    - php ./vendor/bin/apigen generate -s src -d build/api --title "Riak PHP Client" --template-theme bootstrap
+
+matrix:
+  allow_failures:
+    - php: hhvm
