@@ -53,7 +53,7 @@ class CrdtOpConverterTest extends TestCase
     {
         $updates = [
             'register'  => [
-                'register_update' => new Op\RegisterOp('Value')
+                'register_update' => new Op\RegisterOp('Register Value')
             ],
             'counter'   => [
                 'counter_update' => new Op\CounterOp(10)
@@ -105,11 +105,29 @@ class CrdtOpConverterTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapField', $result->removes[3]);
         $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapField', $result->removes[4]);
 
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapField', $result->updates[0]->field);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapField', $result->updates[1]->field);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapField', $result->updates[2]->field);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapField', $result->updates[3]->field);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapField', $result->updates[4]->field);
+
         $this->assertEquals('map_update', $result->updates[0]->field->name);
         $this->assertEquals('set_update', $result->updates[1]->field->name);
         $this->assertEquals('flag_update', $result->updates[2]->field->name);
         $this->assertEquals('counter_update', $result->updates[3]->field->name);
         $this->assertEquals('register_update', $result->updates[4]->field->name);
+
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\MapOp', $result->updates[0]->map_op);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\SetOp', $result->updates[1]->set_op);
+        $this->assertInternalType('integer', $result->updates[2]->flag_op);
+        $this->assertInstanceOf('Basho\Riak\ProtoBuf\CounterOp', $result->updates[3]->counter_op);
+        $this->assertInternalType('string', $result->updates[4]->register_op);
+
+        $this->assertEquals([1,2], $result->updates[1]->set_op->adds);
+        $this->assertEquals([3,4], $result->updates[1]->set_op->removes);
+        $this->assertEquals(ProtoBuf\MapUpdate\FlagOp::ENABLE, $result->updates[2]->flag_op);
+        $this->assertEquals(10, $result->updates[3]->counter_op->increment);
+        $this->assertEquals('Register Value', $result->updates[4]->register_op);
 
         $this->assertEquals('map_remove', $result->removes[0]->name);
         $this->assertEquals('set_remove', $result->removes[1]->name);
