@@ -35,19 +35,19 @@ class CrdtOpConverter
 
     /**
      * @param string $type
-     * @param array  $val
+     * @param mixed  $value
      *
      * @return mixed
      */
-    public function fromArray($type, $val)
+    public function fromArray($type, $value)
     {
         if ($type !== 'map') {
-            return $val;
+            return $value;
         }
 
         $data = [];
 
-        foreach ($val as $key => $val) {
+        foreach ($value as $key => $val) {
             if (substr($key, -7) === 'counter') {
                 $data[substr($key, 0, -8)] = $val;
             }
@@ -76,26 +76,50 @@ class CrdtOpConverter
     private function convert(CrdtOp $op)
     {
         if ($op instanceof CounterOp) {
-            return $op->getIncrement();
-        }
-
-        if ($op instanceof FlagOp) {
-            return $op->isEnabled();
-        }
-
-        if ($op instanceof RegisterOp) {
-            return $op->getValue();
+            return $this->convertCounter($op);
         }
 
         if ($op instanceof SetOp) {
-            return $this->setToArray($op);
+            return $this->convertSet($op);
         }
 
         if ($op instanceof MapOp) {
-            return $this->mapToArray($op);
+            return $this->convertMap($op);
         }
 
         throw new InvalidArgumentException(sprintf('Unknown crdt op : %s', get_class($op)));
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\Op\RegisterOp $op
+     *
+     * @return string
+     */
+    private function convertRegister(RegisterOp $op)
+    {
+         return $op->getValue();
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\Op\CounterOp $op
+     *
+     * @return integer
+     */
+    private function convertCounter(CounterOp $op)
+    {
+        return $op->getIncrement();
+    }
+
+    /**
+     * @param \Basho\Riak\Core\Query\Crdt\Op\FlagOp $op
+     *
+     * @return string
+     */
+    private function convertFlag(FlagOp $op)
+    {
+         return $op->isEnabled()
+            ? 'enable'
+            : 'disable';
     }
 
     /**
@@ -103,7 +127,7 @@ class CrdtOpConverter
      *
      * @return array
      */
-    private function setToArray(SetOp $op)
+    private function convertSet(SetOp $op)
     {
         $value  = [];
         $add    = $op->getAdds();
@@ -114,6 +138,7 @@ class CrdtOpConverter
         }
 
         if ( ! empty($remove)) {
+            //remove_all ??
             $value['remove'] = $remove;
         }
 
@@ -125,32 +150,50 @@ class CrdtOpConverter
      *
      * @return array
      */
-    private function mapToArray(MapOp $op)
+    private function convertMap(MapOp $op)
     {
         $updates = [];
         $removes = [];
         $values  = [];
 
         foreach ($op->getMapUpdates() as $key => $value) {
-            $updates["{$key}_map"] = $this->mapToArray($value);
+            $updates["{$key}_map"] = $this->convertMap($value);
         }
 
         foreach ($op->getSetUpdates() as $key => $value) {
-            $updates["{$key}_set"] = $this->setToArray($value);
+            $updates["{$key}_set"] = $this->convertSet($value);
         }
 
         foreach ($op->getFlagUpdates() as $key => $value) {
-            $updates["{$key}_flag"] = $value->isEnabled()
-                ? 'enable'
-                : 'disable';
+            $updates["{$key}_flag"] = $this->convertFlag($value);
         }
 
         foreach ($op->getCounterUpdates() as $key => $value) {
-            $updates["{$key}_counter"] = $value->getIncrement();
+            $updates["{$key}_counter"] = $this->convertCounter($value);
         }
 
         foreach ($op->getRegisterUpdates() as $key => $value) {
-            $updates["{$key}_register"] = $value->getValue();
+            $updates["{$key}_register"] = $this->convertRegister($value);
+        }
+
+        foreach ($op->getMapRemoves() as $key => $value) {
+            $removes["{$key}_map"] = $key;
+        }
+
+        foreach ($op->getSetRemoves() as $key => $value) {
+            $removes["{$key}_set"] = $key;
+        }
+
+        foreach ($op->getFlagRemoves() as $key => $value) {
+            $removes["{$key}_flag"] = $key;
+        }
+
+        foreach ($op->getCounterRemoves() as $key => $value) {
+            $removes["{$key}_counter"] = $key;
+        }
+
+        foreach ($op->getRegisterRemoves() as $key => $value) {
+            $removes["{$key}_register"] = $key;
         }
 
         if ( ! empty($updates)) {
@@ -158,7 +201,7 @@ class CrdtOpConverter
         }
 
         if ( ! empty($removes)) {
-            $values['remove'] = $removes;
+            $values['remove'] = array_keys($removes);
         }
 
         return $values;
