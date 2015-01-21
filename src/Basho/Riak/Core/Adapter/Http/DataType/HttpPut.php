@@ -32,7 +32,7 @@ class HttpPut extends BaseHttpStrategy
     private function createHttpRequest(PutRequest $putRequest)
     {
         $request = $this->createRequest('POST', $putRequest->type, $putRequest->bucket, $putRequest->key);
-        $body    = $this->createCrdtOpBody($putRequest->op);
+        $body    = $this->opConverter->toJson($putRequest->op);
         $query   = $request->getQuery();
 
         $request->setHeader('Accept', ['multipart/mixed', 'application/json']);

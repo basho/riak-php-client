@@ -6,7 +6,6 @@ use Basho\Riak\Core\Message\Request;
 use Basho\Riak\ProtoBuf\DtUpdateReq;
 use Basho\Riak\ProtoBuf\DtUpdateResp;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
-use Basho\Riak\Core\Adapter\Proto\ProtoStrategy;
 use Basho\Riak\Core\Message\DataType\PutRequest;
 use Basho\Riak\Core\Message\DataType\PutResponse;
 
@@ -18,7 +17,7 @@ use Basho\Riak\Core\Message\DataType\PutResponse;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class ProtoPut extends ProtoStrategy
+class ProtoPut extends BaseProtoStrategy
 {
     /**
      * @param \Basho\Riak\Core\Message\DataType\PutRequest $request
@@ -28,7 +27,7 @@ class ProtoPut extends ProtoStrategy
     private function createRpbMessage(PutRequest $request)
     {
         $rpbPutReq = new DtUpdateReq();
-        $crdtOp    = $this->opConverter->convert($request->op);
+        $crdtOp    = $this->opConverter->toProtoBuf($request->op);
 
         $rpbPutReq->setBucket($request->bucket);
         $rpbPutReq->setType($request->type);

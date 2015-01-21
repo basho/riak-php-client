@@ -2,9 +2,7 @@
 
 namespace Basho\Riak\Core\Adapter\Http\DataType;
 
-use Basho\Riak\Core\Query\Crdt\Op\SetOp;
-use Basho\Riak\Core\Query\Crdt\Op\CrdtOp;
-use Basho\Riak\Core\Query\Crdt\Op\CounterOp;
+use GuzzleHttp\ClientInterface;
 use Basho\Riak\Core\Adapter\Http\HttpStrategy;
 
 /**
@@ -18,9 +16,19 @@ use Basho\Riak\Core\Adapter\Http\HttpStrategy;
 abstract class BaseHttpStrategy extends HttpStrategy
 {
     /**
-     * @var array
+     * @var \Basho\Riak\Core\Adapter\Http\DataType\CrdtOpConverter
      */
-    protected $validResponseCodes = [];
+    protected $opConverter;
+
+    /**
+     * @param \GuzzleHttp\ClientInterface $client
+     */
+    public function __construct(ClientInterface $client)
+    {
+        parent::__construct($client);
+
+        $this->opConverter = new CrdtOpConverter();
+    }
 
     /**
      * @param string $type
@@ -48,48 +56,5 @@ abstract class BaseHttpStrategy extends HttpStrategy
         $httpReq = $this->client->createRequest($method, $path);
 
         return $httpReq;
-    }
-
-    /**
-     * @param \Basho\Riak\Core\Query\Crdt\Op\CrdtOp $op
-     *
-     * @return string
-     */
-    protected function createCrdtOpBody(CrdtOp $op)
-    {
-        $map  = $this->createCrdtOpMap($op);
-        $json = json_encode($map);
-
-        return $json;
-    }
-
-    /**
-     * @param \Basho\Riak\Core\Query\Crdt\Op\CrdtOp $op
-     *
-     * @return string
-     */
-    protected function createCrdtOpMap(CrdtOp $op)
-    {
-        if ($op instanceof CounterOp) {
-            return $op->getIncrement();
-        }
-
-        if ($op instanceof SetOp) {
-            $map    = [];
-            $add    = $op->getAdds();
-            $remove = $op->getRemoves();
-
-            if ( ! empty($add)) {
-                $map['add_all'] = $add;
-            }
-
-            if ( ! empty($remove)) {
-                $map['remove'] = $remove;
-            }
-
-            return $map;
-        }
-
-        throw new RiakException(sprintf('Unknown crdt op : %s', get_class($op)));
     }
 }

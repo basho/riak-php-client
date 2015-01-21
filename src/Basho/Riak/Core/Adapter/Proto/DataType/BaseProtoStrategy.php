@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Proto;
+namespace Basho\Riak\Core\Adapter\Proto\DataType;
 
 use Basho\Riak\Core\Adapter\Strategy;
 use Basho\Riak\Core\Adapter\Proto\ProtoClient;
@@ -13,7 +13,7 @@ use Basho\Riak\Core\Adapter\Proto\ProtoClient;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-abstract class ProtoStrategy implements Strategy
+abstract class BaseProtoStrategy implements Strategy
 {
     /**
      * @var \Basho\Riak\Core\Adapter\Proto\ProtoClient
@@ -21,10 +21,16 @@ abstract class ProtoStrategy implements Strategy
     protected $client;
 
     /**
+     * @var \Basho\Riak\Core\Adapter\Proto\CrdtOpConverter
+     */
+    protected $opConverter;
+
+    /**
      * @param \Basho\Riak\Core\Adapter\Proto\ProtoClient $client
      */
     public function __construct(ProtoClient $client)
     {
-        $this->client = $client;
+        $this->client       = $client;
+        $this->opConverter  = new CrdtOpConverter();
     }
 }

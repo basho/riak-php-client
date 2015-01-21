@@ -1,8 +1,8 @@
 <?php
 
-namespace BashoRiakTest\Core\Adapter\Proto;
+namespace BashoRiakTest\Core\Adapter\Proto\DataType;
 
-use Basho\Riak\Core\Adapter\Proto\CrdtOpConverter;
+use Basho\Riak\Core\Adapter\Proto\DataType\CrdtOpConverter;
 use Basho\Riak\ProtoBuf\MapField\MapFieldType;
 use Basho\Riak\Core\Query\Crdt\Op;
 use BashoRiakTest\TestCase;
@@ -11,7 +11,7 @@ use Basho\Riak\ProtoBuf;
 class CrdtOpConverterTest extends TestCase
 {
     /**
-     * @var \Basho\Riak\Core\Adapter\Proto\CrdtOpConverter
+     * @var \Basho\Riak\Core\Adapter\Proto\DataType\CrdtOpConverter
      */
     private $instance;
 
@@ -138,9 +138,9 @@ class CrdtOpConverterTest extends TestCase
 
     public function testConvert()
     {
-        $setResult      = $this->instance->convert(new Op\SetOp([],[]));
-        $mapResult      = $this->instance->convert(new Op\MapOp([],[]));
-        $counterResult  = $this->instance->convert(new Op\CounterOp(0));
+        $setResult      = $this->instance->toProtoBuf(new Op\SetOp([],[]));
+        $mapResult      = $this->instance->toProtoBuf(new Op\MapOp([],[]));
+        $counterResult  = $this->instance->toProtoBuf(new Op\CounterOp(0));
 
         $this->assertInstanceOf('Basho\Riak\ProtoBuf\DtOp', $setResult);
         $this->assertInstanceOf('Basho\Riak\ProtoBuf\DtOp', $mapResult);
@@ -202,6 +202,6 @@ class CrdtOpConverterTest extends TestCase
     {
         $crdtOp = $this->getMock('Basho\Riak\Core\Query\Crdt\Op\CrdtOp');
 
-        $this->instance->convert($crdtOp);
+        $this->instance->toProtoBuf($crdtOp);
     }
 }

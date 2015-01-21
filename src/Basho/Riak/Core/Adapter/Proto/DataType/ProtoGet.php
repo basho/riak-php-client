@@ -5,9 +5,8 @@ namespace Basho\Riak\Core\Adapter\Proto\DataType;
 use Basho\Riak\Core\Message\Request;
 use Basho\Riak\ProtoBuf\DtFetchReq;
 use Basho\Riak\ProtoBuf\DtFetchResp;
-use Basho\Riak\ProtoBuf\DtFetchResp\DataType;
 use Basho\Riak\ProtoBuf\RiakMessageCodes;
-use Basho\Riak\Core\Adapter\Proto\ProtoStrategy;
+use Basho\Riak\ProtoBuf\DtFetchResp\DataType;
 use Basho\Riak\Core\Message\DataType\GetRequest;
 use Basho\Riak\Core\Message\DataType\GetResponse;
 
@@ -19,7 +18,7 @@ use Basho\Riak\Core\Message\DataType\GetResponse;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
  * @since     2.0
  */
-class ProtoGet extends ProtoStrategy
+class ProtoGet extends BaseProtoStrategy
 {
     /**
      * @param \Basho\Riak\Core\Message\DataType\GetRequest $request
@@ -82,7 +81,7 @@ class ProtoGet extends ProtoStrategy
         }
 
         if (DataType::MAP == $dtType && $dtValue != null) {
-            $response->value = $this->opConverter->convertMapEntries($dtValue->map_value);
+            $response->value = $this->opConverter->fromProtoBuf($dtValue->map_value);
             $response->type  = 'map';
         }
 

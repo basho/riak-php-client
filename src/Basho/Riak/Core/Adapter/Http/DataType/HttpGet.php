@@ -81,8 +81,9 @@ class HttpGet extends BaseHttpStrategy
         if (isset($this->validResponseCodes[$code])) {
             $json = $httpResponse->json();
 
-            $response->value = $json['value'];
             $response->type  = $json['type'];
+            $response->value = $this->opConverter->fromArray($response->type, $json['value']);
+
         }
 
         return $response;

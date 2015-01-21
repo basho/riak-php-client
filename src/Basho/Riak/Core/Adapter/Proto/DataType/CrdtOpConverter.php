@@ -1,9 +1,9 @@
 <?php
 
-namespace Basho\Riak\Core\Adapter\Proto;
+namespace Basho\Riak\Core\Adapter\Proto\DataType;
 
-use InvalidArgumentException;
 use Basho\Riak\ProtoBuf;
+use InvalidArgumentException;
 use Basho\Riak\Core\Query\Crdt\Op;
 use Basho\Riak\ProtoBuf\MapField\MapFieldType;
 
@@ -22,7 +22,7 @@ class CrdtOpConverter
      *
      * @return array
      */
-    public function convertMapEntries($entries)
+    public function fromProtoBuf($entries)
     {
         $values = [];
 
@@ -40,7 +40,7 @@ class CrdtOpConverter
     /**
      * @param \Basho\Riak\ProtoBuf\MapEntry[] $entry
      *
-     * @return mixedd
+     * @return mixed
      */
     public function convertMapEntry(ProtoBuf\MapEntry $entry)
     {
@@ -48,7 +48,7 @@ class CrdtOpConverter
         $type  = $field->getType();
 
         if ($type === MapFieldType::MAP) {
-            return $this->convertMapEntries($entry->getMapValue());
+            return $this->fromProtoBuf($entry->getMapValue());
         }
 
         if ($type === MapFieldType::SET) {
@@ -75,7 +75,7 @@ class CrdtOpConverter
      *
      * @return \Basho\Riak\ProtoBuf\DtOp
      */
-    public function convert(Op\CrdtOp $op)
+    public function toProtoBuf(Op\CrdtOp $op)
     {
         $crdtOp = new ProtoBuf\DtOp();
 
