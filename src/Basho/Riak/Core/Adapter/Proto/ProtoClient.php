@@ -130,16 +130,23 @@ class ProtoClient
     {
         $this->resource = null;
 
-        if ($actualCode !== RiakMessageCodes::MSG_ERRORRESP) {
-            throw new RiakException("Unexpected rpb response code: " . $actualCode);
+        $exceptionCode    = $actualCode;
+        $exceptionMessage = "Unexpected rpb response code: " . $actualCode;
+
+        if ($actualCode === RiakMessageCodes::ERROR_RESP) {
+            $errorClass   = self::$respClassMap[$actualCode];
+            $errorMessage = Protobuf::decode($errorClass, $respBody);
+
+            if ($errorMessage->hasErrmsg()) {
+                $exceptionMessage  = $errorMessage->getErrmsg();
+            }
+
+            if ($errorMessage->hasErrcode()) {
+                $exceptionCode = $errorMessage->getErrcode();
+            }
         }
 
-        $errorClass   = self::$respClassMap[$actualCode];
-        $errorMessage = Protobuf::decode($errorClass, $respBody);
-
-        if ($errorMessage->hasErrmsg()) {
-            throw new RiakException($errorMessage->getErrmsg(), $actualCode);
-        }
+        throw new RiakException($exceptionMessage, $exceptionCode);
     }
 
     /**
