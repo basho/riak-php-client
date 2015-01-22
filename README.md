@@ -53,12 +53,42 @@ To see other clients available for use with Riak visit our
 
 ## Examples
 
-**TODO**
+```php
+use Basho\Riak;
+use Basho\Riak\Node\Builder as NodeBuilder;
+use Basho\Riak\Command\Builder as CommandBuilder;
+use Basho\Riak\Command\Object\Store;
+use Basho\Riak\Object;
+
+$nodes = (new NodeBuilder)
+    ->withPort(10018)
+    ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
+
+$riak = new Riak(static::$nodes);
+
+$object = new Object('test_key');
+$object->setData('test_data');
+
+$command = (new CommandBuilder(new Store()))
+    ->withObject($object)
+    ->build();
+    
+$result = $riak->execute($command);
+```
 
 ## Contributing
 
 This is an open source project licensed under the Apache 2.0 License. We encourage and welcome contributions to the
-project from the community.
+project from the community. We ask that you keep in mind these considerations when planning your contribution.
+
+* Regardless whether your contribution is for a bug fix or a feature request, create an Issue in GitHub and let us know
+what you are thinking.
+* For bugs, if you have already found a fix, feel free to submit a Pull Request referencing the Issue you created.
+* For feature requests, we want to improve upon the library incrementally which means small changes at a time. In order
+ensure your PR can be reviewed in a timely manner, please keep PRs small, e.g. <10 files and <500 lines changed. If you
+think this is unrealistic, then mention that within the GH Issue and we can discuss it.
+* Before you open the PR, please review the following regarding Coding Standards, Docblock comments and 
+unit / integration tests to reduce delays in getting your changes approved.
 
 ### Coding Standards
 
@@ -67,6 +97,7 @@ Here are the standards we expect to see when considering pull requests
 * [PSR-2 Coding Style Guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 * [PHP / Pear Docblock Guide](http://pear.php.net/manual/en/standards.sample.php)
 * [PHPUnit Tests](https://phpunit.de/manual/current/en/phpunit-book.html)
+* Please suffix all Interfaces and Traits with the descriptors Interface and Trait, e.g. ObjectInterface & ObjectTrait
 
 ### Docblock Comments
 
