@@ -5,8 +5,11 @@
         <testsuite name="Unit Tests">
             <directory>tests/unit</directory>
         </testsuite>
-        <testsuite name="Integration Tests">
-            <directory>tests/integration</directory>
+        <testsuite name="Functional Tests">
+            <directory>tests/functional</directory>
+        </testsuite>
+        <testsuite name="Scenario Tests">
+            <directory>tests/scenario</directory>
         </testsuite>
     </testsuites>
     <filter>
