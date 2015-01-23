@@ -1,6 +1,8 @@
 <?php
 
 /*
+Copyright 2014 Basho Technologies, Inc.
+
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
@@ -18,18 +20,91 @@ namespace Riak\Node;
 /**
  * Class Response
  *
- * [summary]
+ * Data structure for handing off the response from the Riak node
  *
- * @package     Riak\Node
  * @author      Christopher Mancini <cmancini at basho d0t com>
- * @copyright   2011-2015 Basho Technologies, Inc.
- * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
- * @since       2.0
  */
 class Response
 {
+    /**
+     * @var int
+     */
+    protected $statusCode = 0;
+
+    /**
+     * @var array
+     */
+    protected $headers = [];
+
+    /**
+     * @var string
+     */
+    protected $body = '';
+
     public function __construct($statusCode = 200, array $headers = [], $body = '')
     {
+        $this->setStatusCode($statusCode);
+        $this->setHeaders($headers);
+        $this->setBody($body);
+    }
 
+    /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * @param int $statusCode
+     *
+     * @return $this
+     */
+    public function setStatusCode($statusCode)
+    {
+        $this->statusCode = $statusCode;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @param array $headers
+     *
+     * @return $this
+     */
+    public function setHeaders($headers)
+    {
+        $this->headers = $headers;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
+     * @param string $body
+     *
+     * @return $this
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+
+        return $this;
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 /*
+Copyright 2014 Basho Technologies, Inc.
+
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
@@ -23,11 +25,7 @@ use Basho\Riak\CommandInterface;
  *
  * Creates a Riak bucket on a node.
  *
- * @package     Basho\Riak\Command\Bucket
- * @author      Christopher Mancini <cmancini at basho d0t com>
- * @copyright   2011-2014 Basho Technologies, Inc.
- * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
- * @since       2.0
+ * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Fetch extends Command implements CommandInterface
 {

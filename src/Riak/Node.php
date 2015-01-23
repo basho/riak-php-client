@@ -1,6 +1,8 @@
 <?php
 
 /*
+Copyright 2014 Basho Technologies, Inc.
+
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
@@ -23,11 +25,7 @@ use Riak\Node\Response;
  *
  * Contains the connection configuration to connect to a Riak node.
  *
- * @package     Basho\Riak
- * @author      Christopher Mancini <cmancini at basho d0t com>
- * @copyright   2011-2014 Basho Technologies, Inc.
- * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
- * @since       2.0
+ * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Node
 {
@@ -125,7 +123,7 @@ class Node
         return $this->getConfig()->isAuth();
     }
 
-    public function execute(Command $command, Api $api)
+    public function execute(Command $command, AbstractApi $api)
     {
         // prepare request
         $api->prepare($command, $this);

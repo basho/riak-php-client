@@ -1,6 +1,8 @@
 <?php
 
 /*
+Copyright 2014 Basho Technologies, Inc.
+
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
@@ -25,11 +27,7 @@ use Basho\Riak\Node;
  *
  * Handles communications between end user app & Riak via Riak HTTP API using cURL
  *
- * @package     Basho\Riak\Api
- * @author      Christopher Mancini <cmancini at basho d0t com>
- * @copyright   2011-2014 Basho Technologies, Inc.
- * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
- * @since       2.0
+ * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Http extends Api implements ApiInterface
 {
@@ -324,7 +322,7 @@ class Http extends Api implements ApiInterface
      */
     public function responseHeaderCallback($ch, $header)
     {
-        $headers = [];
+        /*$headers = [];
 
         foreach (explode("\r\n", $header) as $i => $line) {
             if ($i === 0) {
@@ -334,8 +332,8 @@ class Http extends Api implements ApiInterface
                 $headers[$key] = $value;
             }
         }
-
-        $this->setResponseHeaders($headers);
+        */
+        $this->setResponseHeaders(http_parse_headers($header));
 
         return strlen($header);
     }
