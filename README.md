@@ -129,6 +129,8 @@ We also expect that before submitting a pull request, that you have run the test
 
 To run the tests, clone this repository and run `composer update` from the repository root, then you can execute all the tests by simply running `php vendor/bin/phpunit`.
 
-To execute only the unit tests, run `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
+Unit tests are the most verbose as the test each member of the classes that make up the library. These tests mock live connection objects, so they do not connect to Riak. To execute only the unit tests, run `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
 
-To execute only the integration tests, run `php vendor/bin/phpunit --testsuite 'Integration Tests'`.
+Functional tests focus on the functionality the user is likely to regularly execute, e.g. storing an object. These tests do connect to a live Riak instance. To execute only the functional tests, run `php vendor/bin/phpunit --testsuite 'Functional Tests'`.
+
+Scenario tests focus on testing how the library and Riak responds to edge cases, e.g. how it handles when a node becomes unreachable. These tests connect to a live Riak instance. To execute only the scenario tests, run `php vendor/bin/phpunit --testsuite 'Scenario Tests'`.
