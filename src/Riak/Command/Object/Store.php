@@ -30,4 +30,21 @@ use Basho\Riak\CommandInterface;
 class Store extends Command implements CommandInterface
 {
     protected $method = 'POST';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseResponse($statusCode, array $headers, $body = '')
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        $this->required('Bucket');
+        $this->required('Object');
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 
 /*
+Copyright 2015 Basho Technologies, Inc.
+
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
@@ -25,11 +27,7 @@ use Basho\Riak\Object;
  *
  * Tests the configuration of Riak commands via the Command Builder class
  *
- * @package     Basho\Tests\RiakTest
- * @author      Christopher Mancini <cmancini at basho d0t com>
- * @copyright   2011-2014 Basho Technologies, Inc.
- * @license     http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 License
- * @since       2.0
+ * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {

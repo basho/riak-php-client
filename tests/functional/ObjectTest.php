@@ -18,8 +18,8 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Tests;
 
 use Basho\Riak;
-use Basho\Riak\Node;
-use Basho\Riak\Node\Builder;
+use Basho\Riak\Command\Builder;
+use Basho\Riak\Object;
 
 /**
  * Class ObjectTest
@@ -30,5 +30,57 @@ use Basho\Riak\Node\Builder;
  */
 class ObjectTest extends TestCase
 {
+    /**
+     * Riak client
+     *
+     * @var Riak|null
+     */
+    private static $riak = NULL;
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+        self::$riak = static::$container['riak'];
+    }
+
+    /**
+     * testStoreWithoutKey
+     */
+    public function testStoreWithoutKey()
+    {
+        $object = new Object();
+        $command = (new Builder(new Riak\Command\Object\Store()))->withObject($object)->build();
+
+        $statusCode = self::$riak->execute($command);
+
+        $this->assertEquals('201', $statusCode);
+    }
+
+    public function testStoreNewWithKey()
+    {
+
+    }
+
+    public function testFetchExisting()
+    {
+
+    }
+
+    public function testStoreExisting()
+    {
+
+    }
+
+    public function testDelete()
+    {
+
+    }
+
+    public function testFetchNotFound()
+    {
+
+    }
 }
- 

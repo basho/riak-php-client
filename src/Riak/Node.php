@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak;
 
 use Basho\Riak\Node\Config;
-use Riak\Node\Response;
+use Basho\Riak\Node\Response;
 
 /**
  * Class Node
@@ -123,7 +123,7 @@ class Node
         return $this->getConfig()->isAuth();
     }
 
-    public function execute(Command $command, AbstractApi $api)
+    public function execute(Command $command, Api $api)
     {
         // prepare request
         $api->prepare($command, $this);
@@ -131,7 +131,9 @@ class Node
         // send request
         $statusCode = $api->send();
 
-        // return response object
-        return new Response($statusCode, $api->getResponseHeaders(), $api->getResponseBody());
+        // command parses response & updates data object
+        $command->parseResponse($statusCode, $api->getResponseHeaders(), $api->getResponseBody());
+
+        return $statusCode;
     }
 }

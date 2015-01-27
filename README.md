@@ -8,13 +8,13 @@ The release tags of this project have been aligned with the major & minor releas
 
 ## Dependencies
 **Release 2.x.x**
-* PHP 5.4+.
+* PHP 5.4+
 
 **Release 1.4.x**
-* PHP 5.3+.
+* PHP 5.3+
 
 ## Installation
-### Composer Install (recommended)
+### Composer Install
 Run the following `composer` command:
 
 ```console
@@ -30,9 +30,6 @@ Alternately, manually add the following to your `composer.json`, in the `require
 ```
 
 And then run `composer update` to ensure the module is installed.
-
-### Manual Install
-**TODO**
 
 ## Documentation
 API documentation for this library can be found on [Github Pages](http://basho.github.com/riak-php-client)
@@ -118,19 +115,23 @@ Here is an example of a class docblock:
 
 It is not necessary to add short / long descriptions to simple getters & setters. Use the @since tag where appropriate.
 
-### Unit & Integration Tests
+### Tests
 We want to ensure that all code that is included in a release has proper coverage with unit tests. It is expected that
 all pull requests that include new classes or class methods have appropriate unit tests included with the PR.
 
-**TODO: Finish writing up the unit test section, provide examples**
+There are three types of tests that we use, each has been setup within the phpunit.xml within the root of the library and are described below.
+<dl>
+<dt>Unit Tests</dt>
+<dd>Focus is on each unit of work. It is the most verbose as each member of every class should be tested. These tests use mock objects, so they do not require a live Riak instance.</dd>
+<dt>Functional Tests</dt>
+<dd>Focus is on the functionality the user is likely to regularly execute, e.g. storing an object. These tests will connect to and use a live Riak instance.</dd>
+<dt>Scenario Tests</dt>
+<dd>Focus is on testing how the library and Riak respond to edge cases, e.g. how it handles when a node becomes unreachable. These tests will connect to and use a live Riak instance.</dd>
+</dl>
 
 #### Running Tests
 We also expect that before submitting a pull request, that you have run the tests to ensure that all of them continue to pass after your changes.
 
-To run the tests, clone this repository and run `composer update` from the repository root, then you can execute all the tests by simply running `php vendor/bin/phpunit`.
+To run the tests, clone this repository and run `composer update` from the repository root, then you can execute all the tests by simply running `php vendor/bin/phpunit`. To execute only a single group of tests, you can use the "testsuite" argument, e.g. `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
 
-Unit tests are the most verbose as the test each member of the classes that make up the library. These tests mock live connection objects, so they do not connect to Riak. To execute only the unit tests, run `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
-
-Functional tests focus on the functionality the user is likely to regularly execute, e.g. storing an object. These tests do connect to a live Riak instance. To execute only the functional tests, run `php vendor/bin/phpunit --testsuite 'Functional Tests'`.
-
-Scenario tests focus on testing how the library and Riak responds to edge cases, e.g. how it handles when a node becomes unreachable. These tests connect to a live Riak instance. To execute only the scenario tests, run `php vendor/bin/phpunit --testsuite 'Scenario Tests'`.
+Please note, that the Functional and Scenario tests require a live Riak instance to test against.

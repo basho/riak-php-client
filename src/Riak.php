@@ -143,15 +143,12 @@ class Riak
      * Execute a Riak command
      *
      * @param Command $command
-     * @return null
+     *
+     * @return int
      */
     public function execute(Command $command)
     {
-        $result = null;
-
-        $result = $this->getActiveNode()->execute($command, $this->getApi());
-
-        return $result;
+        return $this->getActiveNode()->execute($command, $this->getApi());
     }
 
     /**

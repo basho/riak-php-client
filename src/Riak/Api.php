@@ -216,4 +216,6 @@ abstract class Api
 
         return $this;
     }
+
+    abstract public function send();
 }

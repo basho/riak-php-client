@@ -15,24 +15,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Tests\Riak;
-
-use Basho\Riak\DataType\Counter;
+namespace Basho\Tests;
 
 /**
- * Class CounterTest
+ * Class NodeUnreachableTest
  *
- * Test set for counter crdt
+ * Scenario tests for when Kv Object changes result in a conflict
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class CounterTest extends \PHPUnit_Framework_TestCase
+class ObjectConflictTest extends TestCase
 {
-    public function testType()
-    {
-        $this->assertEquals('counter', Counter::TYPE);
 
-        $crdt = new Counter();
-        $this->assertEquals('counter', $crdt->getType());
-    }
 }

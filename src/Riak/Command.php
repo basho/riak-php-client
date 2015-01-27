@@ -24,7 +24,7 @@ use Basho\Riak\Command\Builder;
  *
  * The command class is used to build a read or write command to be executed against a Riak node.
  *
- * @author  Christopher Mancini <cmancini at basho d0t com>
+ * @author Christopher Mancini <cmancini at basho d0t com>
  */
 abstract class Command
 {
@@ -172,12 +172,21 @@ abstract class Command
      *
      * @return $this
      */
-    public function setDataType($dataType)
+    public function setDataType(DataType $dataType)
     {
         $this->dataType = $dataType;
 
         return $this;
     }
+
+    /**
+     * parseResponse
+     *
+     * @param int $statusCode
+     * @param array $headers
+     * @param string $body
+     */
+    abstract public function parseResponse($statusCode, array $headers, $body = '');
 
     /**
      * Validate command
@@ -187,8 +196,13 @@ abstract class Command
      * @return bool
      * @throws Builder\Exception
      */
-    public function validate()
+    abstract public function validate();
+
+    protected function required($objectName)
     {
-        return true;
+        $method = "get{$objectName}";
+        if (!$this->$method() && !$this->$method() instanceof $objectName) {
+            throw new Builder\Exception("This command requires {$objectName} be defined.");
+        }
     }
 }

@@ -49,7 +49,7 @@ class Bucket
      */
     protected $type = '';
 
-    public function __construct($name = '', $type = '')
+    public function __construct($name = '', $type = 'default')
     {
         $this->setName($name);
         $this->setType($type);
@@ -77,6 +77,23 @@ class Bucket
     }
 
     /**
+     * getProperty
+     *
+     * @param $key
+     *
+     * @return null
+     */
+    public function getProperty($key)
+    {
+        $properties = $this->getProperties();
+        if (!empty($properties[$key])) {
+            return $properties[$key];
+        }
+
+        return null;
+    }
+
+    /**
      * If properties are not already loaded, fetch them from Riak
      *
      * @return array
@@ -90,22 +107,6 @@ class Bucket
         }
 
         return $this->properties;
-    }
-
-    /**
-     * getProperty
-     *
-     * @param $key
-     * @return null
-     */
-    public function getProperty($key)
-    {
-        $properties = $this->getProperties();
-        if (!empty($properties[$key])) {
-            return $properties[$key];
-        }
-
-        return null;
     }
 
     /**

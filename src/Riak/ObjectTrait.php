@@ -50,6 +50,26 @@ trait ObjectTrait
     protected $bucket = null;
 
     /**
+     * @return Bucket|null
+     */
+    public function getBucket()
+    {
+        return $this->bucket;
+    }
+
+    /**
+     * @param Bucket|null $bucket
+     *
+     * @return $this
+     */
+    public function setBucket(Bucket $bucket)
+    {
+        $this->bucket = $bucket;
+
+        return $this;
+    }
+
+    /**
      * __toString
      *
      * @return string

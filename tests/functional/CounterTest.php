@@ -30,5 +30,5 @@ use Basho\Riak\Node\Builder;
  */
 class CounterTest extends TestCase
 {
+
 }
- 

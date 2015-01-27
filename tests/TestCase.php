@@ -35,6 +35,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected static $container = null;
 
+    /**
+     * setUpBeforeClass
+     *
+     * Sets up dependencies needed to run tests.
+     *
+     * @static
+     */
     public static function setUpBeforeClass()
     {
         static::$container = new Container();
@@ -49,6 +56,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
         };
     }
 
+    /**
+     * tearDownAfterClass
+     *
+     * Releases resources allocated to dependencies
+     *
+     * @static
+     */
     public static function tearDownAfterClass()
     {
         static::$container = null;

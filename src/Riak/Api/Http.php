@@ -191,9 +191,15 @@ class Http extends Api implements ApiInterface
      */
     protected function setPath()
     {
-        $bucket        = $this->getCommand()->getBucket();
-        $bucketTypeSegment   = $bucket->getType() ? '/types/' . $bucket->getType() : '';
-        $bucketSegment = '/buckets/' . $bucket->getName();
+        // grab the bucket off the command
+        $bucket = $this->getCommand()->getBucket();
+        if ($bucket) {
+            // set bucket type if defined, else use default
+            $bucketTypeSegment   = '/types/' . ($bucket->getType() ? $bucket->getType() : 'default/');
+
+            // set the bucket name
+            $bucketSegment = '/buckets/' . $bucket->getName();
+        }
 
         switch (get_class($this->getCommand())) {
             case 'Basho\Riak\Command\Bucket\List':

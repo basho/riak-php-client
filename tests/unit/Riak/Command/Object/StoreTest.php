@@ -15,24 +15,25 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Tests\Riak;
-
-use Basho\Riak\DataType\Counter;
+namespace Basho\Tests\Riak\Command\Object;
+use Basho\Riak\Command\Builder;
+use Basho\Riak\Command\Object\Store;
+use Basho\Riak\Object;
 
 /**
- * Class CounterTest
+ * Class StoreTest
  *
- * Test set for counter crdt
+ * Tests the Kv Object store command
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class CounterTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit_Framework_TestCase
 {
-    public function testType()
+    public function testValidate()
     {
-        $this->assertEquals('counter', Counter::TYPE);
+        $builder = (new Builder(new Store()))->withObject(new Object('test_key'));
+        $command = $builder->build();
 
-        $crdt = new Counter();
-        $this->assertEquals('counter', $crdt->getType());
+        $this->assertEquals('test_key', $command->getObject()->getKey());
     }
 }

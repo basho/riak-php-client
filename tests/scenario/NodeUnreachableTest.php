@@ -17,10 +17,6 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
-use Basho\Riak;
-use Basho\Riak\Node;
-use Basho\Riak\Node\Builder;
-
 /**
  * Class NodeUnreachableTest
  *
@@ -30,5 +26,5 @@ use Basho\Riak\Node\Builder;
  */
 class NodeUnreachableTest extends TestCase
 {
+
 }
- 

@@ -36,7 +36,13 @@ interface CommandInterface
 
     public function setObject(Object $object);
 
+    public function getDataType();
+
+    public function setDataType(DataType $dataType);
+
     public function hasParameters();
 
     public function validate();
+
+    public function parseResponse($statusCode, array $headers, $body = '');
 }
