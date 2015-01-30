@@ -40,22 +40,18 @@ To see other clients available for use with Riak visit our
 ## Examples
 ```php
 use Basho\Riak;
-use Basho\Riak\Node\Builder as NodeBuilder;
-use Basho\Riak\Command\Builder as CommandBuilder;
-use Basho\Riak\Command\Object\Store;
-use Basho\Riak\Object;
+use Basho\Riak\Node;
+use Basho\Riak\Command;
 
-$nodes = (new NodeBuilder)
+$nodes = (new Node\Builder)
     ->withPort(10018)
     ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
 
-$riak = new Riak(static::$nodes);
+$riak = new Riak($nodes);
 
-$object = new Object('test_key');
-$object->setData('test_data');
-
-$command = (new CommandBuilder(new Store()))
-    ->withObject($object)
+$command = (new Command\Builder(Command::STORE_OBJECT))
+    ->addObject('test_data')
+    ->withLocation('/default/users/some_key')
     ->build();
     
 $result = $riak->execute($command);

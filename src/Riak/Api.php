@@ -20,7 +20,7 @@ namespace Basho\Riak;
 /**
  * Class Api
  *
- * [summary]
+ * Extend this class to implement your own API bridge.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
@@ -48,22 +48,18 @@ abstract class Api
     protected $responseBody = '';
 
     /**
-     * HTTP Code of response
+     * HTTP Status Code from response
      *
      * @var int
      */
-    protected $httpCode = 0;
+    protected $statusCode = 0;
 
     /**
-     * [short description]
-     *
      * @var Command|null
      */
     protected $command = null;
 
     /**
-     * [short description]
-     *
      * @var Node|null
      */
     protected $node = null;
@@ -72,7 +68,7 @@ abstract class Api
 
     public function __construct($clientId)
     {
-        $this->setClientId($clientId);
+        $this->clientId = $clientId;
     }
 
     /**
@@ -84,27 +80,19 @@ abstract class Api
     }
 
     /**
-     * @param string $clientId
-     */
-    public function setClientId($clientId)
-    {
-        $this->clientId = $clientId;
-    }
-
-    /**
      * @return int
      */
-    public function getHttpCode()
+    public function getStatusCode()
     {
-        return $this->httpCode;
+        return $this->statusCode;
     }
 
     /**
-     * @param int $httpCode
+     * @param int $statusCode
      */
-    protected function setHttpCode($httpCode)
+    protected function setStatusCode($statusCode)
     {
-        $this->httpCode = $httpCode;
+        $this->statusCode = $statusCode;
     }
 
     /**

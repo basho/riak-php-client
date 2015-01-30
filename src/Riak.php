@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho;
 
+use Basho\Riak\Api;
 use Basho\Riak\Api\Http;
 use Basho\Riak\Command;
 use Basho\Riak\Exception;
@@ -25,7 +26,7 @@ use Basho\Riak\Node;
 /**
  * Class Riak
  *
- * This class is the quarterback of the Riak PHP client library. It maintains the list of nodes in the Riak cluster,
+ * This class is the quarterback of the Riak PHP client library. It maintains the list of nodes in the Riak cluster. It follows the Facade Design Pattern.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
@@ -66,12 +67,22 @@ class Riak
     protected $activeNodeIndex = 0;
 
     /**
+     * API Bridge class to use
+     *
+     * @var Api|null
+     */
+    protected $api = NULL;
+
+    /**
      * Construct a new Client object, defaults to port 8098.
      *
-     * @param Node[] $nodes  an array of Basho\Riak\Node objects
-     * @param array  $config a configuration object
+     * @param Node[] $nodes an array of Basho\Riak\Node objects
+     * @param array $config a configuration object
+     * @param Api $api
+     *
+     * @throws Exception
      */
-    public function __construct(array $nodes, array $config = [])
+    public function __construct(array $nodes, array $config = [], Api $api = NULL)
     {
         $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
 
@@ -82,6 +93,13 @@ class Riak
         if (!empty($config)) {
             // use php array merge so passed in config overrides defaults
             $this->config = array_merge($this->config, $config);
+        }
+
+        if ($api) {
+            $this->api = $api;
+        } else {
+            // default to HTTP bridge class
+            $this->api = new Http($this->getClientID());
         }
     }
 
@@ -124,11 +142,20 @@ class Riak
      * Get value from connection config
      *
      * @param $key
+     *
      * @return mixed
      */
     public function getConfigValue($key)
     {
         return $this->config[$key];
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientID()
+    {
+        return $this->clientId;
     }
 
     /**
@@ -177,17 +204,12 @@ class Riak
         $this->activeNodeIndex = $activeNodeIndex;
     }
 
+    /**
+     * @return Api|null
+     */
     public function getApi()
     {
-        return new Http($this->getClientID());
-    }
-
-    /**
-     * @return string
-     */
-    public function getClientID()
-    {
-        return $this->clientId;
+        return $this->api;
     }
 
     /**

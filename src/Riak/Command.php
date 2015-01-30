@@ -28,6 +28,10 @@ use Basho\Riak\Command\Builder;
  */
 abstract class Command
 {
+    CONST FETCH_OBJECT = 'Object\\Fetch';
+    CONST STORE_OBJECT = 'Object\\Store';
+    CONST DELETE_OBJECT = 'Object\\Delete';
+
     /**
      * Request method
      *
@@ -180,7 +184,7 @@ abstract class Command
     }
 
     /**
-     * parseResponse
+     * Parses the response from the Riak Node based on the operation performed for the command executed
      *
      * @param int $statusCode
      * @param array $headers

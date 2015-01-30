@@ -27,13 +27,6 @@ namespace Basho\Riak;
 trait ObjectTrait
 {
     /**
-     * Key for the object
-     *
-     * @var string
-     */
-    protected $key = '';
-
-    /**
      * Request / response headers for the object
      *
      * Content type, last modified, etc
@@ -45,60 +38,6 @@ trait ObjectTrait
     ];
 
     /**
-     * @var Bucket|null
-     */
-    protected $bucket = null;
-
-    /**
-     * @return Bucket|null
-     */
-    public function getBucket()
-    {
-        return $this->bucket;
-    }
-
-    /**
-     * @param Bucket|null $bucket
-     *
-     * @return $this
-     */
-    public function setBucket(Bucket $bucket)
-    {
-        $this->bucket = $bucket;
-
-        return $this;
-    }
-
-    /**
-     * __toString
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * @return string
-     */
-    public function getKey()
-    {
-        return $this->key;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return $this
-     */
-    public function setKey($key)
-    {
-        $this->key = $key;
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getHeaders()
@@ -108,35 +47,36 @@ trait ObjectTrait
 
     /**
      * @param array $headers
+     *
      * @return $this
      */
     public function setHeaders(array $headers)
     {
         $this->headers = $headers;
+
         return $this;
     }
 
     /**
-     * setHeader
-     *
      * Sets a single header value within the headers array
      *
      * @param $key
      * @param $value
+     *
      * @return $this
      */
     public function setHeader($key, $value)
     {
         $this->headers[$key] = $value;
+
         return $this;
     }
 
     /**
-     * getHeader
-     *
      * Retrieve the value for a header, null if not set
      *
      * @param $key
+     *
      * @return string|null
      */
     public function getHeader($key)

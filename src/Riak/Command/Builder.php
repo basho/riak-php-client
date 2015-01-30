@@ -20,6 +20,7 @@ namespace Basho\Riak\Command;
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
 use Basho\Riak\DataType;
+use Basho\Riak\Location;
 use Basho\Riak\Object;
 
 /**
@@ -29,10 +30,11 @@ use Basho\Riak\Object;
  * objects for interacting with your Riak data cluster.
  *
  * <code>
- * use Basho\Riak\Command\Builder as CommandBuilder;
+ * use Basho\Riak\Command
  *
- * $command = (new CommandBuilder(new Store()))
+ * $command = (new Command\Builder(Command::STORE_OBJECT))
  *      ->withObject(new Object('test_key'))
+ *      ->withNamespace('/default/users')
  *      ->build();
  * </code>
  *
@@ -47,9 +49,13 @@ class Builder
      */
     protected $command = null;
 
-    public function __construct(Command $command)
+    public function __construct($command)
     {
-        $this->setCommand($command);
+        try {
+            $this->command = new $command();
+        } catch (Exception $e) {
+            throw new Command\Builder\Exception('Invalid command.');
+        }
     }
 
     /**
@@ -62,68 +68,139 @@ class Builder
     public function build()
     {
         // validate command is ready to execute
-        $this->getCommand()->validate();
+        $this->command->validate();
 
-        return $this->getCommand();
-    }
-
-    /**
-     * @return Command|null
-     */
-    protected function getCommand()
-    {
         return $this->command;
     }
 
     /**
-     * @param Command|null $command
+     * Add a newly created object
+     *
+     * @param string $data
      *
      * @return $this
      */
-    protected function setCommand($command)
+    public function addObject($data)
     {
-        $this->command = $command;
+        $object = new Object($data);
+        $this->command->setObject($object);
+
+        return $this;
+    }
+
+    public function addCounter()
+    {
+        $this->command->setDataType(new DataType\Counter());
+    }
+
+    public function addSet($data)
+    {
+        $this->command->setDataType(new DataType\Set($data));
+    }
+
+    public function addMap($data)
+    {
+        $this->command->setDataType(new DataType\Map($data));
+    }
+
+    public function addFlag()
+    {
+        $this->command->setDataType(new DataType\Flag());
+    }
+
+    /**
+     * Accepts a Bucket object or a bucket string
+     *
+     * @param Bucket|string $bucket
+     *
+     * @return $this
+     * @throws Builder\Exception
+     */
+    public function withBucket($bucket)
+    {
+        if ($bucket instanceof Bucket) {
+            $this->command->setBucket($bucket);
+        } elseif (is_string($bucket)) {
+            $this->command->setBucket(new Bucket($bucket));
+        } else {
+            throw new Command\Builder\Exception('Invalid argument.');
+        }
 
         return $this;
     }
 
     /**
-     * withBucket
+     * Accepts a Location object or a location string
      *
-     * @param Bucket $bucket
+     * @param Location|string $location
+     *
      * @return $this
+     * @throws Builder\Exception
      */
-    public function withBucket(Bucket $bucket)
+    public function withLocation($location)
     {
-        $this->getCommand()->setBucket($bucket);
+        if ($location instanceof Location) {
+            $this->command->setLocation($location);
+        } elseif (is_string($location) && substr($location, 0, 1) === '/') {
+            // parse the locator string into $matches
+            preg_match('/^\/(\w)\/(\w)\/(\w)$/', $location, $matches);
+
+            // build and set the Location object
+            $this->command->setLocation(
+                new Location($matches[2], new Bucket($matches[1], $matches[0]))
+            );
+        } else {
+            throw new Command\Builder\Exception('Invalid argument.');
+        }
 
         return $this;
     }
 
     public function withObject(Object $object)
     {
-        $this->getCommand()->setObject($object);
+        $this->command->setObject($object);
 
         return $this;
     }
 
-    public function withDataType(DataType $dataType)
+    public function withCounter(DataType\Counter $counter)
     {
-        $this->getCommand()->setDataType($dataType);
+        $this->command->setDataType($counter);
+
+        return $this;
+    }
+
+    public function withFlag(DataType\Flag $flag)
+    {
+        $this->command->setDataType($flag);
+
+        return $this;
+    }
+
+    public function withMap(DataType\Map $map)
+    {
+        $this->command->setDataType($map);
+
+        return $this;
+    }
+
+    public function withSet(DataType\Set $set)
+    {
+        $this->command->setDataType($set);
 
         return $this;
     }
 
     public function withParameter($key, $value = true)
     {
-        $this->getCommand()->setParameter($key, $value);
+        $this->command->setParameter($key, $value);
 
         return $this;
     }
 
     public function withParameters($parameters = [])
     {
-        $this->getCommand()->setParameters($parameters);
+        $this->command->setParameters($parameters);
 
         return $this;
     }

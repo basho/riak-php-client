@@ -18,8 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Tests;
 
 use Basho\Riak;
-use Basho\Riak\Command\Builder;
-use Basho\Riak\Object;
+use Basho\Riak\Command;
 
 /**
  * Class ObjectTest
@@ -51,8 +50,10 @@ class ObjectTest extends TestCase
      */
     public function testStoreWithoutKey()
     {
-        $object = new Object();
-        $command = (new Builder(new Riak\Command\Object\Store()))->withObject($object)->build();
+        $command = (new Command\Builder(Command::STORE_OBJECT))
+            ->addObject('some_data')
+            ->withBucket('/default/user/')
+            ->build();
 
         $statusCode = self::$riak->execute($command);
 

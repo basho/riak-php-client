@@ -22,13 +22,21 @@ use Basho\Riak\DataType;
 /**
  * Class Map
  *
- * [summary]
+ * Data structure for map crdt
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Map extends DataType
 {
+    /**
+     * {@inheritdoc}
+     */
     const TYPE = 'map';
 
+    /**
+     * Current contents of the map
+     *
+     * @var array
+     */
     protected $data = [];
 } 

@@ -30,71 +30,61 @@ use Basho\Riak\Node\Builder;
  */
 class RiakTest extends TestCase
 {
-    /**
-     * Riak Node objects.
-     *
-     * @var Node[]
-     */
-    static $nodes = null;
-
-    /**
-     * setUpBeforeClass
-     *
-     * Sets up the data objects needed by the tests
-     *
-     * @static
-     */
-    public static function setUpBeforeClass()
+    public function getNodes()
     {
-        static::$nodes = (new Builder)
-            ->withPort(10018)
-            ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
+        return [
+            [
+                (new Builder)
+                    ->withPort(10018)
+                    ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',])
+            ],
+        ];
     }
 
     /**
-     * testNodeCount
+     * @dataProvider getNodes
      */
-    public function testNodeCount()
+    public function testNodeCount($nodes)
     {
-        $riak = new Riak(static::$nodes);
-        $this->assertEquals(count($riak->getNodes()), count(static::$nodes));
+        $riak = new Riak($nodes);
+        $this->assertEquals(count($riak->getNodes()), count($nodes));
     }
 
     /**
-     * testClientId
+     * @dataProvider getNodes
      */
-    public function testClientId()
+    public function testClientId($nodes)
     {
-        $riak = new Riak(static::$nodes);
+        $riak = new Riak($nodes);
         $this->assertNotEmpty($riak->getClientID());
         $this->assertRegExp('/^php_([a-z0-9])+$/', $riak->getClientID());
     }
 
     /**
-     * testConfig
+     * @dataProvider getNodes
      */
-    public function testConfig()
+    public function testConfig($nodes)
     {
-        $riak = new Riak(static::$nodes, ['max_connect_attempts' => 5]);
+        $riak = new Riak($nodes, ['max_connect_attempts' => 5]);
         $this->assertEquals(5, $riak->getConfigValue('max_connect_attempts'));
     }
 
     /**
-     * testPickNode
+     * @dataProvider getNodes
      */
-    public function testPickNode()
+    public function testPickNode($nodes)
     {
-        $riak = new Riak(static::$nodes);
+        $riak = new Riak($nodes);
         $this->assertNotFalse($riak->getActiveNodeIndex());
         $this->assertInstanceOf('Basho\Riak\Node', $riak->getActiveNode());
     }
 
     /**
-     * testApi
+     * @dataProvider getNodes
      */
-    public function testApi()
+    public function testApi($nodes)
     {
-        $riak = new Riak(static::$nodes);
+        $riak = new Riak($nodes);
         $this->assertInstanceOf('Basho\Riak\Api', $riak->getApi());
     }
 }

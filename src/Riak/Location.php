@@ -18,28 +18,38 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak;
 
 /**
- * Class DataType
+ * Class Location
  *
- * Abstraction for Conflict-free Replicated Data Types
+ * Immutable data structure storing the location of an Object or DataType
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class DataType
+class Location
 {
-    use ObjectTrait;
-
     /**
-     * DataType::TYPE
+     * Kv Object / CRDT key
      *
      * @var string
      */
-    const TYPE = '';
+    protected $key = '';
 
     /**
-     * @return string
+     * @var Bucket|null
      */
-    public function getType()
+    protected $bucket = NULL;
+
+    /**
+     * @param $key
+     * @param Bucket $bucket
+     */
+    public function __construct($key, Bucket $bucket)
     {
-        return static::TYPE;
+        $this->key = $key;
+        $this->bucket = $bucket;
+    }
+
+    public function __toString()
+    {
+        return $this->bucket . $this->key;
     }
 }

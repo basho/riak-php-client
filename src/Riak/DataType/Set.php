@@ -22,13 +22,21 @@ use Basho\Riak\DataType;
 /**
  * Class Set
  *
- * [summary]
+ * Data structure for set crdt
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Set extends DataType
 {
+    /**
+     * {@inheritdoc}
+     */
     const TYPE = 'set';
 
+    /**
+     * Current contents of the set
+     *
+     * @var array
+     */
     protected $data = [];
 } 

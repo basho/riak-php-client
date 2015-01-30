@@ -16,6 +16,7 @@ specific language governing permissions and limitations under the License.
 */
 
 namespace Basho\Tests\Riak\Command\Object;
+
 use Basho\Riak\Command\Builder;
 use Basho\Riak\Command\Object\Store;
 use Basho\Riak\Object;

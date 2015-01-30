@@ -28,7 +28,15 @@ use Basho\Riak\DataType;
  */
 class Counter extends DataType
 {
+    /**
+     * {@inheritdoc}
+     */
     const TYPE = 'counter';
 
+    /**
+     * Current value of the counter
+     *
+     * @var int
+     */
     protected $data = 0;
 }

@@ -49,15 +49,34 @@ class Bucket
      */
     protected $type = '';
 
-    public function __construct($name = '', $type = 'default')
+    public function __construct($name, $type = 'default')
     {
-        $this->setName($name);
-        $this->setType($type);
+        // support construction by namespace
+        if (substr($name, 0, 1) === '/') {
+            preg_match('/^\/(\w)\/(\w)\/$/', $name, $matches);
+            $this->name = $matches[1];
+            $this->type = $matches[0];
+        } else {
+            $this->name = $name;
+            $this->type = $type;
+        }
     }
 
     public function __toString()
     {
-        return $this->getName();
+        return $this->getNamespace();
+    }
+
+    /**
+     * Bucket namespace
+     *
+     * This is a human readable namespace for the bucket.
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return "/{$this->type}/{$this->name}/";
     }
 
     /**
@@ -69,19 +88,9 @@ class Bucket
     }
 
     /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * getProperty
-     *
      * @param $key
      *
-     * @return null
+     * @return string
      */
     public function getProperty($key)
     {
@@ -90,7 +99,7 @@ class Bucket
             return $properties[$key];
         }
 
-        return null;
+        return '';
     }
 
     /**
@@ -121,30 +130,10 @@ class Bucket
     }
 
     /**
-     * Bucket namespace
-     *
-     * This is a human readable namespace for a bucket.
-     *
-     * @return string
-     */
-    public function getNamespace()
-    {
-        return $this->getType() . '\\' . $this->getName();
-    }
-
-    /**
      * @return string
      */
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
     }
 }

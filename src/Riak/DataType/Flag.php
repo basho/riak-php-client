@@ -15,31 +15,29 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak;
+namespace Basho\Riak\DataType;
+
+use Basho\Riak\DataType;
 
 /**
- * Class DataType
+ * Class Flag
  *
- * Abstraction for Conflict-free Replicated Data Types
+ * Data structure for flag crdt
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class DataType
+class Flag extends DataType
 {
-    use ObjectTrait;
+    /**
+     * {@inheritdoc}
+     */
+    const TYPE = 'flag';
 
     /**
-     * DataType::TYPE
+     * State of the flag
      *
-     * @var string
+     * @var bool
      */
-    const TYPE = '';
+    protected $data = FALSE;
 
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return static::TYPE;
-    }
 }

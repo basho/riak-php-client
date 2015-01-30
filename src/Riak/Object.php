@@ -39,17 +39,15 @@ class Object
     protected $data = null;
 
     /**
-     * @param string     $key
      * @param mixed|null $data
      * @param array|null $headers
      */
-    public function __construct($key = '', $data = null, $headers = null)
+    public function __construct($data = NULL, $headers = NULL)
     {
-        $this->setKey($key);
-        $this->setData($data);
+        $this->data = $data;
 
         if (!empty($headers) && is_array($headers)) {
-            $this->setHeaders($headers);
+            $this->headers = $headers;
         }
     }
 
