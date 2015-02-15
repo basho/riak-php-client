@@ -15,18 +15,46 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Builder;
 
-use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
+use Basho\Riak\Bucket;
+use Basho\Riak\Location;
 
 /**
- * Class Fetch
+ * Class LocationTrait
  *
- * Fetches a Riak Kv Object
+ * Allows easy code sharing for Location getters / setters
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\Object implements CommandInterface
+trait LocationTrait
 {
+    // location depends on bucket
+    use BucketTrait;
+
+    /**
+     * @var Location|null
+     */
+    protected $location = NULL;
+
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function addLocation($key, $name, $type = 'default')
+    {
+        $this->bucket = new Bucket($name, $type);
+        $this->location = new Location($key, $this->bucket);
+
+        return $this;
+    }
+
+    public function withLocation(Location $location)
+    {
+        $this->bucket = $location->getBucket();
+        $this->location = $location;
+
+        return $this;
+    }
 }

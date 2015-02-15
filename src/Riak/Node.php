@@ -118,22 +118,32 @@ class Node
         return $this->getConfig()->getPort();
     }
 
+    /**
+     * Returns host:port for Node
+     *
+     * @return string
+     */
+    public function getUri()
+    {
+        return sprintf('%s:%s', $this->config->getHost(), $this->config->getPort());
+    }
+
     public function useSsl()
     {
         return $this->getConfig()->isAuth();
     }
 
+    /**
+     * @param Command $command
+     * @param Api $api
+     *
+     * @return Api\Response
+     */
     public function execute(Command $command, Api $api)
     {
-        // prepare request
-        $api->prepare($command, $this);
+        $response = $api->prepare($command, $this)->send();
+        $command->setResponse($response);
 
-        // send request
-        $statusCode = $api->send();
-
-        // command parses response & updates data object
-        $command->parseResponse($statusCode, $api->getResponseHeaders(), $api->getResponseBody());
-
-        return $statusCode;
+        return $response->getStatusCode();
     }
 }

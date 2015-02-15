@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2014 Basho Technologies, Inc.
+Copyright 2015 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,18 +15,39 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
-
-use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
+namespace Basho\Riak\Api\Response;
 
 /**
- * Class Fetch
+ * Class Response
  *
- * Fetches a Riak Kv Object
+ * [summary]
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\Object implements CommandInterface
+class Response extends \Basho\Riak\Api\Response
 {
+    public function __construct($statusCode, $responseHeaders = [], $responseBod = '')
+    {
+
+    }
+
+    public function getVClock()
+    {
+
+    }
+
+    public function getObject()
+    {
+
+    }
+
+    public function getDataType()
+    {
+
+    }
+
+    public function hasSiblings()
+    {
+
+    }
 }

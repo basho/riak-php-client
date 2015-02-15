@@ -15,35 +15,55 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\DataType;
+namespace Basho\Riak\Command\Builder;
 
-use Basho\Riak\DataType;
+use Basho\Riak\Object;
 
 /**
- * Class Counter
+ * Class ObjectTrait
  *
- * Data structure for counter crdt
+ * Allows easy code sharing for Object getters / setters
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Counter extends DataType
+trait ObjectTrait
 {
     /**
-     * {@inheritdoc}
+     * @var \Basho\Riak\Object|null
      */
-    const TYPE = 'counter';
+    protected $object = NULL;
+
+    public function getObject()
+    {
+        return $this->object;
+    }
 
     /**
-     * Current value of the counter
+     * Mint a new Object instance with supplied params and attach it to the Command
      *
-     * @var int
+     * @param string $data
+     * @param array $headers
+     *
+     * @return $this
      */
-    protected $data = 0;
+    public function addObject($data = NULL, $headers = NULL)
+    {
+        $this->object = new Object($data, $headers);
+
+        return $this;
+    }
 
     /**
-     * Amount to increment counter
+     * Attach an already instantiated Object to the Command
      *
-     * @var int
+     * @param \Basho\Riak\Object $object
+     *
+     * @return $this
      */
-    protected $increment = 0;
+    public function withObject(Object $object)
+    {
+        $this->object = $object;
+
+        return $this;
+    }
 }

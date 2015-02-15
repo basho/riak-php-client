@@ -27,6 +27,11 @@ namespace Basho\Riak;
 class Bucket
 {
     /**
+     * The default bucket type in Riak.
+     */
+    const DEFAULT_TYPE = "default";
+
+    /**
      * Bucket properties
      *
      * @var array
@@ -35,31 +40,18 @@ class Bucket
 
     /**
      * Name of bucket
-     *
-     * @var string
      */
     protected $name = '';
 
     /**
-     * Bucket type
-     *
-     * Buckets can be grouped together by type, inheriting the properties defined on the type
-     *
-     * @var string
+     * Buckets are grouped by type, inheriting the properties defined on the type
      */
     protected $type = '';
 
-    public function __construct($name, $type = 'default')
+    public function __construct($name, $type = self::DEFAULT_TYPE)
     {
-        // support construction by namespace
-        if (substr($name, 0, 1) === '/') {
-            preg_match('/^\/(\w)\/(\w)\/$/', $name, $matches);
-            $this->name = $matches[1];
-            $this->type = $matches[0];
-        } else {
-            $this->name = $name;
-            $this->type = $type;
-        }
+        $this->name = $name;
+        $this->type = $type;
     }
 
     public function __toString()

@@ -19,7 +19,9 @@ namespace Basho\Riak\Api;
 
 use Basho\Riak\Api;
 use Basho\Riak\ApiInterface;
+use Basho\Riak\Bucket;
 use Basho\Riak\Command;
+use Basho\Riak\Location;
 use Basho\Riak\Node;
 
 /**
@@ -76,7 +78,7 @@ class Http extends Api implements ApiInterface
         parent::prepare($command, $node);
 
         // set the API path to be used
-        $this->setPath();
+        $this->buildPath();
 
         // general connection preparation
         $this->prepareConnection();
@@ -86,6 +88,56 @@ class Http extends Api implements ApiInterface
 
         // set the request string to be sent
         $this->setRequest(curl_getinfo($this->getConnection(), CURLINFO_HEADER_OUT));
+
+        return $this;
+    }
+
+    /**
+     * Sets the API path for the command
+     *
+     * @return $this
+     */
+    protected function buildPath()
+    {
+        $bucket = NULL;
+        $key = '';
+
+        // check location first
+        $location = $this->getCommand()->getLocation();
+        $bucket = $this->getCommand()->getBucket();
+
+        if (!empty($location) && $location instanceof Location) {
+            $bucket = $location->getBucket();
+            $key = $location->getKey();
+        } elseif (!empty($bucket) && $bucket instanceof Bucket) {
+            $bucket = $location->getBucket();
+        }
+
+        switch (get_class($this->getCommand())) {
+            case 'Basho\Riak\Command\Bucket\List':
+                $this->path = sprintf('/types/%s/buckets/%s', $bucket->getType(), $bucket->getName());
+                break;
+            case 'Basho\Riak\Command\Bucket\Fetch':
+            case 'Basho\Riak\Command\Bucket\Store':
+            case 'Basho\Riak\Command\Bucket\Reset':
+                $this->path = sprintf('/types/%s/buckets/%s/props', $bucket->getType(), $bucket->getName());
+                break;
+            case 'Basho\Riak\Command\Bucket\Keys':
+                $this->path = sprintf('/types/%s/buckets/%s/keys', $bucket->getType(), $bucket->getName());
+                break;
+            case 'Basho\Riak\Command\Object\Fetch':
+            case 'Basho\Riak\Command\Object\Store':
+            case 'Basho\Riak\Command\Object\Delete':
+                $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
+                break;
+            case 'Basho\Riak\Command\DateType\Fetch':
+            case 'Basho\Riak\Command\DateType\Store':
+                // curl -XPOST "127.0.0.1:8098/types/counters/buckets/default/datatypes/mycounter?returnbody=true" -i -H "Content-Type:application/json" -d '1'
+                $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
+                break;
+            default:
+                $this->path = '';
+        }
 
         return $this;
     }
@@ -149,101 +201,12 @@ class Http extends Api implements ApiInterface
      */
     protected function prepareRequestUrl()
     {
-        $url = '';
-
-        // choose protocol
-        if ($this->getNode()->useSsl()) {
-            $url .= 'https://';
-        } else {
-            $url .= 'http://';
-        }
-
-        // append hostname / ip
-        $url .= $this->getNode()->getHost();
-
-        // append port the node is listening on
-        $url .= ':' . $this->getNode()->getPort() . '/';
-
-        // append the path of the API endpoint
-        $url .= $this->getPath();
-
-        // append the uri of the API endpoint
-        $url .= '?' . $this->getQuery();
+        $url = sprintf('%s%s?%s', $this->node->getUri(), $this->path, $this->query);
 
         // set the built request URL on the connection
         curl_setopt($this->getConnection(), CURLOPT_URL, $url);
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * Sets the API path for the command
-     *
-     * @return $this
-     */
-    protected function setPath()
-    {
-        // grab the bucket off the command
-        $bucket = $this->getCommand()->getBucket();
-        if ($bucket) {
-            // set bucket type if defined, else use default
-            $bucketTypeSegment   = '/types/' . ($bucket->getType() ? $bucket->getType() : 'default/');
-
-            // set the bucket name
-            $bucketSegment = '/buckets/' . $bucket->getName();
-        }
-
-        switch (get_class($this->getCommand())) {
-            case 'Basho\Riak\Command\Bucket\List':
-                $this->path = $bucketTypeSegment . '/buckets';
-                break;
-            case 'Basho\Riak\Command\Bucket\Fetch':
-            case 'Basho\Riak\Command\Bucket\Store':
-            case 'Basho\Riak\Command\Bucket\Reset':
-                $this->path = $bucketTypeSegment . $bucketSegment . '/props';
-                break;
-            case 'Basho\Riak\Command\Bucket\Keys':
-                $this->path = $bucketTypeSegment . $bucketSegment . '/keys';
-                break;
-            case 'Basho\Riak\Command\Object\Fetch':
-            case 'Basho\Riak\Command\Object\Store':
-            case 'Basho\Riak\Command\Object\Delete':
-                $this->path = $bucketTypeSegment . $bucketSegment . '/keys/' . $this->getCommand()->getObject();
-                break;
-            case 'Basho\Riak\Command\DateType\Fetch':
-            case 'Basho\Riak\Command\DateType\Store':
-                $crdt = $this->getCommand()->getDataType();
-                $this->path = $bucketTypeSegment . $bucketSegment . '/' . $crdt->getType() . 's/' . $crdt;
-                break;
-            default:
-                $this->path = '';
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getQuery()
-    {
-        return $this->query;
-    }
-
-    /**
-     * @param string $query
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
     }
 
     /**
@@ -295,9 +258,33 @@ class Http extends Api implements ApiInterface
     }
 
     /**
-     * Send the request
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
+    /**
+     * @param string $query
+     */
+    public function setQuery($query)
+    {
+        $this->query = $query;
+    }
+
+    /**
+     * send
      *
-     * @return int HTTP status code
+     * @return Http\Response
      */
     public function send()
     {
@@ -309,9 +296,11 @@ class Http extends Api implements ApiInterface
         curl_exec($this->getConnection());
 
         // set the response http code
-        $this->setHttpCode(curl_getinfo($this->getConnection(), CURLINFO_HTTP_CODE));
+        $this->statusCode = curl_getinfo($this->getConnection(), CURLINFO_HTTP_CODE);
 
-        return $this->getHttpCode();
+        $response = new Api\Http\Response($this->statusCode, $this->responseHeaders, $this->responseBody);
+
+        return $response;
     }
 
     /**

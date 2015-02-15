@@ -205,5 +205,10 @@ abstract class Api
         return $this;
     }
 
+    /**
+     * send
+     *
+     * @return Api\Response
+     */
     abstract public function send();
 }

@@ -15,18 +15,40 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Builder;
 
-use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
+use Basho\Riak\Bucket;
 
 /**
- * Class Fetch
+ * Class BucketTrait
  *
- * Fetches a Riak Kv Object
+ * Allows easy code sharing for Bucket getters / setters
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\Object implements CommandInterface
+trait BucketTrait
 {
+    /**
+     * @var Bucket|null
+     */
+    protected $bucket = NULL;
+
+    public function getBucket()
+    {
+        return $this->bucket;
+    }
+
+    public function addBucket($name, $type = 'default')
+    {
+        $this->bucket = new Bucket($name, $type);
+
+        return $this;
+    }
+
+    public function withBucket(Bucket $bucket)
+    {
+        $this->bucket = $bucket;
+
+        return $this;
+    }
 }

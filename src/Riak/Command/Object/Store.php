@@ -27,24 +27,7 @@ use Basho\Riak\CommandInterface;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command implements CommandInterface
+class Store extends Command\Object implements CommandInterface
 {
     protected $method = 'POST';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function parseResponse($statusCode, array $headers, $body = '')
-    {
-
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validate()
-    {
-        $this->required('Bucket');
-        $this->required('Object');
-    }
 }

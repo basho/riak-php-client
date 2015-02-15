@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2014 Basho Technologies, Inc.
+Copyright 2015 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,18 +15,48 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command;
 
+use Basho\Riak\Bucket;
 use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
+use Basho\Riak\Location;
 
 /**
- * Class Fetch
+ * Class Object
  *
- * Fetches a Riak Kv Object
+ * Base class for Commands performing operations on Kv Objects
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\Object implements CommandInterface
+abstract class Object extends Command
 {
+    /**
+     * @var \Basho\Riak\Object|null
+     */
+    protected $object = NULL;
+
+    /**
+     * @var Bucket|null
+     */
+    protected $bucket = NULL;
+
+    /**
+     * @var Location|null
+     */
+    protected $location = NULL;
+
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    public function getBucket()
+    {
+        return $this->bucket;
+    }
+
+    public function getLocation()
+    {
+        return $this->location;
+    }
 }

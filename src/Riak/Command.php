@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
+use Basho\Riak\Api\Response;
 use Basho\Riak\Command\Builder;
 
 /**
@@ -28,10 +29,6 @@ use Basho\Riak\Command\Builder;
  */
 abstract class Command
 {
-    CONST FETCH_OBJECT = 'Object\\Fetch';
-    CONST STORE_OBJECT = 'Object\\Store';
-    CONST DELETE_OBJECT = 'Object\\Delete';
-
     /**
      * Request method
      *
@@ -42,16 +39,6 @@ abstract class Command
      * @var string
      */
     protected $method = 'GET';
-
-    /**
-     * @var Bucket|null
-     */
-    protected $bucket = null;
-
-    /**
-     * @var Object|null
-     */
-    protected $object = null;
 
     /**
      * @var DataType|null
@@ -65,9 +52,21 @@ abstract class Command
      */
     protected $parameters = [];
 
-    public static function builder()
+    /**
+     * @var Response|null
+     */
+    protected $response = NULL;
+
+    /**
+     * @param Response $response
+     *
+     * @return $this
+     */
+    public function setResponse(Response $response)
     {
-        return new Builder(new static());
+        $this->response = $response;
+
+        return $this;
     }
 
     /**
@@ -80,34 +79,11 @@ abstract class Command
     }
 
     /**
-     * @param string $key
-     * @param mixed  $value
-     * @return $this
-     */
-    public function setParameter($key, $value)
-    {
-        $this->parameters[$key] = $value;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getParameters()
     {
         return $this->parameters;
-    }
-
-    /**
-     * @param array $parameters
-     * @return $this
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
-
-        return $this;
     }
 
     /**
@@ -118,44 +94,6 @@ abstract class Command
     public function hasParameters()
     {
         return (bool)count($this->parameters);
-    }
-
-    /**
-     * @return Bucket|null
-     */
-    public function getBucket()
-    {
-        return $this->bucket;
-    }
-
-    /**
-     * @param Bucket $bucket
-     * @return $this
-     */
-    public function setBucket(Bucket $bucket)
-    {
-        $this->bucket = $bucket;
-
-        return $this;
-    }
-
-    /**
-     * @return Object|null
-     */
-    public function getObject()
-    {
-        return $this->object;
-    }
-
-    /**
-     * @param \Basho\Riak\Object $object
-     * @return $this
-     */
-    public function setObject(Object $object)
-    {
-        $this->object = $object;
-
-        return $this;
     }
 
     public function getMethod()
@@ -169,44 +107,5 @@ abstract class Command
     public function getDataType()
     {
         return $this->dataType;
-    }
-
-    /**
-     * @param DataType|null $dataType
-     *
-     * @return $this
-     */
-    public function setDataType(DataType $dataType)
-    {
-        $this->dataType = $dataType;
-
-        return $this;
-    }
-
-    /**
-     * Parses the response from the Riak Node based on the operation performed for the command executed
-     *
-     * @param int $statusCode
-     * @param array $headers
-     * @param string $body
-     */
-    abstract public function parseResponse($statusCode, array $headers, $body = '');
-
-    /**
-     * Validate command
-     *
-     * Method validates if the command has been built with the parameters / objects required to successfully execute.
-     *
-     * @return bool
-     * @throws Builder\Exception
-     */
-    abstract public function validate();
-
-    protected function required($objectName)
-    {
-        $method = "get{$objectName}";
-        if (!$this->$method() && !$this->$method() instanceof $objectName) {
-            throw new Builder\Exception("This command requires {$objectName} be defined.");
-        }
     }
 }

@@ -15,18 +15,18 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
-
-use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
+namespace Basho\Riak\Command;
 
 /**
- * Class Fetch
+ * BuilderInterface
  *
- * Fetches a Riak Kv Object
+ * [summary]
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\Object implements CommandInterface
+interface BuilderInterface
 {
+    const COMMAND = '';
+
+    public function build();
 }

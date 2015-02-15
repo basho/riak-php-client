@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2014 Basho Technologies, Inc.
+Copyright 2015 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,7 +15,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\DataType\Set;
 
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
@@ -23,10 +23,19 @@ use Basho\Riak\CommandInterface;
 /**
  * Class Fetch
  *
- * Fetches a Riak Kv Object
+ * [summary]
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\Object implements CommandInterface
+class Fetch extends Command implements CommandInterface
 {
+    protected $method = 'GET';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        //$this->required('Bucket');
+    }
 }

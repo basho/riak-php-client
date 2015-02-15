@@ -52,4 +52,20 @@ class Location
     {
         return $this->bucket . $this->key;
     }
+
+    /**
+     * @return Bucket|null
+     */
+    public function getBucket()
+    {
+        return $this->bucket;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
 }

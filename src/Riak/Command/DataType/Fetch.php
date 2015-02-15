@@ -30,4 +30,12 @@ use Basho\Riak\CommandInterface;
 class Fetch extends Command implements CommandInterface
 {
     protected $method = 'GET';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        //$this->required('Bucket');
+    }
 }

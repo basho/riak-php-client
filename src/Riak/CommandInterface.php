@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak;
 
 /**
- * Interface Command
+ * CommandInterface
  *
  * The interface for implementing a new Riak Command class.
  *
@@ -30,19 +30,11 @@ interface CommandInterface
 
     public function getBucket();
 
-    public function setBucket(Bucket $bucket);
+    public function getLocation();
 
     public function getObject();
 
-    public function setObject(Object $object);
-
     public function getDataType();
 
-    public function setDataType(DataType $dataType);
-
     public function hasParameters();
-
-    public function validate();
-
-    public function parseResponse($statusCode, array $headers, $body = '');
 }

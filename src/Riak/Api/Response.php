@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2014 Basho Technologies, Inc.
+Copyright 2015 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,35 +15,55 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\DataType;
-
-use Basho\Riak\DataType;
+namespace Basho\Riak\Api;
 
 /**
- * Class Counter
+ * Class Response
  *
- * Data structure for counter crdt
+ * [summary]
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Counter extends DataType
+abstract class Response
 {
     /**
-     * {@inheritdoc}
+     * Response headers returned from request
+     *
+     * @var array
      */
-    const TYPE = 'counter';
+    protected $responseHeaders = [];
 
     /**
-     * Current value of the counter
+     * Response body returned from request
+     *
+     * @var string
+     */
+    protected $responseBody = '';
+
+    /**
+     * HTTP Status Code from response
      *
      * @var int
      */
-    protected $data = 0;
+    protected $statusCode = 0;
 
-    /**
-     * Amount to increment counter
-     *
-     * @var int
-     */
-    protected $increment = 0;
+    public function __construct($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        $this->statusCode = $statusCode;
+        $this->responseHeaders = $responseHeaders;
+        $this->responseBody = $responseBody;
+    }
+
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    abstract public function getVClock();
+
+    abstract public function getObject();
+
+    abstract public function getDataType();
+
+    abstract public function hasSiblings();
 }

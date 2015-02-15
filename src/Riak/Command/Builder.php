@@ -17,11 +17,9 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command;
 
-use Basho\Riak\Bucket;
+use Basho\Riak;
 use Basho\Riak\Command;
 use Basho\Riak\DataType;
-use Basho\Riak\Location;
-use Basho\Riak\Object;
 
 /**
  * Class Builder
@@ -30,135 +28,67 @@ use Basho\Riak\Object;
  * objects for interacting with your Riak data cluster.
  *
  * <code>
- * use Basho\Riak\Command
+ * use Basho\Riak\Command;
+ * use Basho\Riak\Bucket;
+ * use Basho\Riak\Location;
+ *
+ * $bucket = new Bucket('users');
  *
  * $command = (new Command\Builder(Command::STORE_OBJECT))
- *      ->withObject(new Object('test_key'))
- *      ->withNamespace('/default/users')
+ *      ->withObject(new Object('test_data'))
+ *      ->withLocation(new Location('test_key', $bucket))
  *      ->build();
  * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Builder
+abstract class Builder
 {
-    /**
-     * Command object to be built
-     *
-     * @var Command|null
-     */
-    protected $command = null;
+    protected $riak = NULL;
 
-    public function __construct($command)
+    /**
+     * Command parameters
+     *
+     * @var array
+     */
+    protected $parameters = [];
+
+    public function __construct(Riak $riak)
     {
-        try {
-            $this->command = new $command();
-        } catch (Exception $e) {
-            throw new Command\Builder\Exception('Invalid command.');
-        }
+        $this->riak = $riak;
     }
 
     /**
      * Command build
      *
      * Validates then returns the built command object.
-     *
-     * @return Command|null
      */
-    public function build()
-    {
-        // validate command is ready to execute
-        $this->command->validate();
-
-        return $this->command;
-    }
-
-    /**
-     * Add a newly created object
-     *
-     * @param string $data
-     *
-     * @return $this
-     */
-    public function addObject($data)
-    {
-        $object = new Object($data);
-        $this->command->setObject($object);
-
-        return $this;
-    }
+    abstract public function build();
 
     public function addCounter()
     {
         $this->command->setDataType(new DataType\Counter());
+
+        return $this;
     }
 
     public function addSet($data)
     {
         $this->command->setDataType(new DataType\Set($data));
+
+        return $this;
     }
 
     public function addMap($data)
     {
         $this->command->setDataType(new DataType\Map($data));
+
+        return $this;
     }
 
     public function addFlag()
     {
         $this->command->setDataType(new DataType\Flag());
-    }
-
-    /**
-     * Accepts a Bucket object or a bucket string
-     *
-     * @param Bucket|string $bucket
-     *
-     * @return $this
-     * @throws Builder\Exception
-     */
-    public function withBucket($bucket)
-    {
-        if ($bucket instanceof Bucket) {
-            $this->command->setBucket($bucket);
-        } elseif (is_string($bucket)) {
-            $this->command->setBucket(new Bucket($bucket));
-        } else {
-            throw new Command\Builder\Exception('Invalid argument.');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Accepts a Location object or a location string
-     *
-     * @param Location|string $location
-     *
-     * @return $this
-     * @throws Builder\Exception
-     */
-    public function withLocation($location)
-    {
-        if ($location instanceof Location) {
-            $this->command->setLocation($location);
-        } elseif (is_string($location) && substr($location, 0, 1) === '/') {
-            // parse the locator string into $matches
-            preg_match('/^\/(\w)\/(\w)\/(\w)$/', $location, $matches);
-
-            // build and set the Location object
-            $this->command->setLocation(
-                new Location($matches[2], new Bucket($matches[1], $matches[0]))
-            );
-        } else {
-            throw new Command\Builder\Exception('Invalid argument.');
-        }
-
-        return $this;
-    }
-
-    public function withObject(Object $object)
-    {
-        $this->command->setObject($object);
 
         return $this;
     }
@@ -193,15 +123,48 @@ class Builder
 
     public function withParameter($key, $value = true)
     {
-        $this->command->setParameter($key, $value);
+        $this->parameters[$key] = $value;
 
         return $this;
     }
 
     public function withParameters($parameters = [])
     {
-        $this->command->setParameters($parameters);
+        $this->parameters = $parameters;
 
         return $this;
+    }
+
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Validate command
+     *
+     * Method validates if the builder has the parameters / objects required to successfully execute the command
+     *
+     * @return bool
+     * @throws Builder\Exception
+     */
+    protected function validate()
+    {
+        throw new Command\Builder\Exception('Invalid builder.');
+    }
+
+    /**
+     * Used to verify a property within the builder is not null and is instantiated
+     *
+     * @param $objectName
+     *
+     * @throws Builder\Exception
+     */
+    protected function required($objectName)
+    {
+        $method = "get{$objectName}";
+        if (!$this->$method() && !$this->$method() instanceof $objectName) {
+            throw new Builder\Exception("This command requires {$objectName} be defined.");
+        }
     }
 }

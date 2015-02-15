@@ -23,11 +23,11 @@ use Basho\Riak\CommandInterface;
 /**
  * Class Delete
  *
- * [summary]
+ * Used to remove an object from Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Delete extends Command implements CommandInterface
+class Delete extends Command\Object implements CommandInterface
 {
     protected $method = 'DELETE';
-} 
+}
