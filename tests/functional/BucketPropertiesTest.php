@@ -30,5 +30,9 @@ use Basho\Riak\Node\Builder;
  */
 class BucketPropertiesTest extends TestCase
 {
+    public function testStoreNewWithKey()
+    {
+        $this->assertTrue(TRUE);
+    }
 
 }

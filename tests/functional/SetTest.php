@@ -30,5 +30,9 @@ use Basho\Riak\Node\Builder;
  */
 class SetTest extends TestCase
 {
+    public function testStoreNewWithKey()
+    {
+        $this->assertTrue(TRUE);
+    }
 
 }

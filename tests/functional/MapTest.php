@@ -30,5 +30,8 @@ use Basho\Riak\Node\Builder;
  */
 class MapTest extends TestCase
 {
-
+    public function testStoreNewWithKey()
+    {
+        $this->assertTrue(TRUE);
+    }
 }

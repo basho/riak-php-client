@@ -17,7 +17,6 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command;
 
-use Basho\Riak\Bucket;
 use Basho\Riak\Command;
 use Basho\Riak\Location;
 
@@ -36,11 +35,6 @@ abstract class Object extends Command
     protected $object = NULL;
 
     /**
-     * @var Bucket|null
-     */
-    protected $bucket = NULL;
-
-    /**
      * @var Location|null
      */
     protected $location = NULL;
@@ -48,11 +42,6 @@ abstract class Object extends Command
     public function getObject()
     {
         return $this->object;
-    }
-
-    public function getBucket()
-    {
-        return $this->bucket;
     }
 
     public function getLocation()

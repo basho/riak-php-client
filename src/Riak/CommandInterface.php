@@ -28,13 +28,9 @@ interface CommandInterface
 {
     public function getMethod();
 
-    public function getBucket();
-
-    public function getLocation();
-
-    public function getObject();
-
-    public function getDataType();
-
     public function hasParameters();
+
+    public function setResponse($statusCode, $responseHeaders, $responseBody);
+
+    public function execute();
 }

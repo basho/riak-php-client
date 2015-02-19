@@ -19,7 +19,6 @@ namespace Basho\Riak\Api;
 
 use Basho\Riak\Api;
 use Basho\Riak\ApiInterface;
-use Basho\Riak\Bucket;
 use Basho\Riak\Command;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
@@ -87,7 +86,7 @@ class Http extends Api implements ApiInterface
         $this->prepareRequest();
 
         // set the request string to be sent
-        $this->setRequest(curl_getinfo($this->getConnection(), CURLINFO_HEADER_OUT));
+        $this->request = curl_getinfo($this->getConnection(), CURLINFO_HEADER_OUT);
 
         return $this;
     }
@@ -102,15 +101,13 @@ class Http extends Api implements ApiInterface
         $bucket = NULL;
         $key = '';
 
-        // check location first
-        $location = $this->getCommand()->getLocation();
         $bucket = $this->getCommand()->getBucket();
 
-        if (!empty($location) && $location instanceof Location) {
-            $bucket = $location->getBucket();
-            $key = $location->getKey();
-        } elseif (!empty($bucket) && $bucket instanceof Bucket) {
-            $bucket = $location->getBucket();
+        if (method_exists($this->command, 'getLocation')) {
+            $location = $this->getCommand()->getLocation();
+            if (!empty($location) && $location instanceof Location) {
+                $key = $location->getKey();
+            }
         }
 
         switch (get_class($this->getCommand())) {
@@ -222,7 +219,7 @@ class Http extends Api implements ApiInterface
                 curl_setopt($this->getConnection(), CURLOPT_POSTFIELDS, $this->getCommand()->getParameters());
             } else {
                 // build query using RFC 3986 (spaces become %20 instead of '+')
-                $this->setQuery(http_build_query($this->getCommand()->getParameters(), '', '&', PHP_QUERY_RFC3986));
+                $this->query = http_build_query($this->getCommand()->getParameters(), '', '&', PHP_QUERY_RFC3986);
             }
         }
 
@@ -273,19 +270,6 @@ class Http extends Api implements ApiInterface
         return $this->query;
     }
 
-    /**
-     * @param string $query
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-    }
-
-    /**
-     * send
-     *
-     * @return Http\Response
-     */
     public function send()
     {
         // set the response header and body callback functions
@@ -293,14 +277,15 @@ class Http extends Api implements ApiInterface
         curl_setopt($this->getConnection(), CURLOPT_WRITEFUNCTION, [$this, 'responseBodyCallback']);
 
         // execute the request
-        curl_exec($this->getConnection());
+        $this->success = curl_exec($this->getConnection());
+        if ($this->success === FALSE) {
+            $this->error = curl_error($this->getConnection());
+        }
 
         // set the response http code
         $this->statusCode = curl_getinfo($this->getConnection(), CURLINFO_HTTP_CODE);
 
-        $response = new Api\Http\Response($this->statusCode, $this->responseHeaders, $this->responseBody);
-
-        return $response;
+        return $this->success;
     }
 
     /**
@@ -317,18 +302,22 @@ class Http extends Api implements ApiInterface
      */
     public function responseHeaderCallback($ch, $header)
     {
-        /*$headers = [];
+        var_dump($header);
+        if (strpos($header, ':')) {
+            list ($key, $value) = explode(':', $header);
 
-        foreach (explode("\r\n", $header) as $i => $line) {
-            if ($i === 0) {
-                $headers['http_code'] = $line;
-            } else {
-                list ($key, $value) = explode(': ', $line);
-                $headers[$key] = $value;
+            $value = trim($value);
+
+            if (!empty($value)) {
+                if (!isset($this->responseHeaders[$key])) {
+                    $this->responseHeaders[$key] = $value;
+                } elseif (is_array($this->responseHeaders[$key])) {
+                    $this->responseHeaders[$key] = array_merge($this->responseHeaders[$key], [$value]);
+                } else {
+                    $this->responseHeaders[$key] = array_merge([$this->responseHeaders[$key]], [$value]);
+                }
             }
         }
-        */
-        $this->setResponseHeaders(http_parse_headers($header));
 
         return strlen($header);
     }
@@ -346,7 +335,7 @@ class Http extends Api implements ApiInterface
      */
     public function responseBodyCallback($ch, $body)
     {
-        $this->setResponseBody($body);
+        $this->responseBody = $body;
 
         return strlen($body);
     }

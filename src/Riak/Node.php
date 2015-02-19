@@ -137,13 +137,18 @@ class Node
      * @param Command $command
      * @param Api $api
      *
-     * @return Api\Response
+     * @return Command\Response
+     * @throws Exception
      */
     public function execute(Command $command, Api $api)
     {
-        $response = $api->prepare($command, $this)->send();
-        $command->setResponse($response);
+        $success = $api->prepare($command, $this)->send();
+        if ($success === FALSE) {
+            throw new Exception('Command failed to execute against Riak. Error Msg: ' . $api->getError());
+        }
 
-        return $response->getStatusCode();
+        $command->setResponse($api->getStatusCode(), $api->getResponseHeaders(), $api->getResponseBody());
+
+        return $command->getResponse();
     }
 }

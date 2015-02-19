@@ -26,5 +26,9 @@ namespace Basho\Tests;
  */
 class NodeUnreachableTest extends TestCase
 {
+    public function testStoreNewWithKey()
+    {
+        $this->assertTrue(TRUE);
+    }
 
 }

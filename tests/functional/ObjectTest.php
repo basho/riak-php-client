@@ -17,7 +17,6 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
-use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
@@ -30,58 +29,60 @@ use Basho\Riak\Command;
 class ObjectTest extends TestCase
 {
     /**
-     * Riak client
+     * @dataProvider getLocalNodeConnection
      *
-     * @var Riak|null
+     * @param $riak \Basho\Riak
      */
-    private static $riak = NULL;
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function setUpBeforeClass()
+    public function testStoreNewWithoutKey($riak)
     {
-        parent::setUpBeforeClass();
-        self::$riak = static::$container['riak'];
-    }
-
-    /**
-     * testStoreWithoutKey
-     */
-    public function testStoreWithoutKey()
-    {
-        $command = (new Command\Builder(Command::STORE_OBJECT))
+        // build an object
+        $command = (new Command\Builder\StoreObject($riak))
             ->addObject('some_data')
-            ->withBucket('/default/user/')
+            ->addBucket('users')
             ->build();
 
-        $statusCode = self::$riak->execute($command);
+        $response = $command->execute($command);
 
-        $this->assertEquals('201', $statusCode);
+        var_dump($response);
+
+        $this->assertEquals('201', $response->getStatusCode());
     }
 
-    public function testStoreNewWithKey()
+    /**
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testStoreNewWithKey($riak)
     {
+        $command = (new Command\Builder\StoreObject($riak))
+            ->addObject('some_data')
+            ->addLocation('some_key', 'users')
+            ->build();
 
+        $response = $command->execute($command);
+
+        $this->assertEquals('201', $response->getStatusCode());
     }
 
-    public function testFetchExisting()
-    {
+    /*    public function testFetchExisting()
+        {
 
-    }
+        }
 
-    public function testStoreExisting()
-    {
+        public function testStoreExisting()
+        {
 
-    }
+        }
 
-    public function testDelete()
-    {
+        public function testDelete()
+        {
 
-    }
+        }
 
-    public function testFetchNotFound()
-    {
+        public function testFetchNotFound()
+        {
 
-    }
+        }
+    */
 }

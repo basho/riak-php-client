@@ -15,33 +15,23 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Api\Response;
+namespace Basho\Riak\Command\Object;
 
 /**
- * Class Response
+ * Class Object\Response
  *
- * [summary]
+ * Container for a response related to an operation on an object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Response extends \Basho\Riak\Api\Response
+class Response extends \Basho\Riak\Command\Response
 {
-    public function __construct($statusCode, $responseHeaders = [], $responseBod = '')
-    {
-
-    }
-
     public function getVClock()
     {
 
     }
 
     public function getObject()
-    {
-
-    }
-
-    public function getDataType()
     {
 
     }

@@ -17,7 +17,8 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests\Riak;
 
-use Basho\Riak\Node\Builder;
+use Basho\Riak\Node;
+use Basho\Tests\TestCase;
 
 /**
  * Class NodeTest
@@ -26,42 +27,18 @@ use Basho\Riak\Node\Builder;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class NodeTest extends \PHPUnit_Framework_TestCase
+class NodeTest extends TestCase
 {
     /**
-     * Riak Node object.
+     * @dataProvider getLocalNode
      *
-     * @var Node
+     * @param $node Node
      */
-    static $node = null;
-
-    /**
-     * setUpBeforeClass
-     *
-     * Sets up the data objects needed by the tests
-     *
-     * @static
-     */
-    public static function setUpBeforeClass()
+    public function testConfig($node)
     {
-        static::$node = (new Builder)
-            ->withHost('localhost')
-            ->withPort(10018)
-            ->build();
-    }
-
-    /**
-     * testConfig
-     *
-     * Test the node config object
-     *
-     * @covers
-     */
-    public function testConfig()
-    {
-        $this->assertEquals('localhost', static::$node->getHost());
-        $this->assertEquals(10018, static::$node->getPort());
-        $this->assertNotEmpty(static::$node->getSignature());
+        $this->assertEquals('localhost', $node->getHost());
+        $this->assertEquals(8098, $node->getPort());
+        $this->assertNotEmpty($node->getSignature());
     }
 }
  

@@ -46,33 +46,6 @@ trait ObjectTrait
     }
 
     /**
-     * @param array $headers
-     *
-     * @return $this
-     */
-    public function setHeaders(array $headers)
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
-
-    /**
-     * Sets a single header value within the headers array
-     *
-     * @param $key
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setHeader($key, $value)
-    {
-        $this->headers[$key] = $value;
-
-        return $this;
-    }
-
-    /**
      * Retrieve the value for a header, null if not set
      *
      * @param $key

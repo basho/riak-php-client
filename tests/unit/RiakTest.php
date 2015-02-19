@@ -30,19 +30,10 @@ use Basho\Riak\Node\Builder;
  */
 class RiakTest extends TestCase
 {
-    public function getNodes()
-    {
-        return [
-            [
-                (new Builder)
-                    ->withPort(10018)
-                    ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',])
-            ],
-        ];
-    }
-
     /**
-     * @dataProvider getNodes
+     * @dataProvider getCluster
+     *
+     * @param $nodes array
      */
     public function testNodeCount($nodes)
     {
@@ -51,7 +42,9 @@ class RiakTest extends TestCase
     }
 
     /**
-     * @dataProvider getNodes
+     * @dataProvider getCluster
+     *
+     * @param $nodes array
      */
     public function testClientId($nodes)
     {
@@ -61,7 +54,9 @@ class RiakTest extends TestCase
     }
 
     /**
-     * @dataProvider getNodes
+     * @dataProvider getCluster
+     *
+     * @param $nodes array
      */
     public function testConfig($nodes)
     {
@@ -70,7 +65,8 @@ class RiakTest extends TestCase
     }
 
     /**
-     * @dataProvider getNodes
+     * @dataProvider getCluster
+     * @param $nodes array
      */
     public function testPickNode($nodes)
     {
@@ -80,7 +76,8 @@ class RiakTest extends TestCase
     }
 
     /**
-     * @dataProvider getNodes
+     * @dataProvider getCluster
+     * @param $nodes array
      */
     public function testApi($nodes)
     {
@@ -88,4 +85,3 @@ class RiakTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Api', $riak->getApi());
     }
 }
- 

@@ -66,9 +66,21 @@ abstract class Api
 
     protected $clientId = '';
 
+    protected $success = NULL;
+
+    protected $error = '';
+
     public function __construct($clientId)
     {
         $this->clientId = $clientId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->error;
     }
 
     /**
@@ -85,14 +97,6 @@ abstract class Api
     public function getStatusCode()
     {
         return $this->statusCode;
-    }
-
-    /**
-     * @param int $statusCode
-     */
-    protected function setStatusCode($statusCode)
-    {
-        $this->statusCode = $statusCode;
     }
 
     /**
@@ -142,17 +146,6 @@ abstract class Api
     }
 
     /**
-     * @param string $request
-     * @return $this
-     */
-    protected function setRequest($request)
-    {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getResponseBody()
@@ -161,33 +154,11 @@ abstract class Api
     }
 
     /**
-     * @param string $responseBody
-     * @return $this
-     */
-    public function setResponseBody($responseBody)
-    {
-        $this->responseBody = $responseBody;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getResponseHeaders()
     {
         return $this->responseHeaders;
-    }
-
-    /**
-     * @param array $responseHeaders
-     * @return $this
-     */
-    public function setResponseHeaders($responseHeaders)
-    {
-        $this->responseHeaders = $responseHeaders;
-
-        return $this;
     }
 
     /**

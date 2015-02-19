@@ -171,11 +171,11 @@ class Riak
      *
      * @param Command $command
      *
-     * @return int
+     * @return Command\Response
      */
     public function execute(Command $command)
     {
-        return $this->getActiveNode()->execute($command, $this->getApi());
+        return $this->getActiveNode()->execute($command, $this->api);
     }
 
     /**

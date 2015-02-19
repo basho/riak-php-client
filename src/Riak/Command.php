@@ -41,11 +41,6 @@ abstract class Command
     protected $method = 'GET';
 
     /**
-     * @var DataType|null
-     */
-    protected $dataType = null;
-
-    /**
      * Command parameters
      *
      * @var array
@@ -53,20 +48,30 @@ abstract class Command
     protected $parameters = [];
 
     /**
-     * @var Response|null
+     * @var Bucket|null
+     */
+    protected $bucket = NULL;
+
+    /**
+     * @var Command\Response|null
      */
     protected $response = NULL;
 
-    /**
-     * @param Response $response
-     *
-     * @return $this
-     */
-    public function setResponse(Response $response)
-    {
-        $this->response = $response;
+    protected $riak = NULL;
 
-        return $this;
+    public function __construct(Builder $builder)
+    {
+        $this->riak = $builder->getConnection();
+    }
+
+    public function execute()
+    {
+        return $this->riak->execute($this);
+    }
+
+    public function getBucket()
+    {
+        return $this->bucket;
     }
 
     /**
@@ -101,11 +106,10 @@ abstract class Command
         return $this->method;
     }
 
-    /**
-     * @return DataType|null
-     */
-    public function getDataType()
+    public function getResponse()
     {
-        return $this->dataType;
+        return $this->response;
     }
+
+    abstract public function setResponse($statusCode, $responseHeaders = [], $responseBody = '');
 }

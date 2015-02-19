@@ -15,7 +15,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Api;
+namespace Basho\Riak\Command;
 
 /**
  * Class Response
@@ -58,12 +58,4 @@ abstract class Response
     {
         return $this->statusCode;
     }
-
-    abstract public function getVClock();
-
-    abstract public function getObject();
-
-    abstract public function getDataType();
-
-    abstract public function hasSiblings();
 }

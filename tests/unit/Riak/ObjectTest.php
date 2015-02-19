@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Tests\Riak;
 
 use Basho\Riak\Object;
+use Basho\Tests\TestCase;
 
 /**
  * Class ObjectTest
@@ -26,32 +27,22 @@ use Basho\Riak\Object;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class ObjectTest extends \PHPUnit_Framework_TestCase
+class ObjectTest extends TestCase
 {
     public function testConstruct()
     {
         // simple new object
         $object = new Object();
-        $this->assertEmpty($object->getKey());
         $this->assertEmpty($object->getData());
         $this->assertNotEmpty($object->getHeaders());
         $this->assertEquals($object->getHeader('content-type'), 'application/json');
 
         // more complex object
-        $key = 'this_is_a_key';
         $data = new \StdClass();
         $data->woot = 'sauce';
-        $object = new Object($key, $data, ['content-type' => 'text/plain']);
-        $this->assertEquals($key, $object->getKey());
+        $object = new Object($data, ['content-type' => 'text/plain']);
         $this->assertEquals('sauce', $object->getData()->woot);
         $this->assertNotEmpty($object->getHeaders());
-        $this->assertEquals($object->getHeader('content-type'), 'text/plain');
-    }
-
-    public function testSetHeader()
-    {
-        $object = new Object();
-        $object->setHeader('content-type', 'text/plain');
         $this->assertEquals($object->getHeader('content-type'), 'text/plain');
     }
 }

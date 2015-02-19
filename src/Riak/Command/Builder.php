@@ -44,6 +44,9 @@ use Basho\Riak\DataType;
  */
 abstract class Builder
 {
+    /**
+     * @var Riak|null
+     */
     protected $riak = NULL;
 
     /**
@@ -138,6 +141,11 @@ abstract class Builder
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    public function getConnection()
+    {
+        return $this->riak;
     }
 
     /**

@@ -18,8 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Tests;
 
 use Basho\Riak;
-use Basho\Riak\Node\Builder;
-use Pimple\Container;
+use Basho\Riak\Node;
 
 /**
  * Class TestCase
@@ -28,43 +27,56 @@ use Pimple\Container;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Container|null
-     */
-    protected static $container = null;
 
     /**
-     * setUpBeforeClass
+     * DATA PROVIDERS
      *
-     * Sets up dependencies needed to run tests.
-     *
-     * @static
+     * Prepares & provides input parameters needed by tests
      */
-    public static function setUpBeforeClass()
+
+    /**
+     * Gets a cluster of 3 fake nodes
+     *
+     * @return array
+     */
+    public function getCluster()
     {
-        static::$container = new Container();
+        return [
+            [
+                (new Node\Builder)
+                    ->withPort(8098)
+                    ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',])
+            ],
+        ];
+    }
 
-        static::$container['nodes'] = function ($c) {
-            return (new Builder())
-                ->buildLocalhost();
-        };
+    public function getLocalNodeConnection()
+    {
+        $node = $this->getLocalNode();
 
-        static::$container['riak'] = function ($c) {
-            return new Riak($c['nodes']);
-        };
+        return [
+            [
+                new Riak($node[0])
+            ],
+        ];
     }
 
     /**
-     * tearDownAfterClass
+     * Gets a single local node
      *
-     * Releases resources allocated to dependencies
-     *
-     * @static
+     * @return array
      */
-    public static function tearDownAfterClass()
+    public function getLocalNode()
     {
-        static::$container = null;
+        return [
+            [
+                (new Node\Builder)
+                    ->withHost('localhost')
+                    ->withPort(8098)
+                    ->build()
+            ],
+        ];
     }
 }
