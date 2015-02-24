@@ -37,7 +37,7 @@ class Http extends Api implements ApiInterface
      *
      * @var null
      */
-    protected static $connection = null;
+    protected $connection = NULL;
 
     /**
      * API path
@@ -55,13 +55,13 @@ class Http extends Api implements ApiInterface
 
     public function resetConnection()
     {
-        curl_reset(self::$connection);
+        curl_reset($this->connection);
     }
 
     public function closeConnection()
     {
-        curl_close(self::$connection);
-        self::$connection = null;
+        curl_close($this->connection);
+        $this->connection = NULL;
     }
 
     /**
@@ -129,7 +129,6 @@ class Http extends Api implements ApiInterface
                 break;
             case 'Basho\Riak\Command\DateType\Fetch':
             case 'Basho\Riak\Command\DateType\Store':
-                // curl -XPOST "127.0.0.1:8098/types/counters/buckets/default/datatypes/mycounter?returnbody=true" -i -H "Content-Type:application/json" -d '1'
                 $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
             default:
@@ -165,16 +164,18 @@ class Http extends Api implements ApiInterface
      */
     public function getConnection()
     {
-        if (!self::$connection) {
+        if (!$this->connection) {
             $this->openConnection();
         }
 
-        return self::$connection;
+        return $this->connection;
     }
 
     public function openConnection()
     {
-        self::$connection = curl_init();
+        $this->connection = curl_init();
+
+        return $this;
     }
 
     /**
@@ -188,6 +189,7 @@ class Http extends Api implements ApiInterface
     {
         return $this->prepareRequestMethod()
                     ->prepareRequestParameters()
+            ->prepareRequestData()
                     ->prepareRequestUrl();
     }
 
@@ -207,6 +209,22 @@ class Http extends Api implements ApiInterface
     }
 
     /**
+     * Prepare request data
+     *
+     * @return $this
+     */
+    protected function prepareRequestData()
+    {
+        // if POST or PUT, add parameters to post data, else add to uri
+        if (in_array($this->getCommand()->getMethod(), ['POST', 'PUT'])) {
+            $this->requestBody = $this->getCommand()->getUrlEncodedData();
+            curl_setopt($this->getConnection(), CURLOPT_POSTFIELDS, $this->requestBody);
+        }
+
+        return $this;
+    }
+
+    /**
      * Prepare request parameters
      *
      * @return $this
@@ -214,13 +232,8 @@ class Http extends Api implements ApiInterface
     protected function prepareRequestParameters()
     {
         if ($this->getCommand()->hasParameters()) {
-            // if POST or PUT, add parameters to post data, else add to uri
-            if (in_array($this->getCommand()->getMethod(), ['POST', 'PUT'])) {
-                curl_setopt($this->getConnection(), CURLOPT_POSTFIELDS, $this->getCommand()->getParameters());
-            } else {
-                // build query using RFC 3986 (spaces become %20 instead of '+')
-                $this->query = http_build_query($this->getCommand()->getParameters(), '', '&', PHP_QUERY_RFC3986);
-            }
+            // build query using RFC 3986 (spaces become %20 instead of '+')
+            $this->query = http_build_query($this->getCommand()->getParameters(), '', '&', PHP_QUERY_RFC3986);
         }
 
         return $this;
@@ -282,6 +295,8 @@ class Http extends Api implements ApiInterface
             $this->error = curl_error($this->getConnection());
         }
 
+        $this->request = curl_getinfo($this->getConnection(), CURLINFO_HEADER_OUT);
+
         // set the response http code
         $this->statusCode = curl_getinfo($this->getConnection(), CURLINFO_HTTP_CODE);
 
@@ -302,7 +317,6 @@ class Http extends Api implements ApiInterface
      */
     public function responseHeaderCallback($ch, $header)
     {
-        var_dump($header);
         if (strpos($header, ':')) {
             list ($key, $value) = explode(':', $header);
 
