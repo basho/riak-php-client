@@ -51,4 +51,12 @@ class Store extends Command\Object implements CommandInterface
 
         return $this;
     }
+
+    /**
+     * @return Command\Object\Response
+     */
+    public function execute()
+    {
+        return parent::execute();
+    }
 }

@@ -29,4 +29,31 @@ use Basho\Riak\CommandInterface;
  */
 class Fetch extends Command\Object implements CommandInterface
 {
+    /**
+     * @var Response|null
+     */
+    protected $response = NULL;
+
+    public function __construct(Command\Builder\FetchObject $builder)
+    {
+        parent::__construct($builder);
+
+        $this->bucket = $builder->getBucket();
+        $this->location = $builder->getLocation();
+    }
+
+    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
+
+        return $this;
+    }
+
+    /**
+     * @return Command\Object\Response
+     */
+    public function execute()
+    {
+        return parent::execute();
+    }
 }
