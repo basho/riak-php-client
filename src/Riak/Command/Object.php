@@ -48,4 +48,14 @@ abstract class Object extends Command
     {
         return $this->location;
     }
+
+    public function getData()
+    {
+        return $this->object->getData();
+    }
+
+    public function getUrlEncodedData()
+    {
+        return rawurlencode($this->object->getData());
+    }
 }
