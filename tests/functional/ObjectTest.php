@@ -28,9 +28,16 @@ use Basho\Riak\Command;
  */
 class ObjectTest extends TestCase
 {
+    private static $key = '';
+
+    public static function setUpBeforeClass()
+    {
+        // make completely random key based on time
+        static::$key = md5(rand(0, 99) . time());
+    }
+
     /**
      * @dataProvider getLocalNodeConnection
-     *
      * @param $riak \Basho\Riak
      */
     public function testStoreNewWithoutKey($riak)
@@ -43,12 +50,27 @@ class ObjectTest extends TestCase
 
         $response = $command->execute($command);
 
-        var_dump($response);
-
+        // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
     }
 
     /**
+     * @dataProvider getLocalNodeConnection
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchNotFound($riak)
+    {
+        $command = (new Command\Builder\FetchObject($riak))
+            ->addLocation(static::$key, 'users')
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('404', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testFetchNonExisting
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -57,32 +79,43 @@ class ObjectTest extends TestCase
     {
         $command = (new Command\Builder\StoreObject($riak))
             ->addObject('some_data')
-            ->addLocation('some_key', 'users')
+            ->addLocation(static::$key, 'users')
             ->build();
 
         $response = $command->execute($command);
 
-        $this->assertEquals('201', $response->getStatusCode());
+        // expects 204 - No Content
+        // this is wonky, its not 201 because the key may have been generated on another node
+        $this->assertEquals('204', $response->getStatusCode());
     }
 
-    /*    public function testFetchExisting()
-        {
+    /**
+     * @depends      testStoreNewWithKey
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk($riak)
+    {
+        $command = (new Command\Builder\FetchObject($riak))
+            ->addLocation(static::$key, 'users')
+            ->build();
 
-        }
+        $response = $command->execute($command);
 
-        public function testStoreExisting()
-        {
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('some_data', $response->getObject()->getData());
+    }
 
-        }
+    /*
+    public function testStoreExisting()
+    {
 
-        public function testDelete()
-        {
+    }
 
-        }
+    public function testDelete()
+    {
 
-        public function testFetchNotFound()
-        {
-
-        }
+    }
     */
 }
