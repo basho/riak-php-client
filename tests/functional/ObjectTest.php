@@ -70,7 +70,7 @@ class ObjectTest extends TestCase
     }
 
     /**
-     * @depends      testFetchNonExisting
+     * @depends      testFetchNotFound
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
