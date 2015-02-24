@@ -34,6 +34,13 @@ abstract class Api
     protected $request = '';
 
     /**
+     * Request body to be sent
+     *
+     * @var string
+     */
+    protected $requestBody = '';
+
+    /**
      * Response headers returned from request
      *
      * @var array
@@ -179,7 +186,7 @@ abstract class Api
     /**
      * send
      *
-     * @return Api\Response
+     * @return Command\Response
      */
     abstract public function send();
 }
