@@ -17,6 +17,8 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Object;
 
+use Basho\Riak\Object;
+
 /**
  * Class Object\Response
  *
@@ -26,6 +28,20 @@ namespace Basho\Riak\Command\Object;
  */
 class Response extends \Basho\Riak\Command\Response
 {
+    /**
+     * @var \Basho\Riak\Object|null
+     */
+    protected $object = NULL;
+
+    public function __construct($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        parent::__construct($statusCode, $responseHeaders, $responseBody);
+
+        if ($responseBody) {
+            $this->object = new Object(rawurldecode($this->responseBody), $this->responseHeaders);
+        }
+    }
+
     public function getVClock()
     {
 
@@ -33,7 +49,12 @@ class Response extends \Basho\Riak\Command\Response
 
     public function getObject()
     {
+        return $this->object;
+    }
 
+    public function isNotFound()
+    {
+        return $this->statusCode == '404' ? TRUE : FALSE;
     }
 
     public function hasSiblings()
