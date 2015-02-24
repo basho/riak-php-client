@@ -30,6 +30,14 @@ interface CommandInterface
 
     public function hasParameters();
 
+    public function getParameters();
+
+    public function getData();
+
+    public function getUrlEncodedData();
+
+    public function getBucket();
+
     public function setResponse($statusCode, $responseHeaders, $responseBody);
 
     public function execute();

@@ -17,7 +17,6 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
-use Basho\Riak\Api\Response;
 use Basho\Riak\Command\Builder;
 
 /**
@@ -112,4 +111,8 @@ abstract class Command
     }
 
     abstract public function setResponse($statusCode, $responseHeaders = [], $responseBody = '');
+
+    abstract public function getData();
+
+    abstract public function getUrlEncodedData();
 }
