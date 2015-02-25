@@ -34,13 +34,13 @@ trait ObjectTrait
      * @var array
      */
     protected $headers = [
-        'content-type' => 'application/json',
+        'Content-Type' => 'application/json',
     ];
 
     /**
      * @return array
      */
-    public function getHeaders()
+    protected function getHeaders()
     {
         return $this->headers;
     }
@@ -52,7 +52,7 @@ trait ObjectTrait
      *
      * @return string|null
      */
-    public function getHeader($key)
+    protected function getHeader($key)
     {
         return isset($this->headers[$key]) ? $this->headers[$key] : NULL;
     }
