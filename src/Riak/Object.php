@@ -62,4 +62,9 @@ class Object
 
         return $this;
     }
+
+    public function getContentType()
+    {
+        return $this->getHeader('Content-Type');
+    }
 }
