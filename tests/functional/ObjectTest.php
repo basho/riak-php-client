@@ -52,6 +52,7 @@ class ObjectTest extends TestCase
 
         // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
+        $this->assertNotEmpty($response->getLocation());
     }
 
     /**
@@ -73,7 +74,9 @@ class ObjectTest extends TestCase
      * @depends      testFetchNotFound
      * @dataProvider getLocalNodeConnection
      *
-     * @param $riak \Basho\Riak
+*@param $riak \Basho\Riak
+     *
+     * @expectedException \Basho\Riak\Command\Exception
      */
     public function testStoreNewWithKey($riak)
     {
@@ -87,12 +90,12 @@ class ObjectTest extends TestCase
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
         $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEmpty($response->getLocation());
     }
 
     /**
      * @depends      testStoreNewWithKey
      * @dataProvider getLocalNodeConnection
-     *
      * @param $riak \Basho\Riak
      */
     public function testFetchOk($riak)
@@ -105,6 +108,7 @@ class ObjectTest extends TestCase
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals('some_data', $response->getObject()->getData());
+        $this->assertNotEmpty($response->getVClock());
     }
 
     /*

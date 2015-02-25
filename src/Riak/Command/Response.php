@@ -31,14 +31,14 @@ abstract class Response
      *
      * @var array
      */
-    protected $responseHeaders = [];
+    protected $headers = [];
 
     /**
      * Response body returned from request
      *
      * @var string
      */
-    protected $responseBody = '';
+    protected $body = '';
 
     /**
      * HTTP Status Code from response
@@ -47,15 +47,32 @@ abstract class Response
      */
     protected $statusCode = 0;
 
-    public function __construct($statusCode, $responseHeaders = [], $responseBody = '')
+    public function __construct($statusCode, $headers = [], $body = '')
     {
         $this->statusCode = $statusCode;
-        $this->responseHeaders = $responseHeaders;
-        $this->responseBody = $responseBody;
+        $this->headers = $headers;
+        $this->body = $body;
     }
 
     public function getStatusCode()
     {
         return $this->statusCode;
+    }
+
+    /**
+     * Retrieve the value for a header
+     *
+     * @param $key
+     *
+     * @return string
+     * @throws Exception
+     */
+    protected function getHeader($key)
+    {
+        if (!isset($this->headers[$key])) {
+            throw new Exception("Header with key, {$key}, not available within response object.");
+        }
+
+        return $this->headers[$key];
     }
 }

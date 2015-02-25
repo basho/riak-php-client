@@ -33,32 +33,68 @@ class Response extends \Basho\Riak\Command\Response
      */
     protected $object = NULL;
 
-    public function __construct($statusCode, $responseHeaders = [], $responseBody = '')
+    public function __construct($statusCode, $headers = [], $body = '')
     {
-        parent::__construct($statusCode, $responseHeaders, $responseBody);
+        parent::__construct($statusCode, $headers, $body);
 
-        if ($responseBody) {
-            $this->object = new Object(rawurldecode($this->responseBody), $this->responseHeaders);
+        if ($body) {
+            $this->object = new Object(rawurldecode($this->body), $this->headers);
         }
     }
 
-    public function getVClock()
+    /**
+     * Retrieves the Vclock value from the response headers
+     *
+     * @return string
+     * @throws \Basho\Riak\Command\Exception
+     */
+    public function getVclock()
     {
-
+        return $this->getHeader('X-Riak-Vclock');
     }
 
+    /**
+     * Retrieves the Location value from the response headers
+     *
+     * @return string
+     * @throws \Basho\Riak\Command\Exception
+     */
+    public function getLocation()
+    {
+        return $this->getHeader('Location');
+    }
+
+    /**
+     * @return Object|null
+     */
     public function getObject()
     {
         return $this->object;
     }
 
+    /**
+     * @return bool
+     */
     public function isNotFound()
     {
         return $this->statusCode == '404' ? TRUE : FALSE;
     }
 
+    /**
+     * @return bool
+     */
     public function hasSiblings()
     {
+        return $this->statusCode == '300' ? TRUE : FALSE;
+    }
 
+    /**
+     * Fetches the sibling tags from the response
+     *
+     * @return array
+     */
+    public function getSiblingTags()
+    {
+        return [];
     }
 }
