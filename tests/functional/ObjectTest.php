@@ -30,6 +30,11 @@ class ObjectTest extends TestCase
 {
     private static $key = '';
 
+    /**
+     * @var \Basho\Riak\Object|null
+     */
+    private static $object = NULL;
+
     public static function setUpBeforeClass()
     {
         // make completely random key based on time
@@ -74,9 +79,9 @@ class ObjectTest extends TestCase
      * @depends      testFetchNotFound
      * @dataProvider getLocalNodeConnection
      *
-*@param $riak \Basho\Riak
+     * @param $riak \Basho\Riak
      *
-     * @expectedException \Basho\Riak\Command\Exception
+*@expectedException \Basho\Riak\Command\Exception
      */
     public function testStoreNewWithKey($riak)
     {
@@ -107,19 +112,67 @@ class ObjectTest extends TestCase
         $response = $command->execute($command);
 
         $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
         $this->assertEquals('some_data', $response->getObject()->getData());
         $this->assertNotEmpty($response->getVClock());
+
+        static::$object = $response->getObject();
     }
 
-    /*
-    public function testStoreExisting()
+    /**
+     * @depends      testFetchOk
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testStoreExisting($riak)
     {
+        $object = static::$object;
 
+        $object->setData('some_new_data');
+
+        $command = (new Command\Builder\StoreObject($riak))
+            ->withObject($object)
+            ->addLocation(static::$key, 'users')
+            ->build();
+
+        $response = $command->execute($command);
+
+        // 204 - No Content
+        $this->assertEquals('204', $response->getStatusCode());
     }
 
-    public function testDelete()
+    /**
+     * @depends      testStoreExisting
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testDelete($riak)
     {
+        $command = (new Command\Builder\DeleteObject($riak))
+            ->addLocation(static::$key, 'users')
+            ->build();
 
+        $response = $command->execute($command);
+
+        $this->assertEquals('204', $response->getStatusCode());
     }
-    */
+
+    /**
+     * @depends      testDelete
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchDeleted($riak)
+    {
+        $command = (new Command\Builder\FetchObject($riak))
+            ->addLocation(static::$key, 'users')
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('404', $response->getStatusCode());
+    }
 }

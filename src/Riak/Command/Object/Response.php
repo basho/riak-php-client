@@ -97,4 +97,37 @@ class Response extends \Basho\Riak\Command\Response
     {
         return [];
     }
+
+    /**
+     * Retrieves the last modified time of the object
+     *
+     * @return string
+     * @throws \Basho\Riak\Command\Exception
+     */
+    public function getLastModified()
+    {
+        return $this->getHeader('Last-Modified');
+    }
+
+    /**
+     * Retrieves the etag of the object
+     *
+     * @return string
+     * @throws \Basho\Riak\Command\Exception
+     */
+    public function getETag()
+    {
+        return $this->getHeader('ETag');
+    }
+
+    /**
+     * Retrieves the date of the object's retrieval
+     *
+     * @return string
+     * @throws \Basho\Riak\Command\Exception
+     */
+    public function getDate()
+    {
+        return $this->getHeader('Date');
+    }
 }

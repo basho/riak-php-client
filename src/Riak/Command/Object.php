@@ -30,6 +30,11 @@ use Basho\Riak\Location;
 abstract class Object extends Command
 {
     /**
+     * @var Object\Response|null
+     */
+    protected $response = NULL;
+
+    /**
      * @var \Basho\Riak\Object|null
      */
     protected $object = NULL;
@@ -57,5 +62,20 @@ abstract class Object extends Command
     public function getUrlEncodedData()
     {
         return rawurlencode($this->object->getData());
+    }
+
+    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        $this->response = new Object\Response($statusCode, $responseHeaders, $responseBody);
+
+        return $this;
+    }
+
+    /**
+     * @return Command\Object\Response
+     */
+    public function execute()
+    {
+        return parent::execute();
     }
 }

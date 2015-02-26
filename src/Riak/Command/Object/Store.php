@@ -31,11 +31,6 @@ class Store extends Command\Object implements CommandInterface
 {
     protected $method = 'POST';
 
-    /**
-     * @var Response|null
-     */
-    protected $response = NULL;
-
     public function __construct(Command\Builder\StoreObject $builder)
     {
         parent::__construct($builder);
@@ -43,20 +38,5 @@ class Store extends Command\Object implements CommandInterface
         $this->object = $builder->getObject();
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
-    }
-
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
-    }
-
-    /**
-     * @return Command\Object\Response
-     */
-    public function execute()
-    {
-        return parent::execute();
     }
 }

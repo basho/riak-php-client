@@ -15,25 +15,37 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Builder;
 
 use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
 
 /**
- * Class Fetch
- *
- * Fetches a Riak Kv Object
+ * Class FetchObject
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\Object implements CommandInterface
+class DeleteObject extends Command\Builder implements Command\BuilderInterface
 {
-    public function __construct(Command\Builder\FetchObject $builder)
-    {
-        parent::__construct($builder);
+    use ObjectTrait;
+    use LocationTrait;
 
-        $this->bucket = $builder->getBucket();
-        $this->location = $builder->getLocation();
+    /**
+     * {@inheritdoc}
+     *
+     * @return Command\Object\Delete;
+     */
+    public function build()
+    {
+        $this->validate();
+
+        return new Command\Object\Delete($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        $this->required('Location');
     }
 }
