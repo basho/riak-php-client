@@ -29,6 +29,10 @@ use Basho\Riak\Node;
  */
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
+    const SEARCH_BUCKET_TYPE = 'phptest_search';
+    const COUNTER_BUCKET_TYPE = 'phptest_counters';
+    const MAP_BUCKET_TYPE = 'phptest_maps';
+    const SET_BUCKET_TYPE = 'phptest_sets';
 
     /**
      * DATA PROVIDERS
