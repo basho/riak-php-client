@@ -37,11 +37,21 @@ trait LocationTrait
      */
     protected $location = NULL;
 
+    /**
+     * @return Location|null
+     */
     public function getLocation()
     {
         return $this->location;
     }
 
+    /**
+     * @param $key
+     * @param $name
+     * @param string $type
+     *
+     * @return $this
+     */
     public function addLocation($key, $name, $type = 'default')
     {
         $this->bucket = new Bucket($name, $type);
@@ -50,6 +60,11 @@ trait LocationTrait
         return $this;
     }
 
+    /**
+     * @param Location $location
+     *
+     * @return $this
+     */
     public function withLocation(Location $location)
     {
         $this->bucket = $location->getBucket();

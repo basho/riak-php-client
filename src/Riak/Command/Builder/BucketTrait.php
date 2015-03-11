@@ -38,6 +38,12 @@ trait BucketTrait
         return $this->bucket;
     }
 
+    /**
+     * @param $name
+     * @param string $type
+     *
+     * @return $this
+     */
     public function addBucket($name, $type = 'default')
     {
         $this->bucket = new Bucket($name, $type);
@@ -45,6 +51,11 @@ trait BucketTrait
         return $this;
     }
 
+    /**
+     * @param Bucket $bucket
+     *
+     * @return $this
+     */
     public function withBucket(Bucket $bucket)
     {
         $this->bucket = $bucket;
