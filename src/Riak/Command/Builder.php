@@ -89,23 +89,9 @@ abstract class Builder
         return $this;
     }
 
-    public function addFlag()
-    {
-        $this->command->setDataType(new DataType\Flag());
-
-        return $this;
-    }
-
     public function withCounter(DataType\Counter $counter)
     {
         $this->command->setDataType($counter);
-
-        return $this;
-    }
-
-    public function withFlag(DataType\Flag $flag)
-    {
-        $this->command->setDataType($flag);
 
         return $this;
     }
@@ -171,8 +157,13 @@ abstract class Builder
     protected function required($objectName)
     {
         $method = "get{$objectName}";
-        if (!$this->$method() && !$this->$method() instanceof $objectName) {
-            throw new Builder\Exception("This command requires {$objectName} be defined.");
+        $class = "Basho\\Riak\\{$objectName}";
+        $value = $this->$method();
+        if (is_null($value)) {
+            throw new Builder\Exception("Expected non-empty value for {$objectName}");
+        }
+        if (is_object($value) && $value instanceof $class === false) {
+            throw new Builder\Exception("Expected instance of {$class}, received instance of " . get_class($value));
         }
     }
 }
