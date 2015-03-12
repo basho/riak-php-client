@@ -44,6 +44,8 @@ use Basho\Riak\DataType;
  */
 abstract class Builder
 {
+    const CONTENT_TYPE_JSON = 'application/json';
+
     /**
      * @var Riak|null
      */
@@ -55,6 +57,13 @@ abstract class Builder
      * @var array
      */
     protected $parameters = [];
+
+    /**
+     * Command request headers
+     *
+     * @var array
+     */
+    protected $headers = [];
 
     public function __construct(Riak $riak)
     {
@@ -68,20 +77,6 @@ abstract class Builder
      */
     abstract public function build();
 
-    public function addCounter()
-    {
-        $this->command->setDataType(new DataType\Counter());
-
-        return $this;
-    }
-
-    public function addSet($data)
-    {
-        $this->command->setDataType(new DataType\Set($data));
-
-        return $this;
-    }
-
     public function addMap($data)
     {
         $this->command->setDataType(new DataType\Map($data));
@@ -89,23 +84,9 @@ abstract class Builder
         return $this;
     }
 
-    public function withCounter(DataType\Counter $counter)
-    {
-        $this->command->setDataType($counter);
-
-        return $this;
-    }
-
     public function withMap(DataType\Map $map)
     {
         $this->command->setDataType($map);
-
-        return $this;
-    }
-
-    public function withSet(DataType\Set $set)
-    {
-        $this->command->setDataType($set);
 
         return $this;
     }
@@ -124,9 +105,28 @@ abstract class Builder
         return $this;
     }
 
+    public function withHeader($key, $value = true)
+    {
+        $this->headers[$key] = $value;
+
+        return $this;
+    }
+
+    public function withHeaders($headers = [])
+    {
+        $this->headers = $headers;
+
+        return $this;
+    }
+
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 
     public function getConnection()

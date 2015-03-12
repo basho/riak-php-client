@@ -127,8 +127,8 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Object\Delete':
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
-            case 'Basho\Riak\Command\DateType\Fetch':
-            case 'Basho\Riak\Command\DateType\Store':
+            case 'Basho\Riak\Command\DataType\Counter\Fetch':
+            case 'Basho\Riak\Command\DataType\Counter\Store':
                 $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
             default:
@@ -188,24 +188,10 @@ class Http extends Api implements ApiInterface
     protected function prepareRequest()
     {
         return $this->prepareRequestMethod()
+            ->prepareRequestUrl()
+            ->prepareRequestHeaders()
                     ->prepareRequestParameters()
-            ->prepareRequestData()
-                    ->prepareRequestUrl();
-    }
-
-    /**
-     * Prepares the complete request URL
-     *
-     * @return $this
-     */
-    protected function prepareRequestUrl()
-    {
-        $url = sprintf('%s%s?%s', $this->node->getUri(), $this->path, $this->query);
-
-        // set the built request URL on the connection
-        curl_setopt($this->getConnection(), CURLOPT_URL, $url);
-
-        return $this;
+            ->prepareRequestData();
     }
 
     /**
@@ -235,6 +221,39 @@ class Http extends Api implements ApiInterface
             // build query using RFC 3986 (spaces become %20 instead of '+')
             $this->query = http_build_query($this->getCommand()->getParameters(), '', '&', PHP_QUERY_RFC3986);
         }
+
+        return $this;
+    }
+
+    /**
+     * Prepares the request headers
+     *
+     * @return $this
+     */
+    protected function prepareRequestHeaders()
+    {
+        $curl_headers = [];
+        foreach ($this->command->getHeaders() as $key => $value) {
+            $curl_headers[] = sprintf('%s: %s', $key, $value);
+        }
+
+        // set the request headers on the connection
+        curl_setopt($this->getConnection(), CURLOPT_HTTPHEADER, $curl_headers);
+
+        return $this;
+    }
+
+    /**
+     * Prepares the complete request URL
+     *
+     * @return $this
+     */
+    protected function prepareRequestUrl()
+    {
+        $url = sprintf('%s%s?%s', $this->node->getUri(), $this->path, $this->query);
+
+        // set the built request URL on the connection
+        curl_setopt($this->getConnection(), CURLOPT_URL, $url);
 
         return $this;
     }

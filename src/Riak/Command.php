@@ -47,6 +47,13 @@ abstract class Command
     protected $parameters = [];
 
     /**
+     * Command request headers
+     *
+     * @var array
+     */
+    protected $headers = [];
+
+    /**
      * @var Bucket|null
      */
     protected $bucket = NULL;
@@ -56,16 +63,47 @@ abstract class Command
      */
     protected $response = NULL;
 
+    /**
+     * @var \Basho\Riak|null
+     */
     protected $riak = NULL;
+
+    /**
+     * Request headers
+     *
+     * <code>
+     * $headers = ['Content-Type: application/json; charset=utf-8'];
+     * </code>
+     *
+     * @var array
+     */
+    protected $requestHeaders = [];
 
     public function __construct(Builder $builder)
     {
         $this->riak = $builder->getConnection();
+        $this->parameters = $builder->getParameters();
+        $this->headers = $builder->getHeaders();
     }
 
+    /**
+     * Executes the command against the API
+     *
+     * @return Command\Response
+     */
     public function execute()
     {
         return $this->riak->execute($this);
+    }
+
+    /**
+     * Gets the request that was issued to the API by this Command.
+     *
+     * @return string
+     */
+    public function getRequest()
+    {
+        return $this->riak->getLastRequest();
     }
 
     public function getBucket()
@@ -88,6 +126,24 @@ abstract class Command
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * @param $key string
+     *
+     * @return mixed
+     */
+    public function getHeader($key)
+    {
+        return $this->headers[$key];
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 
     /**

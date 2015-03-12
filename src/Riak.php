@@ -213,6 +213,16 @@ class Riak
     }
 
     /**
+     * Accessor for the last request issued to the API. For debugging purposes.
+     *
+     * @return string
+     */
+    public function getLastRequest()
+    {
+        return $this->api->getRequest();
+    }
+
+    /**
      * Pick new active node
      *
      * Used when the currently active node fails to complete a command / query
