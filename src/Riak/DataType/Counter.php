@@ -41,9 +41,20 @@ class Counter extends DataType
     protected $data = 0;
 
     /**
-     * Amount to increment counter
-     *
-     * @var int
+     * @param int $data
+     * @param array|null $headers
      */
-    protected $increment = 0;
+    public function __construct($data = 0, $headers = NULL)
+    {
+        $this->data = $data;
+
+        if (!empty($headers) && is_array($headers)) {
+            $this->headers = $headers;
+        }
+    }
+
+    public function getData()
+    {
+        return $this->data;
+    }
 }

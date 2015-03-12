@@ -19,23 +19,71 @@ namespace Basho\Riak\Command\DataType\Counter;
 
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
+use Basho\Riak\Location;
+
 
 /**
- * Class Fetch
+ * Class Store
  *
- * [summary]
+ * Stores a write operation to a CRDT counter
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Store extends Command implements CommandInterface
 {
-    protected $method = 'PUT';
+    protected $method = 'POST';
 
     /**
-     * {@inheritdoc}
+     * @var int
      */
-    public function validate()
+    protected $increment = 0;
+
+    /**
+     * @var Command\DataType\Counter\Response|null
+     */
+    protected $response = NULL;
+
+    /**
+     * @var Location|null
+     */
+    protected $location = NULL;
+
+    public function __construct(Command\Builder\IncrementCounter $builder)
     {
-        //$this->required('Bucket');
+        parent::__construct($builder);
+
+        $this->increment = $builder->getIncrement();
+        $this->bucket = $builder->getBucket();
+        $this->location = $builder->getLocation();
+    }
+
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function getData()
+    {
+        return $this->increment;
+    }
+
+    public function getUrlEncodedData()
+    {
+        return rawurlencode($this->increment);
+    }
+
+    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
+
+        return $this;
+    }
+
+    /**
+     * @return Command\DataType\Counter\Response
+     */
+    public function execute()
+    {
+        return parent::execute();
     }
 }

@@ -15,19 +15,36 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\DataType;
+namespace Basho\Riak\Command\Builder;
 
 use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
- *
- * [summary]
+ * Class FetchCounter
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command implements CommandInterface
+class FetchCounter extends Command\Builder implements Command\BuilderInterface
 {
-    protected $method = 'POST';
-} 
+    use LocationTrait;
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Command\DataType\Counter\Fetch;
+     */
+    public function build()
+    {
+        $this->validate();
+
+        return new Command\DataType\Counter\Fetch($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        $this->required('Location');
+    }
+}

@@ -19,6 +19,7 @@ namespace Basho\Riak\Command\DataType\Counter;
 
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
+use Basho\Riak\Location;
 
 /**
  * Class Fetch
@@ -29,13 +30,51 @@ use Basho\Riak\CommandInterface;
  */
 class Fetch extends Command implements CommandInterface
 {
-    protected $method = 'GET';
+    /**
+     * @var Command\DataType\Counter\Response|null
+     */
+    protected $response = NULL;
 
     /**
-     * {@inheritdoc}
+     * @var Location|null
      */
-    public function validate()
+    protected $location = NULL;
+
+    public function __construct(Command\Builder\FetchCounter $builder)
     {
-        //$this->required('Bucket');
+        parent::__construct($builder);
+
+        $this->bucket = $builder->getBucket();
+        $this->location = $builder->getLocation();
+    }
+
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function getData()
+    {
+        return '';
+    }
+
+    public function getUrlEncodedData()
+    {
+        return '';
+    }
+
+    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
+
+        return $this;
+    }
+
+    /**
+     * @return Command\DataType\Counter\Response
+     */
+    public function execute()
+    {
+        return parent::execute();
     }
 }

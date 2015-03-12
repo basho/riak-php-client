@@ -17,9 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
-use Basho\Riak;
-use Basho\Riak\Node;
-use Basho\Riak\Node\Builder;
+use Basho\Riak\Command;
 
 /**
  * Class CounterTest
@@ -30,9 +28,172 @@ use Basho\Riak\Node\Builder;
  */
 class CounterTest extends TestCase
 {
-    public function testStoreNewWithKey()
+    private static $key = '';
+
+    public static function setUpBeforeClass()
     {
-        $this->assertTrue(TRUE);
+        // make completely random key based on time
+        static::$key = md5(rand(0, 99) . time());
+    }
+
+    /**
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testIncrementNewWithoutKey($riak)
+    {
+        // build an object
+        $command = (new Command\Builder\IncrementCounter($riak))
+            ->withIncrement(1)
+            ->addBucket('visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // expects 201 - Created
+        $this->assertEquals('201', $response->getStatusCode());
+        $this->assertNotEmpty($response->getLocation());
+    }
+
+    /**
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchNotFound($riak)
+    {
+        $command = (new Command\Builder\FetchCounter($riak))
+            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('404', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testFetchNotFound
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     *
+     * @expectedException \Basho\Riak\Command\Exception
+     */
+    public function testIncrementNewWithKey($riak)
+    {
+        $command = (new Command\Builder\IncrementCounter($riak))
+            ->withIncrement(1)
+            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // expects 204 - No Content
+        // this is wonky, its not 201 because the key may have been generated on another node
+        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEmpty($response->getLocation());
+    }
+
+    /**
+     * @depends      testIncrementNewWithKey
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk($riak)
+    {
+        $command = (new Command\Builder\FetchCounter($riak))
+            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
+        $this->assertNotEmpty($response->getCounter()->getData());
+        $this->assertTrue(is_integer($response->getCounter()->getData()));
+        $this->assertEquals(1, $response->getCounter()->getData());
+    }
+
+    /**
+     * @depends      testFetchOk
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testIncrementExisting($riak)
+    {
+        $command = (new Command\Builder\IncrementCounter($riak))
+            ->withIncrement(1)
+            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // 204 - No Content
+        $this->assertEquals('204', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testIncrementExisting
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk2($riak)
+    {
+        $command = (new Command\Builder\FetchCounter($riak))
+            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
+        $this->assertNotEmpty($response->getCounter()->getData());
+        $this->assertTrue(is_integer($response->getCounter()->getData()));
+        $this->assertEquals(2, $response->getCounter()->getData());
+    }
+
+    /**
+     * @depends      testFetchOk
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testDecrementExisting($riak)
+    {
+        $command = (new Command\Builder\IncrementCounter($riak))
+            ->withIncrement(-1)
+            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // 204 - No Content
+        $this->assertEquals('204', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testDecrementExisting
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk3($riak)
+    {
+        $command = (new Command\Builder\FetchCounter($riak))
+            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
+        $this->assertNotEmpty($response->getCounter()->getData());
+        $this->assertTrue(is_integer($response->getCounter()->getData()));
+        $this->assertEquals(1, $response->getCounter()->getData());
     }
 
 }

@@ -15,12 +15,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\DataType\Counter;
 
-use Basho\Riak\Object;
+use Basho\Riak\DataType\Counter;
 
 /**
- * Class Object\Response
+ * Class Counter\Response
  *
  * Container for a response related to an operation on an object
  *
@@ -29,16 +29,19 @@ use Basho\Riak\Object;
 class Response extends \Basho\Riak\Command\Response
 {
     /**
-     * @var \Basho\Riak\Object|null
+     * @var \Basho\Riak\DataType\Counter|null
      */
-    protected $object = NULL;
+    protected $counter = NULL;
 
     public function __construct($statusCode, $headers = [], $body = '')
     {
         parent::__construct($statusCode, $headers, $body);
 
-        if ($body) {
-            $this->object = new Object(rawurldecode($this->body), $this->headers);
+        // make sure body isn't only whitespace & has a value for the counter
+        if (trim($body) && strpos($body, 'value')) {
+            // json response
+            $body = json_decode(rawurldecode($this->body));
+            $this->counter = new Counter($body->value, $this->headers);
         }
     }
 
@@ -65,11 +68,11 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return Object|null
+     * @return Counter|null
      */
-    public function getObject()
+    public function getCounter()
     {
-        return $this->object;
+        return $this->counter;
     }
 
     /**
@@ -81,47 +84,7 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return bool
-     */
-    public function hasSiblings()
-    {
-        return $this->statusCode == '300' ? TRUE : FALSE;
-    }
-
-    /**
-     * Fetches the sibling tags from the response
-     *
-     * @return array
-     */
-    public function getSiblingTags()
-    {
-        return [];
-    }
-
-    /**
-     * Retrieves the last modified time of the object
-     *
-     * @return string
-     * @throws \Basho\Riak\Command\Exception
-     */
-    public function getLastModified()
-    {
-        return $this->getHeader('Last-Modified');
-    }
-
-    /**
-     * Retrieves the etag of the object
-     *
-     * @return string
-     * @throws \Basho\Riak\Command\Exception
-     */
-    public function getETag()
-    {
-        return $this->getHeader('ETag');
-    }
-
-    /**
-     * Retrieves the date of the object's retrieval
+     * Retrieves the date of the counter's retrieval
      *
      * @return string
      * @throws \Basho\Riak\Command\Exception
