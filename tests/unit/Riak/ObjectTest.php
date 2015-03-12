@@ -34,13 +34,13 @@ class ObjectTest extends TestCase
         // simple new object
         $object = new Object();
         $this->assertEmpty($object->getData());
-        $this->assertEquals($object->getContentType(), 'application/json');
+        $this->assertEquals('application/json', $object->getContentType());
 
         // more complex object
         $data = new \StdClass();
         $data->woot = 'sauce';
         $object = new Object($data, ['Content-Type' => 'text/plain']);
         $this->assertEquals('sauce', $object->getData()->woot);
-        $this->assertEquals($object->getContentType(), 'text/plain');
+        $this->assertEquals('text/plain', $object->getContentType());
     }
 }
