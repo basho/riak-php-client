@@ -37,7 +37,8 @@ class Response extends \Basho\Riak\Command\Response
     {
         parent::__construct($statusCode, $headers, $body);
 
-        if ($body) {
+        // make sure body is not only whitespace
+        if (trim($body)) {
             $this->object = new Object(rawurldecode($this->body), $this->headers);
         }
     }
