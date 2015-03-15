@@ -26,7 +26,7 @@ namespace Basho\Riak;
  */
 abstract class DataType
 {
-    use ObjectTrait;
+    use HeadersTrait;
 
     /**
      * DataType::TYPE

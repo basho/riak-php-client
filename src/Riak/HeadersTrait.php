@@ -18,13 +18,13 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak;
 
 /**
- * Trait ObjectTrait
+ * Trait HeadersTrait
  *
  * Offers code reuse between kv objects & crdts since they several common needs
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-trait ObjectTrait
+trait HeadersTrait
 {
     /**
      * Request / response headers for the object

@@ -29,7 +29,7 @@ use Basho\Riak\MapReduce;
  */
 class Object
 {
-    use ObjectTrait;
+    use HeadersTrait;
 
     /**
      * Stored data or object
