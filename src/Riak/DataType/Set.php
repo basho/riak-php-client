@@ -39,4 +39,29 @@ class Set extends DataType
      * @var array
      */
     protected $data = [];
-} 
+
+    /**
+     * @var
+     */
+    private $context;
+
+    /**
+     * @param array $data
+     * @param $context
+     * @param array $headers
+     */
+    public function __construct(array $data, $context, array $headers)
+    {
+        $this->data = $data;
+        $this->context = $context;
+        $this->headers = $headers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+}

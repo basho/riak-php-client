@@ -44,13 +44,10 @@ class Counter extends DataType
      * @param int $data
      * @param array|null $headers
      */
-    public function __construct($data = 0, $headers = NULL)
+    public function __construct($data, array $headers)
     {
         $this->data = $data;
-
-        if (!empty($headers) && is_array($headers)) {
-            $this->headers = $headers;
-        }
+        $this->headers = $headers;
     }
 
     public function getData()
