@@ -59,7 +59,7 @@ abstract class Object extends Command
         return $this->object->getData();
     }
 
-    public function getUrlEncodedData()
+    public function getEncodedData()
     {
         return rawurlencode($this->object->getData());
     }

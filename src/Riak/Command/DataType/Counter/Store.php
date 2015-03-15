@@ -67,9 +67,9 @@ class Store extends Command implements CommandInterface
         return $this->increment;
     }
 
-    public function getUrlEncodedData()
+    public function getEncodedData()
     {
-        return rawurlencode($this->increment);
+        return json_encode(['increment' => $this->increment]);
     }
 
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')

@@ -170,5 +170,5 @@ abstract class Command
 
     abstract public function getData();
 
-    abstract public function getUrlEncodedData();
+    abstract public function getEncodedData();
 }

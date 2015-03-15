@@ -129,6 +129,8 @@ class Http extends Api implements ApiInterface
                 break;
             case 'Basho\Riak\Command\DataType\Counter\Fetch':
             case 'Basho\Riak\Command\DataType\Counter\Store':
+            case 'Basho\Riak\Command\DataType\Set\Fetch':
+            case 'Basho\Riak\Command\DataType\Set\Store':
                 $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
             default:
@@ -203,7 +205,7 @@ class Http extends Api implements ApiInterface
     {
         // if POST or PUT, add parameters to post data, else add to uri
         if (in_array($this->getCommand()->getMethod(), ['POST', 'PUT'])) {
-            $this->requestBody = $this->getCommand()->getUrlEncodedData();
+            $this->requestBody = $this->getCommand()->getEncodedData();
             curl_setopt($this->getConnection(), CURLOPT_POSTFIELDS, $this->requestBody);
         }
 

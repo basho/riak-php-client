@@ -34,7 +34,7 @@ interface CommandInterface
 
     public function getData();
 
-    public function getUrlEncodedData();
+    public function getEncodedData();
 
     public function getBucket();
 

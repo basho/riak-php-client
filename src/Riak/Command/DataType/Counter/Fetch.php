@@ -24,7 +24,7 @@ use Basho\Riak\Location;
 /**
  * Class Fetch
  *
- * [summary]
+ * Used to fetch a counter
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
@@ -58,7 +58,7 @@ class Fetch extends Command implements CommandInterface
         return '';
     }
 
-    public function getUrlEncodedData()
+    public function getEncodedData()
     {
         return '';
     }
