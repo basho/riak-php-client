@@ -17,22 +17,235 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
-use Basho\Riak;
-use Basho\Riak\Node;
-use Basho\Riak\Node\Builder;
+use Basho\Riak\Command;
 
 /**
  * Class SetTest
  *
- * Functional tests related to Counter CRDTs
+ * Functional tests related to Set CRDTs
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class SetTest extends TestCase
 {
-    public function testStoreNewWithKey()
+    private static $key = '';
+
+    public static function setUpBeforeClass()
     {
-        $this->assertTrue(TRUE);
+        // make completely random key based on time
+        static::$key = md5(rand(0, 99) . time());
     }
 
+    /**
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testAddWithoutKey($riak)
+    {
+        // build an object
+        $command = (new Command\Builder\UpdateSet($riak))
+            ->add('gosabres poked you.')
+            ->add('phprocks viewed your profile.')
+            ->add('phprocks started following you.')
+            ->addBucket('default', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+//var_dump($command->getRequest(), $command->getEncodedData());
+        // expects 201 - Created
+        $this->assertEquals('201', $response->getStatusCode());
+        $this->assertNotEmpty($response->getLocation());
+    }
+
+    /**
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchNotFound($riak)
+    {
+        $command = (new Command\Builder\FetchSet($riak))
+            ->addLocation(static::$key, 'default', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('404', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testFetchNotFound
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     *
+     * @expectedException \Basho\Riak\Command\Exception
+     */
+    public function testAddNewWithKey($riak)
+    {
+        $command = (new Command\Builder\UpdateSet($riak))
+            ->add('Sabres')
+            ->add('Canadiens')
+            ->add('Bruins')
+            ->add('Maple Leafs')
+            ->add('Senators')
+            ->add('Red Wings')
+            ->add('Thrashers')
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // expects 204 - No Content
+        // this is wonky, its not 201 because the key may have been generated on another node
+        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEmpty($response->getLocation());
+    }
+
+    /**
+     * @depends      testAddNewWithKey
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk($riak)
+    {
+        $command = (new Command\Builder\FetchSet($riak))
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
+        $this->assertNotEmpty($response->getSet()->getData());
+        $this->assertTrue(is_array($response->getSet()->getData()));
+        $this->assertEquals(7, count($response->getSet()->getData()));
+    }
+
+    /**
+     * @depends      testFetchOk
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testAddExisting($riak)
+    {
+        $command = (new Command\Builder\UpdateSet($riak))
+            ->add('Lightning')
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // 204 - No Content
+        $this->assertEquals('204', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testAddExisting
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk2($riak)
+    {
+        $command = (new Command\Builder\FetchSet($riak))
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
+        $this->assertNotEmpty($response->getSet()->getData());
+        $this->assertTrue(is_array($response->getSet()->getData()));
+        $this->assertEquals(8, count($response->getSet()->getData()));
+    }
+
+    /**
+     * @depends      testFetchOk
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testRemoveExisting($riak)
+    {
+        $command = (new Command\Builder\UpdateSet($riak))
+            ->remove('Thrashers')
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // 204 - No Content
+        $this->assertEquals('204', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testRemoveExisting
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk3($riak)
+    {
+        $command = (new Command\Builder\FetchSet($riak))
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
+        $this->assertNotEmpty($response->getSet()->getData());
+        $this->assertTrue(is_array($response->getSet()->getData()));
+        $this->assertEquals(7, count($response->getSet()->getData()));
+    }
+
+    /**
+     * @depends      testFetchOk
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testAddRemoveExisting($riak)
+    {
+        $command = (new Command\Builder\UpdateSet($riak))
+            ->add('Penguins')
+            ->add('Ducks')
+            ->remove('Lightning')
+            ->remove('Red Wings')
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        // 204 - No Content
+        $this->assertEquals('204', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testRemoveExisting
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchOk4($riak)
+    {
+        $command = (new Command\Builder\FetchSet($riak))
+            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
+        $this->assertNotEmpty($response->getSet()->getData());
+        $this->assertTrue(is_array($response->getSet()->getData()));
+        $this->assertEquals(7, count($response->getSet()->getData()));
+        $this->assertTrue(in_array('Ducks', $response->getSet()->getData()));
+        $this->assertFalse(in_array('Lightning', $response->getSet()->getData()));
+    }
 }
