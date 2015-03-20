@@ -17,37 +17,12 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\DataType;
 
-use Basho\Riak\DataType;
-
 /**
- * Class Counter
- *
- * Data structure for counter crdt
+ * Exception
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Counter extends DataType
+class Exception extends \Basho\Riak\Exception
 {
-    /**
-     * {@inheritdoc}
-     */
-    const TYPE = 'counter';
 
-    /**
-     * @param int $data
-     * @param array|null $headers
-     */
-    public function __construct($data, array $headers)
-    {
-        $this->data = $data;
-        $this->headers = $headers;
-    }
-
-    /**
-     * @return int
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
 }

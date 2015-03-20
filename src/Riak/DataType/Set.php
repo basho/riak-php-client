@@ -34,14 +34,7 @@ class Set extends DataType
     const TYPE = 'set';
 
     /**
-     * Current contents of the set
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * @var
+     * @var string
      */
     private $context;
 
