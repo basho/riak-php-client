@@ -36,6 +36,13 @@ abstract class DataType
     const TYPE = '';
 
     /**
+     * Storage member for DataType's current value
+     *
+     * @var mixed
+     */
+    protected $data;
+
+    /**
      * @return string
      */
     public function getType()
