@@ -54,14 +54,14 @@ abstract class Object extends Command
         return $this->location;
     }
 
+    public function getEncodedData()
+    {
+        return rawurlencode($this->getData());
+    }
+
     public function getData()
     {
         return $this->object->getData();
-    }
-
-    public function getEncodedData()
-    {
-        return rawurlencode($this->object->getData());
     }
 
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')

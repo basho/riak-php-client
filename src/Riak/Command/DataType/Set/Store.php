@@ -67,20 +67,14 @@ class Store extends Command implements CommandInterface
         return $this->location;
     }
 
+    public function getEncodedData()
+    {
+        return json_encode($this->getData());
+    }
+
     public function getData()
     {
         return ['add_all' => $this->add_all, 'remove_all' => $this->remove_all];
-    }
-
-    public function getEncodedData()
-    {
-        $container = new \StdClass();
-        $container->add_all = $this->add_all;
-        if (count($this->remove_all)) {
-            $container->remove_all = $this->remove_all;
-        }
-
-        return json_encode($container);
     }
 
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
@@ -91,7 +85,7 @@ class Store extends Command implements CommandInterface
     }
 
     /**
-     * @return Command\DataType\Counter\Response
+     * @return Command\DataType\Set\Response
      */
     public function execute()
     {

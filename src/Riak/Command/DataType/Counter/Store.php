@@ -62,14 +62,14 @@ class Store extends Command implements CommandInterface
         return $this->location;
     }
 
-    public function getData()
-    {
-        return $this->increment;
-    }
-
     public function getEncodedData()
     {
-        return json_encode(['increment' => $this->increment]);
+        return json_encode($this->getData());
+    }
+
+    public function getData()
+    {
+        return ['increment' => $this->increment];
     }
 
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
