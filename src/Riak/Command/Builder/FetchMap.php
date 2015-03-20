@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2015 Basho Technologies, Inc.
+Copyright 2014 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,24 +15,36 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Tests\Riak;
+namespace Basho\Riak\Command\Builder;
 
-use Basho\Riak\DataType\Map;
+use Basho\Riak\Command;
 
 /**
- * Class MapTest
- *
- * Test set for counter crdt
+ * Class FetchMap
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class MapTest extends \PHPUnit_Framework_TestCase
+class FetchMap extends Command\Builder implements Command\BuilderInterface
 {
-    public function testType()
-    {
-        $this->assertEquals('map', Map::TYPE);
+    use LocationTrait;
 
-        $crdt = new Map([], '', []);
-        $this->assertEquals('map', $crdt->getType());
+    /**
+     * {@inheritdoc}
+     *
+     * @return Command\DataType\Map\Fetch;
+     */
+    public function build()
+    {
+        $this->validate();
+
+        return new Command\DataType\Map\Fetch($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        $this->required('Location');
     }
 }

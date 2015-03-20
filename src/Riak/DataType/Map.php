@@ -34,9 +34,92 @@ class Map extends DataType
     const TYPE = 'map';
 
     /**
-     * Current contents of the map
-     *
-     * @var array
+     * @var string
      */
-    protected $data = [];
-} 
+    private $context;
+
+    /**
+     * @param array $data
+     * @param $context
+     * @param array $headers
+     */
+    public function __construct(array $data, $context, array $headers)
+    {
+        $this->data = $data;
+        $this->context = $context;
+        $this->headers = $headers;
+    }
+
+    /**
+     * @param $key
+     *
+     * @return string
+     */
+    public function getRegister($key)
+    {
+        return $this->getDataByKey($key, 'register');
+    }
+
+    protected function getDataByKey($key, $type)
+    {
+        $compKey = $this->getCompKey($key, $type);
+        if (!isset($this->data[$compKey])) {
+            throw new Exception("{$type} {$key} not found within Map.");
+        }
+
+        return $this->data[$compKey];
+    }
+
+    /**
+     * Fetches the composite key used with
+     *
+     * @param $key
+     * @param $type
+     *
+     * @return string
+     */
+    protected function getCompKey($key, $type)
+    {
+        return sprintf('%s_%s', $key, $type);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return bool
+     */
+    public function getFlag($key)
+    {
+        return $this->getDataByKey($key, 'flag') == 'enabled' ? TRUE : FALSE;
+    }
+
+    /**
+     * @param $key
+     *
+     * @return Counter
+     */
+    public function getCounter($key)
+    {
+        return new Counter($this->getDataByKey($key, Counter::TYPE), $this->headers);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return Set
+     */
+    public function getSet($key)
+    {
+        return new Set($this->getDataByKey($key, Set::TYPE), $this->context, $this->headers);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return Map
+     */
+    public function getMap($key)
+    {
+        return new Map($this->getDataByKey($key, Map::TYPE), $this->context, $this->headers);
+    }
+}
