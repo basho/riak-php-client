@@ -52,7 +52,7 @@ class SetTest extends TestCase
             ->build();
 
         $response = $command->execute($command);
-//var_dump($command->getRequest(), $command->getEncodedData());
+
         // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
         $this->assertNotEmpty($response->getLocation());
