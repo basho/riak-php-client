@@ -168,6 +168,11 @@ abstract class Command
 
     abstract public function setResponse($statusCode, $responseHeaders = [], $responseBody = '');
 
+    public function getLocation()
+    {
+        return NULL;
+    }
+
     abstract public function getData();
 
     abstract public function getEncodedData();

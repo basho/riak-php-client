@@ -103,11 +103,9 @@ class Http extends Api implements ApiInterface
 
         $bucket = $this->getCommand()->getBucket();
 
-        if (method_exists($this->command, 'getLocation')) {
-            $location = $this->getCommand()->getLocation();
-            if (!empty($location) && $location instanceof Location) {
-                $key = $location->getKey();
-            }
+        $location = $this->getCommand()->getLocation();
+        if (!empty($location) && $location instanceof Location) {
+            $key = $location->getKey();
         }
 
         switch (get_class($this->getCommand())) {
@@ -131,6 +129,8 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Counter\Store':
             case 'Basho\Riak\Command\DataType\Set\Fetch':
             case 'Basho\Riak\Command\DataType\Set\Store':
+            case 'Basho\Riak\Command\DataType\Map\Fetch':
+            case 'Basho\Riak\Command\DataType\Map\Store':
                 $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
             default:
@@ -190,10 +190,10 @@ class Http extends Api implements ApiInterface
     protected function prepareRequest()
     {
         return $this->prepareRequestMethod()
-            ->prepareRequestUrl()
-            ->prepareRequestHeaders()
+                    ->prepareRequestUrl()
+                    ->prepareRequestHeaders()
                     ->prepareRequestParameters()
-            ->prepareRequestData();
+                    ->prepareRequestData();
     }
 
     /**
