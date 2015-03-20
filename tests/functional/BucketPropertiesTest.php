@@ -17,9 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
-use Basho\Riak;
-use Basho\Riak\Node;
-use Basho\Riak\Node\Builder;
+use Basho\Riak\Command;
 
 /**
  * Class BucketPropertiesTest
@@ -34,5 +32,4 @@ class BucketPropertiesTest extends TestCase
     {
         $this->assertTrue(TRUE);
     }
-
 }

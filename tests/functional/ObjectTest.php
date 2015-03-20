@@ -81,7 +81,7 @@ class ObjectTest extends TestCase
      *
      * @param $riak \Basho\Riak
      *
-*@expectedException \Basho\Riak\Command\Exception
+     * @expectedException \Basho\Riak\Command\Exception
      */
     public function testStoreNewWithKey($riak)
     {
