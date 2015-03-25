@@ -58,6 +58,7 @@ class ObjectTest extends TestCase
         // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
         $this->assertNotEmpty($response->getLocation());
+        $this->assertInstanceOf('\Basho\Riak\Location', $response->getLocation());
     }
 
     /**

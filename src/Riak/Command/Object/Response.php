@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Object;
 
+use Basho\Riak\Location;
 use Basho\Riak\Object;
 
 /**
@@ -57,12 +58,12 @@ class Response extends \Basho\Riak\Command\Response
     /**
      * Retrieves the Location value from the response headers
      *
-     * @return string
+     * @return Location
      * @throws \Basho\Riak\Command\Exception
      */
     public function getLocation()
     {
-        return $this->getHeader('Location');
+        return Location::fromString($this->getHeader('Location'));
     }
 
     /**
