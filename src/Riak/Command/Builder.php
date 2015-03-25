@@ -77,20 +77,6 @@ abstract class Builder
      */
     abstract public function build();
 
-    public function addMap($data)
-    {
-        $this->command->setDataType(new DataType\Map($data));
-
-        return $this;
-    }
-
-    public function withMap(DataType\Map $map)
-    {
-        $this->command->setDataType($map);
-
-        return $this;
-    }
-
     public function withParameter($key, $value = true)
     {
         $this->parameters[$key] = $value;
