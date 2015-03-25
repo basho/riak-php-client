@@ -26,7 +26,7 @@ use Basho\Riak\Command;
  *
  * <code>
  * $command = (new Command\Builder\FetchCounter($riak))
- *   ->addLocation($user_name, 'user_visit_count', 'visit_counters')
+ *   ->buildLocation($user_name, 'user_visit_count', 'visit_counters')
  *   ->build();
  *
  * $response = $command->execute($command);

@@ -46,7 +46,7 @@ trait ObjectTrait
      *
      * @return $this
      */
-    public function addObject($data = NULL, $headers = NULL)
+    public function buildObject($data = NULL, $headers = NULL)
     {
         $this->object = new Object($data, $headers);
 

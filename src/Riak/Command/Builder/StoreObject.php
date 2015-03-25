@@ -26,8 +26,8 @@ use Basho\Riak\Command;
  *
  * <code>
  * $command = (new Command\Builder\StoreObject($riak))
- *   ->addObject('{"firstName":"John","lastName":"Doe","email":"johndoe@gmail.com"}')
- *   ->addBucket('users')
+ *   ->buildObject('{"firstName":"John","lastName":"Doe","email":"johndoe@gmail.com"}')
+ *   ->buildBucket('users')
  *   ->build();
  *
  * $response = $command->execute($command);

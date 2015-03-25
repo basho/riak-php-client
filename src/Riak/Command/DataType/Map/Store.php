@@ -128,7 +128,7 @@ class Store extends Command implements CommandInterface
         }
 
         foreach ($this->maps as $key => $item) {
-            $mapCommand = $item->withLocation($this->getLocation())->build();
+            $mapCommand = $item->atLocation($this->getLocation())->build();
             $data['update'][$key] = $mapCommand->getData();
         }
 

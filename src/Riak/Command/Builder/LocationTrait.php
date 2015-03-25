@@ -52,7 +52,7 @@ trait LocationTrait
      *
      * @return $this
      */
-    public function addLocation($key, $name, $type = 'default')
+    public function buildLocation($key, $name, $type = 'default')
     {
         $this->bucket = new Bucket($name, $type);
         $this->location = new Location($key, $this->bucket);
@@ -65,7 +65,7 @@ trait LocationTrait
      *
      * @return $this
      */
-    public function withLocation(Location $location)
+    public function atLocation(Location $location)
     {
         $this->bucket = $location->getBucket();
         $this->location = $location;

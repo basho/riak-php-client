@@ -48,7 +48,7 @@ class SetTest extends TestCase
             ->add('gosabres poked you.')
             ->add('phprocks viewed your profile.')
             ->add('phprocks started following you.')
-            ->addBucket('default', static::SET_BUCKET_TYPE)
+            ->buildBucket('default', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -66,7 +66,7 @@ class SetTest extends TestCase
     public function testFetchNotFound($riak)
     {
         $command = (new Command\Builder\FetchSet($riak))
-            ->addLocation(static::$key, 'default', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'default', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -92,7 +92,7 @@ class SetTest extends TestCase
             ->add('Senators')
             ->add('Red Wings')
             ->add('Thrashers')
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -112,7 +112,7 @@ class SetTest extends TestCase
     public function testFetchOk($riak)
     {
         $command = (new Command\Builder\FetchSet($riak))
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -134,7 +134,7 @@ class SetTest extends TestCase
     {
         $command = (new Command\Builder\UpdateSet($riak))
             ->add('Lightning')
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -152,7 +152,7 @@ class SetTest extends TestCase
     public function testFetchOk2($riak)
     {
         $command = (new Command\Builder\FetchSet($riak))
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -174,7 +174,7 @@ class SetTest extends TestCase
     {
         $command = (new Command\Builder\UpdateSet($riak))
             ->remove('Thrashers')
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -192,7 +192,7 @@ class SetTest extends TestCase
     public function testFetchOk3($riak)
     {
         $command = (new Command\Builder\FetchSet($riak))
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -217,7 +217,7 @@ class SetTest extends TestCase
             ->add('Ducks')
             ->remove('Lightning')
             ->remove('Red Wings')
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -235,7 +235,7 @@ class SetTest extends TestCase
     public function testFetchOk4($riak)
     {
         $command = (new Command\Builder\FetchSet($riak))
-            ->addLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);

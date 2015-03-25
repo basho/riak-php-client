@@ -36,7 +36,7 @@ use Basho\Riak\DataType;
  *
  * $command = (new Command\Builder(Command::STORE_OBJECT))
  *      ->withObject(new Object('test_data'))
- *      ->withLocation(new Location('test_key', $bucket))
+ *      ->atLocation(new Location('test_key', $bucket))
  *      ->build();
  * </code>
  *

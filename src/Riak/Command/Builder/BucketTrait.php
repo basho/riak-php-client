@@ -53,7 +53,7 @@ trait BucketTrait
      *
      * @return $this
      */
-    public function addBucket($name, $type = 'default')
+    public function buildBucket($name, $type = 'default')
     {
         $this->bucket = new Bucket($name, $type);
 
@@ -67,7 +67,7 @@ trait BucketTrait
      *
      * @return $this
      */
-    public function withBucket(Bucket $bucket)
+    public function inBucket(Bucket $bucket)
     {
         $this->bucket = $bucket;
 

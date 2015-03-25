@@ -46,7 +46,7 @@ class CounterTest extends TestCase
         // build an object
         $command = (new Command\Builder\IncrementCounter($riak))
             ->withIncrement(1)
-            ->addBucket('visits', static::COUNTER_BUCKET_TYPE)
+            ->buildBucket('visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -64,7 +64,7 @@ class CounterTest extends TestCase
     public function testFetchNotFound($riak)
     {
         $command = (new Command\Builder\FetchCounter($riak))
-            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -84,7 +84,7 @@ class CounterTest extends TestCase
     {
         $command = (new Command\Builder\IncrementCounter($riak))
             ->withIncrement(1)
-            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -104,7 +104,7 @@ class CounterTest extends TestCase
     public function testFetchOk($riak)
     {
         $command = (new Command\Builder\FetchCounter($riak))
-            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -126,7 +126,7 @@ class CounterTest extends TestCase
     {
         $command = (new Command\Builder\IncrementCounter($riak))
             ->withIncrement(1)
-            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -144,7 +144,7 @@ class CounterTest extends TestCase
     public function testFetchOk2($riak)
     {
         $command = (new Command\Builder\FetchCounter($riak))
-            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -166,7 +166,7 @@ class CounterTest extends TestCase
     {
         $command = (new Command\Builder\IncrementCounter($riak))
             ->withIncrement(-1)
-            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -184,7 +184,7 @@ class CounterTest extends TestCase
     public function testFetchOk3($riak)
     {
         $command = (new Command\Builder\FetchCounter($riak))
-            ->addLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);

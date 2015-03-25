@@ -49,12 +49,14 @@ $nodes = (new Node\Builder)
 
 $riak = new Riak($nodes);
 
-$command = (new Command\Builder(Command::STORE_OBJECT))
-    ->addObject('test_data')
-    ->withLocation('/default/users/some_key')
+$command = (new Command\Builder\StoreObject($riak))
+    ->buildObject('some_data')
+    ->buildBucket('users')
     ->build();
     
-$result = $riak->execute($command);
+$response = $command->execute($command);
+
+$object_location = $response->getLocation();
 ```
 
 ## RoadMap

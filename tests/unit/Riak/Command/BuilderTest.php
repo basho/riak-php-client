@@ -41,8 +41,8 @@ class BuilderTest extends TestCase
     {
         // build an object
         $builder = new Command\Builder\StoreObject($riak);
-        $builder->addObject('some_data');
-        $builder->addLocation('some_key', 'some_bucket');
+        $builder->buildObject('some_data');
+        $builder->buildLocation('some_key', 'some_bucket');
         $command = $builder->build();
 
         $this->assertInstanceOf('Basho\Riak\Command\Object\Store', $command);
@@ -66,8 +66,8 @@ class BuilderTest extends TestCase
     {
         // build an object
         $builder = new Command\Builder\StoreObject($riak);
-        $builder->addObject('some_data');
-        $builder->addBucket('some_bucket');
+        $builder->buildObject('some_data');
+        $builder->buildBucket('some_bucket');
         $command = $builder->build();
 
         $this->assertInstanceOf('Basho\Riak\Command\Object\Store', $command);

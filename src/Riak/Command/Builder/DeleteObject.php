@@ -26,7 +26,7 @@ use Basho\Riak\Command;
  *
  * <code>
  * $command = (new Command\Builder\DeleteObject($riak))
- * ->addLocation('username', 'users')
+ * ->buildLocation('username', 'users')
  * ->build();
  *
  * $response = $command->execute($command);

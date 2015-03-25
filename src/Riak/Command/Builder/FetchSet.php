@@ -26,7 +26,7 @@ use Basho\Riak\Command;
  *
  * <code>
  * $command = (new Command\Builder\FetchSet($riak))
- *   ->addLocation($user_id, 'email_subscriptions', 'user_preferences')
+ *   ->buildLocation($user_id, 'email_subscriptions', 'user_preferences')
  *   ->build();
  *
  * $response = $command->execute($command);

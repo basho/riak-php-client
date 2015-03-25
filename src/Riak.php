@@ -37,7 +37,7 @@ use Basho\Riak\Node;
  * $riak = new Riak($nodes);
  *
  * $command = (new Command\Builder\FetchObject($riak))
- *   ->addLocation('username', 'users')
+ *   ->buildLocation('username', 'users')
  *   ->build();
  *
  * $response = $command->execute($command);

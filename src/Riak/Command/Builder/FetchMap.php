@@ -26,7 +26,7 @@ use Basho\Riak\Command;
  *
  * <code>
  * $command = (new Command\Builder\FetchMap($riak))
- *   ->addLocation($order_id, 'online_orders', 'sales_maps')
+ *   ->buildLocation($order_id, 'online_orders', 'sales_maps')
  *   ->build();
  *
  * $response = $command->execute($command);

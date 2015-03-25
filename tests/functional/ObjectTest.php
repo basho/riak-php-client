@@ -49,8 +49,8 @@ class ObjectTest extends TestCase
     {
         // build an object
         $command = (new Command\Builder\StoreObject($riak))
-            ->addObject('some_data')
-            ->addBucket('users')
+            ->buildObject('some_data')
+            ->buildBucket('users')
             ->build();
 
         $response = $command->execute($command);
@@ -68,7 +68,7 @@ class ObjectTest extends TestCase
     public function testFetchNotFound($riak)
     {
         $command = (new Command\Builder\FetchObject($riak))
-            ->addLocation(static::$key, 'users')
+            ->buildLocation(static::$key, 'users')
             ->build();
 
         $response = $command->execute($command);
@@ -87,8 +87,8 @@ class ObjectTest extends TestCase
     public function testStoreNewWithKey($riak)
     {
         $command = (new Command\Builder\StoreObject($riak))
-            ->addObject('some_data')
-            ->addLocation(static::$key, 'users')
+            ->buildObject('some_data')
+            ->buildLocation(static::$key, 'users')
             ->build();
 
         $response = $command->execute($command);
@@ -107,7 +107,7 @@ class ObjectTest extends TestCase
     public function testFetchOk($riak)
     {
         $command = (new Command\Builder\FetchObject($riak))
-            ->addLocation(static::$key, 'users')
+            ->buildLocation(static::$key, 'users')
             ->build();
 
         $response = $command->execute($command);
@@ -134,7 +134,7 @@ class ObjectTest extends TestCase
 
         $command = (new Command\Builder\StoreObject($riak))
             ->withObject($object)
-            ->addLocation(static::$key, 'users')
+            ->buildLocation(static::$key, 'users')
             ->build();
 
         $response = $command->execute($command);
@@ -152,7 +152,7 @@ class ObjectTest extends TestCase
     public function testDelete($riak)
     {
         $command = (new Command\Builder\DeleteObject($riak))
-            ->addLocation(static::$key, 'users')
+            ->buildLocation(static::$key, 'users')
             ->build();
 
         $response = $command->execute($command);
@@ -169,7 +169,7 @@ class ObjectTest extends TestCase
     public function testFetchDeleted($riak)
     {
         $command = (new Command\Builder\FetchObject($riak))
-            ->addLocation(static::$key, 'users')
+            ->buildLocation(static::$key, 'users')
             ->build();
 
         $response = $command->execute($command);

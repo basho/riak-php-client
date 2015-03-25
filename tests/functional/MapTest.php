@@ -46,7 +46,7 @@ class MapTest extends TestCase
         // build a map update command
         $command = (new Command\Builder\UpdateMap($riak))
             ->updateRegister('favorite', 'Buffalo Sabres')
-            ->addBucket('default', static::MAP_BUCKET_TYPE)
+            ->buildBucket('default', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -64,7 +64,7 @@ class MapTest extends TestCase
     public function testFetchNotFound($riak)
     {
         $command = (new Command\Builder\FetchMap($riak))
-            ->addLocation(static::$key, 'default', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'default', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -89,7 +89,7 @@ class MapTest extends TestCase
             ->withIncrement(1);
 
         $command = (new Command\Builder\UpdateMap($riak))
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->updateCounter('teams', $updateCounterBuilder)
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
             ->build();
@@ -111,7 +111,7 @@ class MapTest extends TestCase
     public function testFetchOk($riak)
     {
         $command = (new Command\Builder\FetchMap($riak))
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -148,7 +148,7 @@ class MapTest extends TestCase
             ->updateFlag('expansion_year', TRUE)
             ->updateCounter('teams', $updateCounterBuilder)
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -166,7 +166,7 @@ class MapTest extends TestCase
     public function testFetchOk2($riak)
     {
         $command = (new Command\Builder\FetchMap($riak))
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -201,7 +201,7 @@ class MapTest extends TestCase
         $command = (new Command\Builder\UpdateMap($riak))
             ->removeFlag('expansion_year')
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -221,7 +221,7 @@ class MapTest extends TestCase
     public function testFetchOk3($riak)
     {
         $command = (new Command\Builder\FetchMap($riak))
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -255,7 +255,7 @@ class MapTest extends TestCase
         // build a map update command
         $command = (new Command\Builder\UpdateMap($riak))
             ->updateMap('preferences', $updateMapBuilder)
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
@@ -273,7 +273,7 @@ class MapTest extends TestCase
     public function testFetchOk4($riak)
     {
         $command = (new Command\Builder\FetchMap($riak))
-            ->addLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute($command);
