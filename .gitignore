@@ -24,3 +24,6 @@ composer.lock
 
 # ignore mac files
 .DS_Store
+
+# ignore generated docs
+docs
