@@ -26,7 +26,24 @@ use Basho\Riak\Node;
 /**
  * Class Riak
  *
- * This class is the quarterback of the Riak PHP client library. It maintains the list of nodes in the Riak cluster. It follows the Facade Design Pattern.
+ * This class maintains the list of nodes in the Riak cluster. It follows the Facade Design Pattern.
+ *
+ * <code>
+ * $nodes = (new Node\Builder)
+ *   ->withHost('localhost')
+ *   ->withPort(8098)
+ *   ->build()
+ *
+ * $riak = new Riak($nodes);
+ *
+ * $command = (new Command\Builder\FetchObject($riak))
+ *   ->addLocation('username', 'users')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $user = $response->getObject();
+ * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

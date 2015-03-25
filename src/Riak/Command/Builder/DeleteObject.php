@@ -20,7 +20,17 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Command;
 
 /**
- * Class FetchObject
+ * Class DeleteObject
+ *
+ * Used to delete a KV object from Riak
+ *
+ * <code>
+ * $command = (new Command\Builder\DeleteObject($riak))
+ * ->addLocation('username', 'users')
+ * ->build();
+ *
+ * $response = $command->execute($command);
+ * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

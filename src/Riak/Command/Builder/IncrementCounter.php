@@ -23,6 +23,18 @@ use Basho\Riak\Command;
 /**
  * Class IncrementCounter
  *
+ * Used to increment counter objects in Riak by the provided positive / negative integer
+ *
+ * <code>
+ * $command = (new Command\Builder\IncrementCounter($riak))
+ *   ->addLocation($user_name, 'user_visit_count', 'visit_counters')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $counter = $response->getCounter();
+ * </code>
+ *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class IncrementCounter extends Command\Builder implements Command\BuilderInterface

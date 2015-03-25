@@ -22,6 +22,18 @@ use Basho\Riak\Command;
 /**
  * Class FetchMap
  *
+ * Used to fetch map objects from Riak
+ *
+ * <code>
+ * $command = (new Command\Builder\FetchMap($riak))
+ *   ->addLocation($order_id, 'online_orders', 'sales_maps')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $map = $response->getMap();
+ * </code>
+ *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class FetchMap extends Command\Builder implements Command\BuilderInterface

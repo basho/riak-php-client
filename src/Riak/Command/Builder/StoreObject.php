@@ -22,6 +22,19 @@ use Basho\Riak\Command;
 /**
  * Class StoreObject
  *
+ * Used to increment counter objects in Riak by the provided positive / negative integer
+ *
+ * <code>
+ * $command = (new Command\Builder\StoreObject($riak))
+ *   ->addObject('{"firstName":"John","lastName":"Doe","email":"johndoe@gmail.com"}')
+ *   ->addBucket('users')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $user_location = $response->getLocation();
+ * </code>
+ *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class StoreObject extends Command\Builder implements Command\BuilderInterface

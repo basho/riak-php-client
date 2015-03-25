@@ -48,6 +48,10 @@ class Bucket
      */
     protected $type = '';
 
+    /**
+     * @param        $name
+     * @param string $type
+     */
     public function __construct($name, $type = self::DEFAULT_TYPE)
     {
         $this->name = $name;

@@ -22,6 +22,18 @@ use Basho\Riak\Command;
 /**
  * Class FetchSet
  *
+ * Used to fetch set objects from Riak
+ *
+ * <code>
+ * $command = (new Command\Builder\FetchSet($riak))
+ *   ->addLocation($user_id, 'email_subscriptions', 'user_preferences')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $set = $response->getSet();
+ * </code>
+ *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class FetchSet extends Command\Builder implements Command\BuilderInterface

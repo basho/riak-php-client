@@ -22,6 +22,18 @@ use Basho\Riak\Command;
 /**
  * Class FetchCounter
  *
+ * Used to fetch counter objects from Riak
+ *
+ * <code>
+ * $command = (new Command\Builder\FetchCounter($riak))
+ *   ->addLocation($user_name, 'user_visit_count', 'visit_counters')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $counter = $response->getCounter();
+ * </code>
+ *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class FetchCounter extends Command\Builder implements Command\BuilderInterface

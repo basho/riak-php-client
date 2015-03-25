@@ -20,7 +20,7 @@ namespace Basho\Riak;
 /**
  * Trait HeadersTrait
  *
- * Offers code reuse between kv objects & crdts since they several common needs
+ * Offers code reuse between kv objects & crdts since they share several common needs
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

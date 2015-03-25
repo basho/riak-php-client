@@ -22,6 +22,18 @@ use Basho\Riak\Command;
 /**
  * Class FetchObject
  *
+ * Used to fetch KV objects from Riak
+ *
+ * <code>
+ * $command = (new Command\Builder\FetchObject($riak))
+ *   ->addLocation($user_id, 'users', 'default')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $user = $response->getObject();
+ * </code>
+ *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class FetchObject extends Command\Builder implements Command\BuilderInterface

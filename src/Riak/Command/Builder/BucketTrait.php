@@ -22,23 +22,32 @@ use Basho\Riak\Bucket;
 /**
  * Class BucketTrait
  *
- * Allows easy code sharing for Bucket getters / setters
+ * Allows easy code sharing for Bucket getters / setters within the Command Builders
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 trait BucketTrait
 {
     /**
+     * Stores the Bucket object
+     *
      * @var Bucket|null
      */
     protected $bucket = NULL;
 
+    /**
+     * Gets the Bucket object
+     *
+     * @return Bucket|null
+     */
     public function getBucket()
     {
         return $this->bucket;
     }
 
     /**
+     * Build a Bucket object to be added to the Command
+     *
      * @param $name
      * @param string $type
      *
@@ -52,6 +61,8 @@ trait BucketTrait
     }
 
     /**
+     * Attach the provided Bucket to the Command
+     *
      * @param Bucket $bucket
      *
      * @return $this

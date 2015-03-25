@@ -22,7 +22,7 @@ use Basho\Riak\Object;
 /**
  * Class ObjectTrait
  *
- * Allows easy code sharing for Object getters / setters
+ * Allows easy code sharing for Object getters / setters within the Command Builders
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
