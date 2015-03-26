@@ -95,39 +95,41 @@ Confirm your PHP installation has curl enabled
 
 This quick example assumes that you have a local riak cluster running on port 8098
 
-    require_once('riak-php-client/src/Basho/Riak/Riak.php');
-    require_once('riak-php-client/src/Basho/Riak/Bucket.php');
-    require_once('riak-php-client/src/Basho/Riak/Exception.php');
-    require_once('riak-php-client/src/Basho/Riak/Link.php');
-    require_once('riak-php-client/src/Basho/Riak/MapReduce.php');
-    require_once('riak-php-client/src/Basho/Riak/Object.php');
-    require_once('riak-php-client/src/Basho/Riak/StringIO.php');
-    require_once('riak-php-client/src/Basho/Riak/Utils.php');
-    require_once('riak-php-client/src/Basho/Riak/Link/Phase.php');
-    require_once('riak-php-client/src/Basho/Riak/MapReduce/Phase.php');
+```php
+require_once 'riak-php-client/src/Basho/Riak/Riak.php';
+require_once 'riak-php-client/src/Basho/Riak/Bucket.php';
+require_once 'riak-php-client/src/Basho/Riak/Exception.php';
+require_once 'riak-php-client/src/Basho/Riak/Link.php';
+require_once 'riak-php-client/src/Basho/Riak/MapReduce.php';
+require_once 'riak-php-client/src/Basho/Riak/Object.php';
+require_once 'riak-php-client/src/Basho/Riak/StringIO.php';
+require_once 'riak-php-client/src/Basho/Riak/Utils.php';
+require_once 'riak-php-client/src/Basho/Riak/Link/Phase.php';
+require_once 'riak-php-client/src/Basho/Riak/MapReduce/Phase.php';
 
-    # Connect to Riak
-    $client = new Basho\Riak\Riak('127.0.0.1', 8098);
+# Connect to Riak
+$client = new Basho\Riak\Riak('127.0.0.1', 8098);
 
-    # Choose a bucket name
-    $bucket = $client->bucket('test');
+# Choose a bucket name
+$bucket = $client->bucket('test');
 
-    # Supply a key under which to store your data
-    $person = $bucket->newObject('riak_developer_1', array(
-        'name' => "John Smith",
-        'age' => 28,
-        'company' => "Facebook"
-    ));
+# Supply a key under which to store your data
+$person = $bucket->newObject('riak_developer_1', array(
+    'name' => 'John Smith',
+    'age' => 28,
+    'company' => 'Facebook'
+));
 
-    # Save the object to Riak
-    $person->store();
+# Save the object to Riak
+$person->store();
 
-    # Fetch the object
-    $person = $bucket->get('riak_developer_1');
+# Fetch the object
+$person = $bucket->get('riak_developer_1');
 
-    # Update the object
-    $person->data['company'] = "Google";
-    $person->store();
+# Update the object
+$person->data['company'] = 'Google';
+$person->store();
+```
 
 ## Connecting ##
 Connect to a Riak server by specifying the address or hostname and port:
@@ -169,18 +171,18 @@ Object data can be set using the Object::setData() method
 
     # Populate object with some data
     $person->setData(array(
-        'name' => "John Smith",
+        'name' => 'John Smith',
         'age' => 28,
-        'company' => "Facebook"
+        'company' => 'Facebook'
     ));
 
 or you may modify the object's data property directly (not recommended)
 
     # Populate object with some data
     $person->data = array(
-        'name' => "John Smith",
+        'name' => 'John Smith',
         'age' => 28,
-        'company' => "Facebook"
+        'company' => 'Facebook'
     );
 
 This method returns an [Object](http://basho.github.io/riak-php-client/classes/Basho.Riak.Object.html)
