@@ -39,6 +39,13 @@ class UpdateSet extends Command\Builder implements Command\BuilderInterface
      */
     protected $remove_all = [];
 
+    /**
+     * Similar to Vector Clocks, the context allows us to determine the state of a CRDT Set
+     *
+     * @var string
+     */
+    protected $context = '';
+
     public function __construct(Riak $riak)
     {
         parent::__construct($riak);
@@ -73,6 +80,18 @@ class UpdateSet extends Command\Builder implements Command\BuilderInterface
     }
 
     /**
+     * @param $context
+     *
+     * @return $this
+     */
+    public function withContext($context)
+    {
+        $this->context = $context;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getAddAll()
@@ -86,6 +105,16 @@ class UpdateSet extends Command\Builder implements Command\BuilderInterface
     public function getRemoveAll()
     {
         return $this->remove_all;
+    }
+
+    /**
+     * getContext
+     *
+     * @return string
+     */
+    public function getContext()
+    {
+        return $this->context;
     }
 
     /**
@@ -114,9 +143,10 @@ class UpdateSet extends Command\Builder implements Command\BuilderInterface
             throw new Exception('At least one element to add or remove needs to be defined.');
         }
 
-        // if we are performing a remove, Location is required
+        // if we are performing a remove, Location and context are required
         if ($count_remove) {
             $this->required('Location');
+            $this->required('Context');
         }
 
         if (!isset($this->headers['Content-Type']) || $this->headers['Content-Type'] != self::CONTENT_TYPE_JSON) {
