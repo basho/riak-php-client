@@ -43,4 +43,27 @@ class ObjectTest extends TestCase
         $this->assertEquals('sauce', $object->getData()->woot);
         $this->assertEquals('text/plain', $object->getContentType());
     }
+
+    public function testExtractIndexes()
+    {
+        // no headers means no indexes, empty array.
+        $data = new \StdClass();
+        $data->woot = 'sauce';
+
+        $object = new Object($data);
+        $this->assertEmpty($object->getIndexes());
+        $this->assertEquals(NULL, $object->getIndex("foo_bin"));
+
+        // 2i headers will result in indexes
+        $headers = ['x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
+        $object = new Object($data, $headers);
+
+        $indexes = $object->getIndexes();
+        $this->assertNotEmpty($indexes);
+        $this->assertEquals(2, count($indexes));
+        $this->assertEquals(['bar', 'baz'], $indexes["foo_bin"]);
+        $this->assertEquals([42, 50], $indexes["foo_int"]);
+    }
+
+
 }

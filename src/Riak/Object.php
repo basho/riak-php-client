@@ -38,11 +38,13 @@ class Object
      */
     protected $data = null;
 
+    protected $indexes = null;
+
     /**
      * @param mixed|null $data
      * @param array|null $headers
      */
-    public function __construct($data = NULL, $headers = NULL)
+    public function __construct($data = null, $headers = null)
     {
         $this->data = $data;
 
@@ -66,5 +68,51 @@ class Object
     public function getContentType()
     {
         return $this->getHeader('Content-Type');
+    }
+
+    public function getIndexes()
+    {
+        $this->lazyInitIndexes();
+
+        return $this->indexes;
+    }
+
+    public function getIndex($indexName)
+    {
+        $this->lazyInitIndexes();
+
+        return $this->indexes[$indexName];
+    }
+
+    public function addValueToIndex($indexName, $value)
+    {
+        $this->lazyInitIndexes();
+
+        if (!in_array($indexName, $this->indexes)) {
+            $this->indexes[$indexName] = [];
+        }
+
+        $this->indexes[$indexName][] = $value;
+    }
+
+    public function removeValueFromIndex($indexName, $value)
+    {
+        $this->lazyInitIndexes();
+
+        if(!in_array($indexName, $this->indexes)) {
+            return;
+        }
+
+        if(($key = array_search($value, $this->indexes[$indexName])) !== false) {
+            array_splice($this->indexes[$indexName], $key, 1);
+        }
+    }
+
+    private function lazyInitIndexes()
+    {
+        if (is_null($this->indexes)) {
+            $translator = new SecondaryIndexHeaderTranslator();
+            $this->indexes = $translator->extractIndexes($this->getHeaders());
+        }
     }
 }
