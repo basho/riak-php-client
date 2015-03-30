@@ -42,6 +42,17 @@ class SecondaryIndexHeader
         return $indexes;
     }
 
+    public function createHeaders($indexes)
+    {
+        $headers = [];
+
+        foreach ($indexes as $indexName => $values) {
+            $this->createIndexHeader($headers, $indexName, $values);
+        }
+
+        return $headers;
+    }
+
     private function parseIndexHeader(&$indexes, $key, $rawValue)
     {
         if (!$this->isIndexHeader($key)) {
@@ -83,6 +94,14 @@ class SecondaryIndexHeader
             return $values;
         } else {
             return array_map("intval", $values);
+        }
+    }
+
+    private function createIndexHeader(&$headers, $indexName, $values)
+    {
+        $headerKey = $this->indexHeaderPrefix . $indexName;
+        foreach ($values as $indexName => $value) {
+            $headers[] = [$headerKey, $value];
         }
     }
 }

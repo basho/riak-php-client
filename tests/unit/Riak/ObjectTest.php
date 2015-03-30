@@ -101,4 +101,16 @@ class ObjectTest extends TestCase
         $this->assertEquals([42], $indexes["foo_int"]);
     }
 
+    public function testGetIndex()
+    {
+        $data = new \StdClass();
+        $data->woot = 'sauce';
+
+        $headers = ['x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
+        $object = new Object($data, $headers);
+
+        $index = $object->getIndex('foo_bin');
+        $this->assertEquals(['bar', 'baz'], $index);
+    }
+
 }
