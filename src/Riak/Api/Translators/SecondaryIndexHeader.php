@@ -14,16 +14,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak;
+namespace Basho\Riak\Api\Translators;
 
 
 /**
- * Class SecondaryIndexHeaderTranslator
- * @package Basho\Riak
+ * Class SecondaryIndexHeader
+ * @package Basho\Riak\Api\Translators
  *
  * @author Alex Moore <amoore at basho d0t com>
  */
-class SecondaryIndexHeaderTranslator
+class SecondaryIndexHeader
 {
     private $integerIndexSuffix = "_int";
     private $stringIndexSuffix = "_bin";
@@ -33,7 +33,7 @@ class SecondaryIndexHeaderTranslator
 
     public function extractIndexes($headers)
     {
-        $indexes = array();
+        $indexes = [];
 
         foreach ($headers as $key => $value) {
             $this->parseIndexHeader($indexes, $key, $value);

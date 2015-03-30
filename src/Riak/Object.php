@@ -88,7 +88,7 @@ class Object
     {
         $this->lazyInitIndexes();
 
-        if (!in_array($indexName, $this->indexes)) {
+        if (!isset($this->indexes[$indexName])) {
             $this->indexes[$indexName] = [];
         }
 
@@ -99,20 +99,24 @@ class Object
     {
         $this->lazyInitIndexes();
 
-        if(!in_array($indexName, $this->indexes)) {
+        if (!isset($this->indexes[$indexName])) {
             return;
         }
 
-        if(($key = array_search($value, $this->indexes[$indexName])) !== false) {
-            array_splice($this->indexes[$indexName], $key, 1);
+        $valuePos = array_search($value, $this->indexes[$indexName]);
+
+        if ($valuePos !== false) {
+            array_splice($this->indexes[$indexName], $valuePos, 1);
         }
     }
 
     private function lazyInitIndexes()
     {
-        if (is_null($this->indexes)) {
-            $translator = new SecondaryIndexHeaderTranslator();
-            $this->indexes = $translator->extractIndexes($this->getHeaders());
+        if (isset($this->indexes)) {
+            return;
         }
+
+        $translator = new Api\Translators\SecondaryIndexHeader();
+        $this->indexes = $translator->extractIndexes($this->getHeaders());
     }
 }

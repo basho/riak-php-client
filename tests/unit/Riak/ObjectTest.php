@@ -65,5 +65,40 @@ class ObjectTest extends TestCase
         $this->assertEquals([42, 50], $indexes["foo_int"]);
     }
 
+    public function testAddIndexes()
+    {
+        $data = new \StdClass();
+        $data->woot = 'sauce';
+
+        $headers = ['x-riak-index-foo_bin' => 'bar', 'x-riak-index-foo_int' => '42'];
+        $object = new Object($data, $headers);
+
+        $object->addValueToIndex("foo_int", 50);
+        $object->addValueToIndex("foo_bin", 'baz');
+
+        $indexes = $object->getIndexes();
+        $this->assertNotEmpty($indexes);
+        $this->assertEquals(2, count($indexes));
+        $this->assertEquals(['bar', 'baz'], $indexes["foo_bin"]);
+        $this->assertEquals([42, 50], $indexes["foo_int"]);
+    }
+
+    public function testRemoveIndexes()
+    {
+        $data = new \StdClass();
+        $data->woot = 'sauce';
+
+        $headers = ['x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
+        $object = new Object($data, $headers);
+
+        $object->removeValueFromIndex("foo_int", 50);
+        $object->removeValueFromIndex("foo_bin", 'baz');
+
+        $indexes = $object->getIndexes();
+        $this->assertNotEmpty($indexes);
+        $this->assertEquals(2, count($indexes));
+        $this->assertEquals(['bar'], $indexes["foo_bin"]);
+        $this->assertEquals([42], $indexes["foo_int"]);
+    }
 
 }
