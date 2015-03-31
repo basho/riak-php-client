@@ -25,11 +25,11 @@ namespace Basho\Riak\Api\Translators;
  */
 class SecondaryIndexHeader
 {
-    private $integerIndexSuffix = "_int";
-    private $stringIndexSuffix = "_bin";
-    private $indexSuffixLen = 4;
-    private $indexHeaderPrefix = "x-riak-index-";
-    private $indexHeaderPrefixLen = 13;
+    const INT_INDEX_SUFFIX = '_int';
+    const STR_IDX_SUFFIX = '_bin';
+    const IDX_SUFFIX_LEN = 4;
+    const IDX_HEADER_PREFIX = "x-riak-index-";
+    const IDX_HEADER_PREFIX_LEN = 13;
 
     public function extractIndexes($headers)
     {
@@ -53,6 +53,16 @@ class SecondaryIndexHeader
         return $headers;
     }
 
+    public static function isStringIndex($headerKey)
+    {
+        return SecondaryIndexHeader::indexNameContainsTypeSuffix($headerKey, self::STR_IDX_SUFFIX);
+    }
+
+    public static function isIntIndex($headerKey)
+    {
+        return SecondaryIndexHeader::indexNameContainsTypeSuffix($headerKey, self::INT_INDEX_SUFFIX);
+    }
+
     private function parseIndexHeader(&$indexes, $key, $rawValue)
     {
         if (!$this->isIndexHeader($key)) {
@@ -67,23 +77,22 @@ class SecondaryIndexHeader
 
     private function isIndexHeader($headerKey)
     {
-        if (strlen($headerKey) <= $this->indexHeaderPrefixLen) {
+        if (strlen($headerKey) <= self::IDX_HEADER_PREFIX_LEN) {
             return false;
         }
 
-        return substr_compare($headerKey, $this->indexHeaderPrefix, 0, $this->indexHeaderPrefixLen) == 0;
+        return substr_compare($headerKey, self::IDX_HEADER_PREFIX, 0, self::IDX_HEADER_PREFIX_LEN) == 0;
     }
 
-    private function isStringIndex($headerKey)
+    private static function indexNameContainsTypeSuffix($indexName, $typeSuffix)
     {
-        $nameLen = strlen($headerKey) - $this->indexSuffixLen;
-
-        return substr_compare($headerKey, $this->stringIndexSuffix, $nameLen) == 0;
+        $nameLen = strlen($indexName) - self::IDX_SUFFIX_LEN;
+        return substr_compare($indexName, $typeSuffix, $nameLen) == 0;
     }
 
     private function getIndexNameWithType($key)
     {
-        return substr($key, $this->indexHeaderPrefixLen);
+        return substr($key, self::IDX_HEADER_PREFIX_LEN);
     }
 
     private function getIndexValue($indexName, $value)
@@ -99,7 +108,7 @@ class SecondaryIndexHeader
 
     private function createIndexHeader(&$headers, $indexName, $values)
     {
-        $headerKey = $this->indexHeaderPrefix . $indexName;
+        $headerKey = self::IDX_HEADER_PREFIX. $indexName;
         foreach ($values as $indexName => $value) {
             $headers[] = [$headerKey, $value];
         }

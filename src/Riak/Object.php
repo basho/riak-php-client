@@ -86,6 +86,7 @@ class Object
 
     public function addValueToIndex($indexName, $value)
     {
+        $this->validateIndexNameAndValue($indexName, $value);
         $this->lazyInitIndexes();
 
         if (!isset($this->indexes[$indexName])) {
@@ -119,4 +120,29 @@ class Object
         $translator = new Api\Translators\SecondaryIndexHeader();
         $this->indexes = $translator->extractIndexes($this->getHeaders());
     }
+
+    private function validateIndexNameAndValue($indexName, $value)
+    {
+        $type = gettype($value);
+        $isIntIndex = Api\Translators\SecondaryIndexHeader::isIntIndex($indexName);
+        $isStringIndex = Api\Translators\SecondaryIndexHeader::isStringIndex($indexName);
+
+        if(!$isIntIndex && !$isStringIndex) {
+            throw new \InvalidArgumentException("Invalid index type for '" . $indexName .
+                "'index. Expecting '*_int' for an integer index, or '*_bin' for a string index.");
+        }
+
+        if($isIntIndex && $type != 'integer')
+        {
+            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
+                "'index. Expecting 'integer', value was '" . $type . "''");
+        }
+
+        if($isStringIndex && $type != 'string')
+        {
+            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
+                "'index. Expecting 'string', value was '" . $type . "''");
+        }
+    }
+
 }

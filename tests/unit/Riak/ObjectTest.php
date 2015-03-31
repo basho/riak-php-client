@@ -113,4 +113,40 @@ class ObjectTest extends TestCase
         $this->assertEquals(['bar', 'baz'], $index);
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidIndexName()
+    {
+        $data = new \StdClass();
+        $data->woot = 'sauce';
+        $object = new Object($data);
+
+        $object->addValueToIndex('foo_bar', 42);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidDataTypeForBinIndex()
+    {
+        $data = new \StdClass();
+        $data->woot = 'sauce';
+        $object = new Object($data);
+
+        $object->addValueToIndex('foo_bin', 42);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInvalidDataTypeForIntIndex()
+    {
+        $data = new \StdClass();
+        $data->woot = 'sauce';
+        $object = new Object($data);
+
+        $object->addValueToIndex('foo_int', 'bar');
+    }
+
 }
