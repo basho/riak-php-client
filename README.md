@@ -85,17 +85,13 @@ Clone this repository to fetch the latest version of this client
     git clone git://github.com/basho/riak-php-client.git
 
 ## Quick start ##
-PHP should be configured with curl enabled
 
-    ./configure --with-curl
+PHP must be compiled with cURL support, i.e. `./configure --with-curl`. We can verify cURL functions are available by running `php -m | grep curl`.
 
-Confirm your PHP installation has curl enabled
-
-    php -m | grep curl
-
-This quick example assumes that you have a local riak cluster running on port 8098
+The following example assumes that we have a local Riak cluster running on port 8098 and our dependencies are installed by [Composer](https://getcomposer.org).
 
 ```php
+# Import dependencies
 require 'vendor/autoload.php';
 
 # Connect to Riak
