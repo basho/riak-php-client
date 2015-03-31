@@ -96,16 +96,7 @@ Confirm your PHP installation has curl enabled
 This quick example assumes that you have a local riak cluster running on port 8098
 
 ```php
-require_once 'riak-php-client/src/Basho/Riak/Riak.php';
-require_once 'riak-php-client/src/Basho/Riak/Bucket.php';
-require_once 'riak-php-client/src/Basho/Riak/Exception.php';
-require_once 'riak-php-client/src/Basho/Riak/Link.php';
-require_once 'riak-php-client/src/Basho/Riak/MapReduce.php';
-require_once 'riak-php-client/src/Basho/Riak/Object.php';
-require_once 'riak-php-client/src/Basho/Riak/StringIO.php';
-require_once 'riak-php-client/src/Basho/Riak/Utils.php';
-require_once 'riak-php-client/src/Basho/Riak/Link/Phase.php';
-require_once 'riak-php-client/src/Basho/Riak/MapReduce/Phase.php';
+require 'vendor/autoload.php';
 
 # Connect to Riak
 $client = new Basho\Riak\Riak('127.0.0.1', 8098);
