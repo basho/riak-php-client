@@ -55,7 +55,7 @@ class ObjectTest extends TestCase
         $this->assertEquals(NULL, $object->getIndex("foo_bin"));
 
         // 2i headers will result in indexes
-        $headers = ['x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
+        $headers = ['My-Header' => 'cats', 'x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
         $object = new Object($data, $headers);
 
         $indexes = $object->getIndexes();

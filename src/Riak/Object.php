@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
+use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\Link;
 use Basho\Riak\MapReduce;
 
@@ -38,7 +39,7 @@ class Object
      */
     protected $data = null;
 
-    protected $indexes = null;
+    protected $indexes = [];
 
     /**
      * @param mixed|null $data
@@ -48,9 +49,13 @@ class Object
     {
         $this->data = $data;
 
-        if (!empty($headers) && is_array($headers)) {
-            $this->headers = $headers;
+        if (empty($headers) || !is_array($headers)) {
+            return;
         }
+
+        $translator = new SecondaryIndexHeaderTranslator();
+        $this->indexes = $translator->extractIndexesFromHeaders($headers);
+        $this->headers = $headers;
     }
 
     public function getData()
@@ -72,22 +77,17 @@ class Object
 
     public function getIndexes()
     {
-        $this->lazyInitIndexes();
-
         return $this->indexes;
     }
 
     public function getIndex($indexName)
     {
-        $this->lazyInitIndexes();
-
         return $this->indexes[$indexName];
     }
 
     public function addValueToIndex($indexName, $value)
     {
         $this->validateIndexNameAndValue($indexName, $value);
-        $this->lazyInitIndexes();
 
         if (!isset($this->indexes[$indexName])) {
             $this->indexes[$indexName] = [];
@@ -98,8 +98,6 @@ class Object
 
     public function removeValueFromIndex($indexName, $value)
     {
-        $this->lazyInitIndexes();
-
         if (!isset($this->indexes[$indexName])) {
             return;
         }
@@ -111,21 +109,11 @@ class Object
         }
     }
 
-    private function lazyInitIndexes()
-    {
-        if (isset($this->indexes)) {
-            return;
-        }
-
-        $translator = new Api\Translators\SecondaryIndexHeader();
-        $this->indexes = $translator->extractIndexes($this->getHeaders());
-    }
-
     private function validateIndexNameAndValue($indexName, $value)
     {
         $type = gettype($value);
-        $isIntIndex = Api\Translators\SecondaryIndexHeader::isIntIndex($indexName);
-        $isStringIndex = Api\Translators\SecondaryIndexHeader::isStringIndex($indexName);
+        $isIntIndex = SecondaryIndexHeaderTranslator::isIntIndex($indexName);
+        $isStringIndex = SecondaryIndexHeaderTranslator::isStringIndex($indexName);
 
         if(!$isIntIndex && !$isStringIndex) {
             throw new \InvalidArgumentException("Invalid index type for '" . $indexName .

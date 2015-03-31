@@ -18,12 +18,12 @@ namespace Basho\Riak\Api\Translators;
 
 
 /**
- * Class SecondaryIndexHeader
+ * Class SecondaryIndexHeaderTranslator
  * @package Basho\Riak\Api\Translators
  *
  * @author Alex Moore <amoore at basho d0t com>
  */
-class SecondaryIndexHeader
+class SecondaryIndexHeaderTranslator
 {
     const INT_INDEX_SUFFIX = '_int';
     const STR_IDX_SUFFIX = '_bin';
@@ -31,18 +31,24 @@ class SecondaryIndexHeader
     const IDX_HEADER_PREFIX = "x-riak-index-";
     const IDX_HEADER_PREFIX_LEN = 13;
 
-    public function extractIndexes($headers)
+    public function extractIndexesFromHeaders(&$headers)
     {
         $indexes = [];
 
         foreach ($headers as $key => $value) {
+
+            if (!$this->isIndexHeader($key)) {
+                continue;
+            }
+
             $this->parseIndexHeader($indexes, $key, $value);
+            unset($headers[$key]);
         }
 
         return $indexes;
     }
 
-    public function createHeaders($indexes)
+    public function createHeadersFromIndexes($indexes)
     {
         $headers = [];
 
@@ -55,27 +61,23 @@ class SecondaryIndexHeader
 
     public static function isStringIndex($headerKey)
     {
-        return SecondaryIndexHeader::indexNameContainsTypeSuffix($headerKey, self::STR_IDX_SUFFIX);
+        return SecondaryIndexHeaderTranslator::indexNameContainsTypeSuffix($headerKey, self::STR_IDX_SUFFIX);
     }
 
     public static function isIntIndex($headerKey)
     {
-        return SecondaryIndexHeader::indexNameContainsTypeSuffix($headerKey, self::INT_INDEX_SUFFIX);
+        return SecondaryIndexHeaderTranslator::indexNameContainsTypeSuffix($headerKey, self::INT_INDEX_SUFFIX);
     }
 
     private function parseIndexHeader(&$indexes, $key, $rawValue)
     {
-        if (!$this->isIndexHeader($key)) {
-            return;
-        }
-
         $indexName = $this->getIndexNameWithType($key);
         $value = $this->getIndexValue($indexName, $rawValue);
 
         $indexes[$indexName] = $value;
     }
 
-    private function isIndexHeader($headerKey)
+    public static function isIndexHeader($headerKey)
     {
         if (strlen($headerKey) <= self::IDX_HEADER_PREFIX_LEN) {
             return false;

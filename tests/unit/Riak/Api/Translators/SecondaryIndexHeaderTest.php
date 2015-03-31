@@ -18,7 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Tests\Riak;
 
 use Basho\Riak\Api;
-use Basho\Riak\Object;
 use Basho\Tests\TestCase;
 
 /**
@@ -32,11 +31,15 @@ class SecondaryIndexHeaderTest extends TestCase
 {
     public function testExtractIndexes()
     {
-        $headers = ['x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
-        $translator = new Api\Translators\SecondaryIndexHeader();
+        $headers = ['My-Header' => 'cats', 'x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
+        $translator = new Api\Translators\SecondaryIndexHeaderTranslator();
 
-        $indexes = $translator->extractIndexes($headers);
+        $indexes = $translator->extractIndexesFromHeaders($headers);
 
+        // Check that array was modified, and only the non-index header is left.
+        $this->assertEquals(['My-Header' => 'cats'], $headers);
+
+        // Check that we have 2 indexes, with the appropriate values.
         $this->assertNotEmpty($indexes);
         $this->assertEquals(2, count($indexes));
         $this->assertEquals(['bar', 'baz'], $indexes["foo_bin"]);
@@ -46,10 +49,10 @@ class SecondaryIndexHeaderTest extends TestCase
     public function testExtractIndexesNoHeaders()
     {
         $headers = [];
-        $translator = new Api\Translators\SecondaryIndexHeader();
+        $translator = new Api\Translators\SecondaryIndexHeaderTranslator();
+        $indexes = $translator->extractIndexesFromHeaders($headers);
 
-        $indexes = $translator->extractIndexes($headers);
-
+        // Check that we get an empty array back.
         $this->assertNotNull($indexes);
         $this->assertEmpty($indexes);
     }
@@ -57,10 +60,11 @@ class SecondaryIndexHeaderTest extends TestCase
     public function testCreateHeaders()
     {
         $indexes = ['foo_bin' => ['bar', 'baz'], 'foo_int' => [42, 50]];
-        $translator = new Api\Translators\SecondaryIndexHeader();
+        $translator = new Api\Translators\SecondaryIndexHeaderTranslator();
 
-        $headers = $translator->createHeaders($indexes);
+        $headers = $translator->createHeadersFromIndexes($indexes);
 
+        // Check that 4 different header key/value pairs are created, with the correct values.
         $this->assertEquals(4, count($headers));
         $this->assertEquals(['x-riak-index-foo_bin', 'bar'], $headers[0]);
         $this->assertEquals(['x-riak-index-foo_bin', 'baz'], $headers[1]);
