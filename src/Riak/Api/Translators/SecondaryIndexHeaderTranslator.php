@@ -61,12 +61,12 @@ class SecondaryIndexHeaderTranslator
 
     public static function isStringIndex($headerKey)
     {
-        return SecondaryIndexHeaderTranslator::indexNameContainsTypeSuffix($headerKey, self::STR_IDX_SUFFIX);
+        return static::indexNameContainsTypeSuffix($headerKey, self::STR_IDX_SUFFIX);
     }
 
     public static function isIntIndex($headerKey)
     {
-        return SecondaryIndexHeaderTranslator::indexNameContainsTypeSuffix($headerKey, self::INT_INDEX_SUFFIX);
+        return static::indexNameContainsTypeSuffix($headerKey, self::INT_INDEX_SUFFIX);
     }
 
     private function parseIndexHeader(&$indexes, $key, $rawValue)
