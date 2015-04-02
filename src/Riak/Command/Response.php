@@ -59,6 +59,11 @@ abstract class Response
         return $this->statusCode;
     }
 
+    public function getBody()
+    {
+        return $this->body;
+    }
+
     /**
      * Retrieve the value for a header
      *
