@@ -27,3 +27,6 @@ composer.lock
 
 # ignore generated docs
 docs
+
+# ignore composer.phar file
+composer.phar
