@@ -49,7 +49,7 @@ abstract class Builder
     /**
      * @var Riak|null
      */
-    protected $riak = NULL;
+    protected $riak = null;
 
     /**
      * Command parameters
@@ -64,6 +64,8 @@ abstract class Builder
      * @var array
      */
     protected $headers = [];
+
+    protected $verbose = false;
 
     public function __construct(Riak $riak)
     {
@@ -105,6 +107,13 @@ abstract class Builder
         return $this;
     }
 
+    public function withVerboseMode($verbose = true)
+    {
+        $this->verbose = $verbose;
+
+        return $this;
+    }
+
     public function getParameters()
     {
         return $this->parameters;
@@ -118,6 +127,11 @@ abstract class Builder
     public function getConnection()
     {
         return $this->riak;
+    }
+
+    public function getVerbose()
+    {
+        return $this->verbose;
     }
 
     /**

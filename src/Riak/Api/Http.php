@@ -37,7 +37,7 @@ class Http extends Api implements ApiInterface
      *
      * @var null
      */
-    protected $connection = NULL;
+    protected $connection = null;
 
     /**
      * API path
@@ -53,26 +53,28 @@ class Http extends Api implements ApiInterface
      */
     protected $query = '';
 
-    public function resetConnection()
-    {
-        curl_reset($this->connection);
-    }
+    private $options = [];
 
     public function closeConnection()
     {
         curl_close($this->connection);
-        $this->connection = NULL;
+        $this->connection = null;
     }
 
     /**
      * Prepare request to be sent
      *
      * @param Command $command
-     * @param Node    $node
+     * @param Node $node
+     *
      * @return $this
      */
     public function prepare(Command $command, Node $node)
     {
+        if ($this->connection) {
+            $this->resetConnection();
+        }
+
         // call parent prepare method to setup object members
         parent::prepare($command, $node);
 
@@ -85,10 +87,23 @@ class Http extends Api implements ApiInterface
         // request specific connection preparation
         $this->prepareRequest();
 
-        // set the request string to be sent
-        $this->request = curl_getinfo($this->getConnection(), CURLINFO_HEADER_OUT);
-
         return $this;
+    }
+
+    public function resetConnection()
+    {
+        $this->command = null;
+        $this->options = [];
+        $this->path = '';
+        $this->query = '';
+        $this->requestBody = '';
+
+        if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
+            curl_reset($this->connection);
+        } else {
+            curl_close($this->connection);
+            $this->connection = null;
+        }
     }
 
     /**
@@ -98,23 +113,23 @@ class Http extends Api implements ApiInterface
      */
     protected function buildPath()
     {
-        $bucket = NULL;
+        $bucket = null;
         $key = '';
 
-        $bucket = $this->getCommand()->getBucket();
+        $bucket = $this->command->getBucket();
 
-        $location = $this->getCommand()->getLocation();
+        $location = $this->command->getLocation();
         if (!empty($location) && $location instanceof Location) {
             $key = $location->getKey();
         }
 
-        switch (get_class($this->getCommand())) {
+        switch (get_class($this->command)) {
             case 'Basho\Riak\Command\Bucket\List':
                 $this->path = sprintf('/types/%s/buckets/%s', $bucket->getType(), $bucket->getName());
                 break;
             case 'Basho\Riak\Command\Bucket\Fetch':
             case 'Basho\Riak\Command\Bucket\Store':
-            case 'Basho\Riak\Command\Bucket\Reset':
+            case 'Basho\Riak\Command\Bucket\Delete':
                 $this->path = sprintf('/types/%s/buckets/%s/props', $bucket->getType(), $bucket->getName());
                 break;
             case 'Basho\Riak\Command\Bucket\Keys':
@@ -131,7 +146,11 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Set\Store':
             case 'Basho\Riak\Command\DataType\Map\Fetch':
             case 'Basho\Riak\Command\DataType\Map\Store':
-                $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
+            $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(),
+                $key);
+                break;
+            case 'Basho\Riak\Command\Search\Index\Store':
+                $this->path = sprintf('/search/index/%s', $this->command);
                 break;
             default:
                 $this->path = '';
@@ -150,32 +169,13 @@ class Http extends Api implements ApiInterface
     protected function prepareConnection()
     {
         // set the response body to be returned
-        curl_setopt($this->getConnection(), CURLOPT_RETURNTRANSFER, 1);
+        $this->options[CURLOPT_RETURNTRANSFER] = 1;
 
         // record outgoing headers
-        curl_setopt($this->getConnection(), CURLINFO_HEADER_OUT, true);
+        $this->options[CURLINFO_HEADER_OUT] = 1;
 
         // return incoming headers
-        curl_setopt($this->getConnection(), CURLOPT_HEADER, true);
-
-        return $this;
-    }
-
-    /**
-     * @return resource
-     */
-    public function getConnection()
-    {
-        if (!$this->connection) {
-            $this->openConnection();
-        }
-
-        return $this->connection;
-    }
-
-    public function openConnection()
-    {
-        $this->connection = curl_init();
+        $this->options[CURLOPT_HEADER] = 1;
 
         return $this;
     }
@@ -190,10 +190,10 @@ class Http extends Api implements ApiInterface
     protected function prepareRequest()
     {
         return $this->prepareRequestMethod()
-                    ->prepareRequestUrl()
-                    ->prepareRequestHeaders()
-                    ->prepareRequestParameters()
-                    ->prepareRequestData();
+            ->prepareRequestUrl()
+            ->prepareRequestHeaders()
+            ->prepareRequestParameters()
+            ->prepareRequestData();
     }
 
     /**
@@ -204,9 +204,9 @@ class Http extends Api implements ApiInterface
     protected function prepareRequestData()
     {
         // if POST or PUT, add parameters to post data, else add to uri
-        if (in_array($this->getCommand()->getMethod(), ['POST', 'PUT'])) {
-            $this->requestBody = $this->getCommand()->getEncodedData();
-            curl_setopt($this->getConnection(), CURLOPT_POSTFIELDS, $this->requestBody);
+        if (in_array($this->command->getMethod(), ['POST', 'PUT'])) {
+            $this->requestBody = $this->command->getEncodedData();
+            $this->options[CURLOPT_POSTFIELDS] = $this->requestBody;
         }
 
         return $this;
@@ -219,9 +219,9 @@ class Http extends Api implements ApiInterface
      */
     protected function prepareRequestParameters()
     {
-        if ($this->getCommand()->hasParameters()) {
+        if ($this->command->hasParameters()) {
             // build query using RFC 3986 (spaces become %20 instead of '+')
-            $this->query = http_build_query($this->getCommand()->getParameters(), '', '&', PHP_QUERY_RFC3986);
+            $this->query = http_build_query($this->command->getParameters(), '', '&', PHP_QUERY_RFC3986);
         }
 
         return $this;
@@ -240,7 +240,7 @@ class Http extends Api implements ApiInterface
         }
 
         // set the request headers on the connection
-        curl_setopt($this->getConnection(), CURLOPT_HTTPHEADER, $curl_headers);
+        $this->options[CURLOPT_HTTPHEADER] = $curl_headers;
 
         return $this;
     }
@@ -255,7 +255,7 @@ class Http extends Api implements ApiInterface
         $url = sprintf('%s%s?%s', $this->node->getUri(), $this->path, $this->query);
 
         // set the built request URL on the connection
-        curl_setopt($this->getConnection(), CURLOPT_URL, $url);
+        $this->options[CURLOPT_URL] = $url;
 
         return $this;
     }
@@ -267,22 +267,22 @@ class Http extends Api implements ApiInterface
      */
     protected function prepareRequestMethod()
     {
-        switch ($this->getCommand()->getMethod()) {
+        switch ($this->command->getMethod()) {
             case "POST":
-                curl_setopt($this->getConnection(), CURLOPT_POST, true);
+                $this->options[CURLOPT_POST] = 1;
                 break;
             case "PUT":
-                curl_setopt($this->getConnection(), CURLOPT_PUT, true);
+                $this->options[CURLOPT_CUSTOMREQUEST] = 'PUT';
                 break;
             case "DELETE":
-                curl_setopt($this->getConnection(), CURLOPT_CUSTOMREQUEST, 'DELETE');
+                $this->options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
                 break;
             case "HEAD":
-                curl_setopt($this->getConnection(), CURLOPT_NOBODY, true);
+                $this->options[CURLOPT_NOBODY] = 1;
                 break;
             default:
                 // reset http method to get in case its changed
-                curl_setopt($this->getConnection(), CURLOPT_HTTPGET, true);
+                $this->options[CURLOPT_HTTPGET] = 1;
         }
 
         return $this;
@@ -307,12 +307,25 @@ class Http extends Api implements ApiInterface
     public function send()
     {
         // set the response header and body callback functions
-        curl_setopt($this->getConnection(), CURLOPT_HEADERFUNCTION, [$this, 'responseHeaderCallback']);
-        curl_setopt($this->getConnection(), CURLOPT_WRITEFUNCTION, [$this, 'responseBodyCallback']);
+        $this->options[CURLOPT_HEADERFUNCTION] = [$this, 'responseHeaderCallback'];
+        $this->options[CURLOPT_WRITEFUNCTION] = [$this, 'responseBodyCallback'];
+
+        if ($this->command->isVerbose()) {
+            // set curls output to be the output buffer stream
+            $this->options[CURLOPT_STDERR] = fopen('php://stdout', 'w+');
+            $this->options[CURLOPT_VERBOSE] = 1;
+
+            // there is a bug when verbose is enabled, header out causes no output
+            // @see https://bugs.php.net/bug.php?id=65348
+            unset($this->options[CURLINFO_HEADER_OUT]);
+        }
+
+        // set all options on the resource
+        curl_setopt_array($this->getConnection(), $this->options);
 
         // execute the request
         $this->success = curl_exec($this->getConnection());
-        if ($this->success === FALSE) {
+        if ($this->success === false) {
             $this->error = curl_error($this->getConnection());
         }
 
@@ -325,6 +338,25 @@ class Http extends Api implements ApiInterface
     }
 
     /**
+     * @return resource
+     */
+    public function getConnection()
+    {
+        if (!$this->connection) {
+            $this->openConnection();
+        }
+
+        return $this->connection;
+    }
+
+    public function openConnection()
+    {
+        $this->connection = curl_init();
+
+        return $this;
+    }
+
+    /**
      * Response header callback
      *
      * Handles callback from curl when the response is received, it parses the headers into an array sets them as
@@ -334,6 +366,7 @@ class Http extends Api implements ApiInterface
      *
      * @param $ch
      * @param $header
+     *
      * @return int
      */
     public function responseHeaderCallback($ch, $header)
@@ -366,6 +399,7 @@ class Http extends Api implements ApiInterface
      *
      * @param $ch
      * @param $body
+     *
      * @return int
      */
     public function responseBodyCallback($ch, $body)
