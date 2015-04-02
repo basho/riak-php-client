@@ -56,17 +56,17 @@ abstract class Command
     /**
      * @var Bucket|null
      */
-    protected $bucket = NULL;
+    protected $bucket = null;
 
     /**
      * @var Command\Response|null
      */
-    protected $response = NULL;
+    protected $response = null;
 
     /**
      * @var \Basho\Riak|null
      */
-    protected $riak = NULL;
+    protected $riak = null;
 
     /**
      * Request headers
@@ -79,11 +79,19 @@ abstract class Command
      */
     protected $requestHeaders = [];
 
+    protected $verbose = false;
+
     public function __construct(Builder $builder)
     {
         $this->riak = $builder->getConnection();
         $this->parameters = $builder->getParameters();
         $this->headers = $builder->getHeaders();
+        $this->verbose = $builder->getVerbose();
+    }
+
+    public function isVerbose()
+    {
+        return $this->verbose;
     }
 
     /**
@@ -113,6 +121,7 @@ abstract class Command
 
     /**
      * @param $key string
+     *
      * @return mixed
      */
     public function getParameter($key)
@@ -172,7 +181,7 @@ abstract class Command
 
     public function getLocation()
     {
-        return NULL;
+        return null;
     }
 
     abstract public function getData();

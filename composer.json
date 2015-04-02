@@ -1,28 +1,34 @@
 {
-    "name": "basho/riak",
-    "description": "Official Riak client for PHP",
-    "keywords": ["riak", "client", "driver", "database", "nosql"],
-    "homepage": "http://basho.com/riak/",
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "Riak Team & Contributors",
-            "homepage": "https://github.com/basho/riak-php-client/contributors"
-        }
-    ],
-    "autoload": {
-        "psr-4": {"Basho\\": "src/"}
-    },
-    "autoload-dev": {
-        "psr-4": { "Basho\\Tests\\": "tests/" }
-    },
-    "require": {
-        "php": ">=5.4",
-        "ext-json": "*",
-        "ext-curl": "*"
-    },
-    "require-dev": {
-      "phpunit/phpunit": "~4.5",
-      "phpdocumentor/phpdocumentor": "2.*"
+  "name": "basho/riak",
+  "description": "Official Riak client for PHP",
+  "keywords": [
+    "riak",
+    "client",
+    "driver",
+    "database",
+    "nosql"
+  ],
+  "homepage": "http://basho.com/riak/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Riak Team & Contributors",
+      "homepage": "https://github.com/basho/riak-php-client/contributors"
     }
+  ],
+  "autoload": {
+    "psr-4": {"Basho\\": "src/"}
+  },
+  "autoload-dev": {
+    "psr-4": {"Basho\\Tests\\": "tests/"}
+  },
+  "require": {
+    "php": ">=5.4",
+    "ext-json": "*",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.5.*",
+    "phpdocumentor/phpdocumentor": "2.*"
+  }
 }
