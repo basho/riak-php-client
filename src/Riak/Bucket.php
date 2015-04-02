@@ -51,11 +51,13 @@ class Bucket
     /**
      * @param        $name
      * @param string $type
+     * @param array $properties
      */
-    public function __construct($name, $type = self::DEFAULT_TYPE)
+    public function __construct($name, $type = self::DEFAULT_TYPE, array $properties = [])
     {
         $this->name = $name;
         $this->type = $type;
+        $this->properties = $properties;
     }
 
     public function __toString()
@@ -91,7 +93,7 @@ class Bucket
     public function getProperty($key)
     {
         $properties = $this->getProperties();
-        if (!empty($properties[$key])) {
+        if (isset($properties[$key])) {
             return $properties[$key];
         }
 
@@ -99,30 +101,11 @@ class Bucket
     }
 
     /**
-     * If properties are not already loaded, fetch them from Riak
-     *
      * @return array
      */
     public function getProperties()
     {
-        if (!$this->properties) {
-            // TODO: Fetch properties from Riak
-
-            // TODO: Set property result to properties member
-        }
-
         return $this->properties;
-    }
-
-    /**
-     * @param array $properties
-     */
-    public function setProperties($properties)
-    {
-        // TODO: If there is a difference, store it in Riak
-        // qualify the difference using array_diff_assoc
-
-        $this->properties = $properties;
     }
 
     /**
