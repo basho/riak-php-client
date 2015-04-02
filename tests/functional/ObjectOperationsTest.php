@@ -35,6 +35,11 @@ class ObjectTest extends TestCase
      */
     private static $object = NULL;
 
+    /**
+     * @var array|null
+     */
+    private static $vclock = NULL;
+
     public static function setUpBeforeClass()
     {
         // make completely random key based on time
@@ -225,9 +230,43 @@ class ObjectTest extends TestCase
         $this->assertEquals($indexes['lastname_bin'], ['Knuth']);
 
         static::$object = $response->getObject();
+        static::$vclock = $response->getVclock();
     }
 
+    /**
+     * @depends      testStoreObjectWithIndexes
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testRemoveIndexes($riak)
+    {
+        $object = static::$object;
+        $object->removeValueFromIndex('lucky_numbers_int', 64);
+        $object->removeValueFromIndex('lastname_bin', 'Knuth');
 
+        $command = (new Command\Builder\StoreObject($riak))
+            ->withObject($object)
+            ->buildLocation(static::$key, 'users', static::LEVELDB_BUCKET_TYPE)
+            ->withHeader("X-Riak-Vclock", static::$vclock)
+            ->build();
 
+        // TODO: internalize Vclock to Riak\Object.
 
+        $response = $command->execute($command);
+
+        $this->assertEquals('204', $response->getStatusCode());
+
+        $command = (new Command\Builder\FetchObject($riak))
+            ->buildLocation(static::$key, 'users', static::LEVELDB_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute($command);
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
+        $this->assertEquals('person', $response->getObject()->getData());
+        $indexes = $response->getObject()->getIndexes();
+        $this->assertEquals($indexes['lucky_numbers_int'], [42]);
+    }
 }
