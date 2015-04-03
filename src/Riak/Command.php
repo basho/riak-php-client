@@ -152,7 +152,9 @@ abstract class Command
      */
     public function getHeaders()
     {
-        return $this->headers;
+        // N.B. - POST headers for 2i values can reuse the same header key many times,
+        //  so converting the Riak Object's headers associative array to an array of [[key,value]...] pairs.
+        return $this->convertHeaderArray($this->headers);
     }
 
     /**
@@ -185,4 +187,13 @@ abstract class Command
     abstract public function getData();
 
     abstract public function getEncodedData();
+
+    protected function convertHeaderArray($headers)
+    {
+        $flatArray = [];
+        foreach ($headers as $key => $value) {
+            $flatArray[] = [$key, $value];
+        }
+        return $flatArray;
+    }
 }

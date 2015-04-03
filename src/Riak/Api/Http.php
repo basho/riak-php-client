@@ -235,8 +235,11 @@ class Http extends Api implements ApiInterface
     protected function prepareRequestHeaders()
     {
         $curl_headers = [];
+
+        // getHeaders() Headers are expected in the following format:
+        // [[key, value], [key, value]...]
         foreach ($this->command->getHeaders() as $key => $value) {
-            $curl_headers[] = sprintf('%s: %s', $key, $value);
+            $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
         }
 
         // set the request headers on the connection

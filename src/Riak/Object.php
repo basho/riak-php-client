@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
+use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\Link;
 use Basho\Riak\MapReduce;
 
@@ -38,17 +39,23 @@ class Object
      */
     protected $data = null;
 
+    protected $indexes = [];
+
     /**
      * @param mixed|null $data
      * @param array|null $headers
      */
-    public function __construct($data = NULL, $headers = NULL)
+    public function __construct($data = null, $headers = null)
     {
         $this->data = $data;
 
-        if (!empty($headers) && is_array($headers)) {
-            $this->headers = $headers;
+        if (empty($headers) || !is_array($headers)) {
+            return;
         }
+
+        $translator = new SecondaryIndexHeaderTranslator();
+        $this->indexes = $translator->extractIndexesFromHeaders($headers);
+        $this->headers = $headers;
     }
 
     public function getData()
@@ -67,4 +74,68 @@ class Object
     {
         return $this->getHeader('Content-Type');
     }
+
+    public function getIndexes()
+    {
+        return $this->indexes;
+    }
+
+    public function getIndex($indexName)
+    {
+        return isset($this->indexes[$indexName]) ? $this->indexes[$indexName] : null;
+    }
+
+    public function addValueToIndex($indexName, $value)
+    {
+        $this->validateIndexNameAndValue($indexName, $value);
+
+        if (!isset($this->indexes[$indexName])) {
+            $this->indexes[$indexName] = [];
+        }
+
+        $this->indexes[$indexName][] = $value;
+    }
+
+    public function removeValueFromIndex($indexName, $value)
+    {
+        if (!isset($this->indexes[$indexName])) {
+            return;
+        }
+
+        $valuePos = array_search($value, $this->indexes[$indexName]);
+
+        if ($valuePos !== false) {
+            array_splice($this->indexes[$indexName], $valuePos, 1);
+        }
+
+        if(count($this->indexes[$indexName]) == 0) {
+            unset($this->indexes[$indexName]);
+        }
+
+    }
+
+    private function validateIndexNameAndValue($indexName, $value)
+    {
+        $type = gettype($value);
+        $isIntIndex = SecondaryIndexHeaderTranslator::isIntIndex($indexName);
+        $isStringIndex = SecondaryIndexHeaderTranslator::isStringIndex($indexName);
+
+        if(!$isIntIndex && !$isStringIndex) {
+            throw new \InvalidArgumentException("Invalid index type for '" . $indexName .
+                "'index. Expecting '*_int' for an integer index, or '*_bin' for a string index.");
+        }
+
+        if($isIntIndex && $type != 'integer')
+        {
+            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
+                "'index. Expecting 'integer', value was '" . $type . "''");
+        }
+
+        if($isStringIndex && $type != 'string')
+        {
+            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
+                "'index. Expecting 'string', value was '" . $type . "''");
+        }
+    }
+
 }

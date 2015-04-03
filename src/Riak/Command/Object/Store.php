@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Object;
 
+use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
@@ -38,5 +39,12 @@ class Store extends Command\Object implements CommandInterface
         $this->object = $builder->getObject();
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
+    }
+
+    public function getHeaders()
+    {
+        $translator = new SecondaryIndexHeaderTranslator();
+        $indexHeaders = $translator->createHeadersFromIndexes($this->object->getIndexes());
+        return array_merge(parent::getHeaders(), $indexHeaders);
     }
 }

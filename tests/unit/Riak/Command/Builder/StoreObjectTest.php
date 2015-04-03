@@ -107,4 +107,34 @@ class StoreObjectTest extends TestCase
         $builder->buildObject('some_data');
         $command = $builder->build();
     }
+
+    /**
+     * Tests that attempting to store an object generates headers for any
+     * 2i entries on the object.
+     *
+     * @covers       Command\Object\Store::getHeaders
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testStoreObjectWithIndexGeneratesHeaders($riak)
+    {
+        $inputHeaders = ['My-Header' => 'cats', 'x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
+        $builder = new Command\Builder\StoreObject($riak);
+        $builder->buildObject('some_data', $inputHeaders);
+        $builder->buildBucket('some_bucket');
+        $command = $builder->build();
+
+        $this->assertInstanceOf('Basho\Riak\Command\Object\Store', $command);
+        $headers = $command->getHeaders();
+        $this->assertNotNull($headers);
+        $this->assertEquals(4, count($headers));
+        // TODO: No pass through for arbitrary headers. Problem?
+        //$this->assertEquals(['My-Header', 'cats'], $headers[0]);
+        $this->assertEquals(['x-riak-index-foo_bin', 'bar'], $headers[0]);
+        $this->assertEquals(['x-riak-index-foo_bin', 'baz'], $headers[1]);
+        $this->assertEquals(['x-riak-index-foo_int', '42'], $headers[2]);
+        $this->assertEquals(['x-riak-index-foo_int', '50'], $headers[3]);
+
+    }
 }
