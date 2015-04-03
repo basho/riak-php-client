@@ -82,7 +82,7 @@ class Object
 
     public function getIndex($indexName)
     {
-        return $this->indexes[$indexName];
+        return isset($this->indexes[$indexName]) ? $this->indexes[$indexName] : null;
     }
 
     public function addValueToIndex($indexName, $value)
@@ -107,6 +107,11 @@ class Object
         if ($valuePos !== false) {
             array_splice($this->indexes[$indexName], $valuePos, 1);
         }
+
+        if(count($this->indexes[$indexName]) == 0) {
+            unset($this->indexes[$indexName]);
+        }
+
     }
 
     private function validateIndexNameAndValue($indexName, $value)

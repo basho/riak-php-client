@@ -93,11 +93,11 @@ class ObjectTest extends TestCase
 
         $object->removeValueFromIndex("foo_int", 50);
         $object->removeValueFromIndex("foo_bin", 'baz');
+        $object->removeValueFromIndex("foo_bin", 'bar');
 
         $indexes = $object->getIndexes();
         $this->assertNotEmpty($indexes);
-        $this->assertEquals(2, count($indexes));
-        $this->assertEquals(['bar'], $indexes["foo_bin"]);
+        $this->assertEquals(1, count($indexes));
         $this->assertEquals([42], $indexes["foo_int"]);
     }
 
@@ -110,6 +110,7 @@ class ObjectTest extends TestCase
         $object = new Object($data, $headers);
 
         $index = $object->getIndex('foo_bin');
+        $this->assertNotNull($index);
         $this->assertEquals(['bar', 'baz'], $index);
     }
 
