@@ -111,7 +111,6 @@ class Object
         if(count($this->indexes[$indexName]) == 0) {
             unset($this->indexes[$indexName]);
         }
-
     }
 
     private function validateIndexNameAndValue($indexName, $value)

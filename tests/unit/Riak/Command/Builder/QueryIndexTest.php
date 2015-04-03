@@ -1,0 +1,74 @@
+<?php
+
+/*
+Copyright 2015 Basho Technologies, Inc.
+
+Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations under the License.
+*/
+
+namespace Basho\Tests\Riak\Command\Builder;
+
+use Basho\Riak\Command;
+use Basho\Tests\TestCase;
+
+/**
+ * Class QueryIndexTest
+ *
+ * Tests the configuration of Riak commands via the Command Builder class
+ *
+ * @author Christopher Mancini <cmancini at basho d0t com>
+ */
+class QueryIndexTest extends TestCase
+{
+    /**
+     * Test command builder construct
+     *
+     * @covers       Command\Builder\QueryIn    dex::build
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testQuery($riak)
+    {
+        // build an object
+        $builder = new Command\Builder\QueryIndex($riak);
+        $builder->buildBucket('some_bucket', 'some_bucket_type')
+                ->withIndexName('foo_int')
+                ->withScalarValue(42);
+
+        $command = $builder->build();
+
+        $this->assertInstanceOf('Basho\Riak\Command\Indexes\Query', $command);
+        $this->assertInstanceOf('Basho\Riak\Bucket', $command->getBucket());
+        $this->assertEquals('some_bucket', $command->getBucket()->getName());
+        $this->assertEquals('some_bucket_type', $command->getBucket()->getType());
+        $this->assertEquals('foo_int', $command->getIndexName());
+        $this->assertEquals('42', $command->getIndexLowerBound());
+    }
+
+//    /**
+//     * Tests validate properly verifies the Object is not there
+//     *
+//     * @covers       Command\Builder\FetchObject::validate
+//     * @dataProvider getLocalNodeConnection
+//     *
+//     * @param $riak \Basho\Riak
+//     *
+//     * @expectedException \Basho\Riak\Command\Builder\Exception
+//     */
+//    public function testValidateLocation($riak)
+//    {
+//        $builder = new Command\Builder\FetchObject($riak);
+//        $builder->buildBucket('some_bucket');
+//        $command = $builder->build();
+//    }
+}

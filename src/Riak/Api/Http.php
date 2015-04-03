@@ -19,6 +19,7 @@ namespace Basho\Riak\Api;
 
 use Basho\Riak\Api;
 use Basho\Riak\ApiInterface;
+use Basho\Riak\Bucket;
 use Basho\Riak\Command;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
@@ -152,11 +153,34 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Search\Index\Store':
                 $this->path = sprintf('/search/index/%s', $this->command);
                 break;
+            case 'Basho\Riak\Command\Indexes\QueryIndex':
+                $this->path = $this->createIndexQueryPath($this->command, $bucket);
+                break;
             default:
                 $this->path = '';
         }
 
         return $this;
+    }
+
+
+    /**
+     * Generates the URL path for a 2i Query
+     *
+     * @param Command\Indexes\Query $command
+     * @param Bucket $bucket
+     * @return string
+     */
+    private function createIndexQueryPath(Command\Indexes\Query $command, Bucket $bucket)
+    {
+        $path =  sprintf('/types/%s/buckets/%s/index/%s/%s', $bucket->getType(),
+                                                             $bucket->getName(),
+                                                             $command->getIndexName(),
+                                                             $command->getIndexLowerBound());
+        if($command->isRangeQuery()) {
+            $path = sprintf('%s/%s', $path, $command->getIndexUpperBound());
+        }
+        return $path;
     }
 
     /**
