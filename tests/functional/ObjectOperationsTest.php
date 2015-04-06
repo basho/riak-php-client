@@ -184,6 +184,7 @@ class ObjectTest extends TestCase
 
 
     /**
+     * @depends      testFetchOk
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak

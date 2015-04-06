@@ -41,7 +41,7 @@ class BucketOperationsTest extends TestCase
             ->set('allow_mult', false)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 201 - Created
         $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
@@ -59,7 +59,7 @@ class BucketOperationsTest extends TestCase
             ->buildBucket('test')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
 
@@ -81,7 +81,7 @@ class BucketOperationsTest extends TestCase
             ->set('allow_mult', true)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 201 - Created
         $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
@@ -99,7 +99,7 @@ class BucketOperationsTest extends TestCase
             ->buildBucket('test')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
 

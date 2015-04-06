@@ -51,7 +51,7 @@ class SetTest extends TestCase
             ->buildBucket('default', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
@@ -69,7 +69,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'default', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('404', $response->getStatusCode());
     }
@@ -95,7 +95,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
@@ -115,7 +115,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
@@ -137,7 +137,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -155,7 +155,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
@@ -177,7 +177,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -195,7 +195,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
@@ -220,7 +220,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -238,7 +238,7 @@ class SetTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());

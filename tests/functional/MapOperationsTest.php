@@ -49,7 +49,7 @@ class MapTest extends TestCase
             ->buildBucket('default', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
@@ -67,7 +67,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'default', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('404', $response->getStatusCode());
     }
@@ -94,7 +94,7 @@ class MapTest extends TestCase
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
@@ -114,7 +114,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $map = $response->getMap();
 
@@ -151,7 +151,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -169,7 +169,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $map = $response->getMap();
 
@@ -204,7 +204,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -224,7 +224,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $map = $response->getMap();
 
@@ -258,7 +258,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -276,7 +276,7 @@ class MapTest extends TestCase
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
         $map = $response->getMap();
 
         $this->assertEquals('200', $response->getStatusCode());
