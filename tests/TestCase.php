@@ -29,6 +29,9 @@ use Basho\Riak\Node;
  */
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
+    const TEST_NODE_HOST = 'localhost';
+    const TEST_NODE_PORT = 8098;
+
     const SEARCH_BUCKET_TYPE = 'phptest_search';
     const COUNTER_BUCKET_TYPE = 'phptest_counters';
     const MAP_BUCKET_TYPE = 'phptest_maps';
@@ -51,7 +54,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return [
             [
                 (new Node\Builder)
-                    ->withPort(8098)
+                    ->withPort(static::TEST_NODE_PORT)
                     ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',])
             ],
         ];
@@ -78,8 +81,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return [
             [
                 (new Node\Builder)
-                    ->withHost('localhost')
-                    ->withPort(8098)
+                    ->withHost(static::TEST_NODE_HOST)
+                    ->withPort(static::TEST_NODE_PORT)
                     ->build()
             ],
         ];
