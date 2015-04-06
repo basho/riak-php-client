@@ -73,7 +73,7 @@ abstract class Api
 
     protected $clientId = '';
 
-    protected $success = NULL;
+    protected $success = null;
 
     protected $error = '';
 
@@ -116,6 +116,7 @@ abstract class Api
 
     /**
      * @param Command|null $command
+     *
      * @return $this
      */
     protected function setCommand($command)
@@ -135,6 +136,7 @@ abstract class Api
 
     /**
      * @param Node|null $node
+     *
      * @return $this
      */
     public function setNode($node)
@@ -149,7 +151,7 @@ abstract class Api
      */
     public function getRequest()
     {
-        return $this->request;
+        return $this->request . $this->requestBody;
     }
 
     /**
@@ -172,7 +174,8 @@ abstract class Api
      * Prepare the api connection
      *
      * @param Command $command
-     * @param Node    $node
+     * @param Node $node
+     *
      * @return $this
      */
     public function prepare(Command $command, Node $node)

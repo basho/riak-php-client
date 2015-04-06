@@ -97,6 +97,8 @@ class Http extends Api implements ApiInterface
         $this->path = '';
         $this->query = '';
         $this->requestBody = '';
+        $this->responseHeaders = [];
+        $this->responseBody = '';
 
         if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
             curl_reset($this->connection);
@@ -149,8 +151,14 @@ class Http extends Api implements ApiInterface
             $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(),
                 $key);
                 break;
+            case 'Basho\Riak\Command\Search\Index\Fetch':
             case 'Basho\Riak\Command\Search\Index\Store':
+            case 'Basho\Riak\Command\Search\Index\Delete':
                 $this->path = sprintf('/search/index/%s', $this->command);
+                break;
+            case 'Basho\Riak\Command\Search\Schema\Fetch':
+            case 'Basho\Riak\Command\Search\Schema\Store':
+                $this->path = sprintf('/search/schema/%s', $this->command);
                 break;
             default:
                 $this->path = '';
@@ -168,14 +176,8 @@ class Http extends Api implements ApiInterface
      */
     protected function prepareConnection()
     {
-        // set the response body to be returned
-        $this->options[CURLOPT_RETURNTRANSFER] = 1;
-
         // record outgoing headers
         $this->options[CURLINFO_HEADER_OUT] = 1;
-
-        // return incoming headers
-        $this->options[CURLOPT_HEADER] = 1;
 
         return $this;
     }
@@ -407,7 +409,7 @@ class Http extends Api implements ApiInterface
      */
     public function responseBodyCallback($ch, $body)
     {
-        $this->responseBody = $body;
+        $this->responseBody .= $body;
 
         return strlen($body);
     }
