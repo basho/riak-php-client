@@ -20,11 +20,11 @@ namespace Basho\Riak\Command;
 /**
  * Class Response
  *
- * [summary]
+ * Data structure for handling Command responses from Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class Response
+class Response
 {
     /**
      * Response headers returned from request
@@ -62,6 +62,11 @@ abstract class Response
     public function getBody()
     {
         return $this->body;
+    }
+
+    public function getContentType()
+    {
+        return $this->getHeader('Content-Type');
     }
 
     /**
