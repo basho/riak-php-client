@@ -15,21 +15,43 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Tests;
+namespace Basho\Riak\Command\Search;
 
-use Basho\Riak\Command;
+use Basho\Riak\Search\Doc;
 
 /**
- * Class BucketPropertiesTest
+ * Class Response
  *
- * Functional tests related to Bucket properties
+ * Container for a response related to an operation on an object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class BucketPropertiesTest extends TestCase
+class Response extends \Basho\Riak\Command\Response
 {
-    public function testStoreNewWithKey()
+    protected $results = '';
+
+    protected $docs = [];
+
+    public function __construct($statusCode, $headers = [], $body = '')
     {
-        $this->assertTrue(TRUE);
+        parent::__construct($statusCode, $headers, $body);
+
+        // make sure body is not only whitespace
+        if (trim($body)) {
+            $this->results = json_decode($body);
+            foreach ($this->results->response->docs as $doc) {
+                $this->docs[] = new Doc($doc);
+            }
+        }
+    }
+
+    public function getNumFound()
+    {
+        return $this->results->response->numFound;
+    }
+
+    public function getDocs()
+    {
+        return $this->docs;
     }
 }

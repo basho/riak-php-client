@@ -160,6 +160,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Search\Schema\Store':
                 $this->path = sprintf('/search/schema/%s', $this->command);
                 break;
+            case 'Basho\Riak\Command\Search\Fetch':
+                $this->path = sprintf('/search/query/%s', $this->command);
+                break;
             default:
                 $this->path = '';
         }
@@ -192,9 +195,9 @@ class Http extends Api implements ApiInterface
     protected function prepareRequest()
     {
         return $this->prepareRequestMethod()
+            ->prepareRequestParameters()
             ->prepareRequestUrl()
             ->prepareRequestHeaders()
-            ->prepareRequestParameters()
             ->prepareRequestData();
     }
 
@@ -209,21 +212,6 @@ class Http extends Api implements ApiInterface
         if (in_array($this->command->getMethod(), ['POST', 'PUT'])) {
             $this->requestBody = $this->command->getEncodedData();
             $this->options[CURLOPT_POSTFIELDS] = $this->requestBody;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Prepare request parameters
-     *
-     * @return $this
-     */
-    protected function prepareRequestParameters()
-    {
-        if ($this->command->hasParameters()) {
-            // build query using RFC 3986 (spaces become %20 instead of '+')
-            $this->query = http_build_query($this->command->getParameters(), '', '&', PHP_QUERY_RFC3986);
         }
 
         return $this;
@@ -261,6 +249,21 @@ class Http extends Api implements ApiInterface
 
         // set the built request URL on the connection
         $this->options[CURLOPT_URL] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Prepare request parameters
+     *
+     * @return $this
+     */
+    protected function prepareRequestParameters()
+    {
+        if ($this->command->hasParameters()) {
+            // build query using RFC 3986 (spaces become %20 instead of '+')
+            $this->query = http_build_query($this->command->getParameters(), '', '&', PHP_QUERY_RFC3986);
+        }
 
         return $this;
     }
