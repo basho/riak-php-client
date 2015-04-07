@@ -29,7 +29,7 @@ use Basho\Riak\Node;
  */
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
-    const TEST_NODE_HOST = 'localhost';
+    const TEST_NODE_HOST = '127.0.0.1';
     const TEST_NODE_PORT = 8098;
 
     const SEARCH_BUCKET_TYPE = 'phptest_search';

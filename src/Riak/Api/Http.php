@@ -163,6 +163,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Search\Fetch':
                 $this->path = sprintf('/search/query/%s', $this->command);
                 break;
+            case 'Basho\Riak\Command\MapReduce\Fetch':
+                $this->path = sprintf('/%s', $this->config['mapred_prefix']);
+                break;
             default:
                 $this->path = '';
         }

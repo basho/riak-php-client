@@ -77,9 +77,12 @@ abstract class Api
 
     protected $error = '';
 
-    public function __construct($clientId)
+    protected $config = [];
+
+    public function __construct($clientId, array $config = [])
     {
         $this->clientId = $clientId;
+        $this->config = $config;
     }
 
     /**

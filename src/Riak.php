@@ -116,7 +116,7 @@ class Riak
             $this->api = $api;
         } else {
             // default to HTTP bridge class
-            $this->api = new Http($this->getClientID());
+            $this->api = new Http($this->getClientID(), $this->config);
         }
     }
 
