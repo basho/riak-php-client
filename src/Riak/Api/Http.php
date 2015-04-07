@@ -123,7 +123,6 @@ class Http extends Api implements ApiInterface
         if (!empty($location) && $location instanceof Location) {
             $key = $location->getKey();
         }
-
         switch (get_class($this->command)) {
             case 'Basho\Riak\Command\Bucket\List':
                 $this->path = sprintf('/types/%s/buckets/%s', $bucket->getType(), $bucket->getName());
@@ -153,7 +152,7 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Search\Index\Store':
                 $this->path = sprintf('/search/index/%s', $this->command);
                 break;
-            case 'Basho\Riak\Command\Indexes\QueryIndex':
+            case 'Basho\Riak\Command\Indexes\Query':
                 $this->path = $this->createIndexQueryPath($this->command, $bucket);
                 break;
             default:

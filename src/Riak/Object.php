@@ -94,12 +94,14 @@ class Object
         }
 
         $this->indexes[$indexName][] = $value;
+
+        return $this;
     }
 
     public function removeValueFromIndex($indexName, $value)
     {
         if (!isset($this->indexes[$indexName])) {
-            return;
+            return $this;
         }
 
         $valuePos = array_search($value, $this->indexes[$indexName]);
@@ -111,6 +113,8 @@ class Object
         if(count($this->indexes[$indexName]) == 0) {
             unset($this->indexes[$indexName]);
         }
+
+        return $this;
     }
 
     private function validateIndexNameAndValue($indexName, $value)

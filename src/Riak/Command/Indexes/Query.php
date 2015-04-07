@@ -29,8 +29,9 @@ use Basho\Riak\CommandInterface;
  */
 class Query extends Command\Object implements CommandInterface
 {
-    protected $method = 'GET';
-
+    /**
+     * @var string
+     */
     protected $indexName = NULL;
 
     protected $lowerBound = NULL;
@@ -70,7 +71,30 @@ class Query extends Command\Object implements CommandInterface
 
     public function isRangeQuery()
     {
-        return $this->upperBound == null;
+        return $this->upperBound != NULL;
+    }
+
+    /**
+     * @return Command\Indexes\Response
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        $this->response = new Command\Indexes\Response($statusCode, $responseHeaders, $responseBody);
+
+        return $this;
+    }
+
+    /**
+     * @return Command\Indexes\Response
+     */
+    public function execute()
+    {
+        return parent::execute();
     }
 
 
