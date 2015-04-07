@@ -26,7 +26,7 @@ use Basho\Riak\Command;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class MapTest extends TestCase
+class MapOperationsTest extends TestCase
 {
     private static $key = '';
 

@@ -26,7 +26,7 @@ use Basho\Riak\Command;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class ObjectTest extends TestCase
+class ObjectOperationsTest extends TestCase
 {
     private static $key = '';
 
@@ -58,7 +58,7 @@ class ObjectTest extends TestCase
             ->buildBucket('users')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
@@ -76,7 +76,7 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('404', $response->getStatusCode());
     }
@@ -96,7 +96,7 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
@@ -115,7 +115,7 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
@@ -142,7 +142,7 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -160,7 +160,7 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('204', $response->getStatusCode());
     }
@@ -177,11 +177,10 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('404', $response->getStatusCode());
     }
-
 
     /**
      * @depends      testFetchOk
@@ -203,8 +202,7 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
-
+        $response = $command->execute();
         $this->assertEquals('204', $response->getStatusCode());
     }
 
@@ -220,13 +218,15 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
         $this->assertEquals('person', $response->getObject()->getData());
         $this->assertNotEmpty($response->getVClock());
+
         $indexes = $response->getObject()->getIndexes();
+
         $this->assertEquals($indexes['lucky_numbers_int'], [42, 64]);
         $this->assertEquals($indexes['lastname_bin'], ['Knuth']);
 
@@ -254,7 +254,7 @@ class ObjectTest extends TestCase
 
         // TODO: internalize Vclock to Riak\Object.
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('204', $response->getStatusCode());
 
@@ -262,7 +262,7 @@ class ObjectTest extends TestCase
             ->buildLocation(static::$key, 'users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
