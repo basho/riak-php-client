@@ -39,6 +39,8 @@ class Store extends Command\Object implements CommandInterface
         $this->object = $builder->getObject();
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
+
+        $this->headers = array_merge($this->headers, $this->object->getHeaders());
     }
 
     public function getHeaders()

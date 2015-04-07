@@ -56,7 +56,13 @@ abstract class Object extends Command
 
     public function getEncodedData()
     {
-        return rawurlencode($this->getData());
+        $data = $this->getData();
+
+        if ($this->object->getContentType() == 'application/json') {
+            return json_encode($data);
+        }
+
+        return rawurlencode($data);
     }
 
     public function getData()
