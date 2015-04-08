@@ -61,6 +61,13 @@ class QueryIndex extends Command\Builder implements Command\BuilderInterface
     {
         $this->required('Bucket');
         $this->required('IndexName');
-        //$this->required('LowerBound');
+
+        if($this->isMatchQuery()) {
+            $this->required('Match');
+        }
+        else {
+            $this->required('LowerBound');
+            $this->required('UpperBound');
+        }
     }
 }

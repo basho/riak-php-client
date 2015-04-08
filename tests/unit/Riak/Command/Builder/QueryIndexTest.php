@@ -52,23 +52,81 @@ class QueryIndexTest extends TestCase
         $this->assertEquals('some_bucket', $command->getBucket()->getName());
         $this->assertEquals('some_bucket_type', $command->getBucket()->getType());
         $this->assertEquals('foo_int', $command->getIndexName());
-        $this->assertEquals('42', $command->getIndexLowerBound());
+        $this->assertEquals('42', $command->getMatchValue());
     }
 
-//    /**
-//     * Tests validate properly verifies the Object is not there
-//     *
-//     * @covers       Command\Builder\FetchObject::validate
-//     * @dataProvider getLocalNodeConnection
-//     *
-//     * @param $riak \Basho\Riak
-//     *
-//     * @expectedException \Basho\Riak\Command\Builder\Exception
-//     */
-//    public function testValidateLocation($riak)
-//    {
-//        $builder = new Command\Builder\FetchObject($riak);
-//        $builder->buildBucket('some_bucket');
-//        $command = $builder->build();
-//    }
+    /**
+     * Tests validate properly verifies the index name is not there
+     *
+     * @covers       Command\Builder\FetchObject::validate
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     *
+     * @expectedException \Basho\Riak\Command\Builder\Exception
+     */
+    public function testValidateLocation($riak)
+    {
+        $builder = new Command\Builder\QueryIndex($riak);
+        $builder->buildBucket('some_bucket');
+        $command = $builder->build();
+    }
+
+    /**
+     * Tests validate properly verifies the scalar match value is not there
+     *
+     * @covers       Command\Builder\FetchObject::validate
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     *
+     * @expectedException \Basho\Riak\Command\Builder\Exception
+     */
+    public function testValidateScalarValue($riak)
+    {
+        $builder = new Command\Builder\QueryIndex($riak);
+        $builder->buildBucket('some_bucket')
+                ->withIndexName("foo_int")
+                ->withScalarValue(null);
+        $command = $builder->build();
+    }
+
+    /**
+     * Tests validate properly verifies the range lower bound value is not there
+     *
+     * @covers       Command\Builder\FetchObject::validate
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     *
+     * @expectedException \Basho\Riak\Command\Builder\Exception
+     */
+    public function testValidateRangeLowerBound($riak)
+    {
+        $builder = new Command\Builder\QueryIndex($riak);
+        $builder->buildBucket('some_bucket')
+            ->withIndexName("foo_int")
+            ->withRangeValue(null, 42);
+        $command = $builder->build();
+    }
+
+    /**
+     * Tests validate properly verifies the range upper bound value is not there
+     *
+     * @covers       Command\Builder\FetchObject::validate
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     *
+     * @expectedException \Basho\Riak\Command\Builder\Exception
+     */
+    public function testValidateRangeUpperBound($riak)
+    {
+        $builder = new Command\Builder\QueryIndex($riak);
+        $builder->buildBucket('some_bucket')
+            ->withIndexName("foo_int")
+            ->withRangeValue(42, null);
+        $command = $builder->build();
+    }
+
 }

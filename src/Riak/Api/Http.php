@@ -21,6 +21,7 @@ use Basho\Riak\Api;
 use Basho\Riak\ApiInterface;
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
+use Basho\Riak\Exception;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
 
@@ -169,16 +170,28 @@ class Http extends Api implements ApiInterface
      * @param Command\Indexes\Query $command
      * @param Bucket $bucket
      * @return string
+     * @throws Exception if 2i query is invalid.
      */
     private function createIndexQueryPath(Command\Indexes\Query $command, Bucket $bucket)
     {
-        $path =  sprintf('/types/%s/buckets/%s/index/%s/%s', $bucket->getType(),
-                                                             $bucket->getName(),
-                                                             $command->getIndexName(),
-                                                             $command->getIndexLowerBound());
-        if($command->isRangeQuery()) {
-            $path = sprintf('%s/%s', $path, $command->getIndexUpperBound());
+        if($command->isMatchQuery()) {
+            $path =  sprintf('/types/%s/buckets/%s/index/%s/%s', $bucket->getType(),
+                        $bucket->getName(),
+                        $command->getIndexName(),
+                        $command->getMatchValue());
         }
+        elseif($command->isRangeQuery()) {
+            $path =  sprintf('/types/%s/buckets/%s/index/%s/%s/%s', $bucket->getType(),
+                        $bucket->getName(),
+                        $command->getIndexName(),
+                        $command->getLowerBound(),
+                        $command->getUpperBound());
+        }
+        else
+        {
+            throw new Exception("Invalid Secondary Index Query.");
+        }
+
         return $path;
     }
 

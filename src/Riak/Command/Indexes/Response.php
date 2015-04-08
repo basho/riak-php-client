@@ -30,7 +30,18 @@ class Response extends \Basho\Riak\Command\Response
     /**
      * @var array
      */
-    protected $matches = [];
+    protected $results = [];
+
+
+    /**
+     * @var bool
+     */
+    protected $termsReturned = false;
+
+    /**
+     * @var string|null
+     */
+    protected $continuation = null;
 
     public function __construct($statusCode, $headers = [], $body = '')
     {
@@ -38,20 +49,38 @@ class Response extends \Basho\Riak\Command\Response
 
         // make sure body is not only whitespace
         if (trim($body)) {
-            $body = json_decode(rawurldecode($this->body), true);
-
-            if(isset($body['keys'])) {
-                $this->matches = $body['keys'];
-            }
+            $this->decodeBody($body);
         }
     }
 
     /**
+     * Get the array of keys that match the query
+     *
      * @return array
      */
-    public function getMatches()
+    public function getResults()
     {
-        return $this->matches;
+        return $this->results;
+    }
+
+    /**
+     * Indicates whether the terms are included in the results array.
+     *
+     * @return bool
+     */
+    public function hasReturnTerms()
+    {
+        return $this->termsReturned;
+    }
+
+    /**
+     * Get the continuation string for paged queries.
+     *
+     * @return null|string
+     */
+    public function getContinuation()
+    {
+        return $this->continuation;
     }
 
     /**
@@ -75,5 +104,20 @@ class Response extends \Basho\Riak\Command\Response
 
     private function decodeBody($body)
     {
+        $body = json_decode(rawurldecode($this->body), true);
+
+        if(isset($body['keys'])) {
+            $this->results = $body['keys'];
+        }
+
+        if(isset($body['continuation'])) {
+            $this->continuation = $body['continuation'];
+        }
+
+        if(isset($body['results'])) {
+            $this->results = $body['results'];
+            $this->termsReturned = true;
+        }
+
     }
 }

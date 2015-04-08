@@ -174,8 +174,8 @@ class SecondaryIndexOperationsTest extends TestCase
         $response = $command->execute($command);
 
         $this->assertEquals('200', $response->getStatusCode());
-        $this->assertEquals(1, count($response->getMatches()));
-        $this->assertEquals('student5', $response->getMatches()[0]);
+        $this->assertEquals(1, count($response->getResults()));
+        $this->assertEquals('student5', $response->getResults()[0]);
     }
 
     /**
@@ -195,7 +195,7 @@ class SecondaryIndexOperationsTest extends TestCase
         $response = $command->execute($command);
 
         $this->assertEquals('200', $response->getStatusCode());
-        $matches = $response->getMatches();
+        $matches = $response->getResults();
         sort($matches, SORT_NATURAL | SORT_FLAG_CASE);
         $this->assertEquals(4, count($matches));
         $this->assertEquals(['student0','student1','student6','student7'], $matches);

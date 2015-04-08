@@ -34,9 +34,16 @@ class Query extends Command\Object implements CommandInterface
      */
     protected $indexName = NULL;
 
+    protected $match = NULL;
     protected $lowerBound = NULL;
-
     protected $upperBound = NULL;
+
+    protected $continuation = NULL; //Binary
+    protected $maxResults; // Int
+    protected $returnTerms; // Bool
+    protected $paginationSort; // Bool
+    protected $termFilter; // string
+    protected $timeout; // timeout
 
     public function __construct(Command\Builder\QueryIndex $builder)
     {
@@ -44,43 +51,136 @@ class Query extends Command\Object implements CommandInterface
 
         $this->bucket = $builder->getBucket();
         $this->indexName = $builder->getIndexName();
-        $queryValue = $builder->getQueryValue();
 
-        if(is_array($queryValue)) {
-            $this->lowerBound = $queryValue[0];
-            $this->upperBound = $queryValue[1];
+        if($builder->isRangeQuery()) {
+            $this->lowerBound = $builder->getLowerBound();
+            $this->upperBound = $builder->getUpperBound();
         }
         else {
-            $this->lowerBound = $queryValue;
+            $this->match = $builder->getMatchValue();
         }
 
-        //TODO Add optional parameters to $this->parameters;
+        $this->continuation = $builder->getContinuation();
+        $this->maxResults = $builder->getMaxResults();
+        $this->returnTerms = $builder->getReturnTerms();
+        $this->paginationSort = $builder->getPaginationSort();
+        $this->termFilter = $builder->getTermFilter();
+        $this->timeout = $builder->getTimeout();
     }
 
     public function getIndexName() {
         return $this->indexName;
     }
 
-    public function getIndexLowerBound() {
+    public function getMatchValue() {
+        return $this->match;
+    }
+
+    public function getLowerBound() {
         return $this->lowerBound;
     }
 
-    public function getIndexUpperBound() {
+    public function getUpperBound() {
         return $this->upperBound;
+    }
+
+    public function isMatchQuery()
+    {
+        return isset($this->match);
     }
 
     public function isRangeQuery()
     {
-        return $this->upperBound != NULL;
+        return isset($this->lowerBound) && isset($this->upperBound);
     }
 
     /**
+     * @return null|string
+     */
+    public function getContinuation()
+    {
+        return $this->continuation;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMaxResults()
+    {
+        return $this->maxResults;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getReturnTerms()
+    {
+        return $this->returnTerms;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getPaginationSort()
+    {
+        return $this->paginationSort;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTermFilter()
+    {
+        return $this->termFilter;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+        /**
      * @return Command\Indexes\Response
      */
     public function getResponse()
     {
         return $this->response;
     }
+
+    public function getParameters()
+    {
+        $parameters = [];
+
+        if(isset($this->continuation)) {
+            $parameters["continuation"] = $this->continuation;
+        }
+
+        if(isset($this->maxResults)) {
+            $parameters["max_results"] = $this->maxResults;
+        }
+
+        if(isset($this->returnTerms)) {
+            $parameters["return_terms"] = $this->returnTerms;
+        }
+
+        if(isset($this->paginationSort)) {
+            $parameters["pagination_sort"] = $this->paginationSort;
+        }
+
+        if(isset($this->termFilter)) {
+            $parameters["term_regex"] = $this->termFilter;
+        }
+
+        if(isset($this->timeout)) {
+            $parameters["timeout"] = $this->timeout;
+        }
+
+        return $parameters;
+    }
+
 
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
     {
