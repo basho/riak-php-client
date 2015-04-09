@@ -40,6 +40,10 @@ class Store extends Command\Object implements CommandInterface
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
 
+        if ($this->location) {
+            $this->method = 'PUT';
+        }
+
         $this->headers = array_merge($this->headers, $this->object->getHeaders());
     }
 
