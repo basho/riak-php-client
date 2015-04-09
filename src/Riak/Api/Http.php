@@ -226,9 +226,9 @@ class Http extends Api implements ApiInterface
     protected function prepareRequest()
     {
         return $this->prepareRequestMethod()
-            ->prepareRequestUrl()
             ->prepareRequestHeaders()
             ->prepareRequestParameters()
+            ->prepareRequestUrl()
             ->prepareRequestData();
     }
 

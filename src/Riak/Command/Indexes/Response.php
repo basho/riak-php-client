@@ -38,6 +38,8 @@ class Response extends \Basho\Riak\Command\Response
      */
     protected $termsReturned = false;
 
+    protected $done = false;
+
     /**
      * @var string|null
      */
@@ -104,14 +106,10 @@ class Response extends \Basho\Riak\Command\Response
 
     private function decodeBody($body)
     {
-        $body = json_decode(rawurldecode($this->body), true);
+        $body = json_decode(rawurldecode($body), true);
 
         if(isset($body['keys'])) {
             $this->results = $body['keys'];
-        }
-
-        if(isset($body['continuation'])) {
-            $this->continuation = $body['continuation'];
         }
 
         if(isset($body['results'])) {
@@ -119,5 +117,17 @@ class Response extends \Basho\Riak\Command\Response
             $this->termsReturned = true;
         }
 
+        if(isset($body['continuation'])) {
+            $this->continuation = $body['continuation'];
+            $this->done = false;
+        }
+        else{
+            $this->done = true;
+        }
+    }
+
+    public function isDone()
+    {
+        return $this->done;
     }
 }

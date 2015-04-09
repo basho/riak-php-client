@@ -63,7 +63,7 @@ class QueryIndex extends Command\Builder implements Command\BuilderInterface
         $this->required('IndexName');
 
         if($this->isMatchQuery()) {
-            $this->required('Match');
+            $this->required('MatchValue');
         }
         else {
             $this->required('LowerBound');

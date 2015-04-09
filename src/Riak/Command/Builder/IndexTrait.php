@@ -148,14 +148,6 @@ trait IndexTrait
     }
 
     /**
-     * @return int|null|string
-     */
-    public function getMatch()
-    {
-        return $this->match;
-    }
-
-    /**
      * @return null|string
      */
     public function getContinuation()

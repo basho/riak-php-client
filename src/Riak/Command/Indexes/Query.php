@@ -155,30 +155,35 @@ class Query extends Command\Object implements CommandInterface
         $parameters = [];
 
         if(isset($this->continuation)) {
-            $parameters["continuation"] = $this->continuation;
+            $parameters['continuation'] = $this->continuation;
         }
 
         if(isset($this->maxResults)) {
-            $parameters["max_results"] = $this->maxResults;
+            $parameters['max_results'] = $this->maxResults;
         }
 
         if(isset($this->returnTerms)) {
-            $parameters["return_terms"] = $this->returnTerms;
+            $parameters['return_terms'] = ($this->returnTerms) ? 'true' : 'false';
         }
 
         if(isset($this->paginationSort)) {
-            $parameters["pagination_sort"] = $this->paginationSort;
+            $parameters['pagination_sort'] = ($this->paginationSort) ? 'true' : 'false';
         }
 
         if(isset($this->termFilter)) {
-            $parameters["term_regex"] = $this->termFilter;
+            $parameters['term_regex'] = $this->termFilter;
         }
 
         if(isset($this->timeout)) {
-            $parameters["timeout"] = $this->timeout;
+            $parameters['timeout'] = $this->timeout;
         }
 
         return $parameters;
+    }
+
+    public function hasParameters()
+    {
+        return true;
     }
 
 
@@ -196,6 +201,4 @@ class Query extends Command\Object implements CommandInterface
     {
         return parent::execute();
     }
-
-
 }
