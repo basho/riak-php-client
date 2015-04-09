@@ -92,10 +92,13 @@ class Builder
      * User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
      * is required to communicate with your Riak nodes.
      *
+     * @param string $user
+     *
      * @return $this
      */
-    public function usingTrustAuthentication()
+    public function usingTrustAuthentication($user = '')
     {
+        $this->config->setUser($user);
         $this->config->setAuth(true);
 
         return $this;
@@ -130,17 +133,21 @@ class Builder
      * User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
      * is required to communicate with your Riak nodes.
      *
+     * CURRENTLY NOT SUPPORTED OVER THE RIAK HTTP API
      *
      * @param $certificate
      * @param string $password
      *
      * @return $this
+     * @throws Builder\Exception
      */
     public function usingCertificateAuthentication($certificate, $password = '')
     {
         $this->config->setCertificate($certificate);
         $this->config->setCertificatePassword($password);
         $this->config->setAuth(true);
+
+        throw new Node\Builder\Exception('Riak over HTTP does not support Certificate Authentication.');
 
         return $this;
     }

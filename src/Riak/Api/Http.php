@@ -206,7 +206,11 @@ class Http extends Api implements ApiInterface
                 $this->options[CURLOPT_USERPWD] = sprintf('%s:%s', $this->node->getUserName(),
                     $this->node->getPassword());
             } elseif ($this->node->getCertificate()) {
+                /*
+                 * NOT CURRENTLY SUPPORTED ON HTTP
+                 *
                 $this->options[CURLOPT_SSLCERT] = $this->node->getCertificate();
+                $this->options[CURLOPT_SSLCERTTYPE] = 'P12';
                 if ($this->node->getCertificatePassword()) {
                     $this->options[CURLOPT_SSLCERTPASSWD] = $this->node->getCertificatePassword();
                 }
@@ -216,6 +220,7 @@ class Http extends Api implements ApiInterface
                         $this->options[CURLOPT_SSLKEYPASSWD] = $this->node->getPrivateKeyPassword();
                     }
                 }
+                */
             }
         }
 
