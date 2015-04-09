@@ -179,11 +179,45 @@ class Http extends Api implements ApiInterface
      * Sets general connection options that are used with every request
      *
      * @return $this
+     * @throws Exception
      */
     protected function prepareConnection()
     {
         // record outgoing headers
         $this->options[CURLINFO_HEADER_OUT] = 1;
+
+        if ($this->node->useTls()) {
+            // CA File
+            if ($this->node->getCaFile()) {
+                $this->options[CURLOPT_CAINFO] = $this->node->getCaFile();
+            } elseif ($this->node->getCaDirectory()) {
+                $this->options[CURLOPT_CAPATH] = $this->node->getCaDirectory();
+            } else {
+                throw new Exception('A Certificate Authority file is required for secure connections.');
+            }
+
+            // verify CA file
+            $this->options[CURLOPT_SSL_VERIFYPEER] = true;
+
+            // verify host common name
+            $this->options[CURLOPT_SSL_VERIFYHOST] = 0;
+
+            if ($this->node->getUserName()) {
+                $this->options[CURLOPT_USERPWD] = sprintf('%s:%s', $this->node->getUserName(),
+                    $this->node->getPassword());
+            } elseif ($this->node->getCertificate()) {
+                $this->options[CURLOPT_SSLCERT] = $this->node->getCertificate();
+                if ($this->node->getCertificatePassword()) {
+                    $this->options[CURLOPT_SSLCERTPASSWD] = $this->node->getCertificatePassword();
+                }
+                if ($this->node->getPrivateKey()) {
+                    $this->options[CURLOPT_SSLKEY] = $this->node->getPrivateKey();
+                    if ($this->node->getPrivateKeyPassword()) {
+                        $this->options[CURLOPT_SSLKEYPASSWD] = $this->node->getPrivateKeyPassword();
+                    }
+                }
+            }
+        }
 
         return $this;
     }
@@ -248,7 +282,8 @@ class Http extends Api implements ApiInterface
      */
     protected function prepareRequestUrl()
     {
-        $url = sprintf('%s%s?%s', $this->node->getUri(), $this->path, $this->query);
+        $protocol = $this->node->useTls() ? 'https' : 'http';
+        $url = sprintf('%s://%s%s?%s', $protocol, $this->node->getUri(), $this->path, $this->query);
 
         // set the built request URL on the connection
         $this->options[CURLOPT_URL] = $url;
