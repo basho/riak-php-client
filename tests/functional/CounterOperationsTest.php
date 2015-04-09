@@ -26,7 +26,7 @@ use Basho\Riak\Command;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class CounterTest extends TestCase
+class CounterOperationsTest extends TestCase
 {
     private static $key = '';
 
@@ -49,7 +49,7 @@ class CounterTest extends TestCase
             ->buildBucket('visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 201 - Created
         $this->assertEquals('201', $response->getStatusCode());
@@ -67,7 +67,7 @@ class CounterTest extends TestCase
             ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('404', $response->getStatusCode());
     }
@@ -87,7 +87,7 @@ class CounterTest extends TestCase
             ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
@@ -107,7 +107,7 @@ class CounterTest extends TestCase
             ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
@@ -129,7 +129,7 @@ class CounterTest extends TestCase
             ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -147,7 +147,7 @@ class CounterTest extends TestCase
             ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
@@ -169,7 +169,7 @@ class CounterTest extends TestCase
             ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
@@ -187,7 +187,7 @@ class CounterTest extends TestCase
             ->buildLocation(static::$key, 'visits', static::COUNTER_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());

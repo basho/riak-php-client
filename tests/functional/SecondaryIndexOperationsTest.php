@@ -66,7 +66,7 @@ class SecondaryIndexOperationsTest extends TestCase
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('204', $response->getStatusCode());
     }
@@ -83,7 +83,7 @@ class SecondaryIndexOperationsTest extends TestCase
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
@@ -117,7 +117,7 @@ class SecondaryIndexOperationsTest extends TestCase
 
         // TODO: internalize Vclock to Riak\Object.
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('204', $response->getStatusCode());
 
@@ -125,7 +125,7 @@ class SecondaryIndexOperationsTest extends TestCase
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
@@ -153,7 +153,7 @@ class SecondaryIndexOperationsTest extends TestCase
                 ->buildLocation('student'.$x, 'Students'.static::$bucket, static::LEVELDB_BUCKET_TYPE)
                 ->build();
 
-            $response = $command->execute($command);
+            $response = $command->execute();
             $this->assertEquals('204', $response->getStatusCode());
         }
     }
@@ -172,7 +172,7 @@ class SecondaryIndexOperationsTest extends TestCase
                         ->withScalarValue(5)
                         ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals(1, count($response->getResults()));
@@ -193,7 +193,7 @@ class SecondaryIndexOperationsTest extends TestCase
             ->withRangeValue('A', 'B')
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $matches = $response->getResults();
@@ -219,7 +219,7 @@ class SecondaryIndexOperationsTest extends TestCase
             ->withReturnTerms(true)
             ->build();
 
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $matches = $response->getResults();
@@ -248,7 +248,7 @@ class SecondaryIndexOperationsTest extends TestCase
 
         // Get first page
         $command = $builder->build();
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals(3, count($response->getResults()));
@@ -283,9 +283,9 @@ class SecondaryIndexOperationsTest extends TestCase
 
         // Get first page
         $command = $builder->build();
-        $response = $command->execute($command);
+        $response = $command->execute();
         $this->assertFalse($response->isSuccess());
-        $this->assertEquals('503', $response->getStatusCode());
+        $this->assertContains($response->getStatusCode(), ['500', '503']);
         $this->assertEquals(0, count($response->getResults()));
         $this->assertNull($response->getContinuation());
         $this->assertTrue($response->isDone());
@@ -308,7 +308,7 @@ class SecondaryIndexOperationsTest extends TestCase
 
         // Get first page
         $command = $builder->build();
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals(['0' => 'student0'], $response->getResults()[0]);
@@ -341,7 +341,7 @@ class SecondaryIndexOperationsTest extends TestCase
 
         // Get first page
         $command = $builder->build();
-        $response = $command->execute($command);
+        $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode());
         $this->assertEquals(500, count($response->getResults()));

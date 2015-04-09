@@ -30,8 +30,8 @@ use Basho\Riak\Node;
  *
  * <code>
  * $nodes = (new Node\Builder)
- *   ->withHost('localhost')
- *   ->withPort(8098)
+ *   ->atHost('localhost')
+ *   ->onPort(8098)
  *   ->build()
  *
  * $riak = new Riak($nodes);
@@ -116,7 +116,7 @@ class Riak
             $this->api = $api;
         } else {
             // default to HTTP bridge class
-            $this->api = new Http($this->getClientID());
+            $this->api = new Http($this->getClientID(), $this->config);
         }
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2015 Basho Technologies, Inc.
+Copyright 2014 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,30 +15,16 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Tests\Riak;
-
-use Basho\Riak\Node;
-use Basho\Tests\TestCase;
+namespace Basho\Riak\Api;
 
 /**
- * Class NodeTest
+ * Class Exception
  *
- * Main class for testing Riak clustering
+ * Exception thrown when there is an error within the execution of an Api Bridge object.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class NodeTest extends TestCase
+class Exception extends \Basho\Riak\Exception
 {
-    /**
-     * @dataProvider getLocalNode
-     *
-     * @param $node Node
-     */
-    public function testConfig($node)
-    {
-        $this->assertEquals(static::TEST_NODE_HOST, $node->getHost());
-        $this->assertEquals(static::TEST_NODE_PORT, $node->getPort());
-        $this->assertNotEmpty($node->getSignature());
-    }
-}
- 
+
+} 

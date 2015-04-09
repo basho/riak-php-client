@@ -15,38 +15,35 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Builder\Search;
 
-use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
+use Basho\Riak;
 use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
+ * Class StoreObject
  *
- * Riak key value object store
+ * Used to increment counter objects in Riak by the provided positive / negative integer
+ *
+ * <code>
+ * $command = (new Command\Builder\StoreObject($riak))
+ *   ->buildObject('{"firstName":"John","lastName":"Doe","email":"johndoe@gmail.com"}')
+ *   ->buildBucket('users')
+ *   ->build();
+ *
+ * $response = $command->execute($command);
+ *
+ * $user_location = $response->getLocation();
+ * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command\Object implements CommandInterface
+class DissociateIndex extends Command\Builder\SetBucketProperties implements Command\BuilderInterface
 {
-    protected $method = 'POST';
-
-    public function __construct(Command\Builder\StoreObject $builder)
+    public function __construct(Riak $riak)
     {
-        parent::__construct($builder);
+        parent::__construct($riak);
 
-        $this->object = $builder->getObject();
-        $this->bucket = $builder->getBucket();
-        $this->location = $builder->getLocation();
-
-        $this->headers = array_merge($this->headers, $this->object->getHeaders());
-    }
-
-    public function getHeaders()
-    {
-        $translator = new SecondaryIndexHeaderTranslator();
-        $indexHeaders = $translator->createHeadersFromIndexes($this->object->getIndexes());
-        return array_merge(parent::getHeaders(), $indexHeaders);
+        $this->set('search_index', '_dont_index_');
     }
 }

@@ -40,7 +40,13 @@ class Response extends \Basho\Riak\Command\Response
 
         // make sure body is not only whitespace
         if (trim($body)) {
-            $this->object = new Object(rawurldecode($this->body), $this->headers);
+            $data = '';
+            if ($headers['Content-Type'] == 'application/json') {
+                $data = json_decode($this->body);
+            } else {
+                $data = rawurldecode($this->body);
+            }
+            $this->object = new Object($data, $this->headers);
         }
     }
 

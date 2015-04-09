@@ -33,14 +33,12 @@ trait HeadersTrait
      *
      * @var array
      */
-    protected $headers = [
-        'Content-Type' => 'application/json',
-    ];
+    protected $headers = [];
 
     /**
      * @return array
      */
-    protected function getHeaders()
+    public function getHeaders()
     {
         return $this->headers;
     }

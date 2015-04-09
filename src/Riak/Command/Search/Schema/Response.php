@@ -15,21 +15,31 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Tests;
-
-use Basho\Riak\Command;
+namespace Basho\Riak\Command\Search\Schema;
 
 /**
- * Class BucketPropertiesTest
+ * Class Response
  *
- * Functional tests related to Bucket properties
+ * Container for a response related to an operation on an object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class BucketPropertiesTest extends TestCase
+class Response extends \Basho\Riak\Command\Response
 {
-    public function testStoreNewWithKey()
+    protected $schema = '';
+
+    public function __construct($statusCode, $headers = [], $body = '')
     {
-        $this->assertTrue(TRUE);
+        parent::__construct($statusCode, $headers, $body);
+
+        // make sure body is not only whitespace
+        if (trim($body)) {
+            $this->schema = $body;
+        }
+    }
+
+    public function getSchema()
+    {
+        return $this->schema;
     }
 }

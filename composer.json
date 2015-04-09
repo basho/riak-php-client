@@ -2,11 +2,16 @@
   "name": "basho/riak",
   "description": "Official Riak client for PHP",
   "keywords": [
+    "basho",
     "riak",
     "client",
     "driver",
     "database",
-    "nosql"
+    "nosql",
+    "kv",
+    "datatype",
+    "crdt",
+    "data"
   ],
   "homepage": "http://basho.com/riak/",
   "license": "Apache-2.0",
@@ -22,6 +27,19 @@
   "autoload-dev": {
     "psr-4": {"Basho\\Tests\\": "tests/"}
   },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "basho/tools",
+        "version": "1.0.0",
+        "dist": {
+          "url": "https://github.com/basho/riak-client-tools/archive/master.zip",
+          "type": "zip"
+        }
+      }
+    }
+  ],
   "require": {
     "php": ">=5.4",
     "ext-json": "*",
@@ -29,6 +47,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "4.5.*",
-    "phpdocumentor/phpdocumentor": "2.*"
+    "phpdocumentor/phpdocumentor": "2.*",
+    "basho/tools": "1.0.0"
   }
 }

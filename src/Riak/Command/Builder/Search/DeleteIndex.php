@@ -15,38 +15,66 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Builder\Search;
 
-use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
+use Basho\Riak;
 use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
+ * Class StoreIndex
  *
- * Riak key value object store
+ *
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command\Object implements CommandInterface
+class DeleteIndex extends Command\Builder implements Command\BuilderInterface
 {
-    protected $method = 'POST';
+    /**
+     * Name of index to create
+     *
+     * @var string
+     */
+    protected $name = '';
 
-    public function __construct(Command\Builder\StoreObject $builder)
+    public function __construct(Riak $riak)
     {
-        parent::__construct($builder);
-
-        $this->object = $builder->getObject();
-        $this->bucket = $builder->getBucket();
-        $this->location = $builder->getLocation();
-
-        $this->headers = array_merge($this->headers, $this->object->getHeaders());
+        parent::__construct($riak);
     }
 
-    public function getHeaders()
+    /**
+     * @param $name
+     *
+     * @return $this
+     */
+    public function withName($name)
     {
-        $translator = new SecondaryIndexHeaderTranslator();
-        $indexHeaders = $translator->createHeadersFromIndexes($this->object->getIndexes());
-        return array_merge(parent::getHeaders(), $indexHeaders);
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Command\Search\Index\Store
+     */
+    public function build()
+    {
+        $this->validate();
+
+        return new Command\Search\Index\Delete($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        $this->required('Name');
     }
 }

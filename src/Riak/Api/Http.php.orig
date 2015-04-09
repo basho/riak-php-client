@@ -157,6 +157,10 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Search\Index\Delete':
                 $this->path = sprintf('/search/index/%s', $this->command);
                 break;
+<<<<<<< HEAD
+            case 'Basho\Riak\Command\Indexes\Query':
+                $this->path = $this->createIndexQueryPath($this->command, $bucket);
+=======
             case 'Basho\Riak\Command\Search\Schema\Fetch':
             case 'Basho\Riak\Command\Search\Schema\Store':
                 $this->path = sprintf('/search/schema/%s', $this->command);
@@ -166,9 +170,7 @@ class Http extends Api implements ApiInterface
                 break;
             case 'Basho\Riak\Command\MapReduce\Fetch':
                 $this->path = sprintf('/%s', $this->config['mapred_prefix']);
-                break;
-            case 'Basho\Riak\Command\Indexes\Query':
-                $this->path = $this->createIndexQueryPath($this->command, $bucket);
+>>>>>>> 2.0.x
                 break;
             default:
                 $this->path = '';
@@ -268,9 +270,15 @@ class Http extends Api implements ApiInterface
     protected function prepareRequest()
     {
         return $this->prepareRequestMethod()
+<<<<<<< HEAD
             ->prepareRequestHeaders()
             ->prepareRequestParameters()
             ->prepareRequestUrl()
+=======
+            ->prepareRequestParameters()
+            ->prepareRequestUrl()
+            ->prepareRequestHeaders()
+>>>>>>> 2.0.x
             ->prepareRequestData();
     }
 

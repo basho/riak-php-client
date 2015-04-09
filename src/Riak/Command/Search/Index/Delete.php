@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2015 Basho Technologies, Inc.
+Copyright 2014 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,73 +15,73 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command;
+namespace Basho\Riak\Command\Search\Index;
 
 use Basho\Riak\Command;
-use Basho\Riak\Location;
+use Basho\Riak\CommandInterface;
 
 /**
- * Class Object
+ * Class Store
  *
- * Base class for Commands performing operations on Kv Objects
+ * Riak Yokozuna Search Index Store
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class Object extends Command
+class Delete extends Command implements CommandInterface
 {
-    /**
-     * @var Object\Response|null
-     */
-    protected $response = NULL;
+    protected $method = 'DELETE';
 
     /**
-     * @var \Basho\Riak\Object|null
+     * @var string
      */
-    protected $object = NULL;
+    protected $name = '';
 
     /**
-     * @var Location|null
+     * @var Command\Response|null
      */
-    protected $location = NULL;
+    protected $response = null;
 
-    public function getObject()
+    public function __construct(Command\Builder\Search\DeleteIndex $builder)
     {
-        return $this->object;
-    }
+        parent::__construct($builder);
 
-    public function getLocation()
-    {
-        return $this->location;
+        $this->name = $builder->getName();
     }
 
     public function getEncodedData()
     {
-        $data = $this->getData();
-
-        if ($this->object->getContentType() == 'application/json') {
-            return json_encode($data);
-        }
-
-        return rawurlencode($data);
+        return $this->getData();
     }
 
     public function getData()
     {
-        return $this->object->getData();
+        return '';
     }
 
+    /**
+     * @param $statusCode
+     * @param array $responseHeaders
+     * @param string $responseBody
+     *
+     * @return $this
+     */
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
     {
-        $this->response = new Object\Response($statusCode, $responseHeaders, $responseBody);
+        $this->response = new Command\Response($statusCode, $responseHeaders, $responseBody);
 
         return $this;
     }
 
     /**
-     * @return Command\Object\Response
+     * @return Command\Response
      */
     public function execute()
     {
         return parent::execute();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

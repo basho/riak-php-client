@@ -15,73 +15,65 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command;
+namespace Basho\Riak\Command\Search;
 
 use Basho\Riak\Command;
-use Basho\Riak\Location;
+use Basho\Riak\CommandInterface;
 
 /**
- * Class Object
+ * Class Fetch
  *
- * Base class for Commands performing operations on Kv Objects
+ * Used to fetch a counter
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class Object extends Command
+class Fetch extends Command implements CommandInterface
 {
     /**
-     * @var Object\Response|null
+     * @var Command\Search\Response|null
      */
-    protected $response = NULL;
+    protected $response = null;
 
-    /**
-     * @var \Basho\Riak\Object|null
-     */
-    protected $object = NULL;
+    protected $index_name;
 
-    /**
-     * @var Location|null
-     */
-    protected $location = NULL;
+    protected $default_field;
 
-    public function getObject()
+    protected $default_operation;
+
+    public function __construct(Command\Builder\Search\FetchObjects $builder)
     {
-        return $this->object;
-    }
+        parent::__construct($builder);
 
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    public function getEncodedData()
-    {
-        $data = $this->getData();
-
-        if ($this->object->getContentType() == 'application/json') {
-            return json_encode($data);
-        }
-
-        return rawurlencode($data);
+        $this->index_name = $builder->getIndexName();
     }
 
     public function getData()
     {
-        return $this->object->getData();
+        return '';
+    }
+
+    public function getEncodedData()
+    {
+        return '';
     }
 
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
     {
-        $this->response = new Object\Response($statusCode, $responseHeaders, $responseBody);
+        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
 
         return $this;
     }
 
     /**
-     * @return Command\Object\Response
+     * @return Command\Search\Response
      */
     public function execute()
     {
         return parent::execute();
+    }
+
+    public function __toString()
+    {
+        return $this->index_name;
     }
 }

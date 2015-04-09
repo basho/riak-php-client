@@ -48,6 +48,20 @@ class Location
         $this->bucket = $bucket;
     }
 
+    /**
+     * Generate an instance of the Location object using the Location header string value returned from Riak
+     *
+     * @param $location_string
+     *
+     * @return Location
+     */
+    public static function fromString($location_string)
+    {
+        preg_match('/^\/types\/([^\/]+)\/buckets\/([^\/]+)\/keys\/([^\/]+)$/', $location_string, $matches);
+
+        return new self($matches[3], new Bucket($matches[2], $matches[1]));
+    }
+
     public function __toString()
     {
         return $this->bucket . $this->key;
@@ -67,17 +81,5 @@ class Location
     public function getKey()
     {
         return $this->key;
-    }
-
-    /**
-     * Generate an instance of the Location object using the Location header string value returned from Riak
-     *
-     * @param $location_string
-     * @return Location
-     */
-    public static function fromString($location_string)
-    {
-        preg_match('/^\/types\/([^\/])+\/buckets\/([^\/])+\/keys\/([^\/])+$/', $location_string, $matches);
-        return new self($matches[2], new Bucket($matches[1], $matches[0]));
     }
 }

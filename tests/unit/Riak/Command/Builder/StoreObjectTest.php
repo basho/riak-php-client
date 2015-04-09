@@ -105,7 +105,7 @@ class StoreObjectTest extends TestCase
     {
         $builder = new Command\Builder\StoreObject($riak);
         $builder->buildObject('some_data');
-        $command = $builder->build();
+        $builder->build();
     }
 
     /**
@@ -127,14 +127,14 @@ class StoreObjectTest extends TestCase
 
         $this->assertInstanceOf('Basho\Riak\Command\Object\Store', $command);
         $headers = $command->getHeaders();
+
         $this->assertNotNull($headers);
-        $this->assertEquals(4, count($headers));
-        // TODO: No pass through for arbitrary headers. Problem?
-        //$this->assertEquals(['My-Header', 'cats'], $headers[0]);
-        $this->assertEquals(['x-riak-index-foo_bin', 'bar'], $headers[0]);
-        $this->assertEquals(['x-riak-index-foo_bin', 'baz'], $headers[1]);
-        $this->assertEquals(['x-riak-index-foo_int', '42'], $headers[2]);
-        $this->assertEquals(['x-riak-index-foo_int', '50'], $headers[3]);
+        $this->assertEquals(5, count($headers));
+        $this->assertEquals(['My-Header', 'cats'], $headers[0]);
+        $this->assertEquals(['x-riak-index-foo_bin', 'bar'], $headers[1]);
+        $this->assertEquals(['x-riak-index-foo_bin', 'baz'], $headers[2]);
+        $this->assertEquals(['x-riak-index-foo_int', '42'], $headers[3]);
+        $this->assertEquals(['x-riak-index-foo_int', '50'], $headers[4]);
 
     }
 }

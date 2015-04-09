@@ -1,7 +1,7 @@
 <?php
 
 /*
-Copyright 2014 Basho Technologies, Inc.
+Copyright 2015 Basho Technologies, Inc.
 
 Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
@@ -15,38 +15,61 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Search\Schema;
 
-use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
+ * Class Fetch
  *
- * Riak key value object store
+ * Used to fetch a counter
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command\Object implements CommandInterface
+class Fetch extends Command implements CommandInterface
 {
-    protected $method = 'POST';
+    /**
+     * @var Command\Search\Schema\Response|null
+     */
+    protected $response = null;
 
-    public function __construct(Command\Builder\StoreObject $builder)
+    protected $name;
+
+    public function __construct(Command\Builder\Search\FetchSchema $builder)
     {
         parent::__construct($builder);
 
-        $this->object = $builder->getObject();
-        $this->bucket = $builder->getBucket();
-        $this->location = $builder->getLocation();
-
-        $this->headers = array_merge($this->headers, $this->object->getHeaders());
+        $this->name = $builder->getSchemaName();
     }
 
-    public function getHeaders()
+    public function getData()
     {
-        $translator = new SecondaryIndexHeaderTranslator();
-        $indexHeaders = $translator->createHeadersFromIndexes($this->object->getIndexes());
-        return array_merge(parent::getHeaders(), $indexHeaders);
+        return '';
+    }
+
+    public function getEncodedData()
+    {
+        return '';
+    }
+
+    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
+    {
+        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
+
+        return $this;
+    }
+
+    /**
+     * @return Command\Search\Schema\Response
+     */
+    public function execute()
+    {
+        return parent::execute();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

@@ -15,30 +15,31 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Tests\Riak;
-
-use Basho\Riak\Node;
-use Basho\Tests\TestCase;
+namespace Basho\Riak\Command\Search\Index;
 
 /**
- * Class NodeTest
+ * Class Response
  *
- * Main class for testing Riak clustering
+ * Container for a response related to an operation on an object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class NodeTest extends TestCase
+class Response extends \Basho\Riak\Command\Response
 {
-    /**
-     * @dataProvider getLocalNode
-     *
-     * @param $node Node
-     */
-    public function testConfig($node)
+    protected $index = null;
+
+    public function __construct($statusCode, $headers = [], $body = '')
     {
-        $this->assertEquals(static::TEST_NODE_HOST, $node->getHost());
-        $this->assertEquals(static::TEST_NODE_PORT, $node->getPort());
-        $this->assertNotEmpty($node->getSignature());
+        parent::__construct($statusCode, $headers, $body);
+
+        // make sure body is not only whitespace
+        if (trim($body)) {
+            $this->index = json_decode($body);
+        }
+    }
+
+    public function getIndex()
+    {
+        return $this->index;
     }
 }
- 

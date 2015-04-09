@@ -15,70 +15,59 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command;
+namespace Basho\Riak\Command\MapReduce;
 
 use Basho\Riak\Command;
-use Basho\Riak\Location;
+use Basho\Riak\CommandInterface;
 
 /**
- * Class Object
+ * Class Fetch
  *
- * Base class for Commands performing operations on Kv Objects
+ * Used to fetch a result set from Riak using MapReduce
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class Object extends Command
+class Fetch extends Command implements CommandInterface
 {
-    /**
-     * @var Object\Response|null
-     */
-    protected $response = NULL;
+    protected $method = 'POST';
 
     /**
-     * @var \Basho\Riak\Object|null
+     * @var Command\MapReduce\Response|null
      */
-    protected $object = NULL;
+    protected $response = null;
 
-    /**
-     * @var Location|null
-     */
-    protected $location = NULL;
+    protected $inputs;
 
-    public function getObject()
+    protected $query;
+
+    public function __construct(Command\Builder\MapReduce\FetchObjects $builder)
     {
-        return $this->object;
-    }
+        parent::__construct($builder);
 
-    public function getLocation()
-    {
-        return $this->location;
+        $this->inputs = $builder->getInputs();
+        // query needs to be a list
+        $this->query = $builder->getQuery();
     }
 
     public function getEncodedData()
     {
-        $data = $this->getData();
-
-        if ($this->object->getContentType() == 'application/json') {
-            return json_encode($data);
-        }
-
-        return rawurlencode($data);
+        return json_encode($this->getData());
     }
 
     public function getData()
     {
-        return $this->object->getData();
+        return ['inputs' => $this->inputs, 'query' => $this->query];
     }
 
     public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
     {
-        $this->response = new Object\Response($statusCode, $responseHeaders, $responseBody);
+        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
 
         return $this;
     }
 
     /**
-     * @return Command\Object\Response
+     * @return Command\MapReduce\Response
      */
     public function execute()
     {

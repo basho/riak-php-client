@@ -15,38 +15,51 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Builder\Search;
 
-use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
- *
- * Riak key value object store
+ * Class FetchSchema
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command\Object implements CommandInterface
+class FetchSchema extends Command\Builder implements Command\BuilderInterface
 {
-    protected $method = 'POST';
+    protected $schema_name = '';
 
-    public function __construct(Command\Builder\StoreObject $builder)
+    /**
+     * @return string
+     */
+    public function getSchemaName()
     {
-        parent::__construct($builder);
-
-        $this->object = $builder->getObject();
-        $this->bucket = $builder->getBucket();
-        $this->location = $builder->getLocation();
-
-        $this->headers = array_merge($this->headers, $this->object->getHeaders());
+        return $this->schema_name;
     }
 
-    public function getHeaders()
+    /**
+     * {@inheritdoc}
+     *
+     * @return Command\Search\Schema\Fetch;
+     */
+    public function build()
     {
-        $translator = new SecondaryIndexHeaderTranslator();
-        $indexHeaders = $translator->createHeadersFromIndexes($this->object->getIndexes());
-        return array_merge(parent::getHeaders(), $indexHeaders);
+        $this->validate();
+
+        return new Command\Search\Schema\Fetch($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate()
+    {
+        $this->required('SchemaName');
+    }
+
+    public function withName($name)
+    {
+        $this->schema_name = $name;
+
+        return $this;
     }
 }

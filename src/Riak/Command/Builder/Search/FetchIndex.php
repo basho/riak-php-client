@@ -15,38 +15,45 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Builder\Search;
 
-use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\Command;
-use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
- *
- * Riak key value object store
+ * Class FetchIndex
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command\Object implements CommandInterface
+class FetchIndex extends Command\Builder implements Command\BuilderInterface
 {
-    protected $method = 'POST';
+    protected $index_name = '';
 
-    public function __construct(Command\Builder\StoreObject $builder)
+    /**
+     * {@inheritdoc}
+     *
+     * @return Command\Search\Index\Fetch;
+     */
+    public function build()
     {
-        parent::__construct($builder);
+        $this->validate();
 
-        $this->object = $builder->getObject();
-        $this->bucket = $builder->getBucket();
-        $this->location = $builder->getLocation();
-
-        $this->headers = array_merge($this->headers, $this->object->getHeaders());
+        return new Command\Search\Index\Fetch($this);
     }
 
-    public function getHeaders()
+    public function validate()
     {
-        $translator = new SecondaryIndexHeaderTranslator();
-        $indexHeaders = $translator->createHeadersFromIndexes($this->object->getIndexes());
-        return array_merge(parent::getHeaders(), $indexHeaders);
+        return;
+    }
+
+    public function withName($name)
+    {
+        $this->index_name = $name;
+
+        return $this;
+    }
+
+    public function getIndexName()
+    {
+        return $this->index_name;
     }
 }
