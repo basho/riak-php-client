@@ -99,7 +99,7 @@ class Node
      */
     public function getHost()
     {
-        return $this->getConfig()->getHost();
+        return $this->config->getHost();
     }
 
     /**
@@ -115,7 +115,7 @@ class Node
      */
     public function getPort()
     {
-        return $this->getConfig()->getPort();
+        return $this->config->getPort();
     }
 
     /**
@@ -128,9 +128,79 @@ class Node
         return sprintf('%s:%s', $this->config->getHost(), $this->config->getPort());
     }
 
-    public function useSsl()
+    /**
+     * useTls
+     *
+     * @return bool
+     */
+    public function useTls()
     {
-        return $this->getConfig()->isAuth();
+        return $this->config->isAuth();
+    }
+
+    /**
+     * getUserName
+     *
+     * @return string
+     */
+    public function getUserName()
+    {
+        return $this->config->getUser();
+    }
+
+    /**
+     * getPassword
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->config->getPass();
+    }
+
+    public function getCaFile()
+    {
+        return $this->config->getCaFile();
+    }
+
+    public function getCaDirectory()
+    {
+        return $this->config->getCaDirectory();
+    }
+
+    /**
+     * getCertificate
+     *
+     * @return string
+     */
+    public function getCertificate()
+    {
+        return $this->config->getCertificate();
+    }
+
+    public function getCertificatePassword()
+    {
+        return $this->config->getCertificatePassword();
+    }
+
+    /**
+     * getPrivateKey
+     *
+     * @return string
+     */
+    public function getPrivateKey()
+    {
+        return $this->config->getPrivateKey();
+    }
+
+    /**
+     * getPrivateKeyPassword
+     *
+     * @return string
+     */
+    public function getPrivateKeyPassword()
+    {
+        return $this->config->getPrivateKeyPassword();
     }
 
     /**

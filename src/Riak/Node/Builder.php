@@ -18,7 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Node;
 
 use Basho\Riak\Node;
-use Basho\Riak\Node\Builder\Exception;
 
 /**
  * Class Node Builder
@@ -27,10 +26,46 @@ use Basho\Riak\Node\Builder\Exception;
  * connecting to your Riak node cluster.
  *
  * <code>
- * use Basho\Riak\Node\Builder as NodeBuilder;
+ *  // simple local development / testing cluster
+ *  use Basho\Riak\Node;
  *
- * $nodes = (new NodeBuilder)
- *     ->buildLocalhost([10018, 10028, 10038, 10048, 10058]);
+ *  $nodes = (new Node\Builder)
+ *      ->buildLocalhost([10018, 10028, 10038, 10048, 10058]);
+ * </code>
+ *
+ * <code>
+ *  // password authentication to production cluster
+ *  use Basho\Riak\Node;
+ *
+ *  $nodes = (new Node\Builder)
+ *      ->onPort(8098)
+ *      ->usingPasswordAuthentication('riakuser', 'riakpassword')
+ *      ->withCertificateAuthorityFile(getcwd() . '/path/to/cacert.pem')
+ *      ->buildCluster(['riak1.company.int','riak2.company.int','riak3.company.int']);
+ * </code>
+ *
+ * <code>
+ *  // certificate authentication to production load balanced cluster
+ *  use Basho\Riak\Node;
+ *
+ *  $node = (new Node\Builder)
+ *      ->atHost('riak.company.int')
+ *      ->onPort(8098)
+ *      ->usingCertificateAuthentication(getcwd() . '/path/to/client.crt')
+ *      ->withCertificateAuthorityFile(getcwd() . '/path/to/cacert.pem')
+ *      ->build();
+ * </code>
+ *
+ * <code>
+ *  // pam authentication to production load balanced cluster
+ *  use Basho\Riak\Node;
+ *
+ *  $node = (new Node\Builder)
+ *      ->atHost('riak.company.int')
+ *      ->onPort(8098)
+ *      ->usingPamAuthentication('riakuser')
+ *      ->withCertificateAuthorityFile(getcwd() . '/path/to/cacert.pem')
+ *      ->build();
  * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
@@ -50,22 +85,125 @@ class Builder
     }
 
     /**
-     * Build nodes with user / password authentication
+     * usingTrustAuthentication
      *
-     * NOTICE: This is NOT IMPLEMENTED / SUPPORTED AT THIS TIME.
+     * Build nodes with trust authentication
      *
-     * User authentication and access rules are only available in Riak versions 2 and above. To use this feature, SSL
+     * User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
+     * is required to communicate with your Riak nodes.
+     *
+     * @return $this
+     */
+    public function usingTrustAuthentication()
+    {
+        $this->config->setAuth(true);
+
+        return $this;
+    }
+
+    /**
+     * usingPasswordAuthentication
+     *
+     * Build nodes with password authentication
+     *
+     * User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
      * is required to communicate with your Riak nodes.
      *
      * @param $user
      * @param $pass
      * @return $this
      */
-    public function withAuth($user, $pass)
+    public function usingPasswordAuthentication($user, $pass = '')
     {
-        $this->getConfig()->setUser($user);
-        $this->getConfig()->setPass($pass);
-        $this->getConfig()->setAuth(true);
+        $this->config->setUser($user);
+        $this->config->setPass($pass);
+        $this->config->setAuth(true);
+
+        return $this;
+    }
+
+    /**
+     * usingCertificateAuthentication
+     *
+     * Build nodes with certificate authentication
+     *
+     * User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
+     * is required to communicate with your Riak nodes.
+     *
+     *
+     * @param $certificate
+     * @param string $password
+     *
+     * @return $this
+     */
+    public function usingCertificateAuthentication($certificate, $password = '')
+    {
+        $this->config->setCertificate($certificate);
+        $this->config->setCertificatePassword($password);
+        $this->config->setAuth(true);
+
+        return $this;
+    }
+
+    /**
+     * usingPamAuthentication
+     *
+     * Build nodes with PAM authentication
+     *
+     * User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
+     * is required to communicate with your Riak nodes.
+     *
+     * @param $user
+     *
+     * @return $this
+     */
+    public function usingPamAuthentication($user)
+    {
+        $this->config->setUser($user);
+        $this->config->setAuth(true);
+
+        return $this;
+    }
+
+    /**
+     * withCertificateAuthorityDirectory
+     *
+     * Path to CA file. A Certificate Authority file is required for any secure connections to Riak
+     *
+     * @param $ca_file
+     *
+     * @return $this
+     *
+     */
+    public function withCertificateAuthorityFile($ca_file)
+    {
+        $this->config->setCaFile($ca_file);
+
+        return $this;
+    }
+
+    /**
+     * withCertificateAuthorityDirectory
+     *
+     * Directory where the CA file can be found. A Certificate Authority file is required for any secure connections to
+     * Riak
+     *
+     * @param $ca_directory
+     *
+     * @return $this
+     *
+     */
+    public function withCertificateAuthorityDirectory($ca_directory)
+    {
+        $this->config->setCaDirectory($ca_directory);
+
+        return $this;
+    }
+
+    public function withPrivateKey($private_key, $password = '')
+    {
+        $this->config->setPrivateKey($private_key);
+        $this->config->setPrivateKeyPassword($password);
 
         return $this;
     }
@@ -91,7 +229,7 @@ class Builder
     {
         $nodes = [];
         foreach ($hosts as $host) {
-            $nodes[] = $this->withHost($host)->build();
+            $nodes[] = $this->atHost($host)->build();
         }
 
         return $nodes;
@@ -108,7 +246,7 @@ class Builder
     {
         $this->validate();
 
-        return new Node(clone $this->getConfig());
+        return new Node(clone $this->config);
     }
 
     /**
@@ -117,15 +255,22 @@ class Builder
      * Checks the current configuration of the Node Builder for errors. This method should be executed before each Node
      * is built.
      *
-     * @throws Exception
+     * @throws Builder\Exception
      */
     protected function validate()
     {
         // verify we have a host address and port
-        if (!$this->getConfig()->getHost() || !$this->getConfig()->getPort()) {
-            throw new Exception('Node host address and port number are required.');
+        if (!$this->config->getHost() || !$this->config->getPort()) {
+            throw new Node\Builder\Exception('Node host address and port number are required.');
         }
-        // TODO: Add validation for user authentication
+
+        if ($this->config->getUser() && $this->config->getCertificate()) {
+            throw new Node\Builder\Exception('Connect with password OR certificate authentication, not both.');
+        }
+
+        if ($this->config->isAuth() && !$this->config->getCaDirectory() && !$this->config->getCaFile()) {
+            throw new Node\Builder\Exception('Certificate authority file is required for authentication.');
+        }
     }
 
     /**
@@ -136,9 +281,9 @@ class Builder
      * @param $host
      * @return $this
      */
-    public function withHost($host)
+    public function atHost($host)
     {
-        $this->getConfig()->setHost($host);
+        $this->config->setHost($host);
 
         return $this;
     }
@@ -155,9 +300,9 @@ class Builder
     public function buildLocalhost(array $ports = [8087])
     {
         $nodes = [];
-        $this->withHost('localhost');
+        $this->atHost('localhost');
         foreach ($ports as $port) {
-            $nodes[] = $this->withPort($port)->build();
+            $nodes[] = $this->onPort($port)->build();
         }
 
         return $nodes;
@@ -169,9 +314,9 @@ class Builder
      * @param $port
      * @return $this
      */
-    public function withPort($port)
+    public function onPort($port)
     {
-        $this->getConfig()->setPort($port);
+        $this->config->setPort($port);
 
         return $this;
     }

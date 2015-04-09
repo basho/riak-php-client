@@ -44,7 +44,7 @@ use Basho\Riak\Node;
 use Basho\Riak\Command;
 
 $nodes = (new Node\Builder)
-    ->withPort(10018)
+    ->onPort(10018)
     ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
 
 $riak = new Riak($nodes);

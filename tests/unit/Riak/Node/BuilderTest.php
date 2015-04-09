@@ -50,7 +50,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testWithHost()
     {
         $builder = (new Builder)
-            ->withHost('localhost');
+            ->atHost('localhost');
 
         $this->assertEquals($builder->getConfig()->getHost(), 'localhost');
     }
@@ -63,7 +63,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testWithPort()
     {
         $builder = (new Builder)
-            ->withPort(10018);
+            ->onPort(10018);
 
         $this->assertEquals($builder->getConfig()->getPort(), 10018);
     }
@@ -95,7 +95,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuildCluster()
     {
         $nodes = (new Builder)
-            ->withPort(10018)
+            ->onPort(10018)
             ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
 
         $this->assertTrue(count($nodes) == 3);
