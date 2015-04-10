@@ -19,7 +19,9 @@ namespace Basho\Riak\Api;
 
 use Basho\Riak\Api;
 use Basho\Riak\ApiInterface;
+use Basho\Riak\Bucket;
 use Basho\Riak\Command;
+use Basho\Riak\Exception;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
 
@@ -124,7 +126,6 @@ class Http extends Api implements ApiInterface
         if (!empty($location) && $location instanceof Location) {
             $key = $location->getKey();
         }
-
         switch (get_class($this->command)) {
             case 'Basho\Riak\Command\Bucket\List':
                 $this->path = sprintf('/types/%s/buckets/%s', $bucket->getType(), $bucket->getName());
@@ -166,11 +167,48 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\MapReduce\Fetch':
                 $this->path = sprintf('/%s', $this->config['mapred_prefix']);
                 break;
+            case 'Basho\Riak\Command\Indexes\Query':
+                $this->path = $this->createIndexQueryPath($bucket);
+                break;
             default:
                 $this->path = '';
         }
 
         return $this;
+    }
+
+
+    /**
+     * Generates the URL path for a 2i Query
+     *
+     * @param Bucket $bucket
+     * @return string
+     * @throws Exception if 2i query is invalid.
+     */
+    private function createIndexQueryPath(Bucket $bucket)
+    {
+        /**  @var Command\Indexes\Query $command */
+        $command = $this->command;
+
+        if($command->isMatchQuery()) {
+            $path =  sprintf('/types/%s/buckets/%s/index/%s/%s', $bucket->getType(),
+                        $bucket->getName(),
+                        $command->getIndexName(),
+                        $command->getMatchValue());
+        }
+        elseif($command->isRangeQuery()) {
+            $path =  sprintf('/types/%s/buckets/%s/index/%s/%s/%s', $bucket->getType(),
+                        $bucket->getName(),
+                        $command->getIndexName(),
+                        $command->getLowerBound(),
+                        $command->getUpperBound());
+        }
+        else
+        {
+            throw new Exception("Invalid Secondary Index Query.");
+        }
+
+        return $path;
     }
 
     /**
@@ -237,9 +275,9 @@ class Http extends Api implements ApiInterface
     protected function prepareRequest()
     {
         return $this->prepareRequestMethod()
+            ->prepareRequestHeaders()
             ->prepareRequestParameters()
             ->prepareRequestUrl()
-            ->prepareRequestHeaders()
             ->prepareRequestData();
     }
 

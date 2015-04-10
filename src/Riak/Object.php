@@ -98,6 +98,27 @@ class Object
         }
 
         $this->indexes[$indexName][] = $value;
+
+        return $this;
+    }
+
+    public function removeValueFromIndex($indexName, $value)
+    {
+        if (!isset($this->indexes[$indexName])) {
+            return $this;
+        }
+
+        $valuePos = array_search($value, $this->indexes[$indexName]);
+
+        if ($valuePos !== false) {
+            array_splice($this->indexes[$indexName], $valuePos, 1);
+        }
+
+        if(count($this->indexes[$indexName]) == 0) {
+            unset($this->indexes[$indexName]);
+        }
+
+        return $this;
     }
 
     private function validateIndexNameAndValue($indexName, $value)
@@ -122,24 +143,6 @@ class Object
             throw new \InvalidArgumentException("Invalid type for '" . $indexName .
                 "'index. Expecting 'string', value was '" . $type . "''");
         }
-    }
-
-    public function removeValueFromIndex($indexName, $value)
-    {
-        if (!isset($this->indexes[$indexName])) {
-            return;
-        }
-
-        $valuePos = array_search($value, $this->indexes[$indexName]);
-
-        if ($valuePos !== false) {
-            array_splice($this->indexes[$indexName], $valuePos, 1);
-        }
-
-        if (count($this->indexes[$indexName]) == 0) {
-            unset($this->indexes[$indexName]);
-        }
-
     }
 
 }
