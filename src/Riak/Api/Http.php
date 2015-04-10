@@ -168,7 +168,7 @@ class Http extends Api implements ApiInterface
                 $this->path = sprintf('/%s', $this->config['mapred_prefix']);
                 break;
             case 'Basho\Riak\Command\Indexes\Query':
-                $this->path = $this->createIndexQueryPath($this->command, $bucket);
+                $this->path = $this->createIndexQueryPath($bucket);
                 break;
             default:
                 $this->path = '';
@@ -181,13 +181,15 @@ class Http extends Api implements ApiInterface
     /**
      * Generates the URL path for a 2i Query
      *
-     * @param Command\Indexes\Query $command
      * @param Bucket $bucket
      * @return string
      * @throws Exception if 2i query is invalid.
      */
-    private function createIndexQueryPath(Command\Indexes\Query $command, Bucket $bucket)
+    private function createIndexQueryPath(Bucket $bucket)
     {
+        /**  @var Command\Indexes\Query $command */
+        $command = $this->command;
+
         if($command->isMatchQuery()) {
             $path =  sprintf('/types/%s/buckets/%s/index/%s/%s', $bucket->getType(),
                         $bucket->getName(),
