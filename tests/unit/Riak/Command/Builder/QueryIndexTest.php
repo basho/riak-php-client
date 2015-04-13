@@ -32,7 +32,7 @@ class QueryIndexTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Command\Builder\QueryIn    dex::build
+     * @covers       Command\Builder\QueryIndex::build
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -129,4 +129,62 @@ class QueryIndexTest extends TestCase
         $command = $builder->build();
     }
 
+    /**
+     * Test command builder defaults for options
+     *
+     * @covers       Command\Indexes\Query::__construct
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testOptionDefaults($riak)
+    {
+        // build an object
+        $builder = new Command\Builder\QueryIndex($riak);
+        $builder->buildBucket('some_bucket', 'some_bucket_type')
+            ->withIndexName('foo_int')
+            ->withScalarValue(42);
+
+        $command = $builder->build();
+
+        $parameters = $command->getParameters();
+
+        $this->assertFalse(isset($parameters['continuation']));
+        $this->assertFalse(isset($parameters['return_terms']));
+        $this->assertFalse(isset($parameters['pagination_sort']));
+        $this->assertFalse(isset($parameters['term_regex']));
+        $this->assertFalse(isset($parameters['timeout']));
+    }
+
+    /**
+     * Test command builder settings for options
+     *
+     * @covers       Command\Indexes\Query::__construct
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testOptionSettings($riak)
+    {
+        // build an object
+        $builder = new Command\Builder\QueryIndex($riak);
+        $builder->buildBucket('some_bucket', 'some_bucket_type')
+            ->withIndexName('foo_int')
+            ->withScalarValue(42)
+            ->withContinuation('12345')
+            ->withReturnTerms(true)
+            ->withPaginationSort(true)
+            ->withTermFilter('foobar')
+            ->withTimeout(43);
+
+        $command = $builder->build();
+
+
+
+        $this->assertEquals('12345', $command->getParameter('continuation'));
+        $this->assertEquals('true', $command->getParameter('return_terms'));
+        $this->assertEquals('true', $command->getParameter('pagination_sort'));
+        $this->assertEquals('foobar', $command->getParameter('term_regex'));
+        $this->assertEquals(43, $command->getParameter('timeout'));
+    }
 }

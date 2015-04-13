@@ -23,6 +23,7 @@ namespace Basho\Riak\Command\Builder;
  * Allows easy code sharing for Bucket getters / setters within the Command Builders
  *
  * @author Alex Moore <amoore at basho d0t com>
+ * @package Basho\Riak\Command\Builder
  */
 trait IndexTrait
 {
@@ -193,6 +194,16 @@ trait IndexTrait
     public function getTimeout()
     {
         return $this->timeout;
+    }
+
+
+    /**
+     * @param $param
+     * @return bool
+     */
+    public function isParamSet($param)
+    {
+        return !empty($this->$param);
     }
 
     /**

@@ -63,17 +63,35 @@ class Query extends Command implements CommandInterface
             $this->isMatchQuery = true;
         }
 
-        $this->parameters['continuation'] = $builder->getContinuation();
+        $continuation = $builder->getContinuation();
+        if(!empty($continuation)) {
+            $this->parameters['continuation'] = $continuation;
+        }
 
-        $this->parameters['max_results'] = $builder->getMaxResults();
+        $maxResults = $builder->getMaxResults();
+        if(!empty($maxResults)) {
+            $this->parameters['max_results'] = $maxResults;
+        }
 
-        $this->parameters['return_terms'] = ($builder->getReturnTerms()) ? 'true' : 'false';
+        $returnTerms = $builder->getReturnTerms();
+        if(!empty($returnTerms)) {
+            $this->parameters['return_terms'] = ($returnTerms) ? 'true' : 'false';
+        }
 
-        $this->parameters['pagination_sort'] = ($builder->getPaginationSort()) ? 'true' : 'false';
+        $paginationSort = $builder->getPaginationSort();
+        if(!empty($paginationSort)) {
+            $this->parameters['pagination_sort'] = ($paginationSort) ? 'true' : 'false';
+        }
 
-        $this->parameters['term_regex'] = $builder->getTermFilter();
+        $termRegex = $builder->getTermFilter();
+        if(!empty($termRegex)) {
+            $this->parameters['term_regex'] = $termRegex;
+        }
 
-        $this->parameters['timeout'] = $builder->getTimeout();
+        $timeout = $builder->getTimeout();
+        if(!empty($timeout)) {
+            $this->parameters['timeout'] = $timeout;
+        }
     }
 
     public function getIndexName() {
