@@ -58,7 +58,7 @@ abstract class Object extends Command
     {
         $data = $this->getData();
 
-        if ($this->object->getContentType() == 'application/json') {
+        if (in_array($this->object->getContentType(), ['application/json', 'text/json'])) {
             return json_encode($data);
         }
 

@@ -66,4 +66,18 @@ trait ObjectTrait
 
         return $this;
     }
+
+    /**
+     * Mint a new Object instance with a json encoded string
+     *
+     * @param mixed $data
+     *
+     * @return $this
+     */
+    public function buildJsonObject($data)
+    {
+        $this->object = new Object($data, ['Content-Type' => 'application/json']);
+
+        return $this;
+    }
 }

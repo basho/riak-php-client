@@ -62,7 +62,7 @@ class Response extends \Basho\Riak\Command\Response
     private function parseObject()
     {
         $headers = $this->headers;
-        if ($headers['Content-Type'] == 'application/json') {
+        if (in_array($headers['Content-Type'], ['application/json', 'text/json'])) {
             $data = json_decode($this->body);
         } else {
             $data = rawurldecode($this->body);
@@ -144,7 +144,7 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return Object|null
+     * @return \Basho\Riak\Object|null
      */
     public function getObject()
     {

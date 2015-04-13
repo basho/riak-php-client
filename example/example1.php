@@ -6,32 +6,42 @@ use Basho\Riak;
 use Basho\Riak\Command;
 use Basho\Riak\Node;
 
-echo "\n========================================\n\n";
-
 $node = (new Node\Builder)
-    ->withHost('localhost')
-    ->withPort(8098)
+    ->atHost('riak-test')
+    ->onPort(8098)
     ->build();
 
 $riak = new Riak([$node]);
 
-$command = (new Command\Builder\SetBucketProperties($riak))
-    ->buildBucket('test')
-    ->set('allow_mult', true)
-    ->withVerboseMode(true)
+$user = new \StdClass();
+$user->name = 'John Doe';
+$user->email = 'jdoe@example.com';
+
+// store a new value
+$command = (new Command\Builder\StoreObject($riak))
+    ->buildJsonObject($user)
+    ->buildBucket('users')
     ->build();
 
-$response = $command->execute($command);
+$response = $command->execute();
 
-echo "\n========================================\n\n";
+$location = $response->getLocation();
 
-// build an object
-$command2 = (new Command\Builder\UpdateSet($riak))
-    ->add('gosabres poked you.')
-    ->add('phprocks viewed your profile.')
-    ->add('phprocks started following you.')
-    ->buildBucket('default', 'phptest_sets')
-    ->withVerboseMode(true)
+$command = (new Command\Builder\FetchObject($riak))
+    ->atLocation($location)
     ->build();
 
-$response2 = $command2->execute($command2);
+$response = $command->execute();
+
+$object = $response->getObject();
+
+$object->getData()->country = 'USA';
+
+$command = (new Command\Builder\StoreObject($riak))
+    ->withObject($object)
+    ->atLocation($location)
+    ->build();
+
+$response = $command->execute();
+
+echo $response->getStatusCode() . PHP_EOL;
