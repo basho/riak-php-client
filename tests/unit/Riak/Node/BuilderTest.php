@@ -17,7 +17,9 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests\Riak\Node;
 
+use Basho\Riak;
 use Basho\Riak\Node\Builder;
+use Basho\Tests\TestCase;
 
 /**
  * Class BuilderTest
@@ -26,7 +28,7 @@ use Basho\Riak\Node\Builder;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class BuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends TestCase
 {
     /**
      * testConstruct
@@ -102,6 +104,23 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($nodes[1]->getHost() == 'riak2.company.com');
         $this->assertTrue($nodes[0]->getPort() == 10018);
         $this->assertTrue($nodes[1]->getPort() == 10018);
+    }
+
+    public function testUsingAuth()
+    {
+        $node = (new Builder())
+            ->atHost(static::TEST_NODE_HOST)
+            ->onPort(static::TEST_NODE_SECURE_PORT)
+            ->usingPasswordAuthentication('unauthorizeduser', 'hispassword')
+            ->withCertificateAuthorityFile(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem')
+            ->build();
+
+        $riak = new Riak([$node]);
+
+        $this->assertEquals('unauthorizeduser', $node->getUserName());
+        $this->assertEquals('hispassword', $node->getPassword());
+        $this->assertEquals(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem', $node->getCaFile());
+        $this->assertInstanceOf('Basho\Riak', $riak);
     }
 }
  
