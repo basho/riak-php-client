@@ -98,7 +98,7 @@ class SecondaryIndexOperationsTest extends TestCase
     }
 
     /**
-     * @depends      testStoreObjectWithIndexes
+     * @depends      testFetchObjectWithIndexes
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak

@@ -82,6 +82,8 @@ class ObjectOperationsTest extends TestCase
     }
 
     /**
+     * This test expects an exception on retrieval of Location, since a store with a key won't have it.
+     *
      * @depends      testFetchNotFound
      * @dataProvider getLocalNodeConnection
      *
