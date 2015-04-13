@@ -34,19 +34,90 @@ class Response extends \Basho\Riak\Command\Response
      */
     protected $object = NULL;
 
+    /**
+     * @var \Basho\Riak\Object[]
+     */
+    protected $siblings = [];
+
     public function __construct($statusCode, $headers = [], $body = '')
     {
         parent::__construct($statusCode, $headers, $body);
 
         // make sure body is not only whitespace
-        if (trim($body)) {
-            $data = '';
-            if ($headers['Content-Type'] == 'application/json') {
-                $data = json_decode($this->body);
-            } else {
-                $data = rawurldecode($this->body);
+        if (trim($body) && !$this->hasSiblings()) {
+            $this->parseObject();
+        } elseif (trim($body) && $this->hasSiblings()) {
+            $this->parseSiblings();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSiblings()
+    {
+        return $this->statusCode == '300' ? true : false;
+    }
+
+    private function parseObject()
+    {
+        $headers = $this->headers;
+        if ($headers['Content-Type'] == 'application/json') {
+            $data = json_decode($this->body);
+        } else {
+            $data = rawurldecode($this->body);
+        }
+
+        // if the following headers exist, remove them
+        if (isset($headers['Content-Length'])) {
+            unset($headers['Content-Length']);
+        }
+        if (isset($headers['Server'])) {
+            unset($headers['Server']);
+        }
+
+        $this->object = new Object($data, $headers);
+    }
+
+    private function parseSiblings()
+    {
+        $position = strpos($this->headers['Content-Type'], 'boundary=');
+        $parts = explode('--' . substr($this->headers['Content-Type'], $position + 9), $this->body);
+        foreach ($parts as $part) {
+            $headers = [];
+            $slice_point = 0;
+            $empties = 0;
+
+            $lines = preg_split('/\n\r|\n|\r/', trim($part));
+            foreach ($lines as $key => $line) {
+                if (strpos($line, ':')) {
+                    $empties = 0;
+                    list ($key, $value) = explode(':', $line);
+
+                    $value = trim($value);
+
+                    if (!empty($value)) {
+                        if (!isset($headers[$key])) {
+                            $headers[$key] = $value;
+                        } elseif (is_array($headers[$key])) {
+                            $headers[$key] = array_merge($headers[$key], [$value]);
+                        } else {
+                            $headers[$key] = array_merge([$headers[$key]], [$value]);
+                        }
+                    }
+                } elseif ($line == '') {
+                    // if we have two line breaks in a row, then we have finished headers
+                    if ($empties) {
+                        $slice_point = $key + 1;
+                        break;
+                    } else {
+                        $empties++;
+                    }
+                }
             }
-            $this->object = new Object($data, $this->headers);
+
+            $data = implode(PHP_EOL, array_slice($lines, $slice_point));
+            $this->siblings[] = new Object($data, $headers);
         }
     }
 
@@ -85,15 +156,7 @@ class Response extends \Basho\Riak\Command\Response
      */
     public function isNotFound()
     {
-        return $this->statusCode == '404' ? TRUE : FALSE;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasSiblings()
-    {
-        return $this->statusCode == '300' ? TRUE : FALSE;
+        return $this->statusCode == '404' ? true : false;
     }
 
     /**
@@ -101,9 +164,9 @@ class Response extends \Basho\Riak\Command\Response
      *
      * @return array
      */
-    public function getSiblingTags()
+    public function getSiblings()
     {
-        return [];
+        return $this->siblings;
     }
 
     /**

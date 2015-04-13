@@ -56,9 +56,6 @@ class Object
         $translator = new SecondaryIndexHeaderTranslator();
         $this->indexes = $translator->extractIndexesFromHeaders($headers);
 
-        if (isset($headers['Content-Length'])) {
-            unset($headers['Content-Length']);
-        }
         $this->headers = $headers;
     }
 
@@ -102,6 +99,28 @@ class Object
         return $this;
     }
 
+    private function validateIndexNameAndValue($indexName, $value)
+    {
+        $type = gettype($value);
+        $isIntIndex = SecondaryIndexHeaderTranslator::isIntIndex($indexName);
+        $isStringIndex = SecondaryIndexHeaderTranslator::isStringIndex($indexName);
+
+        if (!$isIntIndex && !$isStringIndex) {
+            throw new \InvalidArgumentException("Invalid index type for '" . $indexName .
+                "'index. Expecting '*_int' for an integer index, or '*_bin' for a string index.");
+        }
+
+        if ($isIntIndex && $type != 'integer') {
+            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
+                "'index. Expecting 'integer', value was '" . $type . "''");
+        }
+
+        if ($isStringIndex && $type != 'string') {
+            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
+                "'index. Expecting 'string', value was '" . $type . "''");
+        }
+    }
+
     public function removeValueFromIndex($indexName, $value)
     {
         if (!isset($this->indexes[$indexName])) {
@@ -119,30 +138,6 @@ class Object
         }
 
         return $this;
-    }
-
-    private function validateIndexNameAndValue($indexName, $value)
-    {
-        $type = gettype($value);
-        $isIntIndex = SecondaryIndexHeaderTranslator::isIntIndex($indexName);
-        $isStringIndex = SecondaryIndexHeaderTranslator::isStringIndex($indexName);
-
-        if(!$isIntIndex && !$isStringIndex) {
-            throw new \InvalidArgumentException("Invalid index type for '" . $indexName .
-                "'index. Expecting '*_int' for an integer index, or '*_bin' for a string index.");
-        }
-
-        if($isIntIndex && $type != 'integer')
-        {
-            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
-                "'index. Expecting 'integer', value was '" . $type . "''");
-        }
-
-        if($isStringIndex && $type != 'string')
-        {
-            throw new \InvalidArgumentException("Invalid type for '" . $indexName .
-                "'index. Expecting 'string', value was '" . $type . "''");
-        }
     }
 
 }

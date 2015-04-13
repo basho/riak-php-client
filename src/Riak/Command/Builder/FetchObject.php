@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Builder;
 
+use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
@@ -40,6 +41,13 @@ class FetchObject extends Command\Builder implements Command\BuilderInterface
 {
     use ObjectTrait;
     use LocationTrait;
+
+    public function __construct(Riak $riak)
+    {
+        parent::__construct($riak);
+
+        $this->headers['Accept'] = 'multipart/mixed, */*';
+    }
 
     /**
      * {@inheritdoc}

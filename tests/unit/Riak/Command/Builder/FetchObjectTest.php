@@ -55,6 +55,10 @@ class FetchObjectTest extends TestCase
         $command = $builder->build();
 
         $this->assertEquals('some_type', $command->getBucket()->getType());
+
+        $headers = $builder->getHeaders();
+        $this->assertTrue(isset($headers['Accept']));
+        $this->assertEquals('multipart/mixed, */*', $headers['Accept']);
     }
 
     /**
@@ -71,6 +75,6 @@ class FetchObjectTest extends TestCase
     {
         $builder = new Command\Builder\FetchObject($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+        $builder->build();
     }
 }

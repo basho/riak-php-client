@@ -17,6 +17,9 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests;
 
+use Basho\Riak;
+use Basho\Riak\Command;
+
 /**
  * Class NodeUnreachableTest
  *
@@ -26,9 +29,90 @@ namespace Basho\Tests;
  */
 class ObjectConflictTest extends TestCase
 {
-    public function testStoreNewWithKey()
+    private static $key = 'conflicted';
+    private static $vclock = '';
+
+    /**
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testStoreTwiceWithKey($riak)
     {
-        $this->assertTrue(TRUE);
+        $command = (new Command\Builder\StoreObject($riak))
+            ->buildObject('some_data')
+            ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertEquals('204', $response->getStatusCode());
+
+        $command = (new Command\Builder\StoreObject($riak))
+            ->buildObject('some_other_data')
+            ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertEquals('204', $response->getStatusCode());
     }
 
+    /**
+     * @depends      testStoreTwiceWithKey
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchConflicted($riak)
+    {
+        $command = (new Command\Builder\FetchObject($riak))
+            ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertEquals('300', $response->getStatusCode());
+        $this->assertTrue($response->hasSiblings());
+        $this->assertNotEmpty($response->getSiblings());
+
+        static::$vclock = $response->getVclock();
+    }
+
+    /**
+     * @depends      testFetchConflicted
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testResolveConflict($riak)
+    {
+        $command = (new Command\Builder\StoreObject($riak))
+            ->withHeader('X-Riak-Vclock', static::$vclock)
+            ->buildObject('some_resolved_data')
+            ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertEquals('204', $response->getStatusCode());
+    }
+
+    /**
+     * @depends      testResolveConflict
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchResolved($riak)
+    {
+        $command = (new Command\Builder\FetchObject($riak))
+            ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('some_resolved_data', $response->getObject()->getData());
+    }
 }
