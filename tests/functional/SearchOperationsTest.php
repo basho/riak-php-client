@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class CounterTest
- *
  * Functional tests related to Counter CRDTs
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

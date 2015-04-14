@@ -22,8 +22,6 @@ use Basho\Riak\CommandInterface;
 use Basho\Riak\Location;
 
 /**
- * Class Store
- *
  * Stores a write to a map
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

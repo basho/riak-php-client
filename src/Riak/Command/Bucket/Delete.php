@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Delete
- *
  * Used to remove an object from Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

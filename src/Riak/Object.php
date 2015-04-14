@@ -22,8 +22,6 @@ use Basho\Riak\Link;
 use Basho\Riak\MapReduce;
 
 /**
- * Abstract Class DataType
- *
  * Main class for data objects in Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

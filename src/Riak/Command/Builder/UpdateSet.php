@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class UpdateSet
- *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class UpdateSet extends Command\Builder implements Command\BuilderInterface

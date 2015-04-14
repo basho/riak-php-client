@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class SetBucketProperties
- *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class SetBucketProperties extends Command\Builder implements Command\BuilderInterface

@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Tests\TestCase;
 
 /**
- * Class StoreObjectTest
- *
  * Tests the configuration of Riak commands via the Command Builder class
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

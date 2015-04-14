@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Fetch
- *
  * Used to fetch a result set from Riak using MapReduce
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

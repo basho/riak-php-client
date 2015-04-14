@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class SecurityOperationsTest
- *
  * Functional tests verifying TSL features
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Bucket;
 
 /**
- * Class BucketTrait
- *
  * Allows easy code sharing for Bucket getters / setters within the Command Builders
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

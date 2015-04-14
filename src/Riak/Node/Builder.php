@@ -20,8 +20,6 @@ namespace Basho\Riak\Node;
 use Basho\Riak\Node;
 
 /**
- * Class Node Builder
- *
  * This class follows the Builder design pattern and is the preferred method for creating Basho\Riak\Node objects for
  * connecting to your Riak node cluster.
  *

@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak;
 
 /**
- * Class Location
- *
  * Immutable data structure storing the location of an Object or DataType
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

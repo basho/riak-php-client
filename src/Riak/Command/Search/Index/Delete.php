@@ -21,9 +21,7 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
- *
- * Riak Yokozuna Search Index Store
+ * Used to delete a Search Index from Riak Yokozuna
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

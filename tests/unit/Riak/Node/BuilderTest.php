@@ -22,8 +22,6 @@ use Basho\Riak\Node\Builder;
 use Basho\Tests\TestCase;
 
 /**
- * Class BuilderTest
- *
  * Tests the configuration of Riak nodes via the Node Builder class
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Api;
 
 /**
- * Class Exception
- *
  * Exception thrown when there is an error within the execution of an Api Bridge object.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

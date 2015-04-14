@@ -22,9 +22,7 @@ use Basho\Riak\CommandInterface;
 use Basho\Riak\Location;
 
 /**
- * Class Fetch
- *
- * [summary]
+ * Fetches a Set data type from Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

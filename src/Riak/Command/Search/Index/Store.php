@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Store
- *
  * Riak Yokozuna Search Index Store
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class FetchObjects
- *
  * Builds the command to fetch a collection of objects from Riak using Yokozuna search
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

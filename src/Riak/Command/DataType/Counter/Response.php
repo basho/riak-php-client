@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\DataType\Counter;
 use Basho\Riak\DataType\Counter;
 
 /**
- * Class Counter\Response
- *
  * Container for a response related to an operation on an object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Tests;
 
 /**
- * Class NodeUnreachableTest
- *
  * Scenario tests for when Nodes become unreachable
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

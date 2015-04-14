@@ -20,8 +20,6 @@ namespace Basho\Tests\Riak;
 use Basho\Riak\DataType\Set;
 
 /**
- * Class SetTest
- *
  * Test set for counter crdt
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

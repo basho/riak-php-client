@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder\Search;
 use Basho\Riak\Command;
 
 /**
- * Class FetchSchema
- *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class FetchSchema extends Command\Builder implements Command\BuilderInterface

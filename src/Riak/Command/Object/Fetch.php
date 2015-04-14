@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Fetch
- *
  * Fetches a Riak Kv Object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

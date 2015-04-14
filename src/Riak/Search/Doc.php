@@ -21,8 +21,6 @@ use Basho\Riak\Bucket;
 use Basho\Riak\Location;
 
 /**
- * Class Doc
- *
  * Data structure for document objects returned from Solr
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

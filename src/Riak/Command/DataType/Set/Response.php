@@ -20,9 +20,7 @@ namespace Basho\Riak\Command\DataType\Set;
 use Basho\Riak\DataType\Set;
 
 /**
- * Class Set\Response
- *
- * Container for a response related to an operation on an object
+ * Container for a response related to an operation on a set data type
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

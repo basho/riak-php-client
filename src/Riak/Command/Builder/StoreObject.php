@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Command;
 
 /**
- * Class StoreObject
- *
  * Used to increment counter objects in Riak by the provided positive / negative integer
  *
  * <code>

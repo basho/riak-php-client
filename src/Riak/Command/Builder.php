@@ -22,8 +22,6 @@ use Basho\Riak\Command;
 use Basho\Riak\DataType;
 
 /**
- * Class Builder
- *
  * This class follows the Builder design pattern and is the preferred method for creating Basho\Riak\Command
  * objects for interacting with your Riak data cluster.
  *

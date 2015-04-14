@@ -24,8 +24,6 @@ use Basho\Riak\Exception;
 use Basho\Riak\Node;
 
 /**
- * Class Riak
- *
  * This class maintains the list of nodes in the Riak cluster. It follows the Facade Design Pattern.
  *
  * <code>

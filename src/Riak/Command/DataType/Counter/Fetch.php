@@ -22,8 +22,6 @@ use Basho\Riak\CommandInterface;
 use Basho\Riak\Location;
 
 /**
- * Class Fetch
- *
  * Used to fetch a counter
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
