@@ -32,8 +32,6 @@ class BuilderTest extends TestCase
      * testConstruct
      *
      * Test node builder construct
-     *
-     * @covers Builder::__construct
      */
     public function testConstruct()
     {
@@ -44,8 +42,6 @@ class BuilderTest extends TestCase
 
     /**
      * testWithHost
-     *
-     * @covers Builder::withHost
      */
     public function testWithHost()
     {
@@ -57,8 +53,6 @@ class BuilderTest extends TestCase
 
     /**
      * testWithPort
-     *
-     * @covers Builder::withPort
      */
     public function testWithPort()
     {
@@ -72,8 +66,6 @@ class BuilderTest extends TestCase
      * testBuildLocalhost
      *
      * Test the localhost node builder
-     *
-     * @covers Builder::buildLocalhost
      */
     public function testBuildLocalhost()
     {
@@ -89,8 +81,6 @@ class BuilderTest extends TestCase
      * testBuildCluster
      *
      * Test the cluster node builder
-     *
-     * @covers Builder::buildCluster
      */
     public function testBuildCluster()
     {

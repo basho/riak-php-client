@@ -30,7 +30,6 @@ class StoreObjectTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Command\Builder\StoreObject::build
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -55,7 +54,6 @@ class StoreObjectTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Builder::__construct
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -75,7 +73,6 @@ class StoreObjectTest extends TestCase
     /**
      * Tests validate properly verifies the Object is not there
      *
-     * @covers       Command\Builder\StoreObject::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -92,7 +89,6 @@ class StoreObjectTest extends TestCase
     /**
      * Tests validate properly verifies the Bucket is not there
      *
-     * @covers       Command\Builder\StoreObject::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -110,7 +106,6 @@ class StoreObjectTest extends TestCase
      * Tests that attempting to store an object generates headers for any
      * 2i entries on the object.
      *
-     * @covers       Command\Object\Store::getHeaders
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak

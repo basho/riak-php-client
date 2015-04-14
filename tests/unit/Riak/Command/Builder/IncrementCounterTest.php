@@ -74,7 +74,6 @@ class IncrementCounterTest extends TestCase
     /**
      * Tests validate properly verifies the Object is not there
      *
-     * @covers       Command\Builder\IncrementCounter::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -85,13 +84,12 @@ class IncrementCounterTest extends TestCase
     {
         $builder = new Command\Builder\IncrementCounter($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+        $builder->build();
     }
 
     /**
      * Tests validate properly verifies the Bucket is not there
      *
-     * @covers       Command\Builder\IncrementCounter::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -102,6 +100,6 @@ class IncrementCounterTest extends TestCase
     {
         $builder = new Command\Builder\IncrementCounter($riak);
         $builder->withIncrement(1);
-        $command = $builder->build();
+        $builder->build();
     }
 }

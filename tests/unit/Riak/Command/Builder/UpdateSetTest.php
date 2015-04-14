@@ -30,7 +30,6 @@ class UpdateSetTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Command\Builder\UpdateSet::build
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -57,7 +56,6 @@ class UpdateSetTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Builder::__construct
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -79,7 +77,6 @@ class UpdateSetTest extends TestCase
     /**
      * Tests validate properly verifies that an intended change is not applied
      *
-     * @covers       Command\Builder\UpdateSet::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -96,7 +93,6 @@ class UpdateSetTest extends TestCase
     /**
      * Tests validate properly verifies the Bucket is not there
      *
-     * @covers       Command\Builder\UpdateSet::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak

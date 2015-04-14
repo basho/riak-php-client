@@ -30,7 +30,6 @@ class QueryIndexTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Command\Builder\QueryIndex::build
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -56,7 +55,6 @@ class QueryIndexTest extends TestCase
     /**
      * Tests validate properly verifies the index name is not there
      *
-     * @covers       Command\Builder\FetchObject::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -67,13 +65,13 @@ class QueryIndexTest extends TestCase
     {
         $builder = new Command\Builder\QueryIndex($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+
+        $builder->build();
     }
 
     /**
      * Tests validate properly verifies the scalar match value is not there
      *
-     * @covers       Command\Builder\FetchObject::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -86,13 +84,13 @@ class QueryIndexTest extends TestCase
         $builder->buildBucket('some_bucket')
                 ->withIndexName("foo_int")
                 ->withScalarValue(null);
-        $command = $builder->build();
+
+        $builder->build();
     }
 
     /**
      * Tests validate properly verifies the range lower bound value is not there
      *
-     * @covers       Command\Builder\FetchObject::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -105,13 +103,13 @@ class QueryIndexTest extends TestCase
         $builder->buildBucket('some_bucket')
             ->withIndexName("foo_int")
             ->withRangeValue(null, 42);
-        $command = $builder->build();
+
+        $builder->build();
     }
 
     /**
      * Tests validate properly verifies the range upper bound value is not there
      *
-     * @covers       Command\Builder\FetchObject::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -124,13 +122,13 @@ class QueryIndexTest extends TestCase
         $builder->buildBucket('some_bucket')
             ->withIndexName("foo_int")
             ->withRangeValue(42, null);
-        $command = $builder->build();
+
+        $builder->build();
     }
 
     /**
      * Test command builder defaults for options
      *
-     * @covers       Command\Indexes\Query::__construct
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -157,7 +155,6 @@ class QueryIndexTest extends TestCase
     /**
      * Test command builder settings for options
      *
-     * @covers       Command\Indexes\Query::__construct
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak

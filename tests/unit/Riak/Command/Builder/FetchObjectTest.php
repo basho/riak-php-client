@@ -30,7 +30,6 @@ class FetchObjectTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Command\Builder\FetchObject::build
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -62,7 +61,6 @@ class FetchObjectTest extends TestCase
     /**
      * Tests validate properly verifies the Object is not there
      *
-     * @covers       Command\Builder\FetchObject::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak

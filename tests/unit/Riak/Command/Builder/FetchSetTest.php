@@ -30,7 +30,6 @@ class FetchSetTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Command\Builder\FetchSet::build
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -58,7 +57,6 @@ class FetchSetTest extends TestCase
     /**
      * Tests validate properly verifies the Location is not there
      *
-     * @covers       Command\Builder\FetchSet::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -69,6 +67,6 @@ class FetchSetTest extends TestCase
     {
         $builder = new Command\Builder\FetchSet($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+        $builder->build();
     }
 }

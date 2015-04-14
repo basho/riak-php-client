@@ -30,7 +30,6 @@ class FetchMapTest extends TestCase
     /**
      * Test command builder construct
      *
-     * @covers       Command\Builder\FetchMap::build
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -58,7 +57,6 @@ class FetchMapTest extends TestCase
     /**
      * Tests validate properly verifies the Map is not there
      *
-     * @covers       Command\Builder\FetchMap::validate
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -69,6 +67,6 @@ class FetchMapTest extends TestCase
     {
         $builder = new Command\Builder\FetchMap($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+        $builder->build();
     }
 }
