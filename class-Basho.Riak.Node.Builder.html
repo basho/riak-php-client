@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Basho\Riak\Node\Builder | Official Riak Client for PHP</title>
+
+	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
+	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+
+</head>
+
+<body>
+	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand">Official Riak Client for PHP</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+                <form id="search" class="navbar-form navbar-left" role="search">
+                    <input type="hidden" name="cx" value="">
+                    <input type="hidden" name="ie" value="UTF-8">
+                    <div class="form-group">
+                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
+					</div>
+				</form>
+
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="namespace-Basho.Riak.Node.html" title="Summary of Basho\Riak\Node"><span>Namespace</span></a>
+					</li>
+					<li class="active">
+<span>Class</span>					</li>
+
+					<li class="divider-vertical"></li>
+
+					<li>
+						<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+					</li>
+
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="left">
+	<div id="menu">
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+					<li class="active">
+						<a href="namespace-Basho.html">
+							Basho<span></span>
+						</a>
+							<ul>
+					<li class="active">
+						<a href="namespace-Basho.Riak.html">
+							Riak<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.html">
+							Api<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Translators.html">
+							Translators						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.html">
+							Command<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Bucket.html">
+							Bucket						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.html">
+							Builder<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.MapReduce.html">
+							MapReduce						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.Search.html">
+							Search						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.html">
+							DataType<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Counter.html">
+							Counter						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Map.html">
+							Map						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Set.html">
+							Set						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Indexes.html">
+							Indexes						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.MapReduce.html">
+							MapReduce						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Object.html">
+							Object						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.html">
+							Search<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.Index.html">
+							Index						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
+							Schema						</a>
+							</li>
+								</ul></li></ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.DataType.html">
+							DataType						</a>
+							</li>
+					<li class="active">
+						<a href="namespace-Basho.Riak.Node.html">
+							Node<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Node.Builder.html">
+							Builder						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Search.html">
+							Search						</a>
+							</li>
+								</ul></li></ul></li>
+			</ul>
+		</div>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li class="active"><a href="class-Basho.Riak.Node.Builder.html">Builder</a></li>
+				<li><a href="class-Basho.Riak.Node.Config.html">Config</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+	<div id="rightInner">
+<div id="content" class="class">
+	<h1>Class Builder</h1>
+
+
+	<div class="description">
+	<p>This class follows the Builder design pattern and is the preferred method for creating Basho\Riak\Node objects for
+connecting to your Riak node cluster.</p>
+
+<pre><span class="php-comment">// simple local development / testing cluster</span>
+ <span class="php-keyword1">use</span> Basho\Riak\Node;
+
+ <span class="php-var">$nodes</span> = (<span class="php-keyword1">new</span> Node\Builder)
+     -&gt;buildLocalhost([<span class="php-num">10018</span>, <span class="php-num">10028</span>, <span class="php-num">10038</span>, <span class="php-num">10048</span>, <span class="php-num">10058</span>]);</pre>
+
+<pre><span class="php-comment">// password authentication to production cluster</span>
+ <span class="php-keyword1">use</span> Basho\Riak\Node;
+
+ <span class="php-var">$nodes</span> = (<span class="php-keyword1">new</span> Node\Builder)
+     -&gt;onPort(<span class="php-num">8098</span>)
+     -&gt;usingPasswordAuthentication(<span class="php-quote">'riakuser'</span>, <span class="php-quote">'riakpassword'</span>)
+     -&gt;withCertificateAuthorityFile(<span class="php-keyword2">getcwd</span>() . <span class="php-quote">'/path/to/cacert.pem'</span>)
+     -&gt;buildCluster([<span class="php-quote">'riak1.company.int'</span>,<span class="php-quote">'riak2.company.int'</span>,<span class="php-quote">'riak3.company.int'</span>]);</pre>
+
+<pre><span class="php-comment">// certificate authentication to production load balanced cluster</span>
+ <span class="php-keyword1">use</span> Basho\Riak\Node;
+
+ <span class="php-var">$node</span> = (<span class="php-keyword1">new</span> Node\Builder)
+     -&gt;atHost(<span class="php-quote">'riak.company.int'</span>)
+     -&gt;onPort(<span class="php-num">8098</span>)
+     -&gt;usingCertificateAuthentication(<span class="php-keyword2">getcwd</span>() . <span class="php-quote">'/path/to/client.crt'</span>)
+     -&gt;withCertificateAuthorityFile(<span class="php-keyword2">getcwd</span>() . <span class="php-quote">'/path/to/cacert.pem'</span>)
+     -&gt;build();</pre>
+
+<pre><span class="php-comment">// pam authentication to production load balanced cluster</span>
+ <span class="php-keyword1">use</span> Basho\Riak\Node;
+
+ <span class="php-var">$node</span> = (<span class="php-keyword1">new</span> Node\Builder)
+     -&gt;atHost(<span class="php-quote">'riak.company.int'</span>)
+     -&gt;onPort(<span class="php-num">8098</span>)
+     -&gt;usingPamAuthentication(<span class="php-quote">'riakuser'</span>)
+     -&gt;withCertificateAuthorityFile(<span class="php-keyword2">getcwd</span>() . <span class="php-quote">'/path/to/cacert.pem'</span>)
+     -&gt;build();</pre>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="alert alert-info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Basho.html">Basho</a>\<a href="namespace-Basho.Riak.html">Riak</a>\<a href="namespace-Basho.Riak.Node.html">Node</a><br>
+		
+
+				<b>Author:</b>
+				Christopher Mancini <cmancini at basho d0t com><br>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Node.Builder.html#22-328" title="Go to source code">Riak/Node/Builder.php</a>
+		<br>
+	</div>
+
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Methods summary</h2></div>
+			<table class="summary table table-bordered table-striped methods" id="methods">
+		<tr data-order="__construct" id="___construct">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#___construct">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#80-83" title="Go to source code">__construct</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="usingTrustAuthentication" id="_usingTrustAuthentication">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_usingTrustAuthentication">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#85-103" title="Go to source code">usingTrustAuthentication</a>( <span>string <var>$user</var> = <span class="php-quote">''</span></span> )</code>
+
+			<div class="description short">
+				<p>usingTrustAuthentication</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>usingTrustAuthentication</p>
+
+<p>Build nodes with trust authentication</p>
+
+<p>User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
+is required to communicate with your Riak nodes.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$user</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="usingPasswordAuthentication" id="_usingPasswordAuthentication">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_usingPasswordAuthentication">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#105-124" title="Go to source code">usingPasswordAuthentication</a>( <span> <var>$user</var></span>, <span> <var>$pass</var> = <span class="php-quote">''</span></span> )</code>
+
+			<div class="description short">
+				<p>usingPasswordAuthentication</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>usingPasswordAuthentication</p>
+
+<p>Build nodes with password authentication</p>
+
+<p>User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
+is required to communicate with your Riak nodes.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$user</var></dt>
+						<dd></dd>
+						<dt><var>$pass</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="usingCertificateAuthentication" id="_usingCertificateAuthentication">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_usingCertificateAuthentication">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#126-151" title="Go to source code">usingCertificateAuthentication</a>( <span> <var>$certificate</var></span>, <span>string <var>$password</var> = <span class="php-quote">''</span></span> )</code>
+
+			<div class="description short">
+				<p>usingCertificateAuthentication</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>usingCertificateAuthentication</p>
+
+<p>Build nodes with certificate authentication</p>
+
+<p>User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
+is required to communicate with your Riak nodes.</p>
+
+<p>CURRENTLY NOT SUPPORTED OVER THE RIAK HTTP API</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$certificate</var></dt>
+						<dd></dd>
+						<dt><var>$password</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+					<h4>Throws</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Node.Builder.Exception.html">Basho\Riak\Node\Builder\Exception</a></code>
+					</div>
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="usingPamAuthentication" id="_usingPamAuthentication">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_usingPamAuthentication">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#153-171" title="Go to source code">usingPamAuthentication</a>( <span> <var>$user</var></span> )</code>
+
+			<div class="description short">
+				<p>usingPamAuthentication</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>usingPamAuthentication</p>
+
+<p>Build nodes with PAM authentication</p>
+
+<p>User authentication and access rules are only available in Riak versions 2 and above. To use this feature, TSL
+is required to communicate with your Riak nodes.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$user</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withCertificateAuthorityFile" id="_withCertificateAuthorityFile">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withCertificateAuthorityFile">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#173-188" title="Go to source code">withCertificateAuthorityFile</a>( <span> <var>$ca_file</var></span> )</code>
+
+			<div class="description short">
+				<p>withCertificateAuthorityDirectory</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>withCertificateAuthorityDirectory</p>
+
+<p>Path to CA file. A Certificate Authority file is required for any secure connections to Riak</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$ca_file</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withCertificateAuthorityDirectory" id="_withCertificateAuthorityDirectory">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withCertificateAuthorityDirectory">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#190-206" title="Go to source code">withCertificateAuthorityDirectory</a>( <span> <var>$ca_directory</var></span> )</code>
+
+			<div class="description short">
+				<p>withCertificateAuthorityDirectory</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>withCertificateAuthorityDirectory</p>
+
+<p>Directory where the CA file can be found. A Certificate Authority file is required for any secure connections to
+Riak</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$ca_directory</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withPrivateKey" id="_withPrivateKey">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withPrivateKey">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#208-214" title="Go to source code">withPrivateKey</a>( <span> <var>$private_key</var></span>, <span> <var>$password</var> = <span class="php-quote">''</span></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getConfig" id="_getConfig">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code>|null
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getConfig">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#216-222" title="Go to source code">getConfig</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code>|null
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="buildCluster" id="_buildCluster">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a>[]</code>
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_buildCluster">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#224-241" title="Go to source code">buildCluster</a>( <span>array <var>$hosts</var> = [<span class="php-quote">'localhost'</span>]</span> )</code>
+
+			<div class="description short">
+				<p>Build distributed cluster</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Build distributed cluster</p>
+
+<p>Build node objects configured to listen on the same port but different hosts. Commonly used in
+staging and production environments where you have multiple Riak nodes on multiple machines / vms.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$hosts</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a>[]</code>
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="build" id="_build">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a></code>
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_build">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#243-255" title="Go to source code">build</a>( )</code>
+
+			<div class="description short">
+				<p>Build node</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Build node</p>
+
+<p>Validate configuration for a single node object, then build it</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a></code>
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="validate" id="_validate">
+
+			<td class="attributes"><code>
+				 protected 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_validate">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#257-279" title="Go to source code">validate</a>( )</code>
+
+			<div class="description short">
+				<p>Builder configuration validation</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Builder configuration validation</p>
+
+<p>Checks the current configuration of the Node Builder for errors. This method should be executed before each Node
+is built.</p>
+
+
+
+
+					<h4>Throws</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Node.Builder.Exception.html">Basho\Riak\Node\Builder\Exception</a></code>
+					</div>
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="atHost" id="_atHost">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_atHost">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#281-294" title="Go to source code">atHost</a>( <span> <var>$host</var></span> )</code>
+
+			<div class="description short">
+				<p>Build with host address</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Build with host address</p>
+
+<p>Build node objects with configuration to use a specific host address</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$host</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="buildLocalhost" id="_buildLocalhost">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a>[]</code>
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_buildLocalhost">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#296-314" title="Go to source code">buildLocalhost</a>( <span>array <var>$ports</var> = [<span class="php-num">8087</span>]</span> )</code>
+
+			<div class="description short">
+				<p>Build local node cluster</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Build local node cluster</p>
+
+<p>Build multiple node objects configured with the same host address but different ports. Commonly used in
+development environments where you have multiple Riak nodes on a single machine / vm.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$ports</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a>[]</code>
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="onPort" id="_onPort">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_onPort">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#316-327" title="Go to source code">onPort</a>( <span> <var>$port</var></span> )</code>
+
+			<div class="description short">
+				<p>Build node objects with configuration to use a specific port number</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Build node objects with configuration to use a specific port number</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$port</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<br>$this
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Properties summary</h2></div>
+			<table class="summary table table-bordered table-striped properties" id="properties">
+		<tr data-order="config" id="$config">
+			<td class="attributes"><code>
+				protected  
+				<code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code>|null
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Node.Builder.html#73-78" title="Go to source code"><var>$config</var></a>
+
+				<div class="description short">
+					<p>Internal storage</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Internal storage</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$config" class="anchor">#</a>
+					<code><span class="php-keyword1">null</span></code>
+				</div>
+			</td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+</div>
+	</div>
+
+	<div id="footer">
+		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>
