@@ -183,4 +183,43 @@ class ObjectOperationsTest extends TestCase
 
         $this->assertEquals('404', $response->getStatusCode());
     }
+
+    /**
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testFetchAssociativeArray($riak)
+    {
+        $data = ['myData' => 42];
+
+        $command = (new Command\Builder\StoreObject($riak))
+            ->buildLocation(static::$key, 'users')
+            ->buildJsonObject($data)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertEquals('204', $response->getStatusCode());
+
+        // Fetch as associative array
+        $command = (new Command\Builder\FetchObject($riak))
+            ->buildLocation(static::$key, 'users')
+            ->withDecodeAsAssociative()
+            ->build();
+
+        $response = $command->execute();
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals($data, $response->getObject()->getData());
+        $this->assertEquals('array', gettype($response->getObject()->getData()));
+
+        // Fetch normal to get as stdClass object
+        $command = (new Command\Builder\FetchObject($riak))
+            ->buildLocation(static::$key, 'users')
+            ->build();
+
+        $response = $command->execute();
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('object', gettype($response->getObject()->getData()));
+    }
 }

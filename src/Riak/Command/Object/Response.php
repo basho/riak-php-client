@@ -39,9 +39,16 @@ class Response extends \Basho\Riak\Command\Response
      */
     protected $siblings = [];
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    /**
+     * @var bool
+     */
+    private $decodeAsAssociative = false;
+
+    public function __construct($statusCode, $headers = [], $body = '', $decodeAsAssociative = false)
     {
         parent::__construct($statusCode, $headers, $body);
+
+        $this->decodeAsAssociative = $decodeAsAssociative;
 
         // make sure body is not only whitespace
         if (trim($body) && !$this->hasSiblings()) {
@@ -63,7 +70,8 @@ class Response extends \Basho\Riak\Command\Response
     {
         $headers = $this->headers;
         if (in_array($headers['Content-Type'], ['application/json', 'text/json'])) {
-            $data = json_decode($this->body);
+            $data = json_decode($this->body, $this->decodeAsAssociative);
+
         } else {
             $data = rawurldecode($this->body);
         }
