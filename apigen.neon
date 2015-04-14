@@ -1,3 +1,5 @@
+# execute from the root directory
+# ./vendor/bin/apigen generate
 source:         src
 
 destination:    ../docs/riak-php-client
