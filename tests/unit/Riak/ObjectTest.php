@@ -21,8 +21,6 @@ use Basho\Riak\Object;
 use Basho\Tests\TestCase;
 
 /**
- * Class ObjectTest
- *
  * Test set for key value objects
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

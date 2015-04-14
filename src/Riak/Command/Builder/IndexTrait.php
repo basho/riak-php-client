@@ -18,12 +18,9 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Command\Builder;
 
 /**
- * Class IndexTrait
- *
  * Allows easy code sharing for Bucket getters / setters within the Command Builders
  *
  * @author Alex Moore <amoore at basho d0t com>
- * @package Basho\Riak\Command\Builder
  */
 trait IndexTrait
 {

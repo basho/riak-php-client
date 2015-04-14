@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Command;
 
 /**
- * Class QueryIndex
- *
  * Used to query a secondary index in Riak.
  *
  * <code>

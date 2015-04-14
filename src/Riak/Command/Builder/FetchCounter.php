@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Command;
 
 /**
- * Class FetchCounter
- *
  * Used to fetch counter objects from Riak
  *
  * <code>

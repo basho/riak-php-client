@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Command;
 
 /**
- * Class FetchMap
- *
  * Used to fetch map objects from Riak
  *
  * <code>

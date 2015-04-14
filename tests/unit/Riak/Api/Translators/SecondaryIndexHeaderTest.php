@@ -21,8 +21,6 @@ use Basho\Riak\Api;
 use Basho\Tests\TestCase;
 
 /**
- * Class ObjectTest
- *
  * Test set for the HTTP Header <-> Secondary Index translator
  *
  * @author Alex Moore <amoore at basho d0t com>

@@ -21,9 +21,7 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Fetch
- *
- * Used to fetch a counter
+ * Used to fetch a search index from Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

@@ -20,8 +20,6 @@ namespace Basho\Riak;
 use Basho\Riak\Command\Builder;
 
 /**
- * Class Command
- *
  * The command class is used to build a read or write command to be executed against a Riak node.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
@@ -157,6 +155,16 @@ abstract class Command
         return $this->convertHeaderArray($this->headers);
     }
 
+    protected function convertHeaderArray($headers)
+    {
+        $flatArray = [];
+        foreach ($headers as $key => $value) {
+            $flatArray[] = [$key, $value];
+        }
+
+        return $flatArray;
+    }
+
     /**
      * Command has parameters?
      *
@@ -187,13 +195,4 @@ abstract class Command
     abstract public function getData();
 
     abstract public function getEncodedData();
-
-    protected function convertHeaderArray($headers)
-    {
-        $flatArray = [];
-        foreach ($headers as $key => $value) {
-            $flatArray[] = [$key, $value];
-        }
-        return $flatArray;
-    }
 }

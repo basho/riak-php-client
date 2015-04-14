@@ -20,8 +20,6 @@ namespace Basho\Tests;
 use Basho\Riak\Command;
 
 /**
- * Class ObjectTest
- *
  * Functional tests related to Key-Value objects
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

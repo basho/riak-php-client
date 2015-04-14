@@ -21,10 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class StoreIndex
- *
- *
- *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class DeleteIndex extends Command\Builder implements Command\BuilderInterface

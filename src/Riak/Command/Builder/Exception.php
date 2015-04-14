@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Command\Builder;
 
 /**
- * Class Exception
- *
  * Exception thrown when there is an error within the validation of a built command.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

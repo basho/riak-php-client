@@ -20,9 +20,7 @@ namespace Basho\Riak\Command\Search;
 use Basho\Riak\Search\Doc;
 
 /**
- * Class Response
- *
- * Container for a response related to an operation on an object
+ * Container for a response for receiving data back from a Search request on Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

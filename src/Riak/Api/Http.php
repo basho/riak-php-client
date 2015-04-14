@@ -26,8 +26,6 @@ use Basho\Riak\Location;
 use Basho\Riak\Node;
 
 /**
- * Class Http
- *
  * Handles communications between end user app & Riak via Riak HTTP API using cURL
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
@@ -298,27 +296,6 @@ class Http extends Api implements ApiInterface
     }
 
     /**
-     * Prepares the request headers
-     *
-     * @return $this
-     */
-    protected function prepareRequestHeaders()
-    {
-        $curl_headers = [];
-
-        // getHeaders() Headers are expected in the following format:
-        // [[key, value], [key, value]...]
-        foreach ($this->command->getHeaders() as $key => $value) {
-            $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
-        }
-
-        // set the request headers on the connection
-        $this->options[CURLOPT_HTTPHEADER] = $curl_headers;
-
-        return $this;
-    }
-
-    /**
      * Prepares the complete request URL
      *
      * @return $this
@@ -345,6 +322,27 @@ class Http extends Api implements ApiInterface
             // build query using RFC 3986 (spaces become %20 instead of '+')
             $this->query = http_build_query($this->command->getParameters(), '', '&', PHP_QUERY_RFC3986);
         }
+
+        return $this;
+    }
+
+    /**
+     * Prepares the request headers
+     *
+     * @return $this
+     */
+    protected function prepareRequestHeaders()
+    {
+        $curl_headers = [];
+
+        // getHeaders() Headers are expected in the following format:
+        // [[key, value], [key, value]...]
+        foreach ($this->command->getHeaders() as $key => $value) {
+            $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
+        }
+
+        // set the request headers on the connection
+        $this->options[CURLOPT_HTTPHEADER] = $curl_headers;
 
         return $this;
     }

@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Node\Builder;
 
 /**
- * Class Exception
- *
  * Exception thrown when there is a validation error within a Builder object.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

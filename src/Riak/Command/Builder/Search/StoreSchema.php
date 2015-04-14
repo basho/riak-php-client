@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class StoreSchema
- *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class StoreSchema extends Command\Builder implements Command\BuilderInterface

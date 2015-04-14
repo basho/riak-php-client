@@ -20,8 +20,6 @@ namespace Basho\Riak\DataType;
 use Basho\Riak\DataType;
 
 /**
- * Class Map
- *
  * Data structure for map crdt
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

@@ -88,11 +88,12 @@ Here are the standards we expect to see when considering pull requests
 * Please suffix all Interfaces and Traits with the descriptors Interface and Trait, e.g. ObjectInterface & ObjectTrait
 
 ### Docblock Comments
-Complete docblock comments that follow the Pear / PHP standard not only assist in generating documentation, but also development, as IDE's like PHPStorm, ZendStudio, NetBeans, etc use the information found in the comments to improve the development experience. It is expected that any new code in the library is committed with appropriate docblock comments.
+It is expected that any new code is updated with a reasonable docblock comment. 
 
 This includes:
 
-* Short & long descriptions (where appropriate) for all new classes and all class members, properties and constants.
+* Short & long descriptions (where appropriate) for all classes and all class members, properties and constants.
+* Please add code examples where it makes sense using the <code> tag.
 * A @author tag need to be included on all new classes.
 * A @var tag on every class property
 * A @param tag for every parameter on a class method
@@ -102,12 +103,18 @@ This includes:
 Here is an example of a class docblock:
 ```php
 /**
- * Class Riak
- *
  * A more elaborate description of what this class does. It may include warnings, limitations or examples.
  *
+ * <code>
+ * $nodes = (new Node\Builder)
+ *   ->atHost('localhost')
+ *   ->onPort(8098)
+ *   ->build()
+ *
+ * $riak = new Riak($nodes);
+ * </code>
+ *
  * @author  Author Name <author@domain.com>
- * @since   2.0
  */
 ```
 

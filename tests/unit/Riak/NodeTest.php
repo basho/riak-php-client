@@ -21,8 +21,6 @@ use Basho\Riak\Node;
 use Basho\Tests\TestCase;
 
 /**
- * Class NodeTest
- *
  * Main class for testing Riak clustering
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

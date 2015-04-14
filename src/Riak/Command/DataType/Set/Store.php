@@ -22,9 +22,7 @@ use Basho\Riak\CommandInterface;
 use Basho\Riak\Location;
 
 /**
- * Class Store
- *
- * Stores a write to a set
+ * Stores a write update to a set
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

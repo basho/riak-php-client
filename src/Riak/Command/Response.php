@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Command;
 
 /**
- * Class Response
- *
  * Data structure for handling Command responses from Riak
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

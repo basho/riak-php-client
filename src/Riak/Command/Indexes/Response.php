@@ -19,8 +19,6 @@ namespace Basho\Riak\Command\Indexes;
 
 
 /**
- * Class Indexes\Response
- *
  * Container for a response related to an index query
  *
  * @author Alex Moore <amoore at basho d0t com>
@@ -52,6 +50,27 @@ class Response extends \Basho\Riak\Command\Response
         // make sure body is not only whitespace
         if (trim($body)) {
             $this->decodeBody($body);
+        }
+    }
+
+    private function decodeBody($body)
+    {
+        $body = json_decode(rawurldecode($body), true);
+
+        if (isset($body['keys'])) {
+            $this->results = $body['keys'];
+        }
+
+        if (isset($body['results'])) {
+            $this->results = $body['results'];
+            $this->termsReturned = true;
+        }
+
+        if (isset($body['continuation'])) {
+            $this->continuation = $body['continuation'];
+            $this->done = false;
+        } else {
+            $this->done = true;
         }
     }
 
@@ -102,28 +121,6 @@ class Response extends \Basho\Riak\Command\Response
     public function getDate()
     {
         return $this->getHeader('Date');
-    }
-
-    private function decodeBody($body)
-    {
-        $body = json_decode(rawurldecode($body), true);
-
-        if(isset($body['keys'])) {
-            $this->results = $body['keys'];
-        }
-
-        if(isset($body['results'])) {
-            $this->results = $body['results'];
-            $this->termsReturned = true;
-        }
-
-        if(isset($body['continuation'])) {
-            $this->continuation = $body['continuation'];
-            $this->done = false;
-        }
-        else{
-            $this->done = true;
-        }
     }
 
     public function isDone()

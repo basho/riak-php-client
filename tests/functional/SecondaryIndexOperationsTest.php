@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Riak\Object;
 
 /**
- * Class SecondaryIndexOperationsTest
- *
  * Functional tests related to secondary indexes
  *
  * @author Alex Moore <amoore at basho d0t com>

@@ -21,8 +21,6 @@ use Basho\Riak\Node\Config;
 use Basho\Riak\Node\Response;
 
 /**
- * Class Node
- *
  * Contains the connection configuration to connect to a Riak node.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

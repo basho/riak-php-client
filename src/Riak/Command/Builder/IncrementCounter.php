@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class IncrementCounter
- *
  * Used to increment counter objects in Riak by the provided positive / negative integer
  *
  * <code>

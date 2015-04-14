@@ -18,9 +18,6 @@ namespace Basho\Riak\Api\Translators;
 
 
 /**
- * Class SecondaryIndexHeaderTranslator
- * @package Basho\Riak\Api\Translators
- *
  * @author Alex Moore <amoore at basho d0t com>
  */
 class SecondaryIndexHeaderTranslator
@@ -30,6 +27,11 @@ class SecondaryIndexHeaderTranslator
     const IDX_SUFFIX_LEN = 4;
     const IDX_HEADER_PREFIX = "x-riak-index-";
     const IDX_HEADER_PREFIX_LEN = 13;
+
+    public static function isIntIndex($headerKey)
+    {
+        return static::indexNameContainsTypeSuffix($headerKey, self::INT_INDEX_SUFFIX);
+    }
 
     public function extractIndexesFromHeaders(&$headers)
     {
@@ -48,35 +50,6 @@ class SecondaryIndexHeaderTranslator
         return $indexes;
     }
 
-    public function createHeadersFromIndexes($indexes)
-    {
-        $headers = [];
-
-        foreach ($indexes as $indexName => $values) {
-            $this->createIndexHeader($headers, $indexName, $values);
-        }
-
-        return $headers;
-    }
-
-    public static function isStringIndex($headerKey)
-    {
-        return static::indexNameContainsTypeSuffix($headerKey, self::STR_IDX_SUFFIX);
-    }
-
-    public static function isIntIndex($headerKey)
-    {
-        return static::indexNameContainsTypeSuffix($headerKey, self::INT_INDEX_SUFFIX);
-    }
-
-    private function parseIndexHeader(&$indexes, $key, $rawValue)
-    {
-        $indexName = $this->getIndexNameWithType($key);
-        $value = $this->getIndexValue($indexName, $rawValue);
-
-        $indexes[$indexName] = $value;
-    }
-
     public static function isIndexHeader($headerKey)
     {
         if (strlen($headerKey) <= self::IDX_HEADER_PREFIX_LEN) {
@@ -86,10 +59,12 @@ class SecondaryIndexHeaderTranslator
         return substr_compare($headerKey, self::IDX_HEADER_PREFIX, 0, self::IDX_HEADER_PREFIX_LEN) == 0;
     }
 
-    private static function indexNameContainsTypeSuffix($indexName, $typeSuffix)
+    private function parseIndexHeader(&$indexes, $key, $rawValue)
     {
-        $nameLen = strlen($indexName) - self::IDX_SUFFIX_LEN;
-        return substr_compare($indexName, $typeSuffix, $nameLen) == 0;
+        $indexName = $this->getIndexNameWithType($key);
+        $value = $this->getIndexValue($indexName, $rawValue);
+
+        $indexes[$indexName] = $value;
     }
 
     private function getIndexNameWithType($key)
@@ -106,6 +81,29 @@ class SecondaryIndexHeaderTranslator
         } else {
             return array_map("intval", $values);
         }
+    }
+
+    public static function isStringIndex($headerKey)
+    {
+        return static::indexNameContainsTypeSuffix($headerKey, self::STR_IDX_SUFFIX);
+    }
+
+    private static function indexNameContainsTypeSuffix($indexName, $typeSuffix)
+    {
+        $nameLen = strlen($indexName) - self::IDX_SUFFIX_LEN;
+
+        return substr_compare($indexName, $typeSuffix, $nameLen) == 0;
+    }
+
+    public function createHeadersFromIndexes($indexes)
+    {
+        $headers = [];
+
+        foreach ($indexes as $indexName => $values) {
+            $this->createIndexHeader($headers, $indexName, $values);
+        }
+
+        return $headers;
     }
 
     private function createIndexHeader(&$headers, $indexName, $values)

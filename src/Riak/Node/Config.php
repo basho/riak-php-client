@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Node;
 
 /**
- * Class Config
- *
  * Configuration data structure object for connecting to a Riak node.
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

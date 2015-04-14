@@ -1,0 +1,9 @@
+source:         src
+
+destination:    ../docs/riak-php-client
+
+templateTheme:  bootstrap
+
+title:          Official Riak Client for PHP
+
+tree:           true

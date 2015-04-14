@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Class Query
- *
  * Riak 2i query information.
  *
  * @author Alex Moore <amoore at basho d0t com>

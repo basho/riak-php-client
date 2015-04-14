@@ -21,8 +21,6 @@ use Basho\Riak\Location;
 use Basho\Riak\Object;
 
 /**
- * Class Object\Response
- *
  * Container for a response related to an operation on an object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

@@ -23,8 +23,6 @@ use Basho\Riak\Location;
 
 
 /**
- * Class Store
- *
  * Stores a write operation to a CRDT counter
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

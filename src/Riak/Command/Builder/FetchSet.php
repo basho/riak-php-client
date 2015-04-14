@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Command;
 
 /**
- * Class FetchSet
- *
  * Used to fetch set objects from Riak
  *
  * <code>

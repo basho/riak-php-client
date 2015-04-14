@@ -20,8 +20,6 @@ namespace Basho\Tests;
 use Basho\Riak\Command;
 
 /**
- * Class MapTest
- *
  * Functional tests related to Counter CRDTs
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

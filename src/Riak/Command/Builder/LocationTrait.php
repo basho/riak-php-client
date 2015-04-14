@@ -21,8 +21,6 @@ use Basho\Riak\Bucket;
 use Basho\Riak\Location;
 
 /**
- * Class LocationTrait
- *
  * Allows easy code sharing for Location getters / setters within the Command Builders
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

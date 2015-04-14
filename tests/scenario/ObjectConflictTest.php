@@ -21,8 +21,6 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Class NodeUnreachableTest
- *
  * Scenario tests for when Kv Object changes result in a conflict
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

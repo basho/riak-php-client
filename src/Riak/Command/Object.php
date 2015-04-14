@@ -21,8 +21,6 @@ use Basho\Riak\Command;
 use Basho\Riak\Location;
 
 /**
- * Class Object
- *
  * Base class for Commands performing operations on Kv Objects
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

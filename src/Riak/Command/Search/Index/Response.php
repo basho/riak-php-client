@@ -18,8 +18,6 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Command\Search\Index;
 
 /**
- * Class Response
- *
  * Container for a response related to an operation on an object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

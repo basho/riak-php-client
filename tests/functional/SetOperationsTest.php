@@ -20,8 +20,6 @@ namespace Basho\Tests;
 use Basho\Riak\Command;
 
 /**
- * Class SetTest
- *
  * Functional tests related to Set CRDTs
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

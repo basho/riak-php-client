@@ -20,8 +20,6 @@ namespace Basho\Riak\Command\Builder;
 use Basho\Riak\Command;
 
 /**
- * Class DeleteObject
- *
  * Used to delete a KV object from Riak
  *
  * <code>
