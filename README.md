@@ -139,4 +139,6 @@ We also expect that before submitting a pull request, that you have run the test
 
 To run the tests, clone this repository and run `composer update` from the repository root, then you can execute all the tests by simply running `php vendor/bin/phpunit`. To execute only a single group of tests, you can use the "testsuite" argument, e.g. `php vendor/bin/phpunit --testsuite 'Unit Tests'`.
 
+You can execute code coverage analysis along side the test run by appending ` --coverage-text` to the command above.
+
 Please note, that the Functional and Scenario tests require a live Riak instance to test against.
