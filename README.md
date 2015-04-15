@@ -3,18 +3,6 @@ This is the official PHP client for Riak.
 
 [![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
 
-## RoadMap
-* Current develop & master branches contain the legacy 1.4.x release of this library.
-* A Riak 2 rewrite is under active development in the 2.0.x branch
-  * Shooting for a mid Q1 release candidate
-  * Design goals are simplicity, extendability and stability
-  * Follow PHP community standards for code style, docblock comments and use PHPUnit
-  * Post questions, concerns and requests as Issues to open up a discussion
-  * It will only use the HTTP Api for Riak at release
-    * Decision was due to lack of PB library that doesn't depend on PHP extension with good PB message class generation
-    * Plan for future by following Adapter design pattern so each API driver / adapter is interchangeable
-  * It will make use of Traits, Abstract classes and Interfaces so app developers can extend and add any functionality they need
-
 ## Contributing
 This is an open source project licensed under the Apache 2.0 License. We encourage and welcome contributions to the
 project from the community. We ask that you keep in mind these considerations when planning your contribution.
@@ -61,7 +49,7 @@ Here is an example of a class docblock:
 
 ## Documentation ##
 API documentation for this library can be found at<br/>
-<http://basho.github.com/riak-php-client/>
+<http://basho.github.io/riak-php-client/archive/1.4.x>
 
 (See **Documentation Maintenance** at the bottom of the README for instructions on updating the docs.)
 
