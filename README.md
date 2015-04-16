@@ -27,48 +27,53 @@ To see other clients available for use with Riak visit our
 Run the following `composer` command:
 
 ```console
-$ composer require "basho/riak-php-client:1.4.*"
+$ composer require "basho/riak": "2.0.*"
 ```
 
 Alternately, manually add the following to your `composer.json`, in the `require` section:
 
 ```javascript
 "require": {
-    "basho/riak-php-client": "1.4.*"
+    "basho/riak": "2.0.*"
 }
 ```
 
 And then run `composer update` to ensure the module is installed.
 
 ## Documentation
-* Master: [![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
+[![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
 
-A fully traversable version of the API documentation for this library can be found on [Github Pages](http://basho.github.com/riak-php-client). 
+A fully traversable version of the API documentation for this library can be found on [Github Pages](http://basho.github.io/riak-php-client). 
 
 ### Releases
 The release tags of this project have been aligned with the major & minor release versions of Riak. For example, if you are using version 1.4.9 of Riak, then you will want the latest 1.4.* version of this library.
 
-
 ### Example Usage *TODO UPDATE*
 Below is a short example of using the client. More substantial sample code is available [in examples](/examples).
 ```php
+// lib classes are included via the Composer autoloader files
 use Basho\Riak;
 use Basho\Riak\Node;
 use Basho\Riak\Command;
 
+// define the connection info to our Riak nodes
 $nodes = (new Node\Builder)
     ->onPort(10018)
     ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',]);
 
+// instantiate the Riak client
 $riak = new Riak($nodes);
 
+// build a command to be executed against Riak
 $command = (new Command\Builder\StoreObject($riak))
     ->buildObject('some_data')
     ->buildBucket('users')
     ->build();
     
+// Receive a response object
 $response = $command->execute($command);
 
+// Retrieve the Location of our newly stored object from the Response object
 $object_location = $response->getLocation();
 ```
 
@@ -84,19 +89,12 @@ The most helpful way to contribute is by reporting your experience through issue
 Thank you for being part of the community! We love you for it. 
 
 ## Roadmap
-* Current develop & master branches contain the legacy 1.4.x release of this library.
-* A client covering functoinality of Riak 2.x is under active development in the 2.0.x branch
-  * Shooting for a mid Q1 release candidate
-  * Design goals are simplicity, extendability and stability
-  * Follow PHP community standards for code style, docblock comments and use PHPUnit
-  * Post questions, concerns and requests as Issues to open up a discussion
-  * It will only use the HTTP Api for Riak at release
-    * Decision was due to lack of PB library that doesn't depend on PHP extension with good PB message class generation
-    * Plan for future by following Adapter design pattern so each API driver / adapter is interchangeable
-  * It will make use of Traits, Abstract classes and Interfaces so app developers can extend and add any functionality they need
+* Current develop & master branches contain feature support for Riak version 2.0
+* Development for Riak 2.1 features is underway and expected to be completed during Q2 2015
 
 ## License and Authors
 
-* Author: Christopher Mancini (<cmancini@basho.com>)
+* Author: Christopher Mancini (https://github.com/christophermancini)
+* Author: Alex Moore (https://github.com/alexmoore)
 
 Copyright (c) 2015 Basho Technologies, Inc. Licensed under the Apache License, Version 2.0 (the "License"). For more details, see [License](License).
