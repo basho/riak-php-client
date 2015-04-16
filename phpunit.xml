@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Unit Tests">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="Functional Tests">
+            <directory>tests/functional</directory>
+            <exclude>tests/functional/SecurityFeaturesTest.php</exclude>
+        </testsuite>
+        <testsuite name="Scenario Tests">
+            <directory>tests/scenario</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
