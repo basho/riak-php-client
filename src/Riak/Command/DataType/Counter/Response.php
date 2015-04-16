@@ -44,17 +44,6 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * Retrieves the Vclock value from the response headers
-     *
-     * @return string
-     * @throws \Basho\Riak\Command\Exception
-     */
-    public function getVclock()
-    {
-        return $this->getHeader('X-Riak-Vclock');
-    }
-
-    /**
      * Retrieves the Location value from the response headers
      *
      * @return string
@@ -71,14 +60,6 @@ class Response extends \Basho\Riak\Command\Response
     public function getCounter()
     {
         return $this->counter;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNotFound()
-    {
-        return $this->statusCode == '404' ? TRUE : FALSE;
     }
 
     /**

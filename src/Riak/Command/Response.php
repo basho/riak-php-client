@@ -83,4 +83,28 @@ class Response
 
         return $this->headers[$key];
     }
+
+    /**
+     * @return bool
+     */
+    public function isNotFound()
+    {
+        return $this->statusCode == '404' ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnauthorized()
+    {
+        return $this->statusCode == '401' ? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess()
+    {
+        return in_array($this->statusCode, ['200', '201', '204']) ? true : false;
+    }
 }

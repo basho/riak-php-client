@@ -132,8 +132,6 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      * @param bool $state
      *
      * @return $this
-     * @internal param $value
-     *
      */
     public function updateFlag($key, $state = TRUE)
     {

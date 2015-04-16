@@ -63,15 +63,7 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return bool
-     */
-    public function isNotFound()
-    {
-        return $this->statusCode == '404' ? TRUE : FALSE;
-    }
-
-    /**
-     * Retrieves the date of the counter's retrieval
+     * Retrieves the date of the map's retrieval
      *
      * @return string
      * @throws \Basho\Riak\Command\Exception

@@ -120,4 +120,9 @@ class Map extends DataType
     {
         return new Map($this->getDataByKey($key, Map::TYPE), $this->context, $this->headers);
     }
+
+    public function getContext()
+    {
+        return $this->context;
+    }
 }

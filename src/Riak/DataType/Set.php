@@ -57,4 +57,9 @@ class Set extends DataType
     {
         return $this->data;
     }
+
+    public function getContext()
+    {
+        return $this->context;
+    }
 }
