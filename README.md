@@ -1,7 +1,5 @@
 # Riak Client for PHP
 
-**NOTICE: THE 2.0.X BRANCH IS UNDER ACTIVE DEVELOPMENT AND SHOULD NOT BE USED IN PRODUCTION AT THIS TIME**
-
 **Riak PHP Client** is a client which makes it easy to communicate with [Riak](http://basho.com/riak/), an open source, distributed database that focuses on high availability, horizontal scalability, and *predictable*
 latency. Both Riak and this code is maintained by [Basho](http://www.basho.com/). 
 
@@ -41,7 +39,7 @@ Alternately, manually add the following to your `composer.json`, in the `require
 And then run `composer update` to ensure the module is installed.
 
 ## Documentation
-[![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
+* Master: [![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
 
 A fully traversable version of the API documentation for this library can be found on [Github Pages](http://basho.github.io/riak-php-client). 
 
