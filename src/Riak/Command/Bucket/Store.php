@@ -21,7 +21,7 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Riak key value object store
+ * Used to set a bucket property on a bucket
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

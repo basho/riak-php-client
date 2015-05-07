@@ -1,6 +1,7 @@
 {
   "name": "basho/riak",
   "description": "Official Riak client for PHP",
+  "type": "library",
   "keywords": [
     "basho",
     "riak",
@@ -17,8 +18,16 @@
   "license": "Apache-2.0",
   "authors": [
     {
-      "name": "Riak Team & Contributors",
-      "homepage": "https://github.com/basho/riak-php-client/contributors"
+      "name": "Christopher Mancini",
+      "email": "cmancini@basho.com",
+      "homepage": "https://github.com/christophermancini",
+      "role": "Lead Developer"
+    },
+    {
+      "name": "Alex Moore",
+      "email": "amoore@basho.com",
+      "homepage": "https://github.com/alexmoore",
+      "role": "Developer"
     }
   ],
   "autoload": {
@@ -26,6 +35,9 @@
   },
   "autoload-dev": {
     "psr-4": {"Basho\\Tests\\": "tests/"}
+  },
+  "support": {
+    "issues": "https://github.com/sebastianbergmann/phpunit/issues"
   },
   "repositories": [
     {

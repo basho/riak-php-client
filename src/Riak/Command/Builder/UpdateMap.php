@@ -221,6 +221,11 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
             throw new Exception('At least one add, remove, or update operation needs to be defined.');
         }
 
+        if ($count_remove) {
+            $this->required('Location');
+            $this->required('Context');
+        }
+
         // if we are performing a remove on a nested set, Location and context are required
         if ($count_sets) {
             foreach ($this->sets as $set) {
