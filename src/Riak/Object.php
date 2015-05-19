@@ -99,6 +99,11 @@ class Object
 
     private function validateIndexNameAndValue($indexName, $value)
     {
+        if (!is_scalar($value)) {
+            throw new \InvalidArgumentException("Invalid index type for '" . $indexName .
+                "'index. Expecting '*_int' for an integer index, or '*_bin' for a string index.");
+        }
+
         $isIntIndex = SecondaryIndexHeaderTranslator::isIntIndex($indexName);
         $isStringIndex = SecondaryIndexHeaderTranslator::isStringIndex($indexName);
 
@@ -112,7 +117,7 @@ class Object
                 "'index. Expecting 'integer', value was '" . gettype($value) . "''");
         }
 
-        if ($isStringIndex && !is_scalar($value)) {
+        if ($isStringIndex && is_int($value)) {
             throw new \InvalidArgumentException("Invalid type for '" . $indexName .
                 "'index. Expecting 'string', value was '" . gettype($value) . "''");
         }
