@@ -117,7 +117,7 @@ class Object
                 "'index. Expecting 'integer', value was '" . gettype($value) . "''");
         }
 
-        if ($isStringIndex && is_int($value)) {
+        if ($isStringIndex && !is_string($value)) {
             throw new \InvalidArgumentException("Invalid type for '" . $indexName .
                 "'index. Expecting 'string', value was '" . gettype($value) . "''");
         }
