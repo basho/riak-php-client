@@ -26,7 +26,19 @@ use Basho\Riak\Command;
  */
 class MapOperationsTest extends TestCase
 {
+    /**
+     * Key to be used for tests
+     *
+     * @var string
+     */
     private static $key = '';
+
+    /**
+     * Array of context generated from working with the same Set
+     *
+     * @var array
+     */
+    private static $context = [];
 
     public static function setUpBeforeClass()
     {
@@ -98,16 +110,7 @@ class MapOperationsTest extends TestCase
         // this is wonky, its not 201 because the key may have been generated on another node
         $this->assertEquals('204', $response->getStatusCode());
         $this->assertEmpty($response->getLocation());
-    }
 
-    /**
-     * @depends      testAddNewWithKey
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchOk($riak)
-    {
         $command = (new Command\Builder\FetchMap($riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
@@ -124,10 +127,13 @@ class MapOperationsTest extends TestCase
 
         $this->assertInstanceOf('Basho\Riak\DataType\Counter', $map->getCounter('teams'));
         $this->assertEquals(1, $map->getCounter('teams')->getData());
+        $this->assertNotEmpty($map->getContext());
+
+        static::$context[] = $response->getMap()->getContext();
     }
 
     /**
-     * @depends      testFetchOk
+     * @depends      testAddNewWithKey
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -153,6 +159,27 @@ class MapOperationsTest extends TestCase
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
+
+        $command = (new Command\Builder\FetchMap($riak))
+            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute();
+
+        $map = $response->getMap();
+
+        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertInstanceOf('Basho\Riak\DataType\Map', $response->getMap());
+
+        $this->assertInstanceOf('Basho\Riak\DataType\Set', $map->getSet('ATLANTIC_DIVISION'));
+        $this->assertEquals(3, count($map->getSet('ATLANTIC_DIVISION')->getData()));
+
+        $this->assertInstanceOf('Basho\Riak\DataType\Counter', $map->getCounter('teams'));
+        $this->assertEquals(3, $map->getCounter('teams')->getData());
+
+        $this->assertTrue($map->getFlag('expansion_year'));
+
+        static::$context[] = $response->getMap()->getContext();
     }
 
     /**
@@ -160,34 +187,8 @@ class MapOperationsTest extends TestCase
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
-     */
-    public function testFetchOk2($riak)
-    {
-        $command = (new Command\Builder\FetchMap($riak))
-            ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
-            ->build();
-
-        $response = $command->execute();
-
-        $map = $response->getMap();
-
-        $this->assertEquals('200', $response->getStatusCode());
-        $this->assertInstanceOf('Basho\Riak\DataType\Map', $response->getMap());
-
-        $this->assertInstanceOf('Basho\Riak\DataType\Set', $map->getSet('ATLANTIC_DIVISION'));
-        $this->assertEquals(3, count($map->getSet('ATLANTIC_DIVISION')->getData()));
-
-        $this->assertInstanceOf('Basho\Riak\DataType\Counter', $map->getCounter('teams'));
-        $this->assertEquals(3, $map->getCounter('teams')->getData());
-
-        $this->assertTrue($map->getFlag('expansion_year'));
-    }
-
-    /**
-     * @depends      testFetchOk2
-     * @dataProvider getLocalNodeConnection
      *
-     * @param $riak \Basho\Riak
+     * @expectedException \Basho\Riak\DataType\Exception
      */
     public function testRemoveExisting($riak)
     {
@@ -195,29 +196,19 @@ class MapOperationsTest extends TestCase
             ->remove('Thrashers')
             ->add('Lightning');
 
-        // build a map update command
+        // build a map update command with stale context
         $command = (new Command\Builder\UpdateMap($riak))
             ->removeFlag('expansion_year')
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
+            ->withContext(static::$context[0])
             ->build();
 
         $response = $command->execute();
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
-    }
 
-    /**
-     * @depends      testRemoveExisting
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
-     * @expectedException \Basho\Riak\DataType\Exception
-     */
-    public function testFetchOk3($riak)
-    {
         $command = (new Command\Builder\FetchMap($riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
@@ -236,10 +227,12 @@ class MapOperationsTest extends TestCase
         $this->assertEquals(3, $map->getCounter('teams')->getData());
 
         $this->assertTrue($map->getFlag('expansion_year'));
+
+        static::$context[] = $response->getMap()->getContext();
     }
 
     /**
-     * @depends      testFetchOk3
+     * @depends      testRemoveExisting
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
@@ -260,16 +253,7 @@ class MapOperationsTest extends TestCase
 
         // 204 - No Content
         $this->assertEquals('204', $response->getStatusCode());
-    }
 
-    /**
-     * @depends      testAddMapExisting
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchOk4($riak)
-    {
         $command = (new Command\Builder\FetchMap($riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
@@ -283,5 +267,7 @@ class MapOperationsTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\DataType\Map', $map->getMap('preferences'));
         $this->assertEquals('Email Alerts', $map->getMap('preferences')->getRegister('label'));
         $this->assertFalse($map->getMap('preferences')->getFlag('notifications'));
+
+        static::$context[] = $response->getMap()->getContext();
     }
 }
