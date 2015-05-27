@@ -1,13 +1,42 @@
 language: php
+
 php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
   - hhvm
-sudo: false # enables docker
-install:
+
+# enables docker
+sudo: false
+
+addons:
+  hosts:
+    - riak-test
+
+before_script:
+  - composer self-update
   - composer install
+  - riak-admin bucket-type create phptest_counters '{"props":{"datatype":"counter"}}'
+  - riak-admin bucket-type create phptest_maps '{"props":{"datatype":"map"}}'
+  - riak-admin bucket-type create phptest_sets '{"props":{"datatype":"set"}}'
+  - riak-admin bucket-type create phptest_search '{"props":{}}'
+  - riak-admin bucket-type create phptest_leveldb '{"props":{"backend":"leveldb_backend"}}'
+  - riak-admin bucket-type activate phptest_counters
+  - riak-admin bucket-type activate phptest_maps
+  - riak-admin bucket-type activate phptest_sets
+  - riak-admin bucket-type activate phptest_search
+  - riak-admin bucket-type activate phptest_leveldb
+
 notifications:
   webhooks: http://basho-engbot.herokuapp.com/travis?key=8d594c660ec46f616e37e24fd941c0ea1fc67963
   email: clients@basho.com
-script: "php vendor/bin/phpunit --testsuite 'Unit Tests'"
+
+script: "./vendor/bin/phpunit --coverage-text"
+
+services:
+  - riak
+
+matrix:
+  allow_failures:
+    - php: 7.0
