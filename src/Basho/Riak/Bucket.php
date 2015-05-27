@@ -64,19 +64,12 @@ class Bucket
     /**
      * Get the R-value for this bucket
      *
-     * Returns the buckets R-value If it is set,
-     * otherwise return the R-value for the client.
-     *
-     * @param null $r
+     * Returns the buckets R-value If it is set, otherwise return the R-value for the client.
      *
      * @return int
      */
-    public function getR($r = null)
+    public function getR()
     {
-        if ($r != null) {
-            return $r;
-        }
-
         if ($this->r != null) {
             return $this->r;
         }
@@ -106,19 +99,12 @@ class Bucket
     /**
      * Get the W-value for this bucket
      *
-     * If it is set for this bucket, otherwise return
-     * the W-value for the client.
-     *
-     * @param $w
+     * If it is set for this bucket, otherwise return the W-value for the client.
      *
      * @return int
      */
-    public function getW($w)
+    public function getW()
     {
-        if ($w != null) {
-            return $w;
-        }
-
         if ($this->w != null) {
             return $this->w;
         }
@@ -145,19 +131,12 @@ class Bucket
     /**
      * Get the DW-value for this bucket
      *
-     * If it is set for this bucket, otherwise return
-     * the DW-value for the client.
-     *
-     * @param $dw
+     * If it is set for this bucket, otherwise return the DW-value for the client.
      *
      * @return int
      */
-    public function getDW($dw)
+    public function getDW()
     {
-        if ($dw != null) {
-            return $dw;
-        }
-
         if ($this->dw != null) {
             return $this->dw;
         }
@@ -223,13 +202,13 @@ class Bucket
      *
      * @param  string $key - Name of the key.
      * @param  int $r   - R-Value of the request (defaults to bucket's R)
+     *
      * @return Object
      */
     public function get($key, $r = null)
     {
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = true;
-        $r = $this->getR($r);
 
         return $obj->reload($r);
     }
@@ -246,7 +225,6 @@ class Bucket
     {
         $obj = new Object($this->client, $this, $key);
         $obj->jsonize = false;
-        $r = $this->getR($r);
 
         return $obj->reload($r);
     }
@@ -261,6 +239,8 @@ class Bucket
      * only be used if you know what you are doing.
      *
      * @param integer $nval - The new N-Val.
+     *
+     * @return bool
      */
     public function setNVal($nval)
     {
@@ -286,6 +266,8 @@ class Bucket
      * if you know what you are doing.
      *
      * @param  boolean $bool - True to store and return conflicting writes.
+     *
+     * @return bool
      */
     public function setAllowMultiples($bool)
     {
@@ -309,6 +291,8 @@ class Bucket
      *
      * @param  string $key - Property to set.
      * @param  mixed $value - Property value.
+     *
+     * @return bool
      */
     public function setProperty($key, $value)
     {
@@ -338,6 +322,7 @@ class Bucket
      *
      * @param  array $props - An associative array of $key=>$value.
      *
+     * @return bool
      * @throws Exception
      */
     public function setProperties($props)
@@ -360,6 +345,8 @@ class Bucket
         if ($status != 204) {
             throw new Exception("Error setting bucket properties.");
         }
+
+        return true;
     }
 
     /**

@@ -621,8 +621,8 @@ class Object
     public function store($w = null, $dw = null, $returnbody = 'true')
     {
         # Use defaults if not specified...
-        $w = $this->bucket->getW($w);
-        $dw = $this->bucket->getDW($dw);
+        $w = $w ? $w : $this->bucket->getW();
+        $dw = $dw ? $dw : $this->bucket->getDW();
 
         $status_codes = array(200, 201, 300);
         $method = 'POST';
@@ -716,15 +716,17 @@ class Object
      *
      * @param integer $r - R-Value, wait for this many partitions to respond
      * before returning to client.
+     *
      * @return $this
      */
     public function reload($r = null)
     {
-        # Do the request...
-        $r = $this->bucket->getR($r);
+        $r = $r ? $r : $this->bucket->getR();
         $params = array('r' => $r);
         $url = Utils::buildRestPath($this->client, $this->bucket, $this->key, null, $params);
+
         $response = Utils::httpRequest('GET', $url);
+
         $this->populate($response, array(200, 300, 404));
 
         # If there are siblings, load the data for the first one by default...
@@ -746,7 +748,7 @@ class Object
     public function delete($dw = null)
     {
         # Use defaults if not specified...
-        $dw = $this->bucket->getDW($dw);
+        $dw = $dw ? $dw : $this->bucket->getDW();
 
         # Construct the URL...
         $params = array('dw' => $dw);
@@ -969,7 +971,7 @@ class Object
     public function getSibling($i, $r = null)
     {
         # Use defaults if not specified.
-        $r = $this->bucket->getR($r);
+        $r = $r ? $r : $this->bucket->getR();
 
         # Run the request...
         $vtag = $this->siblings[$i];
