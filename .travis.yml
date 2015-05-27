@@ -7,8 +7,7 @@ php:
   - 7.0
   - hhvm
 
-# enables docker
-sudo: false
+sudo: required
 
 addons:
   hosts:
@@ -16,7 +15,7 @@ addons:
 
 before_script:
   - composer self-update
-  - composer install
+  - composer install --prefer-source
   - riak-admin bucket-type create phptest_counters '{"props":{"datatype":"counter"}}'
   - riak-admin bucket-type create phptest_maps '{"props":{"datatype":"map"}}'
   - riak-admin bucket-type create phptest_sets '{"props":{"datatype":"set"}}'
