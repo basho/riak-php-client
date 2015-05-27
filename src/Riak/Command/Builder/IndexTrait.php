@@ -277,7 +277,7 @@ trait IndexTrait
      *
      * @return $this
      */
-    public function withReturnTerms($returnTerms)
+    public function withReturnTerms($returnTerms = true)
     {
         $this->returnTerms = $returnTerms;
         return $this;

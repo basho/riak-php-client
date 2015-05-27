@@ -21,7 +21,7 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Used to remove an object from Riak
+ * Used to remove a bucket property from a Riak bucket
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */

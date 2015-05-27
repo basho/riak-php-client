@@ -33,11 +33,6 @@ class ObjectOperationsTest extends TestCase
      */
     private static $object = NULL;
 
-    /**
-     * @var array|null
-     */
-    private static $vclock = NULL;
-
     public static function setUpBeforeClass()
     {
         // make completely random key based on time
@@ -180,6 +175,9 @@ class ObjectOperationsTest extends TestCase
         $response = $command->execute();
 
         $this->assertEquals('404', $response->getStatusCode());
+
+        // deleted key's still leave behind a tombstone with their causal context, aka vclock
+        $this->assertNotEmpty($response->getVclock());
     }
 
     /**
