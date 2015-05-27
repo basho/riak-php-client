@@ -68,7 +68,7 @@ class SecurityFeaturesTest extends TestCase
             (new Riak\Node\Builder())
                 ->atHost(static::TEST_NODE_HOST)
                 ->onPort(static::TEST_NODE_SECURE_PORT)
-                ->usingPasswordAuthentication('passuser', 'Test1234')
+                ->usingPasswordAuthentication('riakpass', 'Test1234')
                 ->withCertificateAuthorityFile(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem')
                 ->build()
         ];
