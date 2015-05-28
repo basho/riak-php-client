@@ -68,13 +68,6 @@ class Riak
     ];
 
     /**
-     * Unique id for this client connection
-     *
-     * @var string
-     */
-    protected $clientId = '';
-
-    /**
      * The actively connected Riak Node from the ring
      *
      * @var int
@@ -99,8 +92,6 @@ class Riak
      */
     public function __construct(array $nodes, array $config = [], Api $api = NULL)
     {
-        $this->clientId = 'php_' . base_convert(mt_rand(), 10, 36);
-
         // wash any custom keys if any
         $this->nodes = array_values($nodes);
         $this->setActiveNodeIndex($this->pickNode());
@@ -114,7 +105,7 @@ class Riak
             $this->api = $api;
         } else {
             // default to HTTP bridge class
-            $this->api = new Http($this->getClientID(), $this->config);
+            $this->api = new Http($this->config);
         }
     }
 
@@ -163,14 +154,6 @@ class Riak
     public function getConfigValue($key)
     {
         return $this->config[$key];
-    }
-
-    /**
-     * @return string
-     */
-    public function getClientID()
-    {
-        return $this->clientId;
     }
 
     /**
