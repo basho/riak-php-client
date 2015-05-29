@@ -44,18 +44,6 @@ class RiakTest extends TestCase
      *
      * @param $nodes array
      */
-    public function testClientId($nodes)
-    {
-        $riak = new Riak($nodes);
-        $this->assertNotEmpty($riak->getClientID());
-        $this->assertRegExp('/^php_([a-z0-9])+$/', $riak->getClientID());
-    }
-
-    /**
-     * @dataProvider getCluster
-     *
-     * @param $nodes array
-     */
     public function testConfig($nodes)
     {
         $riak = new Riak($nodes, ['max_connect_attempts' => 5]);

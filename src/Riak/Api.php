@@ -69,17 +69,14 @@ abstract class Api
      */
     protected $node = null;
 
-    protected $clientId = '';
-
     protected $success = null;
 
     protected $error = '';
 
     protected $config = [];
 
-    public function __construct($clientId, array $config = [])
+    public function __construct(array $config = [])
     {
-        $this->clientId = $clientId;
         $this->config = $config;
     }
 
@@ -89,14 +86,6 @@ abstract class Api
     public function getError()
     {
         return $this->error;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClientId()
-    {
-        return $this->clientId;
     }
 
     /**
