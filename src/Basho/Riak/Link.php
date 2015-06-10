@@ -28,6 +28,11 @@ namespace Basho\Riak;
 class Link
 {
     /**
+     * @var Riak|null
+     */
+    public $client = null;
+
+    /**
      * Construct a Link object.
      * @param string $bucket - The bucket name.
      * @param string $key - The key.
@@ -72,7 +77,7 @@ class Link
 
     /**
      * Set the bucket name of this link.
-     * @param string $name - The bucket name.
+     * @param $bucket
      * @return $this
      */
     public function setBucket($bucket)
