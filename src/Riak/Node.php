@@ -202,6 +202,14 @@ class Node
     }
 
     /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->config->getConnectionTimeout();
+    }
+
+    /**
      * @param Command $command
      * @param Api $api
      *

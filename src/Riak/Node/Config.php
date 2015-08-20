@@ -95,6 +95,30 @@ class Config
     protected $private_key_password = '';
 
     /**
+     * Client side connection timeout
+     *
+     * @var int
+     */
+    protected $connection_timeout = 0;
+
+
+    /**
+     * @return int
+     */
+    public function getConnectionTimeout()
+    {
+        return $this->connection_timeout;
+    }
+
+    /**
+     * @param int $connection_timeout
+     */
+    public function setConnectionTimeout($connection_timeout)
+    {
+        $this->connection_timeout = $connection_timeout;
+    }
+
+    /**
      * @return string
      */
     public function getCaFile()
