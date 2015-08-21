@@ -37,7 +37,7 @@
     "psr-4": {"Basho\\Tests\\": "tests/"}
   },
   "support": {
-    "issues": "https://github.com/sebastianbergmann/phpunit/issues"
+    "issues": "https://github.com/basho/riak-php-client/issues"
   },
   "repositories": [
     {

@@ -176,8 +176,8 @@ class ObjectOperationsTest extends TestCase
 
         $this->assertEquals('404', $response->getStatusCode());
 
-        // deleted key's still leave behind a tombstone with their causal context, aka vclock
-        $this->assertNotEmpty($response->getVclock());
+        // deleted keys leave behind a tombstone with their causal context, aka vclock unless delete_immediate = 1
+        //$this->assertNotEmpty($response->getVclock());
     }
 
     /**
