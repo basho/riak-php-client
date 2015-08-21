@@ -62,7 +62,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     public function getLocalNodeConnection()
     {
         $node = $this->getLocalNode();
-        $api = $_ENV['PB_INTERFACE'] ? new Riak\Api\Pb() : null;
+        $api = !empty($_ENV['PB_INTERFACE']) ? new Riak\Api\Pb() : null;
 
         return [
             [
