@@ -45,13 +45,6 @@ abstract class Command
     protected $parameters = [];
 
     /**
-     * Command request headers
-     *
-     * @var array
-     */
-    protected $headers = [];
-
-    /**
      * @var Bucket|null
      */
     protected $bucket = null;
@@ -65,17 +58,6 @@ abstract class Command
      * @var \Basho\Riak|null
      */
     protected $riak = null;
-
-    /**
-     * Request headers
-     *
-     * <code>
-     * $headers = ['Content-Type: application/json; charset=utf-8'];
-     * </code>
-     *
-     * @var array
-     */
-    protected $requestHeaders = [];
 
     protected $verbose = false;
 
@@ -136,36 +118,6 @@ abstract class Command
     }
 
     /**
-     * @param $key string
-     *
-     * @return mixed
-     */
-    public function getHeader($key)
-    {
-        return $this->headers[$key];
-    }
-
-    /**
-     * @return array
-     */
-    public function getHeaders()
-    {
-        // N.B. - POST headers for 2i values can reuse the same header key many times,
-        //  so converting the Riak Object's headers associative array to an array of [[key,value]...] pairs.
-        return $this->convertHeaderArray($this->headers);
-    }
-
-    protected function convertHeaderArray($headers)
-    {
-        $flatArray = [];
-        foreach ($headers as $key => $value) {
-            $flatArray[] = [$key, $value];
-        }
-
-        return $flatArray;
-    }
-
-    /**
      * Command has parameters?
      *
      * @return bool
@@ -187,7 +139,18 @@ abstract class Command
 
     abstract public function setResponse($statusCode, $responseHeaders = [], $responseBody = '');
 
+    /**
+     * @return Location|null
+     */
     public function getLocation()
+    {
+        return null;
+    }
+
+    /**
+     * @return Object|null
+     */
+    public function getObject()
     {
         return null;
     }

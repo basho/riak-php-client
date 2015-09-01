@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Builder;
 
+use Basho\Riak;
 use Basho\Riak\Command;
 
 /**

@@ -17,9 +17,8 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
-use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
-use Basho\Riak\Link;
-use Basho\Riak\MapReduce;
+use Basho\Riak;
+use Basho\Riak\Api\Http\Translators\SecondaryIndexHeaderTranslator;
 
 /**
  * Main class for data objects in Riak
@@ -28,8 +27,6 @@ use Basho\Riak\MapReduce;
  */
 class Object
 {
-    use HeadersTrait;
-
     /**
      * Stored data or object
      *
@@ -39,11 +36,19 @@ class Object
 
     protected $indexes = [];
 
+    protected $vclock = '';
+
+    protected $content_type = 'text/plain';
+
+    protected $content_encoding = 'utf-8';
+
+    protected $charset = 'utf-8';
+
     /**
      * @param mixed|null $data
-     * @param array|null $headers
+     * @param array|null $headers DEPRECATED
      */
-    public function __construct($data = null, $headers = null)
+    public function __construct($data = null, $headers = [])
     {
         $this->data = $data;
 
@@ -54,7 +59,21 @@ class Object
         $translator = new SecondaryIndexHeaderTranslator();
         $this->indexes = $translator->extractIndexesFromHeaders($headers);
 
-        $this->headers = $headers;
+        // to prevent breaking the interface, parse $headers and place important stuff in new home
+        if (!empty($headers[Riak\Api\Http::CONTENT_TYPE_KEY])) {
+            // if charset is defined within the Content-Type header
+            if (strpos($headers[Riak\Api\Http::CONTENT_TYPE_KEY], 'charset')) {
+                $parts = explode(';', trim($headers[Riak\Api\Http::CONTENT_TYPE_KEY]));
+                $this->content_type = $parts[0];
+                $this->charset = trim(strrpos($parts[1], '='));
+            } else {
+                $this->content_type = $headers[Riak\Api\Http::CONTENT_TYPE_KEY];
+            }
+        }
+
+        if (!empty($headers[Riak\Api\Http::VCLOCK_KEY])) {
+            $this->content_type = $headers[Riak\Api\Http::VCLOCK_KEY];
+        }
     }
 
     public function getData()
@@ -71,7 +90,60 @@ class Object
 
     public function getContentType()
     {
-        return $this->getHeader('Content-Type');
+        return $this->content_type;
+    }
+
+    /**
+     * @param string $content_type
+     */
+    public function setContentType($content_type)
+    {
+        $this->content_type = $content_type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentEncoding()
+    {
+        return $this->content_encoding;
+    }
+
+    /**
+     * @param string $content_encoding
+     */
+    public function setContentEncoding($content_encoding)
+    {
+        $this->content_encoding = $content_encoding;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    /**
+     * @param string $charset
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
+    }
+
+    public function getVclock()
+    {
+        return $this->vclock;
+    }
+
+    /**
+     * @param string $vclock
+     */
+    public function setVclock($vclock)
+    {
+        $this->vclock = $vclock;
     }
 
     public function getIndexes()
@@ -135,11 +207,10 @@ class Object
             array_splice($this->indexes[$indexName], $valuePos, 1);
         }
 
-        if(count($this->indexes[$indexName]) == 0) {
+        if (count($this->indexes[$indexName]) == 0) {
             unset($this->indexes[$indexName]);
         }
 
         return $this;
     }
-
 }

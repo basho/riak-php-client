@@ -86,7 +86,7 @@ class ObjectConflictTest extends TestCase
     public function testResolveConflict($riak)
     {
         $command = (new Command\Builder\StoreObject($riak))
-            ->withHeader('X-Riak-Vclock', static::$vclock)
+            ->withVclock(static::$vclock)
             ->buildObject('some_resolved_data')
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
             ->build();

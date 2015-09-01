@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Api;
 
 use Basho\Riak\Api;
+use Basho\Riak\Api\Http\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\ApiInterface;
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
@@ -32,6 +33,10 @@ use Basho\Riak\Node;
  */
 class Http extends Api implements ApiInterface
 {
+    // Header keys
+    const VCLOCK_KEY = 'X-Riak-Vclock';
+    const CONTENT_TYPE_KEY = 'Content-Type';
+
     /**
      * cURL connection handle
      *
@@ -54,6 +59,8 @@ class Http extends Api implements ApiInterface
     protected $query = '';
 
     private $options = [];
+
+    protected $headers = [];
 
     public function closeConnection()
     {
@@ -174,7 +181,6 @@ class Http extends Api implements ApiInterface
 
         return $this;
     }
-
 
     /**
      * Generates the URL path for a 2i Query
@@ -335,14 +341,38 @@ class Http extends Api implements ApiInterface
     {
         $curl_headers = [];
 
-        // getHeaders() Headers are expected in the following format:
-        // [[key, value], [key, value]...]
-        foreach ($this->command->getHeaders() as $key => $value) {
+        foreach ($this->headers as $key => $value) {
             $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
+        }
+
+        // if we have an object, set appropriate object headers
+        $object = $this->command->getObject();
+        if ($object) {
+            if ($object->getVclock()) {
+                $curl_headers[] = sprintf('%s: %s', static::VCLOCK_KEY, $object->getVclock());
+            }
+
+            if ($object->getContentType()) {
+                $charset = '';
+                if ($object->getCharset()) {
+                    $charset = sprintf('; charset=%s', $object->getCharset());
+                }
+                $curl_headers[] = sprintf('%s: %s', static::CONTENT_TYPE_KEY, $object->getContentType(), $charset);
+            }
+
+            // setup index headers
+            $translator = new SecondaryIndexHeaderTranslator();
+            $indexHeaders = $translator->createHeadersFromIndexes($object->getIndexes());
+            foreach ($indexHeaders as $value) {
+                $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
+            }
         }
 
         // set the request headers on the connection
         $this->options[CURLOPT_HTTPHEADER] = $curl_headers;
+
+        // dump local headers to start fresh
+        $this->headers = [];
 
         return $this;
     }
@@ -422,6 +452,17 @@ class Http extends Api implements ApiInterface
         $this->statusCode = curl_getinfo($this->getConnection(), CURLINFO_HTTP_CODE);
 
         return $this->success;
+    }
+
+    /**
+     * Add a custom header to the request
+     *
+     * @param $key
+     * @param $value
+     */
+    public function addHeader($key, $value)
+    {
+        $this->headers[$key] = $value;
     }
 
     /**
