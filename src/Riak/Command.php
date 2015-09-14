@@ -65,7 +65,6 @@ abstract class Command
     {
         $this->riak = $builder->getConnection();
         $this->parameters = $builder->getParameters();
-        $this->headers = $builder->getHeaders();
         $this->verbose = $builder->getVerbose();
     }
 

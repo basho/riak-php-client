@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak;
 
 use Basho\Riak;
-use Basho\Riak\Api\Http\Translators\SecondaryIndexHeaderTranslator;
+use Basho\Riak\Api\Http\Translators\SecondaryIndexTranslator;
 
 /**
  * Main class for data objects in Riak
@@ -44,6 +44,8 @@ class Object
 
     protected $charset = 'utf-8';
 
+    protected $metadata = [];
+
     /**
      * @param mixed|null $data
      * @param array|null $headers DEPRECATED
@@ -56,7 +58,7 @@ class Object
             return;
         }
 
-        $translator = new SecondaryIndexHeaderTranslator();
+        $translator = new SecondaryIndexTranslator();
         $this->indexes = $translator->extractIndexesFromHeaders($headers);
 
         // to prevent breaking the interface, parse $headers and place important stuff in new home
@@ -73,6 +75,13 @@ class Object
 
         if (!empty($headers[Riak\Api\Http::VCLOCK_KEY])) {
             $this->content_type = $headers[Riak\Api\Http::VCLOCK_KEY];
+        }
+
+        // pull out metadata headers
+        foreach($headers as $key => $value) {
+            if (strpos($key, Riak\Api\Http::METADATA_PREFIX) !== false) {
+                $this->metadata[substr($key, strlen(Riak\Api\Http::METADATA_PREFIX))] = $value;
+            }
         }
     }
 
@@ -176,8 +185,8 @@ class Object
                 "'index. Expecting '*_int' for an integer index, or '*_bin' for a string index.");
         }
 
-        $isIntIndex = SecondaryIndexHeaderTranslator::isIntIndex($indexName);
-        $isStringIndex = SecondaryIndexHeaderTranslator::isStringIndex($indexName);
+        $isIntIndex = SecondaryIndexTranslator::isIntIndex($indexName);
+        $isStringIndex = SecondaryIndexTranslator::isStringIndex($indexName);
 
         if (!$isIntIndex && !$isStringIndex) {
             throw new \InvalidArgumentException("Invalid index type for '" . $indexName .
@@ -212,5 +221,27 @@ class Object
         }
 
         return $this;
+    }
+
+    public function setMetaDataValue($key, $value = '')
+    {
+        $this->metadata[$key] = $value;
+        return $this;
+    }
+
+    public function getMetaDataValue($key)
+    {
+        return $this->metadata[$key];
+    }
+
+    public function removeMetaDataValue($key)
+    {
+        unset($this->metadata[$key]);
+        return $this;
+    }
+
+    public function getMetaData()
+    {
+        return $this->metadata;
     }
 }

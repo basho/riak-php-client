@@ -20,7 +20,7 @@ namespace Basho\Riak\Api\Http\Translators;
 /**
  * @author Alex Moore <amoore at basho d0t com>
  */
-class SecondaryIndexHeaderTranslator
+class SecondaryIndexTranslator
 {
     const INT_INDEX_SUFFIX = '_int';
     const STR_IDX_SUFFIX = '_bin';

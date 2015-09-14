@@ -18,7 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Api;
 
 use Basho\Riak\Api;
-use Basho\Riak\Api\Http\Translators\SecondaryIndexHeaderTranslator;
+use Basho\Riak\Api\Http\Translators\SecondaryIndexTranslator;
 use Basho\Riak\ApiInterface;
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
@@ -36,6 +36,7 @@ class Http extends Api implements ApiInterface
     // Header keys
     const VCLOCK_KEY = 'X-Riak-Vclock';
     const CONTENT_TYPE_KEY = 'Content-Type';
+    const METADATA_PREFIX = 'X-Riak-Meta-';
 
     /**
      * cURL connection handle
@@ -146,6 +147,10 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Object\Fetch':
             case 'Basho\Riak\Command\Object\Store':
             case 'Basho\Riak\Command\Object\Delete':
+                // to allow siblings
+                if ($this->command->getMethod() == 'GET') {
+                    $this->headers['Accept'] = 'multipart/mixed, */*';
+                }
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
             case 'Basho\Riak\Command\DataType\Counter\Fetch':
@@ -361,10 +366,15 @@ class Http extends Api implements ApiInterface
             }
 
             // setup index headers
-            $translator = new SecondaryIndexHeaderTranslator();
+            $translator = new SecondaryIndexTranslator();
             $indexHeaders = $translator->createHeadersFromIndexes($object->getIndexes());
             foreach ($indexHeaders as $value) {
                 $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
+            }
+
+            // setup metadata headers
+            foreach($object->getMetaData() as $key => $value) {
+                $curl_headers[] = sprintf('%s%s: %s', self::METADATA_PREFIX, $key, $value);
             }
         }
 

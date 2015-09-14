@@ -31,6 +31,9 @@ trait ObjectTrait
      */
     protected $object = NULL;
 
+    /**
+     * @return Object|null
+     */
     public function getObject()
     {
         return $this->object;

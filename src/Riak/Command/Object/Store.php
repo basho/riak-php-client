@@ -28,6 +28,11 @@ use Basho\Riak\CommandInterface;
  */
 class Store extends Command\Object implements CommandInterface
 {
+    /**
+     * Type of operation
+     *
+     * @var string
+     */
     protected $method = 'POST';
 
     public function __construct(Command\Builder\StoreObject $builder)

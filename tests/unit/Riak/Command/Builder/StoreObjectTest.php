@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Tests\Riak\Command\Builder;
 
+use Basho\Riak\Api\Http;
 use Basho\Riak\Command;
 use Basho\Tests\TestCase;
 
@@ -112,22 +113,21 @@ class StoreObjectTest extends TestCase
      */
     public function testStoreObjectWithIndexGeneratesHeaders($riak)
     {
-        $inputHeaders = ['My-Header' => 'cats', 'x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
+        $inputHeaders = [Http::METADATA_PREFIX . 'My-Header' => 'cats', 'x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
         $builder = new Command\Builder\StoreObject($riak);
         $builder->buildObject('some_data', $inputHeaders);
         $builder->buildBucket('some_bucket');
         $command = $builder->build();
 
         $this->assertInstanceOf('Basho\Riak\Command\Object\Store', $command);
-        $headers = $command->getHeaders();
 
-        $this->assertNotNull($headers);
-        $this->assertEquals(5, count($headers));
-        $this->assertEquals(['My-Header', 'cats'], $headers[0]);
-        $this->assertEquals(['x-riak-index-foo_bin', 'bar'], $headers[1]);
-        $this->assertEquals(['x-riak-index-foo_bin', 'baz'], $headers[2]);
-        $this->assertEquals(['x-riak-index-foo_int', '42'], $headers[3]);
-        $this->assertEquals(['x-riak-index-foo_int', '50'], $headers[4]);
+        $this->assertArrayHasKey('My-Header', $command->getObject()->getMetaData());
+        $this->assertEquals($command->getObject()->getMetaData()['My-Header'], 'cats');
 
+        $this->assertArrayHasKey('foo_bin', $command->getObject()->getIndexes());
+        $this->assertCount(2, $command->getObject()->getIndex('foo_bin'));
+
+        $this->assertArrayHasKey('foo_int', $command->getObject()->getIndexes());
+        $this->assertCount(2, $command->getObject()->getIndex('foo_int'));
     }
 }
