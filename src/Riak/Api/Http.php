@@ -38,6 +38,11 @@ class Http extends Api implements ApiInterface
     const CONTENT_TYPE_KEY = 'Content-Type';
     const METADATA_PREFIX = 'X-Riak-Meta-';
 
+    // Content Types
+    const CONTENT_TYPE_JSON = 'application/json';
+    const CONTENT_TYPE_XML = 'application/xml';
+
+
     /**
      * cURL connection handle
      *
@@ -136,45 +141,51 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Bucket\List':
                 $this->path = sprintf('/types/%s/buckets/%s', $bucket->getType(), $bucket->getName());
                 break;
-            case 'Basho\Riak\Command\Bucket\Fetch':
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Bucket\Store':
+                $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
+            case 'Basho\Riak\Command\Bucket\Fetch':
             case 'Basho\Riak\Command\Bucket\Delete':
                 $this->path = sprintf('/types/%s/buckets/%s/props', $bucket->getType(), $bucket->getName());
                 break;
             case 'Basho\Riak\Command\Bucket\Keys':
                 $this->path = sprintf('/types/%s/buckets/%s/keys', $bucket->getType(), $bucket->getName());
                 break;
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Object\Fetch':
+                $this->headers['Accept'] = 'multipart/mixed, */*';
             case 'Basho\Riak\Command\Object\Store':
             case 'Basho\Riak\Command\Object\Delete':
-                // to allow siblings
-                if ($this->command->getMethod() == 'GET') {
-                    $this->headers['Accept'] = 'multipart/mixed, */*';
-                }
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
-            case 'Basho\Riak\Command\DataType\Counter\Fetch':
             case 'Basho\Riak\Command\DataType\Counter\Store':
-            case 'Basho\Riak\Command\DataType\Set\Fetch':
             case 'Basho\Riak\Command\DataType\Set\Store':
-            case 'Basho\Riak\Command\DataType\Map\Fetch':
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\DataType\Map\Store':
-            $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(),
-                $key);
+                $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
+            case 'Basho\Riak\Command\DataType\Counter\Fetch':
+            case 'Basho\Riak\Command\DataType\Set\Fetch':
+            case 'Basho\Riak\Command\DataType\Map\Fetch':
+                $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
-            case 'Basho\Riak\Command\Search\Index\Fetch':
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Search\Index\Store':
+                $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
+            case 'Basho\Riak\Command\Search\Index\Fetch':
             case 'Basho\Riak\Command\Search\Index\Delete':
                 $this->path = sprintf('/search/index/%s', $this->command);
                 break;
-            case 'Basho\Riak\Command\Search\Schema\Fetch':
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Search\Schema\Store':
+                $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_XML;
+            case 'Basho\Riak\Command\Search\Schema\Fetch':
                 $this->path = sprintf('/search/schema/%s', $this->command);
                 break;
             case 'Basho\Riak\Command\Search\Fetch':
                 $this->path = sprintf('/search/query/%s', $this->command);
                 break;
             case 'Basho\Riak\Command\MapReduce\Fetch':
+                $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
                 $this->path = sprintf('/%s', $this->config['mapred_prefix']);
                 break;
             case 'Basho\Riak\Command\Indexes\Query':
@@ -347,7 +358,7 @@ class Http extends Api implements ApiInterface
         $curl_headers = [];
 
         foreach ($this->headers as $key => $value) {
-            $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
+            $curl_headers[] = sprintf('%s: %s', $key, $value);
         }
 
         // if we have an object, set appropriate object headers
@@ -374,7 +385,7 @@ class Http extends Api implements ApiInterface
 
             // setup metadata headers
             foreach($object->getMetaData() as $key => $value) {
-                $curl_headers[] = sprintf('%s%s: %s', self::METADATA_PREFIX, $key, $value);
+                $curl_headers[] = sprintf('%s%s: %s', static::METADATA_PREFIX, $key, $value);
             }
         }
 

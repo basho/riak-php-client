@@ -74,7 +74,7 @@ class Object
         }
 
         if (!empty($headers[Riak\Api\Http::VCLOCK_KEY])) {
-            $this->content_type = $headers[Riak\Api\Http::VCLOCK_KEY];
+            $this->vclock = $headers[Riak\Api\Http::VCLOCK_KEY];
         }
 
         // pull out metadata headers
@@ -104,10 +104,12 @@ class Object
 
     /**
      * @param string $content_type
+     * @return $this
      */
     public function setContentType($content_type)
     {
         $this->content_type = $content_type;
+        return $this;
     }
 
     /**
@@ -120,10 +122,12 @@ class Object
 
     /**
      * @param string $content_encoding
+     * @return $this
      */
     public function setContentEncoding($content_encoding)
     {
         $this->content_encoding = $content_encoding;
+        return $this;
     }
 
     /**
@@ -136,10 +140,12 @@ class Object
 
     /**
      * @param string $charset
+     * @return $this
      */
     public function setCharset($charset)
     {
         $this->charset = $charset;
+        return $this;
     }
 
     public function getVclock()
@@ -149,10 +155,12 @@ class Object
 
     /**
      * @param string $vclock
+     * @return $this
      */
     public function setVclock($vclock)
     {
         $this->vclock = $vclock;
+        return $this;
     }
 
     public function getIndexes()

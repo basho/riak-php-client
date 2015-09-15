@@ -39,13 +39,6 @@ class StoreIndex extends Command\Builder implements Command\BuilderInterface
      */
     protected $schema = '_yz_default';
 
-    public function __construct(Riak $riak)
-    {
-        parent::__construct($riak);
-
-        $this->headers['Content-Type'] = self::CONTENT_TYPE_JSON;
-    }
-
     /**
      * @param $name
      *

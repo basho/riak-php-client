@@ -32,13 +32,6 @@ class SetBucketProperties extends Command\Builder implements Command\BuilderInte
      */
     protected $properties = [];
 
-    public function __construct(Riak $riak)
-    {
-        parent::__construct($riak);
-
-        $this->headers['Content-Type'] = self::CONTENT_TYPE_JSON;
-    }
-
     /**
      * @param $key
      * @param $value
@@ -81,10 +74,6 @@ class SetBucketProperties extends Command\Builder implements Command\BuilderInte
 
         if (count($this->properties) < 1) {
             throw new Exception('At least one element to add or remove needs to be defined.');
-        }
-
-        if (!isset($this->headers['Content-Type']) || $this->headers['Content-Type'] != self::CONTENT_TYPE_JSON) {
-            throw new Exception('The \'Content-Type\' header is required to be ' . self::CONTENT_TYPE_JSON);
         }
     }
 }

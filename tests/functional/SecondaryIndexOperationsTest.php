@@ -106,11 +106,11 @@ class SecondaryIndexOperationsTest extends TestCase
         $object = static::$object;
         $object->removeValueFromIndex('lucky_numbers_int', 64);
         $object->removeValueFromIndex('lastname_bin', 'Knuth');
+        $object->setVclock(static::$vclock);
 
         $command = (new Command\Builder\StoreObject($riak))
             ->withObject($object)
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
-            ->withHeader("X-Riak-Vclock", static::$vclock)
             ->build();
 
         // TODO: internalize Vclock to Riak\Object.

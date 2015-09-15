@@ -49,13 +49,6 @@ class FetchObjects extends Command\Builder implements Command\BuilderInterface
      */
     protected $timeout = 0;
 
-    public function __construct(Riak $riak)
-    {
-        parent::__construct($riak);
-
-        $this->headers['Content-Type'] = self::CONTENT_TYPE_JSON;
-    }
-
     /**
      * {@inheritdoc}
      *

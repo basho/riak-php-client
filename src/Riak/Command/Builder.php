@@ -42,9 +42,6 @@ use Basho\Riak\DataType;
  */
 abstract class Builder
 {
-    const CONTENT_TYPE_JSON = 'application/json';
-    const CONTENT_TYPE_XML = 'application/xml';
-
     /**
      * @var Riak|null
      */
