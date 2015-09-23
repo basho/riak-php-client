@@ -24,16 +24,16 @@ namespace Basho\Riak\Command\Search\Index;
  */
 class Response extends \Basho\Riak\Command\Response
 {
+    /**
+     * @var \stdClass|null
+     */
     protected $index = null;
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    public function __construct($success = true, $code = 0, $message = '', $index = null)
     {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($success, $code, $message);
 
-        // make sure body is not only whitespace
-        if (trim($body)) {
-            $this->index = json_decode($body);
-        }
+        $this->index = $index;
     }
 
     public function getIndex()

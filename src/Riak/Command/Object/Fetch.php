@@ -27,8 +27,6 @@ use Basho\Riak\CommandInterface;
  */
 class Fetch extends Command\Object implements CommandInterface
 {
-    protected $decodeAsAssociative = false;
-
     public function __construct(Command\Builder\FetchObject $builder)
     {
         parent::__construct($builder);
@@ -36,12 +34,5 @@ class Fetch extends Command\Object implements CommandInterface
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
         $this->decodeAsAssociative = $builder->getDecodeAsAssociative();
-    }
-
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Response($statusCode, $responseHeaders, $responseBody, $this->decodeAsAssociative);
-
-        return $this;
     }
 }

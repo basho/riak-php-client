@@ -25,19 +25,26 @@ namespace Basho\Riak\Command\Search\Schema;
 class Response extends \Basho\Riak\Command\Response
 {
     protected $schema = '';
+    protected $contentType = '';
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    public function __construct($success = true, $code = 0, $message = '', $schema = null, $contentType = '')
     {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($success, $code, $message);
 
-        // make sure body is not only whitespace
-        if (trim($body)) {
-            $this->schema = $body;
-        }
+        $this->schema = $schema;
+        $this->contentType = $contentType;
     }
 
     public function getSchema()
     {
         return $this->schema;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
     }
 }

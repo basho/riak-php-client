@@ -38,7 +38,5 @@ interface CommandInterface
 
     public function getBucket();
 
-    public function setResponse($statusCode, $responseHeaders, $responseBody);
-
     public function execute();
 }

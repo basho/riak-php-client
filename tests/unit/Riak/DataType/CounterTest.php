@@ -30,7 +30,7 @@ class CounterTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('counter', Counter::TYPE);
 
-        $crdt = new Counter(1, []);
+        $crdt = new Counter(1);
         $this->assertEquals('counter', $crdt->getType());
     }
 }

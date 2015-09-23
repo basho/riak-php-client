@@ -91,7 +91,7 @@ class MapReduceOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
 
         $results = $response->getResults();
         $this->assertEquals(8, $results[0]->the);

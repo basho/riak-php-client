@@ -40,20 +40,22 @@ class ObjectConflictTest extends TestCase
         $command = (new Command\Builder\StoreObject($riak))
             ->buildObject('some_data')
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\StoreObject($riak))
             ->buildObject('some_other_data')
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -66,15 +68,17 @@ class ObjectConflictTest extends TestCase
     {
         $command = (new Command\Builder\FetchObject($riak))
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
 
-        $this->assertEquals('300', $response->getStatusCode());
+        $this->assertEquals('300', $response->getCode());
         $this->assertTrue($response->hasSiblings());
         $this->assertNotEmpty($response->getSiblings());
+        $this->assertNotEmpty($response->getObject()->getVclock());
 
-        static::$vclock = $response->getVclock();
+        static::$vclock = $response->getObject()->getVclock();
     }
 
     /**
@@ -91,11 +95,12 @@ class ObjectConflictTest extends TestCase
         $command = (new Command\Builder\StoreObject($riak))
             ->withObject($object)
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -108,11 +113,12 @@ class ObjectConflictTest extends TestCase
     {
         $command = (new Command\Builder\FetchObject($riak))
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
+            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertEquals('some_resolved_data', $response->getObject()->getData());
     }
 }

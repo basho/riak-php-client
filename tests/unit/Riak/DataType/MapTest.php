@@ -30,7 +30,7 @@ class MapTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('map', Map::TYPE);
 
-        $crdt = new Map([], '', []);
+        $crdt = new Map([], '');
         $this->assertEquals('map', $crdt->getType());
     }
 }

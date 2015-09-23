@@ -58,8 +58,7 @@ class Object
             return;
         }
 
-        $translator = new SecondaryIndexTranslator();
-        $this->indexes = $translator->extractIndexesFromHeaders($headers);
+        $this->indexes = (new SecondaryIndexTranslator)->extractIndexesFromHeaders($headers);
 
         // to prevent breaking the interface, parse $headers and place important stuff in new home
         if (!empty($headers[Riak\Api\Http::CONTENT_TYPE_KEY])) {

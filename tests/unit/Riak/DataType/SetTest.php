@@ -30,7 +30,7 @@ class SetTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('set', Set::TYPE);
 
-        $crdt = new Set([], '', []);
+        $crdt = new Set([], '');
         $this->assertEquals('set', $crdt->getType());
 
     }

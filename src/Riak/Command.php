@@ -136,8 +136,6 @@ abstract class Command
         return $this->response;
     }
 
-    abstract public function setResponse($statusCode, $responseHeaders = [], $responseBody = '');
-
     /**
      * @return Location|null
      */

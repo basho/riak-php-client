@@ -62,7 +62,7 @@ class MapOperationsTest extends TestCase
         $response = $command->execute();
 
         // expects 201 - Created
-        $this->assertEquals('201', $response->getStatusCode());
+        $this->assertEquals('201', $response->getCode());
         $this->assertNotEmpty($response->getLocation());
     }
 
@@ -79,7 +79,7 @@ class MapOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('404', $response->getStatusCode());
+        $this->assertEquals('404', $response->getCode());
     }
 
     /**
@@ -87,8 +87,6 @@ class MapOperationsTest extends TestCase
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
-     *
-     * @expectedException \Basho\Riak\Command\Exception
      */
     public function testAddNewWithKey($riak)
     {
@@ -108,7 +106,7 @@ class MapOperationsTest extends TestCase
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
         $this->assertEmpty($response->getLocation());
 
         $command = (new Command\Builder\FetchMap($riak))
@@ -119,7 +117,7 @@ class MapOperationsTest extends TestCase
 
         $map = $response->getMap();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Map', $response->getMap());
 
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $map->getSet('ATLANTIC_DIVISION'));
@@ -158,7 +156,7 @@ class MapOperationsTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\FetchMap($riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
@@ -168,7 +166,7 @@ class MapOperationsTest extends TestCase
 
         $map = $response->getMap();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Map', $response->getMap());
 
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $map->getSet('ATLANTIC_DIVISION'));
@@ -207,7 +205,7 @@ class MapOperationsTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\FetchMap($riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
@@ -217,7 +215,7 @@ class MapOperationsTest extends TestCase
 
         $map = $response->getMap();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Map', $response->getMap());
 
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $map->getSet('ATLANTIC_DIVISION'));
@@ -252,7 +250,7 @@ class MapOperationsTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\FetchMap($riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
@@ -261,7 +259,7 @@ class MapOperationsTest extends TestCase
         $response = $command->execute();
         $map = $response->getMap();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Map', $response->getMap());
 
         $this->assertInstanceOf('Basho\Riak\DataType\Map', $map->getMap('preferences'));

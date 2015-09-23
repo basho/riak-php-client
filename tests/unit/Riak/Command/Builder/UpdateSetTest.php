@@ -87,7 +87,7 @@ class UpdateSetTest extends TestCase
     {
         $builder = new Command\Builder\UpdateSet($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+        $builder->build();
     }
 
     /**
@@ -103,7 +103,7 @@ class UpdateSetTest extends TestCase
     {
         $builder = new Command\Builder\UpdateSet($riak);
         $builder->add('some_element');
-        $command = $builder->build();
+        $builder->build();
     }
 
     /**
@@ -119,6 +119,6 @@ class UpdateSetTest extends TestCase
     {
         $builder = new Command\Builder\UpdateSet($riak);
         $builder->remove('some_element');
-        $command = $builder->build();
+        $builder->build();
     }
 }

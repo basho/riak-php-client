@@ -64,7 +64,7 @@ class SetTest extends TestCase
         $response = $command->execute();
 
         // expects 201 - Created
-        $this->assertEquals('201', $response->getStatusCode());
+        $this->assertEquals('201', $response->getCode());
         $this->assertNotEmpty($response->getLocation());
     }
 
@@ -81,7 +81,7 @@ class SetTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('404', $response->getStatusCode());
+        $this->assertEquals('404', $response->getCode());
     }
 
     /**
@@ -89,8 +89,6 @@ class SetTest extends TestCase
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
-     *
-     * @expectedException \Basho\Riak\Command\Exception
      */
     public function testAddNewWithKey($riak)
     {
@@ -109,7 +107,7 @@ class SetTest extends TestCase
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
         $this->assertEmpty($response->getLocation());
 
         $command = (new Command\Builder\FetchSet($riak))
@@ -118,7 +116,7 @@ class SetTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
         $this->assertNotEmpty($response->getSet()->getData());
         $this->assertTrue(is_array($response->getSet()->getData()));
@@ -145,7 +143,7 @@ class SetTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\FetchSet($riak))
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
@@ -153,7 +151,7 @@ class SetTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
         $this->assertNotEmpty($response->getSet()->getData());
         $this->assertTrue(is_array($response->getSet()->getData()));
@@ -180,7 +178,7 @@ class SetTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\FetchSet($riak))
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
@@ -188,7 +186,7 @@ class SetTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
         $this->assertNotEmpty($response->getSet()->getData());
         $this->assertTrue(is_array($response->getSet()->getData()));
@@ -218,7 +216,7 @@ class SetTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\FetchSet($riak))
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
@@ -226,7 +224,7 @@ class SetTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Set', $response->getSet());
         $this->assertNotEmpty($response->getSet()->getData());
         $this->assertTrue(is_array($response->getSet()->getData()));

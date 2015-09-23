@@ -42,6 +42,7 @@ class Store extends Command\Object implements CommandInterface
         $this->object = $builder->getObject();
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
+        $this->decodeAsAssociative = $builder->getDecodeAsAssociative();
 
         if ($this->location) {
             $this->method = 'PUT';

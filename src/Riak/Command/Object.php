@@ -42,6 +42,8 @@ abstract class Object extends Command
      */
     protected $location = NULL;
 
+    protected $decodeAsAssociative = false;
+
     public function getObject()
     {
         return $this->object;
@@ -63,16 +65,23 @@ abstract class Object extends Command
         return rawurlencode($data);
     }
 
+    public function getDecodedData($data, $contentType)
+    {
+        return static::decodeData($data, $contentType, $this->decodeAsAssociative);
+    }
+
+    public static function decodeData($data, $contentType = '', $decodeAsAssociative = false)
+    {
+        if (in_array($contentType, ['application/json', 'text/json'])) {
+            return json_decode($data, $decodeAsAssociative);
+        }
+
+        return rawurlencode($data);
+    }
+
     public function getData()
     {
         return $this->object->getData();
-    }
-
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Object\Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
     }
 
     /**

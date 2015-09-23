@@ -52,7 +52,7 @@ class CounterOperationsTest extends TestCase
         $response = $command->execute();
 
         // expects 201 - Created
-        $this->assertEquals('201', $response->getStatusCode());
+        $this->assertEquals('201', $response->getCode());
         $this->assertNotEmpty($response->getLocation());
     }
 
@@ -69,7 +69,7 @@ class CounterOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('404', $response->getStatusCode());
+        $this->assertEquals('404', $response->getCode());
     }
 
     /**
@@ -77,8 +77,6 @@ class CounterOperationsTest extends TestCase
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
-     *
-     * @expectedException \Basho\Riak\Command\Exception
      */
     public function testIncrementNewWithKey($riak)
     {
@@ -91,7 +89,7 @@ class CounterOperationsTest extends TestCase
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
         $this->assertEmpty($response->getLocation());
     }
 
@@ -109,7 +107,7 @@ class CounterOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
         $this->assertNotEmpty($response->getCounter()->getData());
         $this->assertTrue(is_integer($response->getCounter()->getData()));
@@ -132,7 +130,7 @@ class CounterOperationsTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -149,7 +147,7 @@ class CounterOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
         $this->assertNotEmpty($response->getCounter()->getData());
         $this->assertTrue(is_integer($response->getCounter()->getData()));
@@ -172,7 +170,7 @@ class CounterOperationsTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -189,7 +187,7 @@ class CounterOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\DataType\Counter', $response->getCounter());
         $this->assertNotEmpty($response->getCounter()->getData());
         $this->assertTrue(is_integer($response->getCounter()->getData()));

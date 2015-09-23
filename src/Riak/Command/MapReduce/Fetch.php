@@ -57,13 +57,6 @@ class Fetch extends Command implements CommandInterface
         return ['inputs' => $this->inputs, 'query' => $this->query];
     }
 
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
-    }
-
     /**
      * @return Command\MapReduce\Response
      */

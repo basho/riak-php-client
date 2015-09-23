@@ -223,8 +223,6 @@ class Node
             throw new Exception('Command failed to execute against Riak. Error Msg: ' . $api->getError());
         }
 
-        $command->setResponse($api->getStatusCode(), $api->getResponseHeaders(), $api->getResponseBody());
-
-        return $command->getResponse();
+        return $api->getResponse();
     }
 }

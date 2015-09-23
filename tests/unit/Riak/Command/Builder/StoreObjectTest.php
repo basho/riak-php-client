@@ -84,7 +84,7 @@ class StoreObjectTest extends TestCase
     {
         $builder = new Command\Builder\StoreObject($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+        $builder->build();
     }
 
     /**

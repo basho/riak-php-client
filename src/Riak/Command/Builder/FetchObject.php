@@ -40,7 +40,6 @@ class FetchObject extends Command\Builder implements Command\BuilderInterface
     use ObjectTrait;
     use LocationTrait;
 
-
     /**
      * @var bool
      */

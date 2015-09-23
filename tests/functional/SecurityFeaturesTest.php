@@ -59,7 +59,7 @@ class SecurityFeaturesTest extends TestCase
         $response = $command->execute();
 
         // expects 401 - Unauthorized
-        $this->assertEquals('401', $response->getStatusCode());
+        $this->assertEquals('401', $response->getCode());
     }
 
     public function testPasswordAuth()
@@ -84,7 +84,7 @@ class SecurityFeaturesTest extends TestCase
         $response = $command->execute();
 
         // expects 201 - Created
-        $this->assertEquals('201', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('201', $response->getCode(), $response->getMessage());
         $this->assertNotEmpty($response->getLocation());
         $this->assertInstanceOf('\Basho\Riak\Location', $response->getLocation());
     }

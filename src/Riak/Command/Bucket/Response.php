@@ -33,17 +33,14 @@ class Response extends \Basho\Riak\Command\Response
      */
     protected $bucket = null;
 
-    public function __construct($statusCode, $headers = [], $body = '', Bucket $bucket = null)
-    {
-        parent::__construct($statusCode, $headers, $body);
+    protected $modified = '';
 
-        // make sure body is not only whitespace
-        if (trim($body)) {
-            $properties = json_decode($this->body, true);
-            if ($bucket) {
-                $this->bucket = new Bucket($bucket->getName(), $bucket->getType(), $properties['props']);
-            }
-        }
+    public function __construct($success = true, $code = 0, $message = '', Bucket $bucket = null, $modified = '')
+    {
+        parent::__construct($success, $code, $message);
+
+        $this->bucket = $bucket;
+        $this->modified = $modified;
     }
 
     /**
@@ -57,21 +54,12 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return bool
-     */
-    public function isNotFound()
-    {
-        return $this->statusCode == '404' ? true : false;
-    }
-
-    /**
      * Retrieves the last modified time of the object
      *
      * @return string
-     * @throws \Basho\Riak\Command\Exception
      */
     public function getLastModified()
     {
-        return $this->getHeader('Last-Modified');
+        return $this->modified;
     }
 }

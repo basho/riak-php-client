@@ -22,9 +22,13 @@ use Basho\Riak\Api\Http\Translators\SecondaryIndexTranslator;
 use Basho\Riak\ApiInterface;
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
+use Basho\Riak\DataType\Counter;
+use Basho\Riak\DataType\Map;
+use Basho\Riak\DataType\Set;
 use Basho\Riak\Exception;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
+use Basho\Riak\Object;
 
 /**
  * Handles communications between end user app & Riak via Riak HTTP API using cURL
@@ -37,11 +41,40 @@ class Http extends Api implements ApiInterface
     const VCLOCK_KEY = 'X-Riak-Vclock';
     const CONTENT_TYPE_KEY = 'Content-Type';
     const METADATA_PREFIX = 'X-Riak-Meta-';
+    const LAST_MODIFIED_KEY = 'Last-Modified';
 
     // Content Types
     const CONTENT_TYPE_JSON = 'application/json';
     const CONTENT_TYPE_XML = 'application/xml';
 
+
+    /**
+     * Request body to be sent
+     *
+     * @var string
+     */
+    protected $requestBody = '';
+
+    /**
+     * Response headers returned from request
+     *
+     * @var array
+     */
+    protected $responseHeaders = [];
+
+    /**
+     * Response body returned from request
+     *
+     * @var string
+     */
+    protected $responseBody = '';
+
+    /**
+     * HTTP Status Code from response
+     *
+     * @var int
+     */
+    protected $statusCode = 0;
 
     /**
      * cURL connection handle
@@ -67,6 +100,38 @@ class Http extends Api implements ApiInterface
     private $options = [];
 
     protected $headers = [];
+
+    /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResponseBody()
+    {
+        return $this->responseBody;
+    }
+
+    /**
+     * @return array
+     */
+    public function getResponseHeaders()
+    {
+        return $this->responseHeaders;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequest()
+    {
+        return $this->request . $this->requestBody;
+    }
 
     public function closeConnection()
     {
@@ -442,6 +507,9 @@ class Http extends Api implements ApiInterface
         return $this->query;
     }
 
+    /**
+     * @return bool
+     */
     public function send()
     {
         // set the response header and body callback functions
@@ -471,6 +539,8 @@ class Http extends Api implements ApiInterface
 
         // set the response http code
         $this->statusCode = curl_getinfo($this->getConnection(), CURLINFO_HTTP_CODE);
+
+        $this->parseResponse();
 
         return $this->success;
     }
@@ -556,5 +626,147 @@ class Http extends Api implements ApiInterface
         $this->responseBody .= $body;
 
         return strlen($body);
+    }
+
+    protected function parseResponse()
+    {
+        // trim leading / trailing whitespace
+        $body = trim($this->responseBody);
+        $location = null;
+        if ($this->getResponseHeader('Location')) {
+            $location = Location::fromString($this->getResponseHeader('Location'));
+        }
+
+        switch (get_class($this->command)) {
+            case 'Basho\Riak\Command\Bucket\Store':
+            case 'Basho\Riak\Command\Bucket\Fetch':
+                $bucket = null;
+                $modified = $this->getResponseHeader(static::LAST_MODIFIED_KEY, '');
+                if ($body) {
+                    $properties = json_decode($body, true);
+                    if ($this->command->getBucket()) {
+                        $bucket = new Bucket($this->command->getBucket()->getName(), $this->command->getBucket()->getType(), $properties['props']);
+                    }
+                }
+                $response = new Command\Bucket\Response($this->success, $this->statusCode, $this->error, $bucket, $modified);
+                break;
+
+            case 'Basho\Riak\Command\Object\Fetch':
+            case 'Basho\Riak\Command\Object\Store':
+                /** @var Command\Object $command */
+                $command = $this->command;
+                $objects = (new Api\Http\Translators\ObjectResponse($command, $this->statusCode))
+                    ->parseResponse($this->responseBody, $this->responseHeaders);
+                $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, $objects);
+                break;
+
+            case 'Basho\Riak\Command\DataType\Counter\Store':
+            case 'Basho\Riak\Command\DataType\Counter\Fetch':
+                $counter = null;
+                if ($body && strpos($body, 'value')) {
+                    // json response
+                    $body = json_decode(rawurldecode($body));
+                    $counter = new Counter($body->value);
+                }
+                $response = new Command\DataType\Counter\Response(
+                    $this->success, $this->statusCode, $this->error, $location, $counter, $this->getResponseHeader('Date')
+                );
+                break;
+
+            case 'Basho\Riak\Command\DataType\Set\Store':
+            case 'Basho\Riak\Command\DataType\Set\Fetch':
+                $set = null;
+                if ($body && strpos($body, 'value')) {
+                    // json response
+                    $body = json_decode(rawurldecode($body));
+                    $set = new Set($body->value, $body->context);
+                }
+                $response = new Command\DataType\Set\Response(
+                    $this->success, $this->statusCode, $this->error, $location, $set, $this->getResponseHeader('Date')
+                );
+                break;
+
+            case 'Basho\Riak\Command\DataType\Map\Store':
+            case 'Basho\Riak\Command\DataType\Map\Fetch':
+                $map = null;
+                if ($body && strpos($body, 'value')) {
+                    // json response
+                    $body = json_decode(rawurldecode($body), true);
+                    $map = new Map($body['value'], $body['context']);
+                }
+                $response = new Command\DataType\Map\Response(
+                    $this->success, $this->statusCode, $this->error, $location, $map, $this->getResponseHeader('Date')
+                );
+                break;
+
+            case 'Basho\Riak\Command\Search\Fetch':
+                $results = null;
+                if ($body) {
+                    $results = json_decode($body);
+                }
+                $response = new Command\Search\Response($this->success, $this->statusCode, $this->error, $results);
+                break;
+            case 'Basho\Riak\Command\Search\Index\Store':
+            case 'Basho\Riak\Command\Search\Index\Fetch':
+                $index = $body ? json_decode($body) : null;
+                $response = new Command\Search\Index\Response($this->success, $this->statusCode, $this->error, $index);
+                break;
+            case 'Basho\Riak\Command\Search\Schema\Store':
+            case 'Basho\Riak\Command\Search\Schema\Fetch':
+                $response = new Command\Search\Schema\Response(
+                    $this->success, $this->statusCode, $this->error, $body, $this->getResponseHeader(static::CONTENT_TYPE_KEY)
+                );
+                break;
+
+            case 'Basho\Riak\Command\MapReduce\Fetch':
+                $results = null;
+                if ($body) {
+                    $results = json_decode($body);
+                }
+                $response = new Command\MapReduce\Response($this->success, $this->statusCode, $this->error, $results);
+                break;
+            case 'Basho\Riak\Command\Indexes\Query':
+                $body = json_decode(rawurldecode($body), true);
+                $results = [];
+                $termsReturned = false;
+                $continuation = null;
+                $done = true;
+
+                if (isset($body['keys'])) {
+                    $results = $body['keys'];
+                }
+
+                if (isset($body['results'])) {
+                    $results = $body['results'];
+                    $termsReturned = true;
+                }
+
+                if (isset($body['continuation'])) {
+                    $continuation = $body['continuation'];
+                    $done = false;
+                }
+
+                $response = new Command\Indexes\Response(
+                    $this->success, $this->statusCode, $this->error, $results, $termsReturned, $continuation, $done, $this->getResponseHeader('Date')
+                );
+                break;
+            case 'Basho\Riak\Command\Object\Delete':
+            case 'Basho\Riak\Command\Bucket\Delete':
+            case 'Basho\Riak\Command\Search\Index\Delete':
+            default:
+                $response = new Command\Response($this->success, $this->statusCode, $this->error);
+                break;
+        }
+
+        $this->response = $response;
+    }
+
+    protected function getResponseHeader($key, $default = '')
+    {
+        if (!empty($this->responseHeaders[$key])) {
+            return $this->responseHeaders[$key];
+        } else {
+            return $default;
+        }
     }
 }

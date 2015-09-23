@@ -26,14 +26,11 @@ class Response extends \Basho\Riak\Command\Response
 {
     protected $results = '';
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    public function __construct($success = true, $code = 0, $message = '', $results = null)
     {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($success, $code, $message);
 
-        // make sure body is not only whitespace
-        if (trim($body)) {
-            $this->results = json_decode($body);
-        }
+        $this->results = $results;
     }
 
     public function getResults()

@@ -26,28 +26,38 @@ use Basho\Riak\Search\Doc;
  */
 class Response extends \Basho\Riak\Command\Response
 {
-    protected $results = '';
+    /**
+     * @var \stdClass|null
+     */
+    protected $results = null;
 
+    /**
+     * @var Doc[]
+     */
     protected $docs = [];
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    public function __construct($success = true, $code = 0, $message = '', $results = null)
     {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($success, $code, $message);
 
-        // make sure body is not only whitespace
-        if (trim($body)) {
-            $this->results = json_decode($body);
-            foreach ($this->results->response->docs as $doc) {
-                $this->docs[] = new Doc($doc);
-            }
+        $this->results = $results;
+
+        foreach ($this->results->response->docs as $doc) {
+            $this->docs[] = new Doc($doc);
         }
     }
 
+    /**
+     * @return int
+     */
     public function getNumFound()
     {
         return $this->results->response->numFound;
     }
 
+    /**
+     * @return \Basho\Riak\Search\Doc[]
+     */
     public function getDocs()
     {
         return $this->docs;
