@@ -28,7 +28,6 @@ use Basho\Riak\DataType\Set;
 use Basho\Riak\Exception;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
-use Basho\Riak\Object;
 
 /**
  * Handles communications between end user app & Riak via Riak HTTP API using cURL
@@ -218,7 +217,7 @@ class Http extends Api implements ApiInterface
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Object\Fetch':
-                $this->headers['Accept'] = 'multipart/mixed, */*';
+                $this->headers['Accept'] = '*/*, multipart/mixed';
             case 'Basho\Riak\Command\Object\Store':
             case 'Basho\Riak\Command\Object\Delete':
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);

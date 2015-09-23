@@ -40,7 +40,6 @@ class ObjectConflictTest extends TestCase
         $command = (new Command\Builder\StoreObject($riak))
             ->buildObject('some_data')
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
-            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
@@ -50,7 +49,6 @@ class ObjectConflictTest extends TestCase
         $command = (new Command\Builder\StoreObject($riak))
             ->buildObject('some_other_data')
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
-            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
@@ -68,7 +66,6 @@ class ObjectConflictTest extends TestCase
     {
         $command = (new Command\Builder\FetchObject($riak))
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
-            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
@@ -95,7 +92,6 @@ class ObjectConflictTest extends TestCase
         $command = (new Command\Builder\StoreObject($riak))
             ->withObject($object)
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
-            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
@@ -113,7 +109,6 @@ class ObjectConflictTest extends TestCase
     {
         $command = (new Command\Builder\FetchObject($riak))
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
-            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
