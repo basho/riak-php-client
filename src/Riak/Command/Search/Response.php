@@ -35,7 +35,7 @@ class Response extends \Basho\Riak\Command\Response
         parent::__construct($statusCode, $headers, $body);
 
         // make sure body is not only whitespace
-        if (trim($body)) {
+        if (trim($body) && $this->statusCode != 400) {
             $this->results = json_decode($body);
             foreach ($this->results->response->docs as $doc) {
                 $this->docs[] = new Doc($doc);
@@ -45,7 +45,7 @@ class Response extends \Basho\Riak\Command\Response
 
     public function getNumFound()
     {
-        return $this->results->response->numFound;
+        return !empty($this->results->response->numFound) ? $this->results->response->numFound : 0;
     }
 
     public function getDocs()
