@@ -34,8 +34,8 @@ class NodeTest extends TestCase
      */
     public function testConfig($node)
     {
-        $this->assertEquals(static::TEST_NODE_HOST, $node->getHost());
-        $this->assertEquals(static::TEST_NODE_PORT, $node->getPort());
+        $this->assertEquals(static::getTestHost(), $node->getHost());
+        $this->assertEquals(static::getTestPort(), $node->getPort());
         $this->assertNotEmpty($node->getSignature());
     }
 }

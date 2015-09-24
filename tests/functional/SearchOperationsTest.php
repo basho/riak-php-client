@@ -45,8 +45,8 @@ class SearchOperationsTest extends TestCase
     {
         $node = [
             (new Riak\Node\Builder)
-                ->atHost(static::TEST_NODE_HOST)
-                ->onPort(static::TEST_NODE_PORT)
+                ->atHost(static::getTestHost())
+                ->onPort(static::getTestPort())
                 ->build()
         ];
 
@@ -77,8 +77,8 @@ class SearchOperationsTest extends TestCase
     {
         $node = [
             (new Riak\Node\Builder)
-                ->atHost(static::TEST_NODE_HOST)
-                ->onPort(static::TEST_NODE_PORT)
+                ->atHost(static::getTestHost())
+                ->onPort(static::getTestPort())
                 ->build()
         ];
 

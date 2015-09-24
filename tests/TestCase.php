@@ -53,7 +53,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return [
             [
                 (new Node\Builder)
-                    ->onPort(static::TEST_NODE_PORT)
+                    ->onPort(static::getTestPort())
                     ->buildCluster(['riak1.company.com', 'riak2.company.com', 'riak3.company.com',])
             ],
         ];
@@ -80,10 +80,28 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return [
             [
                 (new Node\Builder)
-                    ->atHost(static::TEST_NODE_HOST)
-                    ->onPort(static::TEST_NODE_PORT)
+                    ->atHost(static::getTestHost())
+                    ->onPort(static::getTestPort())
                     ->build()
             ],
         ];
+    }
+
+    public static function getTestHost()
+    {
+        $host = getenv('RIAK_HOST');
+        return $host ? $host : static::TEST_NODE_HOST;
+    }
+
+    public static function getTestPort()
+    {
+        $port = getenv('RIAK_PORT');
+        return $port ? $port : static::TEST_NODE_PORT;
+    }
+
+    public static function getTestSecurePort()
+    {
+        $port = getenv('RIAK_SECURE_PORT');
+        return $port ? $port : static::TEST_NODE_SECURE_PORT;
     }
 }
