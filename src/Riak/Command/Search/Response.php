@@ -42,8 +42,11 @@ class Response extends \Basho\Riak\Command\Response
 
         $this->results = $results;
 
-        foreach ($this->results->response->docs as $doc) {
-            $this->docs[] = new Doc($doc);
+        if (!empty($this->results->response->docs)) {
+            foreach ($this->results->response->docs as $doc) {
+                $this->docs[] = new Doc($doc);
+
+            }
         }
     }
 
@@ -52,7 +55,7 @@ class Response extends \Basho\Riak\Command\Response
      */
     public function getNumFound()
     {
-        return $this->results->response->numFound;
+        return !empty($this->results->response->numFound) ? $this->results->response->numFound : 0;
     }
 
     /**

@@ -232,6 +232,27 @@ class SearchOperationsTest extends TestCase
     }
 
     /**
+     * Tests handling of a badly formed query
+     *
+     * @depends      testAssociateIndex
+     * @dataProvider getLocalNodeConnection
+     *
+     * @param $riak \Basho\Riak
+     */
+    public function testBadSearch($riak)
+    {
+        $response = (new Command\Builder\Search\FetchObjects($riak))
+            ->withIndexName(static::INDEX)
+            ->withQuery('ffffff')
+            ->build()
+            ->execute();
+
+        $this->assertEquals('400', $response->getCode(), $response->getMessage());
+        $this->assertEmpty($response->getNumFound());
+        $this->assertEmpty($response->getDocs());
+    }
+
+    /**
      * @depends      testSearch
      * @dataProvider getLocalNodeConnection
      *

@@ -700,7 +700,7 @@ class Http extends Api implements ApiInterface
 
             case 'Basho\Riak\Command\Search\Fetch':
                 $results = null;
-                if ($body) {
+                if ($body && $this->statusCode != 400) {
                     $results = json_decode($body);
                 }
                 $response = new Command\Search\Response($this->success, $this->statusCode, $this->error, $results);
