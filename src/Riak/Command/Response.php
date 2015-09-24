@@ -24,80 +24,17 @@ namespace Basho\Riak\Command;
  */
 class Response
 {
-    /**
-     * Response headers returned from request
-     *
-     * @var array
-     */
-    protected $headers = [];
+    protected $success = false;
 
-    /**
-     * Response body returned from request
-     *
-     * @var string
-     */
-    protected $body = '';
+    protected $code = '';
 
-    /**
-     * HTTP Status Code from response
-     *
-     * @var int
-     */
-    protected $statusCode = 0;
+    protected $message = '';
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    public function __construct($success = true, $code = 0, $message = '')
     {
-        $this->statusCode = $statusCode;
-        $this->headers = $headers;
-        $this->body = $body;
-    }
-
-    public function getStatusCode()
-    {
-        return $this->statusCode;
-    }
-
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    public function getContentType()
-    {
-        return $this->getHeader('Content-Type');
-    }
-
-    /**
-     * Retrieve the value for a header
-     *
-     * @param $key
-     *
-     * @return string
-     * @throws Exception
-     */
-    protected function getHeader($key)
-    {
-        if (!isset($this->headers[$key])) {
-            throw new Exception("Header with key, {$key}, not available within response object.");
-        }
-
-        return $this->headers[$key];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNotFound()
-    {
-        return $this->statusCode == '404' ? true : false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUnauthorized()
-    {
-        return $this->statusCode == '401' ? true : false;
+        $this->success = $success;
+        $this->code = $code;
+        $this->message = $message;
     }
 
     /**
@@ -105,6 +42,35 @@ class Response
      */
     public function isSuccess()
     {
-        return in_array($this->statusCode, ['200', '201', '204']) ? true : false;
+        return $this->success;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotFound()
+    {
+        return $this->code == '404' ? true : false;
+    }
+
+    public function isUnauthorized()
+    {
+        return $this->code == '401' ? true : false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

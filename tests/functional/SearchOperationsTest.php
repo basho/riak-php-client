@@ -58,7 +58,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        if ($response->getStatusCode() == '200') {
+        if ($response->getCode() == '200') {
             $command = (new Command\Builder\Search\DissociateIndex($riak))
                 ->buildBucket('sabres', self::SEARCH_BUCKET_TYPE)
                 ->build();
@@ -106,7 +106,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertEquals('application/xml', $response->getContentType());
         $this->assertNotEmpty($response->getSchema());
 
@@ -128,7 +128,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
     /**
@@ -144,7 +144,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('404', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('404', $response->getCode(), $response->getMessage());
     }
 
     /**
@@ -162,7 +162,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
 
         $command = (new Command\Builder\Search\FetchIndex($riak))
             ->withName(static::INDEX)
@@ -172,13 +172,13 @@ class SearchOperationsTest extends TestCase
 
         // indexes take time to propagate between solr and Riak
         $attempts = 1;
-        while ($response->getStatusCode() <> '200' || $attempts <= 5) {
+        while ($response->getCode() <> '200' || $attempts <= 5) {
             sleep(1);
             $response = $command->execute();
             $attempts++;
         }
 
-        $this->assertEquals('200', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertEquals(static::SCHEMA, $response->getIndex()->schema);
     }
 
@@ -197,7 +197,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
     /**
@@ -226,7 +226,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertEquals(2, $response->getNumFound());
         $this->assertEquals('B. Gionta', $response->getDocs()[1]->name_s);
     }
@@ -245,7 +245,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
     /**
@@ -262,7 +262,7 @@ class SearchOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
 
         $command = (new Command\Builder\Search\FetchIndex($riak))
             ->withName(static::INDEX)
@@ -272,12 +272,12 @@ class SearchOperationsTest extends TestCase
 
         // indexes take time to propagate between solr and Riak
         $attempts = 1;
-        while ($response->getStatusCode() <> '404' || $attempts <= 5) {
+        while ($response->getCode() <> '404' || $attempts <= 5) {
             sleep(1);
             $response = $command->execute();
             $attempts++;
         }
 
-        $this->assertEquals('404', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('404', $response->getCode(), $response->getMessage());
     }
 }

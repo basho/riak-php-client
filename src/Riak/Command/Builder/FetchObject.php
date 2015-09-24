@@ -40,7 +40,6 @@ class FetchObject extends Command\Builder implements Command\BuilderInterface
     use ObjectTrait;
     use LocationTrait;
 
-
     /**
      * @var bool
      */
@@ -49,8 +48,6 @@ class FetchObject extends Command\Builder implements Command\BuilderInterface
     public function __construct(Riak $riak)
     {
         parent::__construct($riak);
-
-        $this->headers['Accept'] = 'multipart/mixed, */*';
     }
 
     /**

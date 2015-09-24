@@ -202,6 +202,14 @@ class Node
     }
 
     /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->config->getConnectionTimeout();
+    }
+
+    /**
      * @param Command $command
      * @param Api $api
      *
@@ -215,8 +223,6 @@ class Node
             throw new Exception('Command failed to execute against Riak. Error Msg: ' . $api->getError());
         }
 
-        $command->setResponse($api->getStatusCode(), $api->getResponseHeaders(), $api->getResponseBody());
-
-        return $command->getResponse();
+        return $api->getResponse();
     }
 }

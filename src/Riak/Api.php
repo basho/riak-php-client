@@ -32,32 +32,9 @@ abstract class Api
     protected $request = '';
 
     /**
-     * Request body to be sent
-     *
-     * @var string
+     * @var Command\Response|null
      */
-    protected $requestBody = '';
-
-    /**
-     * Response headers returned from request
-     *
-     * @var array
-     */
-    protected $responseHeaders = [];
-
-    /**
-     * Response body returned from request
-     *
-     * @var string
-     */
-    protected $responseBody = '';
-
-    /**
-     * HTTP Status Code from response
-     *
-     * @var int
-     */
-    protected $statusCode = 0;
+    protected $response = null;
 
     /**
      * @var Command|null
@@ -86,14 +63,6 @@ abstract class Api
     public function getError()
     {
         return $this->error;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStatusCode()
-    {
-        return $this->statusCode;
     }
 
     /**
@@ -141,23 +110,7 @@ abstract class Api
      */
     public function getRequest()
     {
-        return $this->request . $this->requestBody;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResponseBody()
-    {
-        return $this->responseBody;
-    }
-
-    /**
-     * @return array
-     */
-    public function getResponseHeaders()
-    {
-        return $this->responseHeaders;
+        return $this->request;
     }
 
     /**
@@ -177,9 +130,33 @@ abstract class Api
     }
 
     /**
+     * @return Command\Response|null
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * @return null
+     */
+    public function getSuccess()
+    {
+        return $this->success;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * send
      *
-     * @return Command\Response
+     * @return bool
      */
     abstract public function send();
 }

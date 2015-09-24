@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Builder;
 
+use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
@@ -39,6 +40,33 @@ class StoreObject extends Command\Builder implements Command\BuilderInterface
 {
     use ObjectTrait;
     use LocationTrait;
+
+    /**
+     * @var bool
+     */
+    protected $decodeAsAssociative = false;
+
+    /**
+     * Tells the client to decode the data as an associative array instead of a PHP stdClass object.
+     * Only works if the fetched object type is JSON.
+     *
+     * @return $this
+     */
+    public function withDecodeAsAssociative()
+    {
+        $this->decodeAsAssociative = true;
+        return $this;
+    }
+
+    /**
+     * Fetch the setting for decodeAsAssociative.
+     *
+     * @return bool
+     */
+    public function getDecodeAsAssociative()
+    {
+        return $this->decodeAsAssociative;
+    }
 
     /**
      * {@inheritdoc}

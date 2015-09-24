@@ -147,7 +147,7 @@ class Builder
 
         throw new Node\Builder\Exception('Riak over HTTP does not support Certificate Authentication.');
 
-        return $this;
+        //return $this;
     }
 
     /**
@@ -211,6 +211,15 @@ class Builder
         $this->config->setPrivateKeyPassword($password);
 
         return $this;
+    }
+
+    /**
+     * Client side connection timeout for requests
+     *
+     * @param $timeout
+     */
+    public function withConnectionTimeout($timeout) {
+        $this->config->setConnectionTimeout($timeout);
     }
 
     /**

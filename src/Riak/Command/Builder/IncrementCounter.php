@@ -44,13 +44,6 @@ class IncrementCounter extends Command\Builder implements Command\BuilderInterfa
      */
     protected $increment = NULL;
 
-    public function __construct(Riak $riak)
-    {
-        parent::__construct($riak);
-
-        $this->headers['Content-Type'] = self::CONTENT_TYPE_JSON;
-    }
-
     /**
      * {@inheritdoc}
      *
@@ -70,10 +63,6 @@ class IncrementCounter extends Command\Builder implements Command\BuilderInterfa
     {
         $this->required('Bucket');
         $this->required('Increment');
-
-        if (!isset($this->headers['Content-Type']) || $this->headers['Content-Type'] != self::CONTENT_TYPE_JSON) {
-            throw new Exception('The \'Content-Type\' header is required to be ' . self::CONTENT_TYPE_JSON);
-        }
     }
 
     /**

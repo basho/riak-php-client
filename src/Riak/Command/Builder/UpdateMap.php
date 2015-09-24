@@ -61,13 +61,6 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     protected $context = '';
 
-    public function __construct(Riak $riak)
-    {
-        parent::__construct($riak);
-
-        $this->headers['Content-Type'] = self::CONTENT_TYPE_JSON;
-    }
-
     public function removeRegister($key)
     {
         $this->remove($key, 'register');
@@ -242,10 +235,6 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
         if ($count_remove) {
             $this->required('Location');
             $this->required('Context');
-        }
-
-        if (!isset($this->headers['Content-Type']) || $this->headers['Content-Type'] != self::CONTENT_TYPE_JSON) {
-            throw new Exception('The \'Content-Type\' header is required to be ' . self::CONTENT_TYPE_JSON);
         }
     }
 

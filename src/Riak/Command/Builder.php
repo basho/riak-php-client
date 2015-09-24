@@ -42,9 +42,6 @@ use Basho\Riak\DataType;
  */
 abstract class Builder
 {
-    const CONTENT_TYPE_JSON = 'application/json';
-    const CONTENT_TYPE_XML = 'application/xml';
-
     /**
      * @var Riak|null
      */
@@ -92,20 +89,6 @@ abstract class Builder
         return $this;
     }
 
-    public function withHeader($key, $value = true)
-    {
-        $this->headers[$key] = $value;
-
-        return $this;
-    }
-
-    public function withHeaders($headers = [])
-    {
-        $this->headers = $headers;
-
-        return $this;
-    }
-
     public function withVerboseMode($verbose = true)
     {
         $this->verbose = $verbose;
@@ -116,11 +99,6 @@ abstract class Builder
     public function getParameters()
     {
         return $this->parameters;
-    }
-
-    public function getHeaders()
-    {
-        return $this->headers;
     }
 
     public function getConnection()

@@ -54,7 +54,7 @@ class ObjectOperationsTest extends TestCase
         $response = $command->execute();
 
         // expects 201 - Created
-        $this->assertEquals('201', $response->getStatusCode());
+        $this->assertEquals('201', $response->getCode());
         $this->assertNotEmpty($response->getLocation());
         $this->assertInstanceOf('\Basho\Riak\Location', $response->getLocation());
     }
@@ -71,18 +71,14 @@ class ObjectOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('404', $response->getStatusCode());
+        $this->assertEquals('404', $response->getCode());
     }
 
     /**
-     * This test expects an exception on retrieval of Location, since a store with a key won't have it.
-     *
      * @depends      testFetchNotFound
      * @dataProvider getLocalNodeConnection
      *
      * @param $riak \Basho\Riak
-     *
-     * @expectedException \Basho\Riak\Command\Exception
      */
     public function testStoreNewWithKey($riak)
     {
@@ -95,7 +91,7 @@ class ObjectOperationsTest extends TestCase
 
         // expects 204 - No Content
         // this is wonky, its not 201 because the key may have been generated on another node
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
         $this->assertEmpty($response->getLocation());
     }
 
@@ -112,10 +108,10 @@ class ObjectOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
         $this->assertEquals('some_data', $response->getObject()->getData());
-        $this->assertNotEmpty($response->getVClock());
+        $this->assertNotEmpty($response->getObject()->getVclock());
 
         static::$object = $response->getObject();
     }
@@ -140,7 +136,7 @@ class ObjectOperationsTest extends TestCase
         $response = $command->execute();
 
         // 204 - No Content
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -157,7 +153,7 @@ class ObjectOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -174,7 +170,7 @@ class ObjectOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('404', $response->getStatusCode());
+        $this->assertEquals('404', $response->getCode());
 
         // deleted keys leave behind a tombstone with their causal context, aka vclock unless delete_immediate = 1
         //$this->assertNotEmpty($response->getVclock());
@@ -196,7 +192,7 @@ class ObjectOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         // Fetch as associative array
         $command = (new Command\Builder\FetchObject($riak))
@@ -205,7 +201,7 @@ class ObjectOperationsTest extends TestCase
             ->build();
 
         $response = $command->execute();
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertEquals($data, $response->getObject()->getData());
         $this->assertEquals('array', gettype($response->getObject()->getData()));
 
@@ -215,7 +211,7 @@ class ObjectOperationsTest extends TestCase
             ->build();
 
         $response = $command->execute();
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertEquals('object', gettype($response->getObject()->getData()));
     }
 }

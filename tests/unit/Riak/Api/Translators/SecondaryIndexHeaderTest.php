@@ -30,7 +30,7 @@ class SecondaryIndexHeaderTest extends TestCase
     public function testExtractIndexes()
     {
         $headers = ['My-Header' => 'cats', 'x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
-        $translator = new Api\Translators\SecondaryIndexHeaderTranslator();
+        $translator = new Api\Http\Translators\SecondaryIndexTranslator();
 
         $indexes = $translator->extractIndexesFromHeaders($headers);
 
@@ -47,7 +47,7 @@ class SecondaryIndexHeaderTest extends TestCase
     public function testExtractIndexesNoHeaders()
     {
         $headers = [];
-        $translator = new Api\Translators\SecondaryIndexHeaderTranslator();
+        $translator = new Api\Http\Translators\SecondaryIndexTranslator();
         $indexes = $translator->extractIndexesFromHeaders($headers);
 
         // Check that we get an empty array back.
@@ -58,7 +58,7 @@ class SecondaryIndexHeaderTest extends TestCase
     public function testCreateHeaders()
     {
         $indexes = ['foo_bin' => ['bar', 'baz'], 'foo_int' => [42, 50]];
-        $translator = new Api\Translators\SecondaryIndexHeaderTranslator();
+        $translator = new Api\Http\Translators\SecondaryIndexTranslator();
 
         $headers = $translator->createHeadersFromIndexes($indexes);
 

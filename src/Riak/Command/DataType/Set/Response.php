@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Command\DataType\Set;
 
 use Basho\Riak\DataType\Set;
+use Basho\Riak\Location;
 
 /**
  * Container for a response related to an operation on a set data type
@@ -29,29 +30,26 @@ class Response extends \Basho\Riak\Command\Response
     /**
      * @var \Basho\Riak\DataType\Set|null
      */
-    protected $set = NULL;
+    protected $set = null;
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    public function __construct($success = true, $code = 0, $message = '', $location = null, $set = null, $date = '')
     {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($success, $code, $message);
 
-        // make sure body isn't only whitespace & has a value for the counter
-        if (trim($body) && strpos($body, 'value')) {
-            // json response
-            $body = json_decode(rawurldecode($this->body));
-            $this->set = new Set($body->value, $body->context, $this->headers);
-        }
+        $this->set = $set;
+        $this->location = $location;
+        $this->date = $date;
     }
 
     /**
      * Retrieves the Location value from the response headers
      *
-     * @return string
+     * @return Location
      * @throws \Basho\Riak\Command\Exception
      */
     public function getLocation()
     {
-        return $this->getHeader('Location');
+        return $this->location;
     }
 
     /**
@@ -63,13 +61,13 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * Retrieves the date of the set's retrieval
+     * Retrieves the date of the counter's retrieval
      *
      * @return string
      * @throws \Basho\Riak\Command\Exception
      */
     public function getDate()
     {
-        return $this->getHeader('Date');
+        return $this->date;
     }
 }

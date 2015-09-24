@@ -17,9 +17,8 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak;
 
-use Basho\Riak\Api\Translators\SecondaryIndexHeaderTranslator;
-use Basho\Riak\Link;
-use Basho\Riak\MapReduce;
+use Basho\Riak;
+use Basho\Riak\Api\Http\Translators\SecondaryIndexTranslator;
 
 /**
  * Main class for data objects in Riak
@@ -28,8 +27,6 @@ use Basho\Riak\MapReduce;
  */
 class Object
 {
-    use HeadersTrait;
-
     /**
      * Stored data or object
      *
@@ -39,11 +36,21 @@ class Object
 
     protected $indexes = [];
 
+    protected $vclock = '';
+
+    protected $content_type = 'text/plain';
+
+    protected $content_encoding = 'utf-8';
+
+    protected $charset = 'utf-8';
+
+    protected $metadata = [];
+
     /**
      * @param mixed|null $data
-     * @param array|null $headers
+     * @param array|null $headers DEPRECATED
      */
-    public function __construct($data = null, $headers = null)
+    public function __construct($data = null, $headers = [])
     {
         $this->data = $data;
 
@@ -51,10 +58,30 @@ class Object
             return;
         }
 
-        $translator = new SecondaryIndexHeaderTranslator();
-        $this->indexes = $translator->extractIndexesFromHeaders($headers);
+        $this->indexes = (new SecondaryIndexTranslator)->extractIndexesFromHeaders($headers);
 
-        $this->headers = $headers;
+        // to prevent breaking the interface, parse $headers and place important stuff in new home
+        if (!empty($headers[Riak\Api\Http::CONTENT_TYPE_KEY])) {
+            // if charset is defined within the Content-Type header
+            if (strpos($headers[Riak\Api\Http::CONTENT_TYPE_KEY], 'charset')) {
+                $parts = explode(';', trim($headers[Riak\Api\Http::CONTENT_TYPE_KEY]));
+                $this->content_type = $parts[0];
+                $this->charset = trim(strrpos($parts[1], '='));
+            } else {
+                $this->content_type = $headers[Riak\Api\Http::CONTENT_TYPE_KEY];
+            }
+        }
+
+        if (!empty($headers[Riak\Api\Http::VCLOCK_KEY])) {
+            $this->vclock = $headers[Riak\Api\Http::VCLOCK_KEY];
+        }
+
+        // pull out metadata headers
+        foreach($headers as $key => $value) {
+            if (strpos($key, Riak\Api\Http::METADATA_PREFIX) !== false) {
+                $this->metadata[substr($key, strlen(Riak\Api\Http::METADATA_PREFIX))] = $value;
+            }
+        }
     }
 
     public function getData()
@@ -71,7 +98,68 @@ class Object
 
     public function getContentType()
     {
-        return $this->getHeader('Content-Type');
+        return $this->content_type;
+    }
+
+    /**
+     * @param string $content_type
+     * @return $this
+     */
+    public function setContentType($content_type)
+    {
+        $this->content_type = $content_type;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentEncoding()
+    {
+        return $this->content_encoding;
+    }
+
+    /**
+     * @param string $content_encoding
+     * @return $this
+     */
+    public function setContentEncoding($content_encoding)
+    {
+        $this->content_encoding = $content_encoding;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCharset()
+    {
+        return $this->charset;
+    }
+
+    /**
+     * @param string $charset
+     * @return $this
+     */
+    public function setCharset($charset)
+    {
+        $this->charset = $charset;
+        return $this;
+    }
+
+    public function getVclock()
+    {
+        return $this->vclock;
+    }
+
+    /**
+     * @param string $vclock
+     * @return $this
+     */
+    public function setVclock($vclock)
+    {
+        $this->vclock = $vclock;
+        return $this;
     }
 
     public function getIndexes()
@@ -104,8 +192,8 @@ class Object
                 "'index. Expecting '*_int' for an integer index, or '*_bin' for a string index.");
         }
 
-        $isIntIndex = SecondaryIndexHeaderTranslator::isIntIndex($indexName);
-        $isStringIndex = SecondaryIndexHeaderTranslator::isStringIndex($indexName);
+        $isIntIndex = SecondaryIndexTranslator::isIntIndex($indexName);
+        $isStringIndex = SecondaryIndexTranslator::isStringIndex($indexName);
 
         if (!$isIntIndex && !$isStringIndex) {
             throw new \InvalidArgumentException("Invalid index type for '" . $indexName .
@@ -135,11 +223,32 @@ class Object
             array_splice($this->indexes[$indexName], $valuePos, 1);
         }
 
-        if(count($this->indexes[$indexName]) == 0) {
+        if (count($this->indexes[$indexName]) == 0) {
             unset($this->indexes[$indexName]);
         }
 
         return $this;
     }
 
+    public function setMetaDataValue($key, $value = '')
+    {
+        $this->metadata[$key] = $value;
+        return $this;
+    }
+
+    public function getMetaDataValue($key)
+    {
+        return $this->metadata[$key];
+    }
+
+    public function removeMetaDataValue($key)
+    {
+        unset($this->metadata[$key]);
+        return $this;
+    }
+
+    public function getMetaData()
+    {
+        return $this->metadata;
+    }
 }

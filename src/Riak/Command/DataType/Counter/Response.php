@@ -18,6 +18,7 @@ specific language governing permissions and limitations under the License.
 namespace Basho\Riak\Command\DataType\Counter;
 
 use Basho\Riak\DataType\Counter;
+use Basho\Riak\Location;
 
 /**
  * Container for a response related to an operation on an object
@@ -29,29 +30,36 @@ class Response extends \Basho\Riak\Command\Response
     /**
      * @var \Basho\Riak\DataType\Counter|null
      */
-    protected $counter = NULL;
+    protected $counter = null;
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    /**
+     * @var Location
+     */
+    protected $location = null;
+
+    /**
+     * @var string
+     */
+    protected $date = '';
+
+    public function __construct($success = true, $code = 0, $message = '', $location = null, $counter = null, $date = '')
     {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($success, $code, $message);
 
-        // make sure body isn't only whitespace & has a value for the counter
-        if (trim($body) && strpos($body, 'value')) {
-            // json response
-            $body = json_decode(rawurldecode($this->body));
-            $this->counter = new Counter($body->value, $this->headers);
-        }
+        $this->counter = $counter;
+        $this->location = $location;
+        $this->date = $date;
     }
 
     /**
      * Retrieves the Location value from the response headers
      *
-     * @return string
+     * @return Location
      * @throws \Basho\Riak\Command\Exception
      */
     public function getLocation()
     {
-        return $this->getHeader('Location');
+        return $this->location;
     }
 
     /**
@@ -70,6 +78,6 @@ class Response extends \Basho\Riak\Command\Response
      */
     public function getDate()
     {
-        return $this->getHeader('Date');
+        return $this->date;
     }
 }

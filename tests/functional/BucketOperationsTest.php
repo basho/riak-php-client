@@ -44,7 +44,7 @@ class BucketOperationsTest extends TestCase
         $response = $command->execute();
 
         // expects 201 - Created
-        $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
     /**
@@ -61,7 +61,7 @@ class BucketOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
 
         $bucket = $response->getBucket();
         $this->assertNotEmpty($bucket->getProperties());
@@ -84,7 +84,7 @@ class BucketOperationsTest extends TestCase
         $response = $command->execute();
 
         // expects 201 - Created
-        $this->assertEquals('204', $response->getStatusCode(), $response->getBody());
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
     /**
@@ -101,7 +101,7 @@ class BucketOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
 
         $bucket = $response->getBucket();
         $this->assertNotEmpty($bucket->getProperties());

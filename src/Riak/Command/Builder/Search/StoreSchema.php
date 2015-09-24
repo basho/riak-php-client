@@ -34,13 +34,6 @@ class StoreSchema extends Command\Builder implements Command\BuilderInterface
 
     protected $schema = '';
 
-    public function __construct(Riak $riak)
-    {
-        parent::__construct($riak);
-
-        $this->headers['Content-Type'] = self::CONTENT_TYPE_XML;
-    }
-
     public function withSchemaFile($schema_file)
     {
         $this->schema = file_get_contents($schema_file);

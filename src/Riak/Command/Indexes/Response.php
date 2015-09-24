@@ -30,7 +30,6 @@ class Response extends \Basho\Riak\Command\Response
      */
     protected $results = [];
 
-
     /**
      * @var bool
      */
@@ -43,34 +42,21 @@ class Response extends \Basho\Riak\Command\Response
      */
     protected $continuation = null;
 
-    public function __construct($statusCode, $headers = [], $body = '')
+    protected $date = '';
+
+    public function __construct($success = true, $code = 0, $message = '', $results = [], $termsReturned = false, $continuation = null, $done = true, $date = '')
     {
-        parent::__construct($statusCode, $headers, $body);
+        parent::__construct($success, $code, $message);
 
-        // make sure body is not only whitespace
-        if (trim($body)) {
-            $this->decodeBody($body);
-        }
-    }
+        $this->results = $results;
+        $this->termsReturned = $termsReturned;
+        $this->continuation = $continuation;
+        $this->done = $done;
+        $this->date = $date;
 
-    private function decodeBody($body)
-    {
-        $body = json_decode(rawurldecode($body), true);
-
-        if (isset($body['keys'])) {
-            $this->results = $body['keys'];
-        }
-
-        if (isset($body['results'])) {
-            $this->results = $body['results'];
-            $this->termsReturned = true;
-        }
-
-        if (isset($body['continuation'])) {
-            $this->continuation = $body['continuation'];
-            $this->done = false;
-        } else {
-            $this->done = true;
+        // when timeout is used, cURL returns success for some reason
+        if (in_array($code, ['501', '503'])) {
+            $this->success = false;
         }
     }
 
@@ -105,22 +91,14 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return bool
-     */
-    public function isSuccess()
-    {
-        return $this->statusCode == '200' ? TRUE : FALSE;
-    }
-
-    /**
-     * Retrieves the date of the object's retrieval
+     * Retrieves the date of the counter's retrieval
      *
      * @return string
      * @throws \Basho\Riak\Command\Exception
      */
     public function getDate()
     {
-        return $this->getHeader('Date');
+        return $this->date;
     }
 
     public function isDone()

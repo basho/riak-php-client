@@ -52,10 +52,6 @@ class FetchObjectTest extends TestCase
         $command = $builder->build();
 
         $this->assertEquals('some_type', $command->getBucket()->getType());
-
-        $headers = $builder->getHeaders();
-        $this->assertTrue(isset($headers['Accept']));
-        $this->assertEquals('multipart/mixed, */*', $headers['Accept']);
     }
 
     /**

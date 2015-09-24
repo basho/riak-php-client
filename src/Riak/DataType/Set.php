@@ -41,13 +41,11 @@ class Set extends DataType
     /**
      * @param array $data
      * @param $context
-     * @param array $headers
      */
-    public function __construct(array $data, $context, array $headers)
+    public function __construct(array $data, $context)
     {
         $this->data = $data;
         $this->context = $context;
-        $this->headers = $headers;
     }
 
     /**

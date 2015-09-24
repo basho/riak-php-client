@@ -51,13 +51,6 @@ class Fetch extends Command implements CommandInterface
         return '';
     }
 
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
-    }
-
     /**
      * @return Command\Search\Index\Response
      */

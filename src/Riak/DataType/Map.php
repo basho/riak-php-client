@@ -39,13 +39,11 @@ class Map extends DataType
     /**
      * @param array $data
      * @param $context
-     * @param array $headers
      */
-    public function __construct(array $data, $context, array $headers)
+    public function __construct(array $data, $context)
     {
         $this->data = $data;
         $this->context = $context;
-        $this->headers = $headers;
     }
 
     /**
@@ -98,7 +96,7 @@ class Map extends DataType
      */
     public function getCounter($key)
     {
-        return new Counter($this->getDataByKey($key, Counter::TYPE), $this->headers);
+        return new Counter($this->getDataByKey($key, Counter::TYPE));
     }
 
     /**
@@ -108,7 +106,7 @@ class Map extends DataType
      */
     public function getSet($key)
     {
-        return new Set($this->getDataByKey($key, Set::TYPE), $this->context, $this->headers);
+        return new Set($this->getDataByKey($key, Set::TYPE), $this->context);
     }
 
     /**
@@ -118,7 +116,7 @@ class Map extends DataType
      */
     public function getMap($key)
     {
-        return new Map($this->getDataByKey($key, Map::TYPE), $this->context, $this->headers);
+        return new Map($this->getDataByKey($key, Map::TYPE), $this->context);
     }
 
     public function getContext()

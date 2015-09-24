@@ -44,7 +44,7 @@ class ObjectConflictTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
 
         $command = (new Command\Builder\StoreObject($riak))
             ->buildObject('some_other_data')
@@ -53,7 +53,7 @@ class ObjectConflictTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -70,11 +70,12 @@ class ObjectConflictTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('300', $response->getStatusCode());
+        $this->assertEquals('300', $response->getCode());
         $this->assertTrue($response->hasSiblings());
         $this->assertNotEmpty($response->getSiblings());
+        $this->assertNotEmpty($response->getObject()->getVclock());
 
-        static::$vclock = $response->getVclock();
+        static::$vclock = $response->getObject()->getVclock();
     }
 
     /**
@@ -85,15 +86,17 @@ class ObjectConflictTest extends TestCase
      */
     public function testResolveConflict($riak)
     {
+        $object = new Riak\Object('some_resolved_data');
+        $object->setVclock(static::$vclock);
+
         $command = (new Command\Builder\StoreObject($riak))
-            ->withHeader('X-Riak-Vclock', static::$vclock)
-            ->buildObject('some_resolved_data')
+            ->withObject($object)
             ->buildLocation(static::$key, 'test', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
         $response = $command->execute();
 
-        $this->assertEquals('204', $response->getStatusCode());
+        $this->assertEquals('204', $response->getCode());
     }
 
     /**
@@ -110,7 +113,7 @@ class ObjectConflictTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getStatusCode());
+        $this->assertEquals('200', $response->getCode());
         $this->assertEquals('some_resolved_data', $response->getObject()->getData());
     }
 }

@@ -84,7 +84,7 @@ class UpdateMapTest extends TestCase
     {
         $builder = new Command\Builder\UpdateMap($riak);
         $builder->buildBucket('some_bucket');
-        $command = $builder->build();
+        $builder->build();
     }
 
     /**
@@ -100,7 +100,7 @@ class UpdateMapTest extends TestCase
     {
         $builder = new Command\Builder\UpdateMap($riak);
         $builder->updateRegister('some_key', 'some_data');
-        $command = $builder->build();
+        $builder->build();
     }
 
     /**
@@ -116,6 +116,6 @@ class UpdateMapTest extends TestCase
     {
         $builder = new Command\Builder\UpdateMap($riak);
         $builder->removeRegister('some_key');
-        $command = $builder->build();
+        $builder->build();
     }
 }

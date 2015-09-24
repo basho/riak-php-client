@@ -112,7 +112,7 @@ class ObjectTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidIndexName()
     {
@@ -124,7 +124,7 @@ class ObjectTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidDataTypeForBinIndex()
     {
@@ -136,7 +136,7 @@ class ObjectTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidDataTypeForIntIndex()
     {
