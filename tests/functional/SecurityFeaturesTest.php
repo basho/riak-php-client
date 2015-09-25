@@ -41,8 +41,8 @@ class SecurityFeaturesTest extends TestCase
     {
         $nodes = [
             (new Riak\Node\Builder())
-                ->atHost(static::TEST_NODE_HOST)
-                ->onPort(static::TEST_NODE_SECURE_PORT)
+                ->atHost(static::getTestHost())
+                ->onPort(static::getTestSecurePort())
                 ->usingPasswordAuthentication('unauthorizeduser', 'hispassword')
                 ->withCertificateAuthorityFile(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem')
                 ->build()
@@ -66,8 +66,8 @@ class SecurityFeaturesTest extends TestCase
     {
         $nodes = [
             (new Riak\Node\Builder())
-                ->atHost(static::TEST_NODE_HOST)
-                ->onPort(static::TEST_NODE_SECURE_PORT)
+                ->atHost(static::getTestHost())
+                ->onPort(static::getTestSecurePort())
                 ->usingPasswordAuthentication('riakpass', 'Test1234')
                 ->withCertificateAuthorityFile(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem')
                 ->build()
