@@ -28,7 +28,8 @@ use Basho\Riak\Node;
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     const TEST_NODE_HOST = 'riak-test';
-    const TEST_NODE_PORT = 8098;
+    const TEST_NODE_PORT = 8087;
+    const TEST_NODE_HTTP_PORT = 8098;
     const TEST_NODE_SECURE_PORT = 10011;
 
     const SEARCH_BUCKET_TYPE = 'phptest_search';
@@ -90,18 +91,28 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     public static function getTestHost()
     {
         $host = getenv('RIAK_HOST');
-        return $host ? $host : static::TEST_NODE_HOST;
+        return $host ?: static::TEST_NODE_HOST;
     }
 
     public static function getTestPort()
     {
-        $port = getenv('RIAK_PORT');
-        return $port ? $port : static::TEST_NODE_PORT;
+        if (getenv('PB_INSTANCE')) {
+            $port = getenv('RIAK_PORT') ? getenv('RIAK_PORT') : static::TEST_NODE_PORT;
+        } else {
+            $port = getenv('RIAK_HTTP_PORT') ? getenv('RIAK_HTTP_PORT') : static::TEST_NODE_HTTP_PORT;
+        }
+
+        return $port;
     }
 
     public static function getTestSecurePort()
     {
-        $port = getenv('RIAK_SECURE_PORT');
-        return $port ? $port : static::TEST_NODE_SECURE_PORT;
+        if (getenv('PB_INSTANCE')) {
+            $port = static::getTestPort();
+        } else {
+            $port = getenv('RIAK_HTTPS_PORT') ? getenv('RIAK_HTTPS_PORT') : static::TEST_NODE_SECURE_PORT;
+        }
+
+        return $port;
     }
 }
