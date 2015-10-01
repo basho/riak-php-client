@@ -97,7 +97,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     public static function getTestPort()
     {
-        if (getenv('PB_INSTANCE')) {
+        if (getenv('PB_INTERFACE')) {
             $port = getenv('RIAK_PORT') ? getenv('RIAK_PORT') : static::TEST_NODE_PORT;
         } else {
             $port = getenv('RIAK_HTTP_PORT') ? getenv('RIAK_HTTP_PORT') : static::TEST_NODE_HTTP_PORT;
@@ -108,7 +108,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     public static function getTestSecurePort()
     {
-        if (getenv('PB_INSTANCE')) {
+        if (getenv('PB_INTERFACE')) {
             $port = static::getTestPort();
         } else {
             $port = getenv('RIAK_HTTPS_PORT') ? getenv('RIAK_HTTPS_PORT') : static::TEST_NODE_SECURE_PORT;
