@@ -99,7 +99,7 @@ class Config
      *
      * @var int
      */
-    protected $connection_timeout = 0;
+    protected $connection_timeout = 10;
 
 
     /**

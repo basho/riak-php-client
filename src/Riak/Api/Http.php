@@ -25,7 +25,6 @@ use Basho\Riak\Command;
 use Basho\Riak\DataType\Counter;
 use Basho\Riak\DataType\Map;
 use Basho\Riak\DataType\Set;
-use Basho\Riak\Exception;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
 
@@ -267,7 +266,7 @@ class Http extends Api implements ApiInterface
      *
      * @param Bucket $bucket
      * @return string
-     * @throws Exception if 2i query is invalid.
+     * @throws Api\Exception if 2i query is invalid.
      */
     private function createIndexQueryPath(Bucket $bucket)
     {
@@ -289,7 +288,7 @@ class Http extends Api implements ApiInterface
         }
         else
         {
-            throw new Exception("Invalid Secondary Index Query.");
+            throw new Api\Exception("Invalid Secondary Index Query.");
         }
 
         return $path;
@@ -301,7 +300,7 @@ class Http extends Api implements ApiInterface
      * Sets general connection options that are used with every request
      *
      * @return $this
-     * @throws Exception
+     * @throws Api\Exception
      */
     protected function prepareConnection()
     {
@@ -315,7 +314,7 @@ class Http extends Api implements ApiInterface
             } elseif ($this->node->getCaDirectory()) {
                 $this->options[CURLOPT_CAPATH] = $this->node->getCaDirectory();
             } else {
-                throw new Exception('A Certificate Authority file is required for secure connections.');
+                throw new Api\Exception('A Certificate Authority file is required for secure connections.');
             }
 
             // verify CA file

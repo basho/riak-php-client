@@ -76,7 +76,7 @@ abstract class Object extends Command
             return json_decode($data, $decodeAsAssociative);
         }
 
-        return rawurlencode($data);
+        return rawurldecode($data);
     }
 
     public function getData()
