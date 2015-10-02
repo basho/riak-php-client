@@ -254,6 +254,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Indexes\Query':
                 $this->path = $this->createIndexQueryPath($bucket);
                 break;
+            case 'Basho\Riak\Command\Ping':
+                $this->path = '/ping';
+                break;
             default:
                 $this->path = '';
         }
@@ -751,6 +754,7 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Object\Delete':
             case 'Basho\Riak\Command\Bucket\Delete':
             case 'Basho\Riak\Command\Search\Index\Delete':
+            case 'Basho\Riak\Command\Ping':
             default:
                 $response = new Command\Response($this->success, $this->statusCode, $this->error);
                 break;
