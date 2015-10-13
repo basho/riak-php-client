@@ -35,8 +35,8 @@ class Response extends \Basho\Riak\Command\Response
         parent::__construct($statusCode, $headers, $body);
 
         // make sure body is not only whitespace
-        if (trim($body) && in_array($this->statusCode, [200,204])) {
-            $this->results = json_decode($body);
+        $this->results = in_array($this->statusCode, [200,204]) ? json_decode($body) : null;
+        if ($this->results) {
             foreach ($this->results->response->docs as $doc) {
                 $this->docs[] = new Doc($doc);
             }
