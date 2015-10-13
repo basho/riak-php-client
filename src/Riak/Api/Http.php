@@ -632,7 +632,7 @@ class Http extends Api implements ApiInterface
     protected function parseResponse()
     {
         // trim leading / trailing whitespace
-        $body = trim($this->responseBody);
+        $body = $this->responseBody;
         $location = null;
         if ($this->getResponseHeader('Location')) {
             $location = Location::fromString($this->getResponseHeader('Location'));
@@ -643,11 +643,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Bucket\Fetch':
                 $bucket = null;
                 $modified = $this->getResponseHeader(static::LAST_MODIFIED_KEY, '');
-                if ($body) {
-                    $properties = json_decode($body, true);
-                    if ($this->command->getBucket()) {
-                        $bucket = new Bucket($this->command->getBucket()->getName(), $this->command->getBucket()->getType(), $properties['props']);
-                    }
+                $properties = json_decode($body, true);
+                if ($properties && $this->command->getBucket()) {
+                    $bucket = new Bucket($this->command->getBucket()->getName(), $this->command->getBucket()->getType(), $properties['props']);
                 }
                 $response = new Command\Bucket\Response($this->success, $this->statusCode, $this->error, $bucket, $modified);
                 break;
@@ -657,17 +655,16 @@ class Http extends Api implements ApiInterface
                 /** @var Command\Object $command */
                 $command = $this->command;
                 $objects = (new Api\Http\Translators\ObjectResponse($command, $this->statusCode))
-                    ->parseResponse($this->responseBody, $this->responseHeaders);
+                    ->parseResponse($body, $this->responseHeaders);
                 $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, $objects);
                 break;
 
             case 'Basho\Riak\Command\DataType\Counter\Store':
             case 'Basho\Riak\Command\DataType\Counter\Fetch':
                 $counter = null;
-                if ($body && strpos($body, 'value')) {
-                    // json response
-                    $body = json_decode(rawurldecode($body));
-                    $counter = new Counter($body->value);
+                $json_object = json_decode($body);
+                if ($json_object && isset($json_object->value)) {
+                    $counter = new Counter($json_object->value);
                 }
                 $response = new Command\DataType\Counter\Response(
                     $this->success, $this->statusCode, $this->error, $location, $counter, $this->getResponseHeader('Date')
@@ -677,10 +674,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Set\Store':
             case 'Basho\Riak\Command\DataType\Set\Fetch':
                 $set = null;
-                if ($body && strpos($body, 'value')) {
-                    // json response
-                    $body = json_decode(rawurldecode($body));
-                    $set = new Set($body->value, $body->context);
+                $json_object = json_decode($body);
+                if ($json_object && isset($json_object->value)) {
+                    $set = new Set($json_object->value, $json_object->context);
                 }
                 $response = new Command\DataType\Set\Response(
                     $this->success, $this->statusCode, $this->error, $location, $set, $this->getResponseHeader('Date')
@@ -690,10 +686,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Map\Store':
             case 'Basho\Riak\Command\DataType\Map\Fetch':
                 $map = null;
-                if ($body && strpos($body, 'value')) {
-                    // json response
-                    $body = json_decode(rawurldecode($body), true);
-                    $map = new Map($body['value'], $body['context']);
+                $json_object = json_decode($body, true);
+                if ($json_object && isset($json_object['value'])) {
+                    $map = new Map($json_object['value'], $json_object['context']);
                 }
                 $response = new Command\DataType\Map\Response(
                     $this->success, $this->statusCode, $this->error, $location, $map, $this->getResponseHeader('Date')
@@ -701,17 +696,15 @@ class Http extends Api implements ApiInterface
                 break;
 
             case 'Basho\Riak\Command\Search\Fetch':
-                $results = null;
-                if ($body && in_array($this->statusCode, [200,204])) {
-                    $results = json_decode($body);
-                }
+                $results = in_array($this->statusCode, [200,204]) ? json_decode($body) : null;
                 $response = new Command\Search\Response($this->success, $this->statusCode, $this->error, $results);
                 break;
             case 'Basho\Riak\Command\Search\Index\Store':
             case 'Basho\Riak\Command\Search\Index\Fetch':
-                $index = $body ? json_decode($body) : null;
+                $index = json_decode($body);
                 $response = new Command\Search\Index\Response($this->success, $this->statusCode, $this->error, $index);
                 break;
+
             case 'Basho\Riak\Command\Search\Schema\Store':
             case 'Basho\Riak\Command\Search\Schema\Fetch':
                 $response = new Command\Search\Schema\Response(
@@ -720,30 +713,27 @@ class Http extends Api implements ApiInterface
                 break;
 
             case 'Basho\Riak\Command\MapReduce\Fetch':
-                $results = null;
-                if ($body) {
-                    $results = json_decode($body);
-                }
+                $results = in_array($this->statusCode, [200,204]) ? json_decode($body) : null;
                 $response = new Command\MapReduce\Response($this->success, $this->statusCode, $this->error, $results);
                 break;
             case 'Basho\Riak\Command\Indexes\Query':
-                $body = json_decode(rawurldecode($body), true);
+                $json_object = in_array($this->statusCode, [200,204]) ? json_decode($body, true) : null;
                 $results = [];
                 $termsReturned = false;
                 $continuation = null;
                 $done = true;
 
-                if (isset($body['keys'])) {
-                    $results = $body['keys'];
+                if (isset($json_object['keys'])) {
+                    $results = $json_object['keys'];
                 }
 
-                if (isset($body['results'])) {
-                    $results = $body['results'];
+                if (isset($json_object['results'])) {
+                    $results = $json_object['results'];
                     $termsReturned = true;
                 }
 
-                if (isset($body['continuation'])) {
-                    $continuation = $body['continuation'];
+                if (isset($json_object['continuation'])) {
+                    $continuation = $json_object['continuation'];
                     $done = false;
                 }
 
