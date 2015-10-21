@@ -257,6 +257,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Ping':
                 $this->path = '/ping';
                 break;
+            case 'Basho\Riak\Command\Stats':
+                $this->path = '/stats';
+                break;
             default:
                 $this->path = '';
         }
@@ -740,6 +743,9 @@ class Http extends Api implements ApiInterface
                 $response = new Command\Indexes\Response(
                     $this->success, $this->statusCode, $this->error, $results, $termsReturned, $continuation, $done, $this->getResponseHeader('Date')
                 );
+                break;
+            case 'Basho\Riak\Command\Stats':
+                $response = new Command\Stats\Response($this->success, $this->statusCode, $this->error, json_decode($body));
                 break;
             case 'Basho\Riak\Command\Object\Delete':
             case 'Basho\Riak\Command\Bucket\Delete':
