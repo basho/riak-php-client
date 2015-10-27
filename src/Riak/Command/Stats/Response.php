@@ -29,7 +29,7 @@ class Response extends \Basho\Riak\Command\Response
 {
     protected $stats = [];
 
-    public function __construct($success = true, $code = 0, $message = '', $data = []])
+    public function __construct($success = true, $code = 0, $message = '', $data = [])
     {
         parent::__construct($success, $code, $message);
 
