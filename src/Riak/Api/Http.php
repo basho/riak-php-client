@@ -745,7 +745,7 @@ class Http extends Api implements ApiInterface
                 );
                 break;
             case 'Basho\Riak\Command\Stats':
-                $response = new Command\Stats\Response($this->success, $this->statusCode, $this->error, json_decode($body));
+                $response = new Command\Stats\Response($this->success, $this->statusCode, $this->error, json_decode($body, true));
                 break;
             case 'Basho\Riak\Command\Object\Delete':
             case 'Basho\Riak\Command\Bucket\Delete':

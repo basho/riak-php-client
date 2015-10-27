@@ -27,9 +27,9 @@ use Basho\Riak\Object;
  */
 class Response extends \Basho\Riak\Command\Response
 {
-    protected $stats = null;
+    protected $stats = [];
 
-    public function __construct($success = true, $code = 0, $message = '', $data = null)
+    public function __construct($success = true, $code = 0, $message = '', $data = []])
     {
         parent::__construct($success, $code, $message);
 
@@ -37,10 +37,14 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     public function __get($name) {
-        if (isset($this->stats->{$name})) {
-            return $this->stats->{$name};
+        if (isset($this->stats[$name])) {
+            return $this->stats[$name];
         }
 
         return null;
+    }
+
+    public function getAllStats() {
+        return $this->stats;
     }
 }
