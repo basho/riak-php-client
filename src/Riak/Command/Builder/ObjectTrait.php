@@ -17,6 +17,7 @@ specific language governing permissions and limitations under the License.
 
 namespace Basho\Riak\Command\Builder;
 
+use Basho\Riak\Api\Http;
 use Basho\Riak\Object;
 
 /**
@@ -77,7 +78,9 @@ trait ObjectTrait
      */
     public function buildJsonObject($data)
     {
-        $this->object = new Object($data, ['Content-Type' => 'application/json']);
+        $this->object = new Object();
+        $this->object->setData($data);
+        $this->object->setContentType(Http::CONTENT_TYPE_JSON);
 
         return $this;
     }
