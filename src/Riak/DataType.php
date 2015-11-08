@@ -27,6 +27,8 @@ abstract class DataType
     /**
      * DataType::TYPE
      *
+     * Defines the key to be used to identify the data type. Used within a Maps composite key.
+     *
      * @var string
      */
     const TYPE = '';

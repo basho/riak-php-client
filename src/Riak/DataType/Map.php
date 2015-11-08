@@ -32,6 +32,20 @@ class Map extends DataType
     const TYPE = 'map';
 
     /**
+     * Used within a composite key to identify a flag (bool) element
+     *
+     * @var string
+     */
+    const FLAG = 'flag';
+
+    /**
+     * Used within a composite key to identify a register (string) element
+     *
+     * @var string
+     */
+    const REGISTER = 'register';
+
+    /**
      * @var string
      */
     private $context;
