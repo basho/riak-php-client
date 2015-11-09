@@ -168,6 +168,12 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Indexes\Query':
                 $this->path = $this->createIndexQueryPath($bucket);
                 break;
+            case 'Basho\Riak\Command\Ping':
+                $this->path = '/ping';
+                break;
+            case 'Basho\Riak\Command\Stats':
+                $this->path = '/stats';
+                break;
             default:
                 $this->path = '';
         }
