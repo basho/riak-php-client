@@ -74,6 +74,16 @@ class Object
         return $this->getHeader('Content-Type');
     }
 
+    /**
+     * The Vclock identifies the state of an object
+     *
+     * @return null|string
+     */
+    public function getVclock()
+    {
+        return $this->getHeader('X-Riak-Vclock');
+    }
+
     public function getIndexes()
     {
         return $this->indexes;

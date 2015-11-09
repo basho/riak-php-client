@@ -92,4 +92,14 @@ class Response
     {
         return in_array($this->statusCode, ['200', '201', '204']) ? true : false;
     }
+
+    /**
+     * Added for backwards compatibility with the Zend Z-Ray plugin, provides error message in versions 3.0+
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return '';
+    }
 }
