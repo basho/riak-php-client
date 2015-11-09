@@ -2,9 +2,6 @@
 
 namespace Basho\Riak\Command\Stats;
 
-use Basho\Riak\Location;
-use Basho\Riak\Object;
-
 /**
  * Container for a response related to an operation on an object
  *
@@ -16,7 +13,7 @@ class Response extends \Basho\Riak\Command\Response
 
     public function __construct($statusCode, $headers = [], $body = '')
     {
-        parent::__construct($statusCode, $headers = [], $body = '');
+        parent::__construct($statusCode, $headers, $body);
 
         $this->stats = json_decode($body, true);
     }
