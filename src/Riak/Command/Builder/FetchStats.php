@@ -35,7 +35,7 @@ class FetchStats extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Ping;
+     * @return Command\Stats;
      */
     public function build()
     {
