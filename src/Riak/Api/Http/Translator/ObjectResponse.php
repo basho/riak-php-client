@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Api\Http\Translators;
+namespace Basho\Riak\Api\Http\Translator;
 
 use Basho\Riak\Api\Http;
 use Basho\Riak\Command;

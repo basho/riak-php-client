@@ -14,13 +14,13 @@ Unless required by applicable law or agreed to in writing, software distributed 
 specific language governing permissions and limitations under the License.
 */
 
-namespace Basho\Riak\Api\Http\Translators;
+namespace Basho\Riak\Api\Http\Translator;
 
 
 /**
  * @author Alex Moore <amoore at basho d0t com>
  */
-class SecondaryIndexTranslator
+class SecondaryIndex
 {
     const INT_INDEX_SUFFIX = '_int';
     const STR_IDX_SUFFIX = '_bin';

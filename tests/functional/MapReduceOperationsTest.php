@@ -35,17 +35,10 @@ class MapReduceOperationsTest extends TestCase
 
     public static function setUpBeforeClass()
     {
-        $node = [
-            (new Riak\Node\Builder)
-                ->atHost(static::getTestHost())
-                ->onPort(static::getTestPort())
-                ->build()
-        ];
-
-        $riak = new Riak($node);
+        parent::setUpBeforeClass();
 
         foreach (static::$mr_content as $key => $value) {
-            $command = (new Command\Builder\StoreObject($riak))
+            $command = (new Command\Builder\StoreObject(static::$riak))
                 ->buildObject($value)
                 ->buildLocation($key, 'phptest_mr')
                 ->build();
@@ -56,32 +49,20 @@ class MapReduceOperationsTest extends TestCase
 
     public static function tearDownAfterClass()
     {
-        $node = [
-            (new Riak\Node\Builder)
-                ->atHost(static::getTestHost())
-                ->onPort(static::getTestPort())
-                ->build()
-        ];
-
-        $riak = new Riak($node);
-
         foreach (static::$mr_content as $key => $object) {
-            $command = (new Command\Builder\DeleteObject($riak))
+            $command = (new Command\Builder\DeleteObject(static::$riak))
                 ->buildLocation($key, 'phptest_mr')
                 ->build();
 
             $command->execute();
         }
+
+        parent::tearDownAfterClass();
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetch($riak)
+    public function testFetch()
     {
-        $command = (new Command\Builder\MapReduce\FetchObjects($riak))
+        $command = (new Command\Builder\MapReduce\FetchObjects(static::$riak))
             ->addBucketInput(new Riak\Bucket('phptest_mr'))
             ->buildMapPhase('', '',
                 "function(v) {var m = v.values[0].data.toLowerCase().match(/[A-Za-z]*/g); var r = []; for(var i in m) {if(m[i] != '') {var o = {};o[m[i]] = 1;r.push(o);}}return r;}")

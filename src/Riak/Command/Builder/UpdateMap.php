@@ -63,7 +63,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
 
     public function removeRegister($key)
     {
-        $this->remove($key, 'register');
+        $this->remove($key, Riak\DataType\Map::REGISTER);
 
         return $this;
     }
@@ -75,7 +75,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
 
     public function removeFlag($key)
     {
-        $this->remove($key, 'flag');
+        $this->remove($key, Riak\DataType\Map::FLAG);
 
         return $this;
     }
@@ -109,7 +109,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateRegister($key, $value)
     {
-        $this->update($key, 'register', $value);
+        $this->update($key, Riak\DataType\Map::REGISTER, $value);
 
         return $this;
     }
@@ -128,7 +128,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateFlag($key, $state = TRUE)
     {
-        $this->update($key, 'flag', $state);
+        $this->update($key, Riak\DataType\Map::FLAG, $state);
 
         return $this;
     }
@@ -141,7 +141,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateCounter($key, IncrementCounter $builder)
     {
-        $this->update($key, 'counter', $builder);
+        $this->update($key, Riak\DataType\Counter::TYPE, $builder);
 
         return $this;
     }
@@ -154,7 +154,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateSet($key, UpdateSet $builder)
     {
-        $this->update($key, 'set', $builder);
+        $this->update($key, Riak\DataType\Set::TYPE, $builder);
 
         return $this;
     }
@@ -167,7 +167,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateMap($key, UpdateMap $builder)
     {
-        $this->update($key, 'map', $builder);
+        $this->update($key, Riak\DataType\Map::TYPE, $builder);
 
         return $this;
     }

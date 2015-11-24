@@ -67,7 +67,7 @@ class Map extends DataType
      */
     public function getRegister($key)
     {
-        return $this->getDataByKey($key, 'register');
+        return $this->getDataByKey($key, static::REGISTER);
     }
 
     protected function getDataByKey($key, $type)
@@ -100,7 +100,7 @@ class Map extends DataType
      */
     public function getFlag($key)
     {
-        return $this->getDataByKey($key, 'flag') == 'enabled' ? TRUE : FALSE;
+        return $this->getDataByKey($key, static::FLAG) == 'enabled' ? TRUE : FALSE;
     }
 
     /**
