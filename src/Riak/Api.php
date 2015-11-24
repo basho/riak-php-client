@@ -159,4 +159,11 @@ abstract class Api
      * @return bool
      */
     abstract public function send();
+
+    /**
+     * Closes the connection to the Riak Interface
+     *
+     * @return null
+     */
+    abstract public function closeConnection();
 }
