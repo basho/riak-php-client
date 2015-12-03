@@ -11,6 +11,7 @@ use Basho\Riak\DataType\Map;
 use Basho\Riak\DataType\Set;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
+use Basho\Riak\Search\Doc;
 
 /**
  * Handles communications between end user app & Riak via Riak HTTP API using cURL
@@ -686,7 +687,15 @@ class Http extends Api implements ApiInterface
 
             case 'Basho\Riak\Command\Search\Fetch':
                 $results = in_array($this->statusCode, [200,204]) ? json_decode($body) : null;
-                $response = new Command\Search\Response($this->success, $this->statusCode, $this->error, $results);
+                $docs = [];
+                if (!empty($results->response->docs)) {
+                    foreach ($results->response->docs as $doc) {
+                        $docs[] = new Doc($doc);
+                    }
+                }
+                $numFound = !empty($results->response->numFound) ? $results->response->numFound : 0;
+
+                $response = new Command\Search\Response($this->success, $this->statusCode, $this->error, $numFound, $docs);
                 break;
             case 'Basho\Riak\Command\Search\Index\Store':
             case 'Basho\Riak\Command\Search\Index\Fetch':

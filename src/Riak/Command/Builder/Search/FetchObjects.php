@@ -178,14 +178,14 @@ class FetchObjects extends Command\Builder implements Command\BuilderInterface
 
     public function withDefaultField($default_field)
     {
-        $this->default_field = $default_field;
+        $this->parameters['df'] = $default_field;
 
         return $this;
     }
 
     public function withDefaultOperation($default_operation)
     {
-        $this->default_operation = $default_operation;
+        $this->parameters['op'] = $default_operation;
 
         return $this;
     }

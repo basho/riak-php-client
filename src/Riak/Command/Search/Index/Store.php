@@ -63,20 +63,6 @@ class Store extends Command implements CommandInterface
     }
 
     /**
-     * @param $statusCode
-     * @param array $responseHeaders
-     * @param string $responseBody
-     *
-     * @return $this
-     */
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Command\Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
-    }
-
-    /**
      * @return Command\Response
      */
     public function execute()

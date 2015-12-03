@@ -34,10 +34,6 @@ class Fetch extends Command implements CommandInterface
 
     protected $index_name;
 
-    protected $default_field;
-
-    protected $default_operation;
-
     public function __construct(Command\Builder\Search\FetchObjects $builder)
     {
         parent::__construct($builder);

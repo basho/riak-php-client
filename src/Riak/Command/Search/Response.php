@@ -27,27 +27,29 @@ use Basho\Riak\Search\Doc;
 class Response extends \Basho\Riak\Command\Response
 {
     /**
-     * @var \stdClass|null
+     * @var int
      */
-    protected $results = null;
+    protected $numFound = 0;
 
     /**
      * @var Doc[]
      */
     protected $docs = [];
 
-    public function __construct($success = true, $code = 0, $message = '', $results = null)
+    /**
+     * Response constructor.
+     * @param bool|true $success
+     * @param int $code
+     * @param string $message
+     * @param int $numFound
+     * @param \Basho\Riak\Search\Doc[] $docs
+     */
+    public function __construct($success = true, $code = 0, $message = '', $numFound = 0, $docs = [])
     {
         parent::__construct($success, $code, $message);
 
-        $this->results = $results;
-
-        if (!empty($this->results->response->docs)) {
-            foreach ($this->results->response->docs as $doc) {
-                $this->docs[] = new Doc($doc);
-
-            }
-        }
+        $this->numFound = $numFound;
+        $this->docs = $docs;
     }
 
     /**
@@ -55,7 +57,7 @@ class Response extends \Basho\Riak\Command\Response
      */
     public function getNumFound()
     {
-        return !empty($this->results->response->numFound) ? $this->results->response->numFound : 0;
+        return $this->numFound;
     }
 
     /**
