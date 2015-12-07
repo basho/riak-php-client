@@ -132,7 +132,7 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Set\Store':
             case 'Basho\Riak\Command\DataType\Map\Fetch':
             case 'Basho\Riak\Command\DataType\Map\Store':
-            $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(),
+                $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(),
                 $key);
                 break;
             case 'Basho\Riak\Command\Search\Index\Fetch':
@@ -158,6 +158,9 @@ class Http extends Api implements ApiInterface
                 break;
             case 'Basho\Riak\Command\Stats':
                 $this->path = '/stats';
+                break;
+            case 'Basho\Riak\Command\Object\FetchPreflist':
+                $this->path = sprintf('/types/%s/buckets/%s/keys/%s/preflist', $bucket->getType(), $bucket->getName(), $key);
                 break;
             default:
                 $this->path = '';
@@ -294,7 +297,7 @@ class Http extends Api implements ApiInterface
     protected function prepareRequestUrl()
     {
         $protocol = $this->node->useTls() ? 'https' : 'http';
-        $url = sprintf('%s://%s%s?%s', $protocol, $this->node->getUri(), $this->path, $this->query);
+        $url = sprintf('%s://%s%s%s', $protocol, $this->node->getUri(), $this->path, $this->query);
 
         // set the built request URL on the connection
         $this->options[CURLOPT_URL] = $url;
@@ -311,7 +314,7 @@ class Http extends Api implements ApiInterface
     {
         if ($this->command->hasParameters()) {
             // build query using RFC 3986 (spaces become %20 instead of '+')
-            $this->query = http_build_query($this->command->getParameters(), '', '&', PHP_QUERY_RFC3986);
+            $this->query = '?' . http_build_query($this->command->getParameters(), '', '&', PHP_QUERY_RFC3986);
         }
 
         return $this;
