@@ -46,7 +46,6 @@ class PreflistTest extends TestCase
         // build an object
         $command = (new Command\Builder\FetchPreflist($riak))
             ->atLocation($location)
-            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
