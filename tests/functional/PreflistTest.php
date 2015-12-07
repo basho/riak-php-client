@@ -50,8 +50,6 @@ class PreflistTest extends TestCase
 
         $response = $command->execute();
 
-        var_dump($response->getBody());
-        // expects 201 - Created
         $this->assertEquals('200', $response->getStatusCode(), $response->getBody());
     }
 }
