@@ -35,7 +35,7 @@ class PreflistTest extends TestCase
      */
     public function testFetch($riak)
     {
-        // build an object
+        // build a store object comand, get the location of the newly minted object
         $location = (new Command\Builder\StoreObject($riak))
             ->buildObject('some_data')
             ->buildBucket('users')
@@ -43,7 +43,7 @@ class PreflistTest extends TestCase
             ->execute()
             ->getLocation();
 
-        // build an object
+        // build a fetch command
         $command = (new Command\Builder\FetchPreflist($riak))
             ->atLocation($location)
             ->build();
@@ -51,5 +51,10 @@ class PreflistTest extends TestCase
         $response = $command->execute();
 
         $this->assertEquals('200', $response->getStatusCode(), $response->getBody());
+        $this->assertJson($response->getBody());
+        $this->assertNotEmpty($response->getObject()->getData()->preflist);
+        $this->assertObjectHasAttribute("partition", $response->getObject()->getData()->preflist[0]);
+        $this->assertObjectHasAttribute("node", $response->getObject()->getData()->preflist[0]);
+        $this->assertObjectHasAttribute("primary", $response->getObject()->getData()->preflist[0]);
     }
 }
