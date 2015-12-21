@@ -39,13 +39,6 @@ class Store extends Command implements CommandInterface
         return ['props' => $this->properties];
     }
 
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
-    }
-
     /**
      * @return Command\Bucket\Response
      */

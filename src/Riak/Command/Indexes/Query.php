@@ -108,13 +108,6 @@ class Query extends Command implements CommandInterface
         return true;
     }
 
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Command\Indexes\Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
-    }
-
     /**
      * @return Command\Indexes\Response
      */

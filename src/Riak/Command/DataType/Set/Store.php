@@ -60,13 +60,6 @@ class Store extends Command implements CommandInterface
         return ['add_all' => $this->add_all, 'remove_all' => $this->remove_all];
     }
 
-    public function setResponse($statusCode, $responseHeaders = [], $responseBody = '')
-    {
-        $this->response = new Response($statusCode, $responseHeaders, $responseBody);
-
-        return $this;
-    }
-
     /**
      * @return Command\DataType\Set\Response
      */
