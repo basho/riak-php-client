@@ -86,11 +86,15 @@ abstract class Command
     /**
      * @param $key string
      *
-     * @return mixed
+     * @return null|string
      */
     public function getParameter($key)
     {
-        return $this->parameters[$key];
+        if (isset($this->parameters[$key])) {
+            return $this->parameters[$key];
+        }
+
+        return null;
     }
 
     /**
