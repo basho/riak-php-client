@@ -11,6 +11,7 @@ use Basho\Riak\DataType\Map;
 use Basho\Riak\DataType\Set;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
+use Basho\Riak\Object;
 use Basho\Riak\Search\Doc;
 
 /**
@@ -246,6 +247,9 @@ class Http extends Api implements ApiInterface
                 break;
             case 'Basho\Riak\Command\Stats':
                 $this->path = '/stats';
+                break;
+            case 'Basho\Riak\Command\Object\FetchPreflist':
+                $this->path = sprintf('/types/%s/buckets/%s/keys/%s/preflist', $bucket->getType(), $bucket->getName(), $key);
                 break;
             default:
                 $this->path = '';
@@ -647,6 +651,10 @@ class Http extends Api implements ApiInterface
                 $objects = (new Api\Http\Translator\ObjectResponse($command, $this->statusCode))
                     ->parseResponse($body, $this->responseHeaders);
                 $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, $objects);
+                break;
+
+            case 'Basho\Riak\Command\Object\FetchPreflist':
+                $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, [new Object(json_decode($body))]);
                 break;
 
             case 'Basho\Riak\Command\DataType\Counter\Store':
