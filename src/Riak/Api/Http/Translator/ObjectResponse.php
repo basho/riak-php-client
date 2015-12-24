@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Api\Http\Translators;
+namespace Basho\Riak\Api\Http\Translator;
 
 use Basho\Riak\Api\Http;
 use Basho\Riak\Command;
@@ -30,14 +30,12 @@ class ObjectResponse
     {
         $objects = [];
 
-        if ($response) {
-            if ($this->code == '300') {
-                $position = strpos($headers[Http::CONTENT_TYPE_KEY], 'boundary=');
-                $boundary = '--' . substr($headers[Http::CONTENT_TYPE_KEY], $position + 9);
-                $objects = $this->parseSiblings($response, $boundary, $headers[Http::VCLOCK_KEY]);
-            } else {
-                $objects[] = $this->parseObject($response, $headers);
-            }
+        if ($this->code == '300') {
+            $position = strpos($headers[Http::CONTENT_TYPE_KEY], 'boundary=');
+            $boundary = '--' . substr($headers[Http::CONTENT_TYPE_KEY], $position + 9);
+            $objects = $this->parseSiblings($response, $boundary, $headers[Http::VCLOCK_KEY]);
+        } elseif (in_array($this->code, ['200','201','204'])) {
+            $objects[] = $this->parseObject($response, $headers);
         }
 
         return $objects;

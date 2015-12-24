@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2014 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Riak\Command\Builder;
 
 use Basho\Riak;
@@ -63,7 +48,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
 
     public function removeRegister($key)
     {
-        $this->remove($key, 'register');
+        $this->remove($key, Riak\DataType\Map::REGISTER);
 
         return $this;
     }
@@ -75,7 +60,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
 
     public function removeFlag($key)
     {
-        $this->remove($key, 'flag');
+        $this->remove($key, Riak\DataType\Map::FLAG);
 
         return $this;
     }
@@ -109,7 +94,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateRegister($key, $value)
     {
-        $this->update($key, 'register', $value);
+        $this->update($key, Riak\DataType\Map::REGISTER, $value);
 
         return $this;
     }
@@ -128,7 +113,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateFlag($key, $state = TRUE)
     {
-        $this->update($key, 'flag', $state);
+        $this->update($key, Riak\DataType\Map::FLAG, $state);
 
         return $this;
     }
@@ -141,7 +126,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateCounter($key, IncrementCounter $builder)
     {
-        $this->update($key, 'counter', $builder);
+        $this->update($key, Riak\DataType\Counter::TYPE, $builder);
 
         return $this;
     }
@@ -154,7 +139,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateSet($key, UpdateSet $builder)
     {
-        $this->update($key, 'set', $builder);
+        $this->update($key, Riak\DataType\Set::TYPE, $builder);
 
         return $this;
     }
@@ -167,7 +152,7 @@ class UpdateMap extends Command\Builder implements Command\BuilderInterface
      */
     public function updateMap($key, UpdateMap $builder)
     {
-        $this->update($key, 'map', $builder);
+        $this->update($key, Riak\DataType\Map::TYPE, $builder);
 
         return $this;
     }

@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Riak\Command\Search;
 
 use Basho\Riak\Search\Doc;
@@ -27,24 +12,29 @@ use Basho\Riak\Search\Doc;
 class Response extends \Basho\Riak\Command\Response
 {
     /**
-     * @var \stdClass|null
+     * @var int
      */
-    protected $results = null;
+    protected $numFound = 0;
 
     /**
      * @var Doc[]
      */
     protected $docs = [];
 
-    public function __construct($success = true, $code = 0, $message = '', $results = null)
+    /**
+     * Response constructor.
+     * @param bool|true $success
+     * @param int $code
+     * @param string $message
+     * @param int $numFound
+     * @param \Basho\Riak\Search\Doc[] $docs
+     */
+    public function __construct($success = true, $code = 0, $message = '', $numFound = 0, $docs = [])
     {
         parent::__construct($success, $code, $message);
 
-        $this->results = $results;
-
-        foreach ($this->results->response->docs as $doc) {
-            $this->docs[] = new Doc($doc);
-        }
+        $this->numFound = $numFound;
+        $this->docs = $docs;
     }
 
     /**
@@ -52,7 +42,7 @@ class Response extends \Basho\Riak\Command\Response
      */
     public function getNumFound()
     {
-        return $this->results->response->numFound;
+        return $this->numFound;
     }
 
     /**

@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests;
 
 use Basho\Riak;
@@ -43,68 +28,44 @@ class SearchOperationsTest extends TestCase
 
     public static function setUpBeforeClass()
     {
-        $node = [
-            (new Riak\Node\Builder)
-                ->atHost(static::getTestHost())
-                ->onPort(static::getTestPort())
-                ->build()
-        ];
+        parent::setUpBeforeClass();
 
-        $riak = new Riak($node);
-
-        $command = (new Command\Builder\Search\FetchIndex($riak))
+        $response = (new Command\Builder\Search\FetchIndex(static::$riak))
             ->withName(static::INDEX)
-            ->build();
-
-        $response = $command->execute();
+            ->build()
+            ->execute();
 
         if ($response->getCode() == '200') {
-            $command = (new Command\Builder\Search\DissociateIndex($riak))
+            (new Command\Builder\Search\DissociateIndex(static::$riak))
                 ->buildBucket('sabres', self::SEARCH_BUCKET_TYPE)
-                ->build();
+                ->build()
+                ->execute();
 
-            $command->execute();
-
-            $command = (new Command\Builder\Search\DeleteIndex($riak))
+            (new Command\Builder\Search\DeleteIndex(static::$riak))
                 ->withName(static::INDEX)
-                ->build();
-
-            $command->execute();
+                ->build()
+                ->execute();
         }
     }
 
     public static function tearDownAfterClass()
     {
-        $node = [
-            (new Riak\Node\Builder)
-                ->atHost(static::getTestHost())
-                ->onPort(static::getTestPort())
-                ->build()
-        ];
-
-        $riak = new Riak($node);
-
         foreach (static::$search_content as $key => $object) {
-            $command = (new Command\Builder\DeleteObject($riak))
+            (new Command\Builder\DeleteObject(static::$riak))
                 ->buildLocation($key, 'sabres', self::SEARCH_BUCKET_TYPE)
-                ->build();
-
-            $command->execute();
+                ->build()
+                ->execute();
         }
+
+        parent::tearDownAfterClass();
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchSchema($riak)
+    public function testFetchSchema()
     {
-        $command = (new Command\Builder\Search\FetchSchema($riak))
+        $response = (new Command\Builder\Search\FetchSchema(static::$riak))
             ->withName('_yz_default')
-            ->build();
-
-        $response = $command->execute();
+            ->build()
+            ->execute();
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertEquals('application/xml', $response->getContentType());
@@ -115,13 +76,10 @@ class SearchOperationsTest extends TestCase
 
     /**
      * @depends      testFetchSchema
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testStoreSchema($riak)
+    public function testStoreSchema()
     {
-        $command = (new Command\Builder\Search\StoreSchema($riak))
+        $command = (new Command\Builder\Search\StoreSchema(static::$riak))
             ->withName('users')
             ->withSchemaString(static::$default_schema)
             ->build();
@@ -131,14 +89,9 @@ class SearchOperationsTest extends TestCase
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchIndexNotFound($riak)
+    public function testFetchIndexNotFound()
     {
-        $command = (new Command\Builder\Search\FetchIndex($riak))
+        $command = (new Command\Builder\Search\FetchIndex(static::$riak))
             ->withName(static::INDEX)
             ->build();
 
@@ -149,13 +102,10 @@ class SearchOperationsTest extends TestCase
 
     /**
      * @depends      testFetchIndexNotFound
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testStoreIndex($riak)
+    public function testStoreIndex()
     {
-        $command = (new Command\Builder\Search\StoreIndex($riak))
+        $command = (new Command\Builder\Search\StoreIndex(static::$riak))
             ->withName(static::INDEX)
             ->usingSchema('_yz_default')
             ->build();
@@ -164,7 +114,7 @@ class SearchOperationsTest extends TestCase
 
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
 
-        $command = (new Command\Builder\Search\FetchIndex($riak))
+        $command = (new Command\Builder\Search\FetchIndex(static::$riak))
             ->withName(static::INDEX)
             ->build();
 
@@ -184,13 +134,10 @@ class SearchOperationsTest extends TestCase
 
     /**
      * @depends      testStoreIndex
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testAssociateIndex($riak)
+    public function testAssociateIndex()
     {
-        $command = (new Command\Builder\Search\AssociateIndex($riak))
+        $command = (new Command\Builder\Search\AssociateIndex(static::$riak))
             ->withName(static::INDEX)
             ->buildBucket('sabres', self::SEARCH_BUCKET_TYPE)
             ->build();
@@ -202,14 +149,11 @@ class SearchOperationsTest extends TestCase
 
     /**
      * @depends      testAssociateIndex
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testSearch($riak)
+    public function testSearch()
     {
         foreach (static::$search_content as $key => $object) {
-            $command = (new Command\Builder\StoreObject($riak))
+            $command = (new Command\Builder\StoreObject(static::$riak))
                 ->buildObject($object, ['Content-Type' => 'application/json'])
                 ->buildLocation($key, 'sabres', self::SEARCH_BUCKET_TYPE)
                 ->build();
@@ -219,7 +163,7 @@ class SearchOperationsTest extends TestCase
 
         sleep(5);
 
-        $command = (new Command\Builder\Search\FetchObjects($riak))
+        $command = (new Command\Builder\Search\FetchObjects(static::$riak))
             ->withQuery('name_s:*Gi*')
             ->withIndexName(static::INDEX)
             ->build();
@@ -232,14 +176,29 @@ class SearchOperationsTest extends TestCase
     }
 
     /**
-     * @depends      testSearch
-     * @dataProvider getLocalNodeConnection
+     * Tests handling of a badly formed query
      *
-     * @param $riak \Basho\Riak
+     * @depends      testAssociateIndex
      */
-    public function testDissociateIndex($riak)
+    public function testBadSearch()
     {
-        $command = (new Command\Builder\Search\DissociateIndex($riak))
+        $response = (new Command\Builder\Search\FetchObjects(static::$riak))
+            ->withIndexName(static::INDEX)
+            ->withQuery('ffffff')
+            ->build()
+            ->execute();
+
+        $this->assertEquals('400', $response->getCode(), $response->getMessage());
+        $this->assertEmpty($response->getNumFound());
+        $this->assertEmpty($response->getDocs());
+    }
+
+    /**
+     * @depends      testSearch
+     */
+    public function testDissociateIndex()
+    {
+        $command = (new Command\Builder\Search\DissociateIndex(static::$riak))
             ->buildBucket('sabres', self::SEARCH_BUCKET_TYPE)
             ->build();
 
@@ -250,13 +209,10 @@ class SearchOperationsTest extends TestCase
 
     /**
      * @depends      testDissociateIndex
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testDeleteIndex($riak)
+    public function testDeleteIndex()
     {
-        $command = (new Command\Builder\Search\DeleteIndex($riak))
+        $command = (new Command\Builder\Search\DeleteIndex(static::$riak))
             ->withName(static::INDEX)
             ->build();
 
@@ -264,7 +220,7 @@ class SearchOperationsTest extends TestCase
 
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
 
-        $command = (new Command\Builder\Search\FetchIndex($riak))
+        $command = (new Command\Builder\Search\FetchIndex(static::$riak))
             ->withName(static::INDEX)
             ->build();
 

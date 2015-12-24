@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests;
 
 use Basho\Riak\Command;
@@ -42,24 +27,21 @@ class SecondaryIndexOperationsTest extends TestCase
 
     public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+
         // make completely random key/bucket based on time
         static::$key = md5(rand(0, 99) . time());
         static::$bucket = md5(rand(0, 99) . time());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testStoreObjectWithIndexes($riak)
+    public function testStoreObjectWithIndexes()
     {
         $object = new Object('person');
         $object->addValueToIndex('lucky_numbers_int', 42);
         $object->addValueToIndex('lucky_numbers_int', 64);
         $object->addValueToIndex('lastname_bin', 'Knuth');
 
-        $command = (new Command\Builder\StoreObject($riak))
+        $command = (new Command\Builder\StoreObject(static::$riak))
             ->withObject($object)
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
@@ -71,13 +53,10 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testStoreObjectWithIndexes
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testFetchObjectWithIndexes($riak)
+    public function testFetchObjectWithIndexes()
     {
-        $command = (new Command\Builder\FetchObject($riak))
+        $command = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
@@ -97,18 +76,15 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testFetchObjectWithIndexes
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testRemoveIndexes($riak)
+    public function testRemoveIndexes()
     {
         $object = static::$object;
         $object->removeValueFromIndex('lucky_numbers_int', 64);
         $object->removeValueFromIndex('lastname_bin', 'Knuth');
         $object->setVclock(static::$vclock);
 
-        $command = (new Command\Builder\StoreObject($riak))
+        $command = (new Command\Builder\StoreObject(static::$riak))
             ->withObject($object)
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
@@ -119,7 +95,7 @@ class SecondaryIndexOperationsTest extends TestCase
 
         $this->assertEquals('204', $response->getCode());
 
-        $command = (new Command\Builder\FetchObject($riak))
+        $command = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
@@ -132,12 +108,7 @@ class SecondaryIndexOperationsTest extends TestCase
         $this->assertEquals($indexes['lucky_numbers_int'], [42]);
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testSetupIndexObjects($riak)
+    public function testSetupIndexObjects()
     {
         for($x = 0; $x <= 1000; $x++) {
             $object = (new Object('student'.$x))
@@ -146,7 +117,7 @@ class SecondaryIndexOperationsTest extends TestCase
                         ->addValueToIndex('grade_bin', chr(65 + ($x % 6))) // A,B,C,D,E,F,A...
                         ->addValueToIndex('lessThan500_bin', $x < 500 ? 'less' : 'more');
 
-            $command = (new Command\Builder\StoreObject($riak))
+            $command = (new Command\Builder\StoreObject(static::$riak))
                 ->withObject($object)
                 ->buildLocation('student'.$x, 'Students'.static::$bucket, static::LEVELDB_BUCKET_TYPE)
                 ->build();
@@ -158,13 +129,10 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testSetupIndexObjects
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testScalarQuery($riak)
+    public function testScalarQuery()
     {
-        $command = (new Command\Builder\QueryIndex($riak))
+        $command = (new Command\Builder\QueryIndex(static::$riak))
                         ->buildBucket('Students'.static::$bucket, static::LEVELDB_BUCKET_TYPE)
                         ->withIndexName('lucky_numbers_int')
                         ->withScalarValue(5)
@@ -179,13 +147,10 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testSetupIndexObjects
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testRangeQuery($riak)
+    public function testRangeQuery()
     {
-        $command = (new Command\Builder\QueryIndex($riak))
+        $command = (new Command\Builder\QueryIndex(static::$riak))
             ->buildBucket('Students'.static::$bucket, static::LEVELDB_BUCKET_TYPE)
             ->withIndexName('grade_bin')
             ->withRangeValue('A', 'B')
@@ -202,15 +167,12 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testSetupIndexObjects
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testReturnTerms($riak)
+    public function testReturnTerms()
     {
         $keysAndTerms = [['A' => 'student0'], ['B' => 'student1'], ['A' => 'student6'], ['B' => 'student7']];
 
-        $command = (new Command\Builder\QueryIndex($riak))
+        $command = (new Command\Builder\QueryIndex(static::$riak))
             ->buildBucket('Students'.static::$bucket, static::LEVELDB_BUCKET_TYPE)
             ->withIndexName('grade_bin')
             ->withRangeValue('A', 'B')
@@ -232,13 +194,10 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testSetupIndexObjects
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testGettingKeysWithContinuationWorks($riak)
+    public function testGettingKeysWithContinuationWorks()
     {
-        $builder = (new Command\Builder\QueryIndex($riak))
+        $builder = (new Command\Builder\QueryIndex(static::$riak))
             ->buildBucket('Students'.static::$bucket, static::LEVELDB_BUCKET_TYPE)
             ->withIndexName('lucky_numbers_int')
             ->withRangeValue(0,3)
@@ -267,13 +226,10 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testSetupIndexObjects
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testTimeoutWorks($riak)
+    public function testTimeoutWorks()
     {
-        $builder = (new Command\Builder\QueryIndex($riak))
+        $builder = (new Command\Builder\QueryIndex(static::$riak))
             ->buildBucket('Students' . static::$bucket, static::LEVELDB_BUCKET_TYPE)
             ->withIndexName('lucky_numbers_int')
             ->withRangeValue(0, 1000)
@@ -291,13 +247,10 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testSetupIndexObjects
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testUsingPaginationSortWillSortResultsWhilePaging($riak)
+    public function testUsingPaginationSortWillSortResultsWhilePaging()
     {
-        $builder = (new Command\Builder\QueryIndex($riak))
+        $builder = (new Command\Builder\QueryIndex(static::$riak))
             ->buildBucket('Students'.static::$bucket, static::LEVELDB_BUCKET_TYPE)
             ->withIndexName('lucky_numbers_int')
             ->withRangeValue(0,500)
@@ -325,13 +278,10 @@ class SecondaryIndexOperationsTest extends TestCase
 
     /**
      * @depends      testSetupIndexObjects
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testUsingTermRegexOnARangeFiltersTheResults($riak)
+    public function testUsingTermRegexOnARangeFiltersTheResults()
     {
-        $builder = (new Command\Builder\QueryIndex($riak))
+        $builder = (new Command\Builder\QueryIndex(static::$riak))
             ->buildBucket('Students' . static::$bucket, static::LEVELDB_BUCKET_TYPE)
             ->withIndexName('lessThan500_bin')
             ->withRangeValue('a', 'z')

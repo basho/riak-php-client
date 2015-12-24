@@ -97,7 +97,21 @@ To run the tests, clone this repository and run `composer update` from the repos
 
 You can execute code coverage analysis along side the test run by appending ` --coverage-text` to the command above.
 
-Please note, that the Functional and Scenario tests require a live Riak instance to test against.
+Please note, that the Functional and Scenario tests require a live Riak instance to test against. Also, the following bucket types to be created and activated on the Riak instance. If using the [riak-clients-vagrant](https://github.com/basho-labs/riak-clients-vagrant) project, the `integration_testing` role creates these bucket types for you.
+
+```bash
+riak-admin bucket-type create phptest_counters '{"props":{"datatype":"counter"}}'
+riak-admin bucket-type create phptest_sets '{"props":{"datatype":"set"}}'
+riak-admin bucket-type create phptest_maps '{"props":{"datatype":"map"}}'
+riak-admin bucket-type create phptest_search '{"props":{}}'
+riak-admin bucket-type create phptest_leveldb '{"props":{}}'
+
+riak-admin bucket-type activate phptest_counters
+riak-admin bucket-type activate phptest_sets
+riak-admin bucket-type activate phptest_maps
+riak-admin bucket-type activate phptest_search
+riak-admin bucket-type activate phptest_leveldb
+```
 
 ## Thank You
 

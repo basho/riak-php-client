@@ -8,21 +8,23 @@ To see other clients available for use with Riak visit our
 
 
 1. [Installation](#installation)
-2. [Documentation](#documentation)
-3. [Contributing](#contributing)
+1. [Documentation](#documentation)
+1. [Contributing](#contributing)
 	* [An honest disclaimer](#an-honest-disclaimer)
-4. [Roadmap](#roadmap)
-5. [License and Authors](#license-and-authors)
+1. [Roadmap](#roadmap)
+1. [License and Authors](#license-and-authors)
 
 
 ## Installation *TODO UPDATE*
 
 ### Dependencies
-* **Release 2.x.x** requires PHP 5.4+
-* **Release 1.4.x** requires PHP 5.3+
+- PHP 5.4+
+- PHP Extensions: curl, json and openssh if using security features
+- Riak 2.0+
+- [Composer PHP Dependency Manager](https://getcomposer.org/)
 
 ### Composer Install
-Run the following `composer` command:
+Run the following [composer](https://getcomposer.org/) command:
 
 ```console
 $ composer require "basho/riak": "2.0.*"

@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests\Riak\Command\Builder;
 
 use Basho\Riak\Command;
@@ -29,15 +14,11 @@ class UpdateMapTest extends TestCase
 {
     /**
      * Test command builder construct
-     *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testStoreWithKey($riak)
+    public function testStoreWithKey()
     {
         // build an object
-        $builder = new Command\Builder\UpdateMap($riak);
+        $builder = new Command\Builder\UpdateMap(static::$riak);
         $builder->updateRegister('some_key', 'some_data');
         $builder->buildLocation('some_key', 'some_bucket');
         $command = $builder->build();
@@ -54,15 +35,11 @@ class UpdateMapTest extends TestCase
 
     /**
      * Test command builder construct
-     *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testStoreWithOutKey($riak)
+    public function testStoreWithOutKey()
     {
         // build an object
-        $builder = new Command\Builder\UpdateMap($riak);
+        $builder = new Command\Builder\UpdateMap(static::$riak);
         $builder->updateRegister('some_key', 'some_data');
         $builder->buildBucket('some_bucket');
         $command = $builder->build();
@@ -74,15 +51,11 @@ class UpdateMapTest extends TestCase
     /**
      * Tests validate properly verifies that intended changes are not there
      *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */
-    public function testValidateUpdate($riak)
+    public function testValidateUpdate()
     {
-        $builder = new Command\Builder\UpdateMap($riak);
+        $builder = new Command\Builder\UpdateMap(static::$riak);
         $builder->buildBucket('some_bucket');
         $builder->build();
     }
@@ -90,15 +63,11 @@ class UpdateMapTest extends TestCase
     /**
      * Tests validate properly verifies the Bucket is not there
      *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */
-    public function testValidateBucket($riak)
+    public function testValidateBucket()
     {
-        $builder = new Command\Builder\UpdateMap($riak);
+        $builder = new Command\Builder\UpdateMap(static::$riak);
         $builder->updateRegister('some_key', 'some_data');
         $builder->build();
     }
@@ -106,15 +75,11 @@ class UpdateMapTest extends TestCase
     /**
      * Tests validate properly verifies that remove commands require the context
      *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */
-    public function testValidateRemove($riak)
+    public function testValidateRemove()
     {
-        $builder = new Command\Builder\UpdateMap($riak);
+        $builder = new Command\Builder\UpdateMap(static::$riak);
         $builder->removeRegister('some_key');
         $builder->build();
     }

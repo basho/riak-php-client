@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests;
 
 use Basho\Riak\Command;
@@ -35,18 +20,16 @@ class ObjectOperationsTest extends TestCase
 
     public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+
         // make completely random key based on time
         static::$key = md5(rand(0, 99) . time());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     * @param $riak \Basho\Riak
-     */
-    public function testStoreNewWithoutKey($riak)
+    public function testStoreNewWithoutKey()
     {
         // build an object
-        $command = (new Command\Builder\StoreObject($riak))
+        $command = (new Command\Builder\StoreObject(static::$riak))
             ->buildObject('some_data')
             ->buildBucket('users')
             ->build();
@@ -59,13 +42,9 @@ class ObjectOperationsTest extends TestCase
         $this->assertInstanceOf('\Basho\Riak\Location', $response->getLocation());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchNotFound($riak)
+    public function testFetchNotFound()
     {
-        $command = (new Command\Builder\FetchObject($riak))
+        $command = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::$key, 'users')
             ->build();
 
@@ -76,13 +55,10 @@ class ObjectOperationsTest extends TestCase
 
     /**
      * @depends      testFetchNotFound
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testStoreNewWithKey($riak)
+    public function testStoreNewWithKey()
     {
-        $command = (new Command\Builder\StoreObject($riak))
+        $command = (new Command\Builder\StoreObject(static::$riak))
             ->buildObject('some_data')
             ->buildLocation(static::$key, 'users')
             ->build();
@@ -97,12 +73,10 @@ class ObjectOperationsTest extends TestCase
 
     /**
      * @depends      testStoreNewWithKey
-     * @dataProvider getLocalNodeConnection
-     * @param $riak \Basho\Riak
      */
-    public function testFetchOk($riak)
+    public function testFetchOk()
     {
-        $command = (new Command\Builder\FetchObject($riak))
+        $command = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::$key, 'users')
             ->build();
 
@@ -118,17 +92,14 @@ class ObjectOperationsTest extends TestCase
 
     /**
      * @depends      testFetchOk
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testStoreExisting($riak)
+    public function testStoreExisting()
     {
         $object = static::$object;
 
         $object->setData('some_new_data');
 
-        $command = (new Command\Builder\StoreObject($riak))
+        $command = (new Command\Builder\StoreObject(static::$riak))
             ->withObject($object)
             ->buildLocation(static::$key, 'users')
             ->build();
@@ -141,13 +112,10 @@ class ObjectOperationsTest extends TestCase
 
     /**
      * @depends      testStoreExisting
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testDelete($riak)
+    public function testDelete()
     {
-        $command = (new Command\Builder\DeleteObject($riak))
+        $command = (new Command\Builder\DeleteObject(static::$riak))
             ->buildLocation(static::$key, 'users')
             ->build();
 
@@ -158,13 +126,10 @@ class ObjectOperationsTest extends TestCase
 
     /**
      * @depends      testDelete
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testFetchDeleted($riak)
+    public function testFetchDeleted()
     {
-        $command = (new Command\Builder\FetchObject($riak))
+        $command = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::$key, 'users')
             ->build();
 
@@ -176,16 +141,11 @@ class ObjectOperationsTest extends TestCase
         //$this->assertNotEmpty($response->getVclock());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchAssociativeArray($riak)
+    public function testFetchAssociativeArray()
     {
         $data = ['myData' => 42];
 
-        $command = (new Command\Builder\StoreObject($riak))
+        $command = (new Command\Builder\StoreObject(static::$riak))
             ->buildLocation(static::$key, 'users')
             ->buildJsonObject($data)
             ->build();
@@ -195,7 +155,7 @@ class ObjectOperationsTest extends TestCase
         $this->assertEquals('204', $response->getCode());
 
         // Fetch as associative array
-        $command = (new Command\Builder\FetchObject($riak))
+        $command = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::$key, 'users')
             ->withDecodeAsAssociative()
             ->build();
@@ -206,7 +166,7 @@ class ObjectOperationsTest extends TestCase
         $this->assertEquals('array', gettype($response->getObject()->getData()));
 
         // Fetch normal to get as stdClass object
-        $command = (new Command\Builder\FetchObject($riak))
+        $command = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::$key, 'users')
             ->build();
 

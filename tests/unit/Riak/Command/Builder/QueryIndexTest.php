@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests\Riak\Command\Builder;
 
 use Basho\Riak\Command;
@@ -29,15 +14,11 @@ class QueryIndexTest extends TestCase
 {
     /**
      * Test command builder construct
-     *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testQuery($riak)
+    public function testQuery()
     {
         // build an object
-        $builder = new Command\Builder\QueryIndex($riak);
+        $builder = new Command\Builder\QueryIndex(static::$riak);
         $builder->buildBucket('some_bucket', 'some_bucket_type')
                 ->withIndexName('foo_int')
                 ->withScalarValue(42);
@@ -55,15 +36,11 @@ class QueryIndexTest extends TestCase
     /**
      * Tests validate properly verifies the index name is not there
      *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */
-    public function testValidateLocation($riak)
+    public function testValidateLocation()
     {
-        $builder = new Command\Builder\QueryIndex($riak);
+        $builder = new Command\Builder\QueryIndex(static::$riak);
         $builder->buildBucket('some_bucket');
 
         $builder->build();
@@ -72,15 +49,11 @@ class QueryIndexTest extends TestCase
     /**
      * Tests validate properly verifies the scalar match value is not there
      *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */
-    public function testValidateScalarValue($riak)
+    public function testValidateScalarValue()
     {
-        $builder = new Command\Builder\QueryIndex($riak);
+        $builder = new Command\Builder\QueryIndex(static::$riak);
         $builder->buildBucket('some_bucket')
                 ->withIndexName("foo_int")
                 ->withScalarValue(null);
@@ -91,15 +64,11 @@ class QueryIndexTest extends TestCase
     /**
      * Tests validate properly verifies the range lower bound value is not there
      *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */
-    public function testValidateRangeLowerBound($riak)
+    public function testValidateRangeLowerBound()
     {
-        $builder = new Command\Builder\QueryIndex($riak);
+        $builder = new Command\Builder\QueryIndex(static::$riak);
         $builder->buildBucket('some_bucket')
             ->withIndexName("foo_int")
             ->withRangeValue(null, 42);
@@ -110,15 +79,11 @@ class QueryIndexTest extends TestCase
     /**
      * Tests validate properly verifies the range upper bound value is not there
      *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */
-    public function testValidateRangeUpperBound($riak)
+    public function testValidateRangeUpperBound()
     {
-        $builder = new Command\Builder\QueryIndex($riak);
+        $builder = new Command\Builder\QueryIndex(static::$riak);
         $builder->buildBucket('some_bucket')
             ->withIndexName("foo_int")
             ->withRangeValue(42, null);
@@ -128,15 +93,11 @@ class QueryIndexTest extends TestCase
 
     /**
      * Test command builder defaults for options
-     *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testOptionDefaults($riak)
+    public function testOptionDefaults()
     {
         // build an object
-        $builder = new Command\Builder\QueryIndex($riak);
+        $builder = new Command\Builder\QueryIndex(static::$riak);
         $builder->buildBucket('some_bucket', 'some_bucket_type')
             ->withIndexName('foo_int')
             ->withScalarValue(42);
@@ -154,15 +115,11 @@ class QueryIndexTest extends TestCase
 
     /**
      * Test command builder settings for options
-     *
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testOptionSettings($riak)
+    public function testOptionSettings()
     {
         // build an object
-        $builder = new Command\Builder\QueryIndex($riak);
+        $builder = new Command\Builder\QueryIndex(static::$riak);
         $builder->buildBucket('some_bucket', 'some_bucket_type')
             ->withIndexName('foo_int')
             ->withScalarValue(42)

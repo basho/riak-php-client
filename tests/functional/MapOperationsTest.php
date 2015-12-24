@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests;
 
 use Basho\Riak\Command;
@@ -42,19 +27,16 @@ class MapOperationsTest extends TestCase
 
     public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+
         // make completely random key based on time
         static::$key = md5(rand(0, 99) . time());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testAddWithoutKey($riak)
+    public function testAddWithoutKey()
     {
         // build a map update command
-        $command = (new Command\Builder\UpdateMap($riak))
+        $command = (new Command\Builder\UpdateMap(static::$riak))
             ->updateRegister('favorite', 'Buffalo Sabres')
             ->buildBucket('default', static::MAP_BUCKET_TYPE)
             ->build();
@@ -66,14 +48,9 @@ class MapOperationsTest extends TestCase
         $this->assertNotEmpty($response->getLocation());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchNotFound($riak)
+    public function testFetchNotFound()
     {
-        $command = (new Command\Builder\FetchMap($riak))
+        $command = (new Command\Builder\FetchMap(static::$riak))
             ->buildLocation(static::$key, 'default', static::MAP_BUCKET_TYPE)
             ->build();
 
@@ -84,19 +61,16 @@ class MapOperationsTest extends TestCase
 
     /**
      * @depends      testFetchNotFound
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testAddNewWithKey($riak)
+    public function testAddNewWithKey()
     {
-        $updateSetBuilder = (new Command\Builder\UpdateSet($riak))
+        $updateSetBuilder = (new Command\Builder\UpdateSet(static::$riak))
             ->add('Sabres');
 
-        $updateCounterBuilder = (new Command\Builder\IncrementCounter($riak))
+        $updateCounterBuilder = (new Command\Builder\IncrementCounter(static::$riak))
             ->withIncrement(1);
 
-        $command = (new Command\Builder\UpdateMap($riak))
+        $command = (new Command\Builder\UpdateMap(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->updateCounter('teams', $updateCounterBuilder)
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
@@ -109,7 +83,7 @@ class MapOperationsTest extends TestCase
         $this->assertEquals('204', $response->getCode());
         $this->assertEmpty($response->getLocation());
 
-        $command = (new Command\Builder\FetchMap($riak))
+        $command = (new Command\Builder\FetchMap(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
@@ -132,21 +106,18 @@ class MapOperationsTest extends TestCase
 
     /**
      * @depends      testAddNewWithKey
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testAddExisting($riak)
+    public function testAddExisting()
     {
-        $updateSetBuilder = (new Command\Builder\UpdateSet($riak))
+        $updateSetBuilder = (new Command\Builder\UpdateSet(static::$riak))
             ->add('Bruins')
             ->add('Thrashers');
 
-        $updateCounterBuilder = (new Command\Builder\IncrementCounter($riak))
+        $updateCounterBuilder = (new Command\Builder\IncrementCounter(static::$riak))
             ->withIncrement(2);
 
         // build a map update command
-        $command = (new Command\Builder\UpdateMap($riak))
+        $command = (new Command\Builder\UpdateMap(static::$riak))
             ->updateFlag('expansion_year', TRUE)
             ->updateCounter('teams', $updateCounterBuilder)
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
@@ -158,7 +129,7 @@ class MapOperationsTest extends TestCase
         // 204 - No Content
         $this->assertEquals('204', $response->getCode());
 
-        $command = (new Command\Builder\FetchMap($riak))
+        $command = (new Command\Builder\FetchMap(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
@@ -182,20 +153,17 @@ class MapOperationsTest extends TestCase
 
     /**
      * @depends      testAddExisting
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      *
      * @expectedException \Basho\Riak\DataType\Exception
      */
-    public function testRemoveExisting($riak)
+    public function testRemoveExisting()
     {
-        $updateSetBuilder = (new Command\Builder\UpdateSet($riak))
+        $updateSetBuilder = (new Command\Builder\UpdateSet(static::$riak))
             ->remove('Thrashers')
             ->add('Lightning');
 
         // build a map update command with stale context
-        $command = (new Command\Builder\UpdateMap($riak))
+        $command = (new Command\Builder\UpdateMap(static::$riak))
             ->removeFlag('expansion_year')
             ->updateSet('ATLANTIC_DIVISION', $updateSetBuilder)
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
@@ -207,7 +175,7 @@ class MapOperationsTest extends TestCase
         // 204 - No Content
         $this->assertEquals('204', $response->getCode());
 
-        $command = (new Command\Builder\FetchMap($riak))
+        $command = (new Command\Builder\FetchMap(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 
@@ -231,18 +199,15 @@ class MapOperationsTest extends TestCase
 
     /**
      * @depends      testRemoveExisting
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testAddMapExisting($riak)
+    public function testAddMapExisting()
     {
-        $updateMapBuilder = (new Command\Builder\UpdateMap($riak))
+        $updateMapBuilder = (new Command\Builder\UpdateMap(static::$riak))
             ->updateFlag('notifications', FALSE)
             ->updateRegister('label', 'Email Alerts');
 
         // build a map update command
-        $command = (new Command\Builder\UpdateMap($riak))
+        $command = (new Command\Builder\UpdateMap(static::$riak))
             ->updateMap('preferences', $updateMapBuilder)
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
@@ -252,7 +217,7 @@ class MapOperationsTest extends TestCase
         // 204 - No Content
         $this->assertEquals('204', $response->getCode());
 
-        $command = (new Command\Builder\FetchMap($riak))
+        $command = (new Command\Builder\FetchMap(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::MAP_BUCKET_TYPE)
             ->build();
 

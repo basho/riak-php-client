@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests;
 
 use Basho\Riak\Command;
@@ -28,15 +13,10 @@ use Basho\Riak\Command;
  */
 class BucketOperationsTest extends TestCase
 {
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testStore($riak)
+    public function testStore()
     {
         // build an object
-        $command = (new Command\Builder\SetBucketProperties($riak))
+        $command = (new Command\Builder\SetBucketProperties(static::$riak))
             ->buildBucket('test')
             ->set('allow_mult', false)
             ->build();
@@ -47,15 +27,10 @@ class BucketOperationsTest extends TestCase
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetch($riak)
+    public function testFetch()
     {
         // build an object
-        $command = (new Command\Builder\FetchBucketProperties($riak))
+        $command = (new Command\Builder\FetchBucketProperties(static::$riak))
             ->buildBucket('test')
             ->build();
 
@@ -68,15 +43,10 @@ class BucketOperationsTest extends TestCase
         $this->assertFalse($bucket->getProperty('allow_mult'));
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testStore2($riak)
+    public function testStore2()
     {
         // build an object
-        $command = (new Command\Builder\SetBucketProperties($riak))
+        $command = (new Command\Builder\SetBucketProperties(static::$riak))
             ->buildBucket('test')
             ->set('allow_mult', true)
             ->build();
@@ -87,15 +57,10 @@ class BucketOperationsTest extends TestCase
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetch2($riak)
+    public function testFetch2()
     {
         // build an object
-        $command = (new Command\Builder\FetchBucketProperties($riak))
+        $command = (new Command\Builder\FetchBucketProperties(static::$riak))
             ->buildBucket('test')
             ->build();
 

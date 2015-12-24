@@ -32,6 +32,20 @@ class Map extends DataType
     const TYPE = 'map';
 
     /**
+     * Used within a composite key to identify a flag (bool) element
+     *
+     * @var string
+     */
+    const FLAG = 'flag';
+
+    /**
+     * Used within a composite key to identify a register (string) element
+     *
+     * @var string
+     */
+    const REGISTER = 'register';
+
+    /**
      * @var string
      */
     private $context;
@@ -53,7 +67,7 @@ class Map extends DataType
      */
     public function getRegister($key)
     {
-        return $this->getDataByKey($key, 'register');
+        return $this->getDataByKey($key, static::REGISTER);
     }
 
     protected function getDataByKey($key, $type)
@@ -86,7 +100,7 @@ class Map extends DataType
      */
     public function getFlag($key)
     {
-        return $this->getDataByKey($key, 'flag') == 'enabled' ? TRUE : FALSE;
+        return $this->getDataByKey($key, static::FLAG) == 'enabled' ? TRUE : FALSE;
     }
 
     /**

@@ -1,33 +1,18 @@
 <?php
 
-/*
-Copyright 2014 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Riak\Api;
 
 use Basho\Riak\Api;
-use Basho\Riak\Api\Http\Translators\SecondaryIndexTranslator;
 use Basho\Riak\ApiInterface;
 use Basho\Riak\Bucket;
 use Basho\Riak\Command;
 use Basho\Riak\DataType\Counter;
 use Basho\Riak\DataType\Map;
 use Basho\Riak\DataType\Set;
-use Basho\Riak\Exception;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
+use Basho\Riak\Object;
+use Basho\Riak\Search\Doc;
 
 /**
  * Handles communications between end user app & Riak via Riak HTTP API using cURL
@@ -134,8 +119,10 @@ class Http extends Api implements ApiInterface
 
     public function closeConnection()
     {
-        curl_close($this->connection);
-        $this->connection = null;
+        if ($this->connection) {
+            curl_close($this->connection);
+            $this->connection = null;
+        }
     }
 
     /**
@@ -255,6 +242,15 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Indexes\Query':
                 $this->path = $this->createIndexQueryPath($bucket);
                 break;
+            case 'Basho\Riak\Command\Ping':
+                $this->path = '/ping';
+                break;
+            case 'Basho\Riak\Command\Stats':
+                $this->path = '/stats';
+                break;
+            case 'Basho\Riak\Command\Object\FetchPreflist':
+                $this->path = sprintf('/types/%s/buckets/%s/keys/%s/preflist', $bucket->getType(), $bucket->getName(), $key);
+                break;
             default:
                 $this->path = '';
         }
@@ -267,7 +263,7 @@ class Http extends Api implements ApiInterface
      *
      * @param Bucket $bucket
      * @return string
-     * @throws Exception if 2i query is invalid.
+     * @throws Api\Exception if 2i query is invalid.
      */
     private function createIndexQueryPath(Bucket $bucket)
     {
@@ -289,7 +285,7 @@ class Http extends Api implements ApiInterface
         }
         else
         {
-            throw new Exception("Invalid Secondary Index Query.");
+            throw new Api\Exception("Invalid Secondary Index Query.");
         }
 
         return $path;
@@ -301,7 +297,7 @@ class Http extends Api implements ApiInterface
      * Sets general connection options that are used with every request
      *
      * @return $this
-     * @throws Exception
+     * @throws Api\Exception
      */
     protected function prepareConnection()
     {
@@ -315,7 +311,7 @@ class Http extends Api implements ApiInterface
             } elseif ($this->node->getCaDirectory()) {
                 $this->options[CURLOPT_CAPATH] = $this->node->getCaDirectory();
             } else {
-                throw new Exception('A Certificate Authority file is required for secure connections.');
+                throw new Api\Exception('A Certificate Authority file is required for secure connections.');
             }
 
             // verify CA file
@@ -441,7 +437,7 @@ class Http extends Api implements ApiInterface
             }
 
             // setup index headers
-            $translator = new SecondaryIndexTranslator();
+            $translator = new Api\Http\Translator\SecondaryIndex();
             $indexHeaders = $translator->createHeadersFromIndexes($object->getIndexes());
             foreach ($indexHeaders as $value) {
                 $curl_headers[] = sprintf('%s: %s', $value[0], $value[1]);
@@ -630,7 +626,7 @@ class Http extends Api implements ApiInterface
     protected function parseResponse()
     {
         // trim leading / trailing whitespace
-        $body = trim($this->responseBody);
+        $body = $this->responseBody;
         $location = null;
         if ($this->getResponseHeader('Location')) {
             $location = Location::fromString($this->getResponseHeader('Location'));
@@ -641,11 +637,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Bucket\Fetch':
                 $bucket = null;
                 $modified = $this->getResponseHeader(static::LAST_MODIFIED_KEY, '');
-                if ($body) {
-                    $properties = json_decode($body, true);
-                    if ($this->command->getBucket()) {
-                        $bucket = new Bucket($this->command->getBucket()->getName(), $this->command->getBucket()->getType(), $properties['props']);
-                    }
+                $properties = json_decode($body, true);
+                if ($properties && $this->command->getBucket()) {
+                    $bucket = new Bucket($this->command->getBucket()->getName(), $this->command->getBucket()->getType(), $properties['props']);
                 }
                 $response = new Command\Bucket\Response($this->success, $this->statusCode, $this->error, $bucket, $modified);
                 break;
@@ -654,18 +648,21 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Object\Store':
                 /** @var Command\Object $command */
                 $command = $this->command;
-                $objects = (new Api\Http\Translators\ObjectResponse($command, $this->statusCode))
-                    ->parseResponse($this->responseBody, $this->responseHeaders);
+                $objects = (new Api\Http\Translator\ObjectResponse($command, $this->statusCode))
+                    ->parseResponse($body, $this->responseHeaders);
                 $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, $objects);
+                break;
+
+            case 'Basho\Riak\Command\Object\FetchPreflist':
+                $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, [new Object(json_decode($body))]);
                 break;
 
             case 'Basho\Riak\Command\DataType\Counter\Store':
             case 'Basho\Riak\Command\DataType\Counter\Fetch':
                 $counter = null;
-                if ($body && strpos($body, 'value')) {
-                    // json response
-                    $body = json_decode(rawurldecode($body));
-                    $counter = new Counter($body->value);
+                $json_object = json_decode($body);
+                if ($json_object && isset($json_object->value)) {
+                    $counter = new Counter($json_object->value);
                 }
                 $response = new Command\DataType\Counter\Response(
                     $this->success, $this->statusCode, $this->error, $location, $counter, $this->getResponseHeader('Date')
@@ -675,10 +672,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Set\Store':
             case 'Basho\Riak\Command\DataType\Set\Fetch':
                 $set = null;
-                if ($body && strpos($body, 'value')) {
-                    // json response
-                    $body = json_decode(rawurldecode($body));
-                    $set = new Set($body->value, $body->context);
+                $json_object = json_decode($body);
+                if ($json_object && isset($json_object->value)) {
+                    $set = new Set($json_object->value, $json_object->context);
                 }
                 $response = new Command\DataType\Set\Response(
                     $this->success, $this->statusCode, $this->error, $location, $set, $this->getResponseHeader('Date')
@@ -688,10 +684,9 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Map\Store':
             case 'Basho\Riak\Command\DataType\Map\Fetch':
                 $map = null;
-                if ($body && strpos($body, 'value')) {
-                    // json response
-                    $body = json_decode(rawurldecode($body), true);
-                    $map = new Map($body['value'], $body['context']);
+                $json_object = json_decode($body, true);
+                if ($json_object && isset($json_object['value'])) {
+                    $map = new Map($json_object['value'], $json_object['context']);
                 }
                 $response = new Command\DataType\Map\Response(
                     $this->success, $this->statusCode, $this->error, $location, $map, $this->getResponseHeader('Date')
@@ -699,17 +694,23 @@ class Http extends Api implements ApiInterface
                 break;
 
             case 'Basho\Riak\Command\Search\Fetch':
-                $results = null;
-                if ($body) {
-                    $results = json_decode($body);
+                $results = in_array($this->statusCode, [200,204]) ? json_decode($body) : null;
+                $docs = [];
+                if (!empty($results->response->docs)) {
+                    foreach ($results->response->docs as $doc) {
+                        $docs[] = new Doc($doc);
+                    }
                 }
-                $response = new Command\Search\Response($this->success, $this->statusCode, $this->error, $results);
+                $numFound = !empty($results->response->numFound) ? $results->response->numFound : 0;
+
+                $response = new Command\Search\Response($this->success, $this->statusCode, $this->error, $numFound, $docs);
                 break;
             case 'Basho\Riak\Command\Search\Index\Store':
             case 'Basho\Riak\Command\Search\Index\Fetch':
-                $index = $body ? json_decode($body) : null;
+                $index = json_decode($body);
                 $response = new Command\Search\Index\Response($this->success, $this->statusCode, $this->error, $index);
                 break;
+
             case 'Basho\Riak\Command\Search\Schema\Store':
             case 'Basho\Riak\Command\Search\Schema\Fetch':
                 $response = new Command\Search\Schema\Response(
@@ -718,30 +719,27 @@ class Http extends Api implements ApiInterface
                 break;
 
             case 'Basho\Riak\Command\MapReduce\Fetch':
-                $results = null;
-                if ($body) {
-                    $results = json_decode($body);
-                }
+                $results = in_array($this->statusCode, [200,204]) ? json_decode($body) : null;
                 $response = new Command\MapReduce\Response($this->success, $this->statusCode, $this->error, $results);
                 break;
             case 'Basho\Riak\Command\Indexes\Query':
-                $body = json_decode(rawurldecode($body), true);
+                $json_object = in_array($this->statusCode, [200,204]) ? json_decode($body, true) : null;
                 $results = [];
                 $termsReturned = false;
                 $continuation = null;
                 $done = true;
 
-                if (isset($body['keys'])) {
-                    $results = $body['keys'];
+                if (isset($json_object['keys'])) {
+                    $results = $json_object['keys'];
                 }
 
-                if (isset($body['results'])) {
-                    $results = $body['results'];
+                if (isset($json_object['results'])) {
+                    $results = $json_object['results'];
                     $termsReturned = true;
                 }
 
-                if (isset($body['continuation'])) {
-                    $continuation = $body['continuation'];
+                if (isset($json_object['continuation'])) {
+                    $continuation = $json_object['continuation'];
                     $done = false;
                 }
 
@@ -749,9 +747,13 @@ class Http extends Api implements ApiInterface
                     $this->success, $this->statusCode, $this->error, $results, $termsReturned, $continuation, $done, $this->getResponseHeader('Date')
                 );
                 break;
+            case 'Basho\Riak\Command\Stats':
+                $response = new Command\Stats\Response($this->success, $this->statusCode, $this->error, json_decode($body, true));
+                break;
             case 'Basho\Riak\Command\Object\Delete':
             case 'Basho\Riak\Command\Bucket\Delete':
             case 'Basho\Riak\Command\Search\Index\Delete':
+            case 'Basho\Riak\Command\Ping':
             default:
                 $response = new Command\Response($this->success, $this->statusCode, $this->error);
                 break;

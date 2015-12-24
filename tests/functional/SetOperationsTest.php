@@ -1,20 +1,5 @@
 <?php
 
-/*
-Copyright 2015 Basho Technologies, Inc.
-
-Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
-
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations under the License.
-*/
-
 namespace Basho\Tests;
 
 use Basho\Riak\Command;
@@ -42,19 +27,16 @@ class SetTest extends TestCase
 
     public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+
         // make completely random key based on time
         static::$key = md5(rand(0, 99) . time());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testAddWithoutKey($riak)
+    public function testAddWithoutKey()
     {
         // build an object
-        $command = (new Command\Builder\UpdateSet($riak))
+        $command = (new Command\Builder\UpdateSet(static::$riak))
             ->add('gosabres poked you.')
             ->add('phprocks viewed your profile.')
             ->add('phprocks started following you.')
@@ -68,14 +50,9 @@ class SetTest extends TestCase
         $this->assertNotEmpty($response->getLocation());
     }
 
-    /**
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
-     */
-    public function testFetchNotFound($riak)
+    public function testFetchNotFound()
     {
-        $command = (new Command\Builder\FetchSet($riak))
+        $command = (new Command\Builder\FetchSet(static::$riak))
             ->buildLocation(static::$key, 'default', static::SET_BUCKET_TYPE)
             ->build();
 
@@ -86,13 +63,10 @@ class SetTest extends TestCase
 
     /**
      * @depends      testFetchNotFound
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testAddNewWithKey($riak)
+    public function testAddNewWithKey()
     {
-        $command = (new Command\Builder\UpdateSet($riak))
+        $command = (new Command\Builder\UpdateSet(static::$riak))
             ->add('Sabres')
             ->add('Canadiens')
             ->add('Bruins')
@@ -110,7 +84,7 @@ class SetTest extends TestCase
         $this->assertEquals('204', $response->getCode());
         $this->assertEmpty($response->getLocation());
 
-        $command = (new Command\Builder\FetchSet($riak))
+        $command = (new Command\Builder\FetchSet(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
@@ -128,14 +102,11 @@ class SetTest extends TestCase
 
     /**
      * @depends      testAddNewWithKey
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testAddExisting($riak)
+    public function testAddExisting()
     {
         // add without context
-        $command = (new Command\Builder\UpdateSet($riak))
+        $command = (new Command\Builder\UpdateSet(static::$riak))
             ->add('Lightning')
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
@@ -145,7 +116,7 @@ class SetTest extends TestCase
         // 204 - No Content
         $this->assertEquals('204', $response->getCode());
 
-        $command = (new Command\Builder\FetchSet($riak))
+        $command = (new Command\Builder\FetchSet(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
@@ -162,14 +133,11 @@ class SetTest extends TestCase
 
     /**
      * @depends      testAddNewWithKey
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testRemoveExisting($riak)
+    public function testRemoveExisting()
     {
         // using stale context
-        $command = (new Command\Builder\UpdateSet($riak))
+        $command = (new Command\Builder\UpdateSet(static::$riak))
             ->remove('Thrashers')
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->withContext(static::$context[0])
@@ -180,7 +148,7 @@ class SetTest extends TestCase
         // 204 - No Content
         $this->assertEquals('204', $response->getCode());
 
-        $command = (new Command\Builder\FetchSet($riak))
+        $command = (new Command\Builder\FetchSet(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
@@ -197,14 +165,11 @@ class SetTest extends TestCase
 
     /**
      * @depends      testRemoveExisting
-     * @dataProvider getLocalNodeConnection
-     *
-     * @param $riak \Basho\Riak
      */
-    public function testAddRemoveExisting($riak)
+    public function testAddRemoveExisting()
     {
         // using latest context
-        $command = (new Command\Builder\UpdateSet($riak))
+        $command = (new Command\Builder\UpdateSet(static::$riak))
             ->add('Penguins')
             ->add('Ducks')
             ->remove('Lightning')
@@ -218,7 +183,7 @@ class SetTest extends TestCase
         // 204 - No Content
         $this->assertEquals('204', $response->getCode());
 
-        $command = (new Command\Builder\FetchSet($riak))
+        $command = (new Command\Builder\FetchSet(static::$riak))
             ->buildLocation(static::$key, 'Teams', static::SET_BUCKET_TYPE)
             ->build();
 
