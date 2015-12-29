@@ -1,10 +1,9 @@
 # Riak Client for PHP
 
-**Riak PHP Client** is a client which makes it easy to communicate with [Riak](http://basho.com/riak/), an open source, distributed database that focuses on high availability, horizontal scalability, and *predictable*
-latency. Both Riak and this code is maintained by [Basho](http://www.basho.com/). 
+**Riak PHP Client** is a library which makes it easy to communicate with [Riak](http://basho.com/riak/), an open source, distributed database that focuses on high availability, horizontal scalability, and *predictable*
+latency. This library communicates with Riak's HTTP interface using the cURL extension. If you want to communicate with Riak using the Protocol Buffers interface, use the [Official PHP PB Client](https://github.com/basho/riak-phppb-client). Both Riak and this library are maintained by [Basho Technologies](http://www.basho.com/). 
 
-To see other clients available for use with Riak visit our
-[Documentation Site](http://docs.basho.com/riak/latest/dev/using/libraries)
+To see other clients available for use with Riak visit our [Documentation Site](http://docs.basho.com/riak/latest/dev/using/libraries)
 
 
 1. [Installation](#installation)
@@ -15,41 +14,46 @@ To see other clients available for use with Riak visit our
 1. [License and Authors](#license-and-authors)
 
 
-## Installation *TODO UPDATE*
+## Installation
 
 ### Dependencies
 - PHP 5.4+
-- PHP Extensions: curl, json and openssh if using security features
-- Riak 2.0+
+- PHP Extensions: curl, json and openssh [required for security features]
+- Riak 2.1+
 - [Composer PHP Dependency Manager](https://getcomposer.org/)
 
 ### Composer Install
-Run the following [composer](https://getcomposer.org/) command:
+
+This library has been added to [Packagist] to simplify the installation process. Run the following [composer](https://getcomposer.org/) command:
 
 ```console
-$ composer require "basho/riak": "2.0.*"
+$ composer require "basho/riak": "3.0.*"
 ```
 
 Alternately, manually add the following to your `composer.json`, in the `require` section:
 
 ```javascript
 "require": {
-    "basho/riak": "2.0.*"
+    "basho/riak": "3.0.*"
 }
 ```
 
 And then run `composer update` to ensure the module is installed.
 
 ## Documentation
+
 * Master: [![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
 
 A fully traversable version of the API documentation for this library can be found on [Github Pages](http://basho.github.io/riak-php-client). 
 
 ### Releases
+
 The release tags of this project have been aligned with the major & minor release versions of Riak. For example, if you are using version 1.4.9 of Riak, then you will want the latest 1.4.* version of this library.
 
-### Example Usage *TODO UPDATE*
+### Example Usage
+
 Below is a short example of using the client. More substantial sample code is available [in examples](/examples).
+
 ```php
 // lib classes are included via the Composer autoloader files
 use Basho\Riak;
@@ -78,6 +82,7 @@ $object_location = $response->getLocation();
 ```
 
 ## Contributing
+
 This repo's maintainers are engineers at Basho and we welcome your contribution to the project! You can start by reviewing [CONTRIBUTING.md](CONTRIBUTING.md) for information on everything from testing to coding standards.
 
 ### An honest disclaimer
@@ -89,8 +94,9 @@ The most helpful way to contribute is by reporting your experience through issue
 Thank you for being part of the community! We love you for it. 
 
 ## Roadmap
-* Current develop & master branches contain feature support for Riak version 2.0
-* Development for Riak 2.1 features is underway and expected to be completed during Q2 2015
+
+* Current develop & master branches contain feature support for Riak version 2.1+
+* Add support for Riak TS Q2 2016
 
 ## License and Authors
 
