@@ -24,7 +24,7 @@ To see other clients available for use with Riak visit our [Documentation Site](
 
 ### Composer Install
 
-This library has been added to [Packagist] to simplify the installation process. Run the following [composer](https://getcomposer.org/) command:
+This library has been added to [Packagist](https://packagist.org/packages/basho/) to simplify the installation process. Run the following [composer](https://getcomposer.org/) command:
 
 ```console
 $ composer require "basho/riak": "3.0.*"
