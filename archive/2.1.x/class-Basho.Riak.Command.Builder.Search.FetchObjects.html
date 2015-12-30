@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Basho\Riak\Command\Builder\Search\FetchObjects | Official Riak Client for PHP</title>
+
+	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
+
+</head>
+
+<body>
+	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand">Official Riak Client for PHP</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+                <form id="search" class="navbar-form navbar-left" role="search">
+                    <input type="hidden" name="cx" value="">
+                    <input type="hidden" name="ie" value="UTF-8">
+                    <div class="form-group">
+                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
+					</div>
+				</form>
+
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.Search.html" title="Summary of Basho\Riak\Command\Builder\Search"><span>Namespace</span></a>
+					</li>
+					<li class="active">
+<span>Class</span>					</li>
+
+					<li class="divider-vertical"></li>
+
+					<li>
+						<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+					</li>
+
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="left">
+	<div id="menu">
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+					<li class="active">
+						<a href="namespace-Basho.html">
+							Basho<span></span>
+						</a>
+							<ul>
+					<li class="active">
+						<a href="namespace-Basho.Riak.html">
+							Riak<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.html">
+							Api<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Translators.html">
+							Translators						</a>
+							</li>
+								</ul></li>
+					<li class="active">
+						<a href="namespace-Basho.Riak.Command.html">
+							Command<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Bucket.html">
+							Bucket						</a>
+							</li>
+					<li class="active">
+						<a href="namespace-Basho.Riak.Command.Builder.html">
+							Builder<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.MapReduce.html">
+							MapReduce						</a>
+							</li>
+					<li class="active">
+						<a href="namespace-Basho.Riak.Command.Builder.Search.html">
+							Search						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.html">
+							DataType<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Counter.html">
+							Counter						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Map.html">
+							Map						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Set.html">
+							Set						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Indexes.html">
+							Indexes						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.MapReduce.html">
+							MapReduce						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Object.html">
+							Object						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.html">
+							Search<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.Index.html">
+							Index						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
+							Schema						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.DataType.html">
+							DataType						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Node.html">
+							Node<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Node.Builder.html">
+							Builder						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Search.html">
+							Search						</a>
+							</li>
+								</ul></li></ul></li>
+			</ul>
+		</div>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Basho.Riak.Command.Builder.Search.AssociateIndex.html">AssociateIndex</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Search.DeleteIndex.html">DeleteIndex</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Search.DissociateIndex.html">DissociateIndex</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Search.FetchIndex.html">FetchIndex</a></li>
+				<li class="active"><a href="class-Basho.Riak.Command.Builder.Search.FetchObjects.html">FetchObjects</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Search.FetchSchema.html">FetchSchema</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Search.StoreIndex.html">StoreIndex</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Search.StoreSchema.html">StoreSchema</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+	<div id="rightInner">
+<div id="content" class="class">
+	<h1>Class FetchObjects</h1>
+
+
+	<div class="description">
+	<p>Builds the command to fetch a collection of objects from Riak using Yokozuna search</p>
+	</div>
+
+	<dl class="tree well">
+		<dd style="padding-left:0px">
+			<a href="class-Basho.Riak.Command.Builder.html"><span>Basho\Riak\Command\Builder</span></a>
+			
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Basho\Riak\Command\Builder\Search\FetchObjects</span></b>			
+			 implements 
+				<a href="class-Basho.Riak.Command.BuilderInterface.html"><span>Basho\Riak\Command\BuilderInterface</span></a>
+			
+			
+		</dd>
+	</dl>
+
+
+
+
+
+
+
+
+	<div class="alert alert-info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Basho.html">Basho</a>\<a href="namespace-Basho.Riak.html">Riak</a>\<a href="namespace-Basho.Riak.Command.html">Command</a>\<a href="namespace-Basho.Riak.Command.Builder.html">Builder</a>\<a href="namespace-Basho.Riak.Command.Builder.Search.html">Search</a><br>
+		
+
+				<b>Author:</b>
+				Christopher Mancini <cmancini at basho d0t com><br>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#23-199" title="Go to source code">Riak/Command/Builder/Search/FetchObjects.php</a>
+		<br>
+	</div>
+
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Methods summary</h2></div>
+			<table class="summary table table-bordered table-striped methods" id="methods">
+		<tr data-order="__construct" id="___construct">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#___construct">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#36-43" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.html">Basho\Riak</a></code> <var>$riak</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+					<h4>Overrides</h4>
+					<div class="list"><code><a href="class-Basho.Riak.Command.Builder.html#___construct">Basho\Riak\Command\Builder::__construct</a></code></div>
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="build" id="_build">
+
+			<td class="attributes"><code>
+				 public 
+				Basho\Riak\Command\Search\Fetch;
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_build">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#45-55" title="Go to source code">build</a>( )</code>
+
+			<div class="description short">
+				<p>Command build</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Command build</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						Basho\Riak\Command\Search\Fetch;
+					</div>
+
+
+
+
+					<h4>Implementation of</h4>
+					<div class="list"><code><a href="class-Basho.Riak.Command.BuilderInterface.html#_build">Basho\Riak\Command\BuilderInterface::build()</a></code></div>
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="validate" id="_validate">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_validate">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#57-66" title="Go to source code">validate</a>( )</code>
+
+			<div class="description short">
+				<p>Validate command</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Validate command</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean
+					</div>
+
+					<h4>Throws</h4>
+					<div class="list">
+						Builder\Exception
+					</div>
+
+
+					<h4>Overrides</h4>
+					<div class="list"><code><a href="class-Basho.Riak.Command.Builder.html#_validate">Basho\Riak\Command\Builder::validate</a></code></div>
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withIndexName" id="_withIndexName">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withIndexName">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#68-73" title="Go to source code">withIndexName</a>( <span> <var>$name</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getIndexName" id="_getIndexName">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getIndexName">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#75-78" title="Go to source code">getIndexName</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getQuery" id="_getQuery">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getQuery">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#80-86" title="Go to source code">getQuery</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getMaxRows" id="_getMaxRows">
+
+			<td class="attributes"><code>
+				 public 
+				integer
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getMaxRows">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#88-94" title="Go to source code">getMaxRows</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						integer
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getStartRow" id="_getStartRow">
+
+			<td class="attributes"><code>
+				 public 
+				integer
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getStartRow">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#96-102" title="Go to source code">getStartRow</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						integer
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getFilterQuery" id="_getFilterQuery">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getFilterQuery">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#104-110" title="Go to source code">getFilterQuery</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getSortField" id="_getSortField">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getSortField">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#112-118" title="Go to source code">getSortField</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getDefaultField" id="_getDefaultField">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getDefaultField">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#120-126" title="Go to source code">getDefaultField</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getDefaultOperation" id="_getDefaultOperation">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getDefaultOperation">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#128-134" title="Go to source code">getDefaultOperation</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getReturnFields" id="_getReturnFields">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getReturnFields">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#136-142" title="Go to source code">getReturnFields</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withQuery" id="_withQuery">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withQuery">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#144-149" title="Go to source code">withQuery</a>( <span> <var>$query</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withMaxRows" id="_withMaxRows">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withMaxRows">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#151-156" title="Go to source code">withMaxRows</a>( <span> <var>$rows</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withStartRow" id="_withStartRow">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withStartRow">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#158-163" title="Go to source code">withStartRow</a>( <span> <var>$row_num</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withSortField" id="_withSortField">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withSortField">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#165-170" title="Go to source code">withSortField</a>( <span> <var>$field_name</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withFilterQuery" id="_withFilterQuery">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withFilterQuery">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#172-177" title="Go to source code">withFilterQuery</a>( <span> <var>$filter_query</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withDefaultField" id="_withDefaultField">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withDefaultField">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#179-184" title="Go to source code">withDefaultField</a>( <span> <var>$default_field</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withDefaultOperation" id="_withDefaultOperation">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withDefaultOperation">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#186-191" title="Go to source code">withDefaultOperation</a>( <span> <var>$default_operation</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withReturnFields" id="_withReturnFields">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withReturnFields">#</a>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#193-198" title="Go to source code">withReturnFields</a>( <span> <var>$return_fields</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+			</table>
+		</div>
+
+		<div class="panel panel-default">
+	        <div class="panel-heading"><h3>Methods inherited from <a href="class-Basho.Riak.Command.Builder.html#methods">Basho\Riak\Command\Builder</a></h3></div>
+			<p class="elementList">
+				<code><a href="class-Basho.Riak.Command.Builder.html#_getConnection">getConnection()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_getHeaders">getHeaders()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_getParameters">getParameters()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_getVerbose">getVerbose()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_required">required()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_withHeader">withHeader()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_withHeaders">withHeaders()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_withParameter">withParameter()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_withParameters">withParameters()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#_withVerboseMode">withVerboseMode()</a></code>
+			</p>
+		</div>
+
+
+
+
+
+
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Constants summary</h2></div>
+		</div>
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h3>Constants inherited from <a href="class-Basho.Riak.Command.Builder.html#constants">Basho\Riak\Command\Builder</a></h3></div>
+			<p class="elementList">
+				<code><a href="class-Basho.Riak.Command.Builder.html#CONTENT_TYPE_JSON"><b>CONTENT_TYPE_JSON</b></a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#CONTENT_TYPE_XML"><b>CONTENT_TYPE_XML</b></a></code>
+			</p>
+		</div>
+		<div class="panel panel-default">
+            <div class="panel-heading"><h3>Constants inherited from <a href="class-Basho.Riak.Command.BuilderInterface.html#constants">Basho\Riak\Command\BuilderInterface</a></h3></div>
+			<p class="elementList">
+				<code><a href="class-Basho.Riak.Command.BuilderInterface.html#COMMAND"><b>COMMAND</b></a></code>
+			</p>
+		</div>
+
+
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Properties summary</h2></div>
+			<table class="summary table table-bordered table-striped properties" id="properties">
+		<tr data-order="default_field" id="$default_field">
+			<td class="attributes"><code>
+				protected  
+				string
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#30" title="Go to source code"><var>$default_field</var></a>
+
+				<div class="description short">
+					
+				</div>
+
+				<div class="description detailed hidden">
+					
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$default_field" class="anchor">#</a>
+					<code><span class="php-quote">''</span></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="default_operation" id="$default_operation">
+			<td class="attributes"><code>
+				protected  
+				string
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#32" title="Go to source code"><var>$default_operation</var></a>
+
+				<div class="description short">
+					
+				</div>
+
+				<div class="description detailed hidden">
+					
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$default_operation" class="anchor">#</a>
+					<code><span class="php-quote">''</span></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="index_name" id="$index_name">
+			<td class="attributes"><code>
+				protected  
+				string
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Command.Builder.Search.FetchObjects.html#34" title="Go to source code"><var>$index_name</var></a>
+
+				<div class="description short">
+					
+				</div>
+
+				<div class="description detailed hidden">
+					
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$index_name" class="anchor">#</a>
+					<code><span class="php-quote">''</span></code>
+				</div>
+			</td>
+		</tr>
+			</table>
+		</div>
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h3>Properties inherited from <a href="class-Basho.Riak.Command.Builder.html#properties">Basho\Riak\Command\Builder</a></h3></div>
+			<p class="elementList">
+				<code><a href="class-Basho.Riak.Command.Builder.html#$headers"><var>$headers</var></a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#$parameters"><var>$parameters</var></a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#$riak"><var>$riak</var></a></code>, 
+				<code><a href="class-Basho.Riak.Command.Builder.html#$verbose"><var>$verbose</var></a></code>
+			</p>
+		</div>
+
+
+
+
+
+</div>
+	</div>
+
+	<div id="footer">
+		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://basho.github.io/riak-php-client/archive/2.1.x/sitemap.xml

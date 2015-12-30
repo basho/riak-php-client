@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Basho\Riak\Node | Official Riak Client for PHP</title>
+
+	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
+
+</head>
+
+<body>
+	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand">Official Riak Client for PHP</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+                <form id="search" class="navbar-form navbar-left" role="search">
+                    <input type="hidden" name="cx" value="">
+                    <input type="hidden" name="ie" value="UTF-8">
+                    <div class="form-group">
+                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
+					</div>
+				</form>
+
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="namespace-Basho.Riak.html" title="Summary of Basho\Riak"><span>Namespace</span></a>
+					</li>
+					<li class="active">
+<span>Class</span>					</li>
+
+					<li class="divider-vertical"></li>
+
+					<li>
+						<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+					</li>
+
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="left">
+	<div id="menu">
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+					<li class="active">
+						<a href="namespace-Basho.html">
+							Basho<span></span>
+						</a>
+							<ul>
+					<li class="active">
+						<a href="namespace-Basho.Riak.html">
+							Riak<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.html">
+							Api<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Translators.html">
+							Translators						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.html">
+							Command<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Bucket.html">
+							Bucket						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.html">
+							Builder<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.MapReduce.html">
+							MapReduce						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.Search.html">
+							Search						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.html">
+							DataType<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Counter.html">
+							Counter						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Map.html">
+							Map						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.DataType.Set.html">
+							Set						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Indexes.html">
+							Indexes						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.MapReduce.html">
+							MapReduce						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Object.html">
+							Object						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.html">
+							Search<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.Index.html">
+							Index						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
+							Schema						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.DataType.html">
+							DataType						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Node.html">
+							Node<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Node.Builder.html">
+							Builder						</a>
+							</li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Search.html">
+							Search						</a>
+							</li>
+								</ul></li></ul></li>
+			</ul>
+		</div>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Basho.Riak.Api.html">Api</a></li>
+				<li><a href="class-Basho.Riak.Bucket.html">Bucket</a></li>
+				<li><a href="class-Basho.Riak.Command.html">Command</a></li>
+				<li><a href="class-Basho.Riak.DataType.html">DataType</a></li>
+				<li><a href="class-Basho.Riak.Location.html">Location</a></li>
+				<li class="active"><a href="class-Basho.Riak.Node.html">Node</a></li>
+				<li><a href="class-Basho.Riak.Object.html">Object</a></li>
+			</ul>
+
+			<h3>Interfaces</h3>
+			<ul>
+				<li><a href="class-Basho.Riak.ApiInterface.html">ApiInterface</a></li>
+				<li><a href="class-Basho.Riak.CommandInterface.html">CommandInterface</a></li>
+			</ul>
+
+			<h3>Traits</h3>
+			<ul>
+				<li><a href="class-Basho.Riak.HeadersTrait.html">HeadersTrait</a></li>
+			</ul>
+
+			<h3>Exceptions</h3>
+			<ul>
+				<li><a href="class-Basho.Riak.Exception.html">Exception</a></li>
+			</ul>
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+	<div id="rightInner">
+<div id="content" class="class">
+	<h1>Class Node</h1>
+
+
+	<div class="description">
+	<p>Contains the connection configuration to connect to a Riak node.</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="alert alert-info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Basho.html">Basho</a>\<a href="namespace-Basho.Riak.html">Riak</a><br>
+		
+
+				<b>Author:</b>
+				Christopher Mancini <cmancini at basho d0t com><br>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Node.html#23-222" title="Go to source code">Riak/Node.php</a>
+		<br>
+	</div>
+
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Methods summary</h2></div>
+			<table class="summary table table-bordered table-striped methods" id="methods">
+		<tr data-order="__construct" id="___construct">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#___construct">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#57-61" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code> <var>$config</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="isInactive" id="_isInactive">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_isInactive">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#71-77" title="Go to source code">isInactive</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setInactive" id="_setInactive">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setInactive">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#79-85" title="Go to source code">setInactive</a>( <span>boolean <var>$inactive</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$inactive</var></dt>
+						<dd></dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getSignature" id="_getSignature">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getSignature">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#87-93" title="Go to source code">getSignature</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getHost" id="_getHost">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getHost">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#95-101" title="Go to source code">getHost</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getConfig" id="_getConfig">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code>|null
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getConfig">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#103-109" title="Go to source code">getConfig</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code>|null
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getPort" id="_getPort">
+
+			<td class="attributes"><code>
+				 public 
+				integer
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getPort">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#111-117" title="Go to source code">getPort</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						integer
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getUri" id="_getUri">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getUri">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#119-127" title="Go to source code">getUri</a>( )</code>
+
+			<div class="description short">
+				<p>Returns host:port for Node</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Returns host:port for Node</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="useTls" id="_useTls">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_useTls">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#129-137" title="Go to source code">useTls</a>( )</code>
+
+			<div class="description short">
+				<p>useTls</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>useTls</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getUserName" id="_getUserName">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getUserName">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#139-147" title="Go to source code">getUserName</a>( )</code>
+
+			<div class="description short">
+				<p>getUserName</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>getUserName</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getPassword" id="_getPassword">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getPassword">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#149-157" title="Go to source code">getPassword</a>( )</code>
+
+			<div class="description short">
+				<p>getPassword</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>getPassword</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getCaFile" id="_getCaFile">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getCaFile">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#159-162" title="Go to source code">getCaFile</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getCaDirectory" id="_getCaDirectory">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getCaDirectory">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#164-167" title="Go to source code">getCaDirectory</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getCertificate" id="_getCertificate">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getCertificate">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#169-177" title="Go to source code">getCertificate</a>( )</code>
+
+			<div class="description short">
+				<p>getCertificate</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>getCertificate</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getCertificatePassword" id="_getCertificatePassword">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getCertificatePassword">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#179-182" title="Go to source code">getCertificatePassword</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getPrivateKey" id="_getPrivateKey">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getPrivateKey">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#184-192" title="Go to source code">getPrivateKey</a>( )</code>
+
+			<div class="description short">
+				<p>getPrivateKey</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>getPrivateKey</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getPrivateKeyPassword" id="_getPrivateKeyPassword">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getPrivateKeyPassword">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#194-202" title="Go to source code">getPrivateKeyPassword</a>( )</code>
+
+			<div class="description short">
+				<p>getPrivateKeyPassword</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>getPrivateKeyPassword</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="execute" id="_execute">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Basho.Riak.Command.Response.html">Basho\Riak\Command\Response</a></code>
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_execute">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#204-221" title="Go to source code">execute</a>( <span><code><a href="class-Basho.Riak.Command.html">Basho\Riak\Command</a></code> <var>$command</var></span>, <span><code><a href="class-Basho.Riak.Api.html">Basho\Riak\Api</a></code> <var>$api</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$command</var></dt>
+						<dd></dd>
+						<dt><var>$api</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Command.Response.html">Basho\Riak\Command\Response</a></code>
+					</div>
+
+					<h4>Throws</h4>
+					<div class="list">
+						<code><a href="class-Basho.Riak.Exception.html">Basho\Riak\Exception</a></code>
+					</div>
+
+
+
+			</div>
+			</div></td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Properties summary</h2></div>
+			<table class="summary table table-bordered table-striped properties" id="properties">
+		<tr data-order="config" id="$config">
+			<td class="attributes"><code>
+				protected  
+				<code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code>|null
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Node.html#30-37" title="Go to source code"><var>$config</var></a>
+
+				<div class="description short">
+					<p>Configuration</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Configuration</p>
+
+<p>Contains configuration needed to connect to a Riak node.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$config" class="anchor">#</a>
+					<code><span class="php-keyword1">null</span></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="inactive" id="$inactive">
+			<td class="attributes"><code>
+				protected  
+				boolean
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Node.html#39-46" title="Go to source code"><var>$inactive</var></a>
+
+				<div class="description short">
+					<p>Inactive node</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Inactive node</p>
+
+<p>This is only set to true if the node has been marked as unreachable.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$inactive" class="anchor">#</a>
+					<code><span class="php-keyword1">false</span></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="signature" id="$signature">
+			<td class="attributes"><code>
+				protected  
+				string
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Node.html#48-55" title="Go to source code"><var>$signature</var></a>
+
+				<div class="description short">
+					<p>Node signature</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Node signature</p>
+
+<p>This property is used to store a stateless unique identifier for this node.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$signature" class="anchor">#</a>
+					<code><span class="php-quote">''</span></code>
+				</div>
+			</td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+</div>
+	</div>
+
+	<div id="footer">
+		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>
