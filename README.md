@@ -41,7 +41,7 @@ And then run `composer update` to ensure the module is installed.
 ## Documentation
 * Master: [![Build Status](https://secure.travis-ci.org/basho/riak-php-client.png?branch=master)](http://travis-ci.org/basho/riak-php-client)
 
-A fully traversable version of the API documentation for this library can be found on [Github Pages](http://basho.github.io/riak-php-client). 
+A fully traversable version of the API documentation for this library can be found on [Github Pages](http://basho.github.io/riak-php-client/archive/2.1.x/). 
 
 ### Releases
 The release tags of this project have been aligned with the major & minor release versions of Riak. For example, if you are using version 1.4.9 of Riak, then you will want the latest 1.4.* version of this library.

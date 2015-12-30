@@ -2,10 +2,12 @@
 # ./vendor/bin/apigen generate
 source:         src
 
-destination:    ../docs/riak-php-client
+destination:    ../docs/riak-php-client/archive/2.1.x
 
 templateTheme:  bootstrap
 
 title:          Official Riak Client for PHP
 
 tree:           true
+
+baseUrl:        https://basho.github.io/riak-php-client/archive/2.1.x/
