@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Api\Http | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -224,7 +234,7 @@
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Api.Http.html#28-498" title="Go to source code">Riak/Api/Http.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Api.Http.html#17-773" title="Go to source code">Riak/Api/Http.php</a>
 		<br>
 	</div>
 
@@ -233,18 +243,18 @@
 		<div class="panel panel-default">
 			<div class="panel-heading"><h2>Methods summary</h2></div>
 			<table class="summary table table-bordered table-striped methods" id="methods">
-		<tr data-order="closeConnection" id="_closeConnection">
+		<tr data-order="getStatusCode" id="_getStatusCode">
 
 			<td class="attributes"><code>
 				 public 
-				
+				integer
 				
 				</code>
 			</td>
 
 			<td class="name"><div>
-			<a class="anchor" href="#_closeConnection">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#58-62" title="Go to source code">closeConnection</a>( )</code>
+			<a class="anchor" href="#_getStatusCode">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#88-94" title="Go to source code">getStatusCode</a>( )</code>
 
 			<div class="description short">
 				
@@ -255,10 +265,152 @@
 
 
 
+					<h4>Returns</h4>
+					<div class="list">
+						integer
+					</div>
 
 
 
 
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getResponseBody" id="_getResponseBody">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getResponseBody">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#96-102" title="Go to source code">getResponseBody</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getResponseHeaders" id="_getResponseHeaders">
+
+			<td class="attributes"><code>
+				 public 
+				array
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getResponseHeaders">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#104-110" title="Go to source code">getResponseHeaders</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						array
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getRequest" id="_getRequest">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getRequest">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#112-118" title="Go to source code">getRequest</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+					<h4>Overrides</h4>
+					<div class="list"><code><a href="class-Basho.Riak.Api.html#_getRequest">Basho\Riak\Api::getRequest</a></code></div>
+
+					<h4>Implementation of</h4>
+					<div class="list"><code><a href="class-Basho.Riak.ApiInterface.html#_getRequest">Basho\Riak\ApiInterface::getRequest()</a></code></div>
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="closeConnection" id="_closeConnection">
+
+			<td class="attributes"><code>
+				 public 
+				null
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_closeConnection">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#120-126" title="Go to source code">closeConnection</a>( )</code>
+
+			<div class="description short">
+				<p>Closes the connection to the Riak Interface</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Closes the connection to the Riak Interface</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						null
+					</div>
+
+
+
+
+					<h4>Implementation of</h4>
+					<div class="list"><code><a href="class-Basho.Riak.ApiInterface.html#_closeConnection">Basho\Riak\ApiInterface::closeConnection()</a></code></div>
 			</div>
 			</div></td>
 		</tr>
@@ -273,7 +425,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepare">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#64-91" title="Go to source code">prepare</a>( <span><code><a href="class-Basho.Riak.Command.html">Basho\Riak\Command</a></code> <var>$command</var></span>, <span><code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a></code> <var>$node</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#128-155" title="Go to source code">prepare</a>( <span><code><a href="class-Basho.Riak.Command.html">Basho\Riak\Command</a></code> <var>$command</var></span>, <span><code><a href="class-Basho.Riak.Node.html">Basho\Riak\Node</a></code> <var>$node</var></span> )</code>
 
 			<div class="description short">
 				<p>Prepare request to be sent</p>
@@ -317,7 +469,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_resetConnection">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#93-109" title="Go to source code">resetConnection</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#157-173" title="Go to source code">resetConnection</a>( )</code>
 
 			<div class="description short">
 				
@@ -346,7 +498,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_buildPath">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#111-176" title="Go to source code">buildPath</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#175-259" title="Go to source code">buildPath</a>( )</code>
 
 			<div class="description short">
 				<p>Sets the API path for the command</p>
@@ -379,7 +531,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepareConnection">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#212-264" title="Go to source code">prepareConnection</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#294-346" title="Go to source code">prepareConnection</a>( )</code>
 
 			<div class="description short">
 				<p>Prepare Connection</p>
@@ -418,7 +570,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepareRequest">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#266-280" title="Go to source code">prepareRequest</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#348-362" title="Go to source code">prepareRequest</a>( )</code>
 
 			<div class="description short">
 				<p>Prepare request</p>
@@ -453,7 +605,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepareRequestData">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#282-296" title="Go to source code">prepareRequestData</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#364-378" title="Go to source code">prepareRequestData</a>( )</code>
 
 			<div class="description short">
 				<p>Prepare request data</p>
@@ -486,7 +638,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepareRequestUrl">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#298-312" title="Go to source code">prepareRequestUrl</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#380-394" title="Go to source code">prepareRequestUrl</a>( )</code>
 
 			<div class="description short">
 				<p>Prepares the complete request URL</p>
@@ -519,7 +671,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepareRequestParameters">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#314-327" title="Go to source code">prepareRequestParameters</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#396-409" title="Go to source code">prepareRequestParameters</a>( )</code>
 
 			<div class="description short">
 				<p>Prepare request parameters</p>
@@ -552,7 +704,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepareRequestHeaders">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#329-348" title="Go to source code">prepareRequestHeaders</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#411-459" title="Go to source code">prepareRequestHeaders</a>( )</code>
 
 			<div class="description short">
 				<p>Prepares the request headers</p>
@@ -585,7 +737,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_prepareRequestMethod">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#350-376" title="Go to source code">prepareRequestMethod</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#461-487" title="Go to source code">prepareRequestMethod</a>( )</code>
 
 			<div class="description short">
 				<p>Prepare the request method</p>
@@ -618,7 +770,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getPath">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#378-384" title="Go to source code">getPath</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#489-495" title="Go to source code">getPath</a>( )</code>
 
 			<div class="description short">
 				
@@ -651,7 +803,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getQuery">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#386-392" title="Go to source code">getQuery</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#497-503" title="Go to source code">getQuery</a>( )</code>
 
 			<div class="description short">
 				
@@ -677,27 +829,27 @@
 
 			<td class="attributes"><code>
 				 public 
-				<code><a href="class-Basho.Riak.Command.Response.html">Basho\Riak\Command\Response</a></code>
+				boolean
 				
 				</code>
 			</td>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_send">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#394-425" title="Go to source code">send</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#505-541" title="Go to source code">send</a>( )</code>
 
 			<div class="description short">
-				<p>send</p>
+				
 			</div>
 
 			<div class="description detailed hidden">
-				<p>send</p>
+				
 
 
 
 					<h4>Returns</h4>
 					<div class="list">
-						<code><a href="class-Basho.Riak.Command.Response.html">Basho\Riak\Command\Response</a></code>
+						boolean
 					</div>
 
 
@@ -705,6 +857,42 @@
 
 					<h4>Implementation of</h4>
 					<div class="list"><code><a href="class-Basho.Riak.ApiInterface.html#_send">Basho\Riak\ApiInterface::send()</a></code></div>
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="addHeader" id="_addHeader">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_addHeader">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#543-552" title="Go to source code">addHeader</a>( <span> <var>$key</var></span>, <span> <var>$value</var></span> )</code>
+
+			<div class="description short">
+				<p>Add a custom header to the request</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Add a custom header to the request</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$key</var></dt>
+						<dd></dd>
+						<dt><var>$value</var></dt>
+						<dd></dd>
+					</dl></div>
+
+
+
+
+
 			</div>
 			</div></td>
 		</tr>
@@ -719,7 +907,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getConnection">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#427-437" title="Go to source code">getConnection</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#554-564" title="Go to source code">getConnection</a>( )</code>
 
 			<div class="description short">
 				
@@ -752,7 +940,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_openConnection">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#439-444" title="Go to source code">openConnection</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#566-571" title="Go to source code">openConnection</a>( )</code>
 
 			<div class="description short">
 				
@@ -781,7 +969,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_responseHeaderCallback">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#446-478" title="Go to source code">responseHeaderCallback</a>( <span> <var>$ch</var></span>, <span> <var>$header</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#573-605" title="Go to source code">responseHeaderCallback</a>( <span> <var>$ch</var></span>, <span> <var>$header</var></span> )</code>
 
 			<div class="description short">
 				<p>Response header callback</p>
@@ -826,7 +1014,7 @@ member of the class.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_responseBodyCallback">#</a>
-			<code><a href="source-class-Basho.Riak.Api.Http.html#480-497" title="Go to source code">responseBodyCallback</a>( <span> <var>$ch</var></span>, <span> <var>$body</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#607-624" title="Go to source code">responseBodyCallback</a>( <span> <var>$ch</var></span>, <span> <var>$body</var></span> )</code>
 
 			<div class="description short">
 				<p>Response body callback</p>
@@ -859,6 +1047,64 @@ member of the class.</p>
 			</div>
 			</div></td>
 		</tr>
+		<tr data-order="parseResponse" id="_parseResponse">
+
+			<td class="attributes"><code>
+				 protected 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_parseResponse">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#626-763" title="Go to source code">parseResponse</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="getResponseHeader" id="_getResponseHeader">
+
+			<td class="attributes"><code>
+				 protected 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getResponseHeader">#</a>
+			<code><a href="source-class-Basho.Riak.Api.Http.html#765-772" title="Go to source code">getResponseHeader</a>( <span> <var>$key</var></span>, <span> <var>$default</var> = <span class="php-quote">''</span></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
 			</table>
 		</div>
 
@@ -866,14 +1112,12 @@ member of the class.</p>
 	        <div class="panel-heading"><h3>Methods inherited from <a href="class-Basho.Riak.Api.html#methods">Basho\Riak\Api</a></h3></div>
 			<p class="elementList">
 				<code><a href="class-Basho.Riak.Api.html#___construct">__construct()</a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#_getClientId">getClientId()</a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#_getCommand">getCommand()</a></code>, 
+				<code><a href="class-Basho.Riak.Api.html#_getConfig">getConfig()</a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#_getError">getError()</a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#_getNode">getNode()</a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#_getRequest">getRequest()</a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#_getResponseBody">getResponseBody()</a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#_getResponseHeaders">getResponseHeaders()</a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#_getStatusCode">getStatusCode()</a></code>, 
+				<code><a href="class-Basho.Riak.Api.html#_getResponse">getResponse()</a></code>, 
+				<code><a href="class-Basho.Riak.Api.html#_getSuccess">getSuccess()</a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#_setCommand">setCommand()</a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#_setNode">setNode()</a></code>
 			</p>
@@ -885,12 +1129,262 @@ member of the class.</p>
 
 
 
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Constants summary</h2></div>
+			<table class="summary table table-bordered table-striped constants" id="constants">
+			<tr data-order="VCLOCK_KEY" id="VCLOCK_KEY">
+
+				<td class="attributes"><code>string</code></td>
+				<td class="name">
+					<code>
+						<a href="source-class-Basho.Riak.Api.Http.html#25" title="Go to source code"><b>VCLOCK_KEY</b></a>
+					</code>
+
+					<div class="description short">
+						
+					</div>
+
+					<div class="description detailed hidden">
+						
+
+					</div>
+				</td>
+				<td class="value">
+					<div>
+						<a href="#VCLOCK_KEY" class="anchor">#</a>
+						<code><span class="php-quote">'X-Riak-Vclock'</span></code>
+					</div>
+				</td>
+			</tr>
+			<tr data-order="CONTENT_TYPE_KEY" id="CONTENT_TYPE_KEY">
+
+				<td class="attributes"><code>string</code></td>
+				<td class="name">
+					<code>
+						<a href="source-class-Basho.Riak.Api.Http.html#26" title="Go to source code"><b>CONTENT_TYPE_KEY</b></a>
+					</code>
+
+					<div class="description short">
+						
+					</div>
+
+					<div class="description detailed hidden">
+						
+
+					</div>
+				</td>
+				<td class="value">
+					<div>
+						<a href="#CONTENT_TYPE_KEY" class="anchor">#</a>
+						<code><span class="php-quote">'Content-Type'</span></code>
+					</div>
+				</td>
+			</tr>
+			<tr data-order="METADATA_PREFIX" id="METADATA_PREFIX">
+
+				<td class="attributes"><code>string</code></td>
+				<td class="name">
+					<code>
+						<a href="source-class-Basho.Riak.Api.Http.html#27" title="Go to source code"><b>METADATA_PREFIX</b></a>
+					</code>
+
+					<div class="description short">
+						
+					</div>
+
+					<div class="description detailed hidden">
+						
+
+					</div>
+				</td>
+				<td class="value">
+					<div>
+						<a href="#METADATA_PREFIX" class="anchor">#</a>
+						<code><span class="php-quote">'X-Riak-Meta-'</span></code>
+					</div>
+				</td>
+			</tr>
+			<tr data-order="LAST_MODIFIED_KEY" id="LAST_MODIFIED_KEY">
+
+				<td class="attributes"><code>string</code></td>
+				<td class="name">
+					<code>
+						<a href="source-class-Basho.Riak.Api.Http.html#28" title="Go to source code"><b>LAST_MODIFIED_KEY</b></a>
+					</code>
+
+					<div class="description short">
+						
+					</div>
+
+					<div class="description detailed hidden">
+						
+
+					</div>
+				</td>
+				<td class="value">
+					<div>
+						<a href="#LAST_MODIFIED_KEY" class="anchor">#</a>
+						<code><span class="php-quote">'Last-Modified'</span></code>
+					</div>
+				</td>
+			</tr>
+			<tr data-order="CONTENT_TYPE_JSON" id="CONTENT_TYPE_JSON">
+
+				<td class="attributes"><code>string</code></td>
+				<td class="name">
+					<code>
+						<a href="source-class-Basho.Riak.Api.Http.html#31" title="Go to source code"><b>CONTENT_TYPE_JSON</b></a>
+					</code>
+
+					<div class="description short">
+						
+					</div>
+
+					<div class="description detailed hidden">
+						
+
+					</div>
+				</td>
+				<td class="value">
+					<div>
+						<a href="#CONTENT_TYPE_JSON" class="anchor">#</a>
+						<code><span class="php-quote">'application/json'</span></code>
+					</div>
+				</td>
+			</tr>
+			<tr data-order="CONTENT_TYPE_XML" id="CONTENT_TYPE_XML">
+
+				<td class="attributes"><code>string</code></td>
+				<td class="name">
+					<code>
+						<a href="source-class-Basho.Riak.Api.Http.html#32" title="Go to source code"><b>CONTENT_TYPE_XML</b></a>
+					</code>
+
+					<div class="description short">
+						
+					</div>
+
+					<div class="description detailed hidden">
+						
+
+					</div>
+				</td>
+				<td class="value">
+					<div>
+						<a href="#CONTENT_TYPE_XML" class="anchor">#</a>
+						<code><span class="php-quote">'application/xml'</span></code>
+					</div>
+				</td>
+			</tr>
+			</table>
+		</div>
+
 
 
 
 		<div class="panel panel-default">
             <div class="panel-heading"><h2>Properties summary</h2></div>
 			<table class="summary table table-bordered table-striped properties" id="properties">
+		<tr data-order="requestBody" id="$requestBody">
+			<td class="attributes"><code>
+				protected  
+				string
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Api.Http.html#35-40" title="Go to source code"><var>$requestBody</var></a>
+
+				<div class="description short">
+					<p>Request body to be sent</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Request body to be sent</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$requestBody" class="anchor">#</a>
+					<code><span class="php-quote">''</span></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="responseHeaders" id="$responseHeaders">
+			<td class="attributes"><code>
+				protected  
+				array
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Api.Http.html#42-47" title="Go to source code"><var>$responseHeaders</var></a>
+
+				<div class="description short">
+					<p>Response headers returned from request</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Response headers returned from request</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$responseHeaders" class="anchor">#</a>
+					<code>[]</code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="responseBody" id="$responseBody">
+			<td class="attributes"><code>
+				protected  
+				string
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Api.Http.html#49-54" title="Go to source code"><var>$responseBody</var></a>
+
+				<div class="description short">
+					<p>Response body returned from request</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Response body returned from request</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$responseBody" class="anchor">#</a>
+					<code><span class="php-quote">''</span></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="statusCode" id="$statusCode">
+			<td class="attributes"><code>
+				protected  
+				integer
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Api.Http.html#56-61" title="Go to source code"><var>$statusCode</var></a>
+
+				<div class="description short">
+					<p>HTTP Status Code from response</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>HTTP Status Code from response</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$statusCode" class="anchor">#</a>
+					<code><span class="php-num">0</span></code>
+				</div>
+			</td>
+		</tr>
 		<tr data-order="connection" id="$connection">
 			<td class="attributes"><code>
 				protected  
@@ -898,7 +1392,7 @@ member of the class.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Api.Http.html#35-40" title="Go to source code"><var>$connection</var></a>
+					<a href="source-class-Basho.Riak.Api.Http.html#63-68" title="Go to source code"><var>$connection</var></a>
 
 				<div class="description short">
 					<p>cURL connection handle</p>
@@ -923,7 +1417,7 @@ member of the class.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Api.Http.html#42-47" title="Go to source code"><var>$path</var></a>
+					<a href="source-class-Basho.Riak.Api.Http.html#70-75" title="Go to source code"><var>$path</var></a>
 
 				<div class="description short">
 					<p>API path</p>
@@ -948,7 +1442,7 @@ member of the class.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Api.Http.html#49-54" title="Go to source code"><var>$query</var></a>
+					<a href="source-class-Basho.Riak.Api.Http.html#77-82" title="Go to source code"><var>$query</var></a>
 
 				<div class="description short">
 					<p>Query string</p>
@@ -966,22 +1460,43 @@ member of the class.</p>
 				</div>
 			</td>
 		</tr>
+		<tr data-order="headers" id="$headers">
+			<td class="attributes"><code>
+				protected  
+				array
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Api.Http.html#86" title="Go to source code"><var>$headers</var></a>
+
+				<div class="description short">
+					
+				</div>
+
+				<div class="description detailed hidden">
+					
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$headers" class="anchor">#</a>
+					<code>[]</code>
+				</div>
+			</td>
+		</tr>
 			</table>
 		</div>
 
 		<div class="panel panel-default">
             <div class="panel-heading"><h3>Properties inherited from <a href="class-Basho.Riak.Api.html#properties">Basho\Riak\Api</a></h3></div>
 			<p class="elementList">
-				<code><a href="class-Basho.Riak.Api.html#$clientId"><var>$clientId</var></a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#$command"><var>$command</var></a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#$config"><var>$config</var></a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#$error"><var>$error</var></a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#$node"><var>$node</var></a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#$request"><var>$request</var></a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#$requestBody"><var>$requestBody</var></a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#$responseBody"><var>$responseBody</var></a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#$responseHeaders"><var>$responseHeaders</var></a></code>, 
-				<code><a href="class-Basho.Riak.Api.html#$statusCode"><var>$statusCode</var></a></code>, 
+				<code><a href="class-Basho.Riak.Api.html#$response"><var>$response</var></a></code>, 
 				<code><a href="class-Basho.Riak.Api.html#$success"><var>$success</var></a></code>
 			</p>
 		</div>
@@ -997,7 +1512,7 @@ member of the class.</p>
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

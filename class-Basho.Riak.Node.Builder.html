@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Node\Builder | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -241,7 +251,7 @@ connecting to your Riak node cluster.</p>
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Node.Builder.html#22-328" title="Go to source code">Riak/Node/Builder.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Node.Builder.html#7-322" title="Go to source code">Riak/Node/Builder.php</a>
 		<br>
 	</div>
 
@@ -261,7 +271,7 @@ connecting to your Riak node cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#80-83" title="Go to source code">__construct</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#65-68" title="Go to source code">__construct</a>( )</code>
 
 			<div class="description short">
 				
@@ -290,7 +300,7 @@ connecting to your Riak node cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_usingTrustAuthentication">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#85-103" title="Go to source code">usingTrustAuthentication</a>( <span>string <var>$user</var> = <span class="php-quote">''</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#70-88" title="Go to source code">usingTrustAuthentication</a>( <span>string <var>$user</var> = <span class="php-quote">''</span></span> )</code>
 
 			<div class="description short">
 				<p>usingTrustAuthentication</p>
@@ -333,7 +343,7 @@ is required to communicate with your Riak nodes.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_usingPasswordAuthentication">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#105-124" title="Go to source code">usingPasswordAuthentication</a>( <span> <var>$user</var></span>, <span> <var>$pass</var> = <span class="php-quote">''</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#90-109" title="Go to source code">usingPasswordAuthentication</a>( <span> <var>$user</var></span>, <span> <var>$pass</var> = <span class="php-quote">''</span></span> )</code>
 
 			<div class="description short">
 				<p>usingPasswordAuthentication</p>
@@ -378,7 +388,7 @@ is required to communicate with your Riak nodes.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_usingCertificateAuthentication">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#126-151" title="Go to source code">usingCertificateAuthentication</a>( <span> <var>$certificate</var></span>, <span>string <var>$password</var> = <span class="php-quote">''</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#111-136" title="Go to source code">usingCertificateAuthentication</a>( <span> <var>$certificate</var></span>, <span>string <var>$password</var> = <span class="php-quote">''</span></span> )</code>
 
 			<div class="description short">
 				<p>usingCertificateAuthentication</p>
@@ -429,7 +439,7 @@ is required to communicate with your Riak nodes.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_usingPamAuthentication">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#153-171" title="Go to source code">usingPamAuthentication</a>( <span> <var>$user</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#138-156" title="Go to source code">usingPamAuthentication</a>( <span> <var>$user</var></span> )</code>
 
 			<div class="description short">
 				<p>usingPamAuthentication</p>
@@ -472,7 +482,7 @@ is required to communicate with your Riak nodes.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withCertificateAuthorityFile">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#173-188" title="Go to source code">withCertificateAuthorityFile</a>( <span> <var>$ca_file</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#158-173" title="Go to source code">withCertificateAuthorityFile</a>( <span> <var>$ca_file</var></span> )</code>
 
 			<div class="description short">
 				<p>withCertificateAuthorityDirectory</p>
@@ -512,7 +522,7 @@ is required to communicate with your Riak nodes.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withCertificateAuthorityDirectory">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#190-206" title="Go to source code">withCertificateAuthorityDirectory</a>( <span> <var>$ca_directory</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#175-191" title="Go to source code">withCertificateAuthorityDirectory</a>( <span> <var>$ca_directory</var></span> )</code>
 
 			<div class="description short">
 				<p>withCertificateAuthorityDirectory</p>
@@ -553,7 +563,7 @@ Riak</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withPrivateKey">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#208-214" title="Go to source code">withPrivateKey</a>( <span> <var>$private_key</var></span>, <span> <var>$password</var> = <span class="php-quote">''</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#193-199" title="Go to source code">withPrivateKey</a>( <span> <var>$private_key</var></span>, <span> <var>$password</var> = <span class="php-quote">''</span></span> )</code>
 
 			<div class="description short">
 				
@@ -563,6 +573,40 @@ Riak</p>
 				
 
 
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="withConnectionTimeout" id="_withConnectionTimeout">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_withConnectionTimeout">#</a>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#201-208" title="Go to source code">withConnectionTimeout</a>( <span> <var>$timeout</var></span> )</code>
+
+			<div class="description short">
+				<p>Client side connection timeout for requests</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Client side connection timeout for requests</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$timeout</var></dt>
+						<dd></dd>
+					</dl></div>
 
 
 
@@ -582,7 +626,7 @@ Riak</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getConfig">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#216-222" title="Go to source code">getConfig</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#210-216" title="Go to source code">getConfig</a>( )</code>
 
 			<div class="description short">
 				
@@ -615,7 +659,7 @@ Riak</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_buildCluster">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#224-241" title="Go to source code">buildCluster</a>( <span>array <var>$hosts</var> = [<span class="php-quote">'localhost'</span>]</span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#218-235" title="Go to source code">buildCluster</a>( <span>array <var>$hosts</var> = [<span class="php-quote">'localhost'</span>]</span> )</code>
 
 			<div class="description short">
 				<p>Build distributed cluster</p>
@@ -656,7 +700,7 @@ staging and production environments where you have multiple Riak nodes on multip
 
 			<td class="name"><div>
 			<a class="anchor" href="#_build">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#243-255" title="Go to source code">build</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#237-249" title="Go to source code">build</a>( )</code>
 
 			<div class="description short">
 				<p>Build node</p>
@@ -691,7 +735,7 @@ staging and production environments where you have multiple Riak nodes on multip
 
 			<td class="name"><div>
 			<a class="anchor" href="#_validate">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#257-279" title="Go to source code">validate</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#251-273" title="Go to source code">validate</a>( )</code>
 
 			<div class="description short">
 				<p>Builder configuration validation</p>
@@ -727,7 +771,7 @@ is built.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_atHost">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#281-294" title="Go to source code">atHost</a>( <span> <var>$host</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#275-288" title="Go to source code">atHost</a>( <span> <var>$host</var></span> )</code>
 
 			<div class="description short">
 				<p>Build with host address</p>
@@ -767,7 +811,7 @@ is built.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_buildLocalhost">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#296-314" title="Go to source code">buildLocalhost</a>( <span>array <var>$ports</var> = [<span class="php-num">8087</span>]</span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#290-308" title="Go to source code">buildLocalhost</a>( <span>array <var>$ports</var> = [<span class="php-num">8087</span>]</span> )</code>
 
 			<div class="description short">
 				<p>Build local node cluster</p>
@@ -808,7 +852,7 @@ development environments where you have multiple Riak nodes on a single machine 
 
 			<td class="name"><div>
 			<a class="anchor" href="#_onPort">#</a>
-			<code><a href="source-class-Basho.Riak.Node.Builder.html#316-327" title="Go to source code">onPort</a>( <span> <var>$port</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.Builder.html#310-321" title="Go to source code">onPort</a>( <span> <var>$port</var></span> )</code>
 
 			<div class="description short">
 				<p>Build node objects with configuration to use a specific port number</p>
@@ -858,7 +902,7 @@ development environments where you have multiple Riak nodes on a single machine 
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Node.Builder.html#73-78" title="Go to source code"><var>$config</var></a>
+					<a href="source-class-Basho.Riak.Node.Builder.html#58-63" title="Go to source code"><var>$config</var></a>
 
 				<div class="description short">
 					<p>Internal storage</p>
@@ -891,7 +935,7 @@ development environments where you have multiple Riak nodes on a single machine 
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

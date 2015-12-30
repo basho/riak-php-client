@@ -6,7 +6,7 @@
 	<title>Trait Basho\Riak\Command\Builder\IndexTrait | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li class="active">
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -170,8 +180,11 @@
 				<li><a href="class-Basho.Riak.Command.Builder.FetchCounter.html">FetchCounter</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.FetchMap.html">FetchMap</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.FetchObject.html">FetchObject</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.FetchPreflist.html">FetchPreflist</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.FetchSet.html">FetchSet</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.FetchStats.html">FetchStats</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.IncrementCounter.html">IncrementCounter</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Ping.html">Ping</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.QueryIndex.html">QueryIndex</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.SetBucketProperties.html">SetBucketProperties</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.StoreObject.html">StoreObject</a></li>
@@ -232,7 +245,7 @@
 
 				<b>Author:</b>
 				Alex Moore <amoore at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#20-318" title="Go to source code">Riak/Command/Builder/IndexTrait.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#5-303" title="Go to source code">Riak/Command/Builder/IndexTrait.php</a>
 		<br>
 	</div>
 
@@ -252,7 +265,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getIndexName">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#98-106" title="Go to source code">getIndexName</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#83-91" title="Go to source code">getIndexName</a>( )</code>
 
 			<div class="description short">
 				<p>Gets the index name</p>
@@ -285,7 +298,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getMatchValue">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#108-114" title="Go to source code">getMatchValue</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#93-99" title="Go to source code">getMatchValue</a>( )</code>
 
 			<div class="description short">
 				
@@ -318,7 +331,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getLowerBound">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#116-122" title="Go to source code">getLowerBound</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#101-107" title="Go to source code">getLowerBound</a>( )</code>
 
 			<div class="description short">
 				
@@ -351,7 +364,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getUpperBound">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#124-130" title="Go to source code">getUpperBound</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#109-115" title="Go to source code">getUpperBound</a>( )</code>
 
 			<div class="description short">
 				
@@ -384,7 +397,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_isMatchQuery">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#132-138" title="Go to source code">isMatchQuery</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#117-123" title="Go to source code">isMatchQuery</a>( )</code>
 
 			<div class="description short">
 				
@@ -417,7 +430,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_isRangeQuery">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#140-146" title="Go to source code">isRangeQuery</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#125-131" title="Go to source code">isRangeQuery</a>( )</code>
 
 			<div class="description short">
 				
@@ -450,7 +463,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getContinuation">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#148-154" title="Go to source code">getContinuation</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#133-139" title="Go to source code">getContinuation</a>( )</code>
 
 			<div class="description short">
 				
@@ -483,7 +496,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getMaxResults">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#156-162" title="Go to source code">getMaxResults</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#141-147" title="Go to source code">getMaxResults</a>( )</code>
 
 			<div class="description short">
 				
@@ -516,7 +529,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getReturnTerms">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#164-170" title="Go to source code">getReturnTerms</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#149-155" title="Go to source code">getReturnTerms</a>( )</code>
 
 			<div class="description short">
 				
@@ -549,7 +562,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getPaginationSort">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#172-178" title="Go to source code">getPaginationSort</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#157-163" title="Go to source code">getPaginationSort</a>( )</code>
 
 			<div class="description short">
 				
@@ -582,7 +595,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getTermFilter">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#180-186" title="Go to source code">getTermFilter</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#165-171" title="Go to source code">getTermFilter</a>( )</code>
 
 			<div class="description short">
 				
@@ -615,7 +628,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getTimeout">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#188-194" title="Go to source code">getTimeout</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#173-179" title="Go to source code">getTimeout</a>( )</code>
 
 			<div class="description short">
 				
@@ -648,7 +661,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_isParamSet">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#197-204" title="Go to source code">isParamSet</a>( <span> <var>$param</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#182-189" title="Go to source code">isParamSet</a>( <span> <var>$param</var></span> )</code>
 
 			<div class="description short">
 				
@@ -686,7 +699,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withIndexName">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#206-217" title="Go to source code">withIndexName</a>( <span> <var>$indexName</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#191-202" title="Go to source code">withIndexName</a>( <span> <var>$indexName</var></span> )</code>
 
 			<div class="description short">
 				<p>Adds the index name information to the Command</p>
@@ -724,7 +737,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withScalarValue">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#220-233" title="Go to source code">withScalarValue</a>( <span> <var>$value</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#205-218" title="Go to source code">withScalarValue</a>( <span> <var>$value</var></span> )</code>
 
 			<div class="description short">
 				<p>Adds the scalar index query information to the Command</p>
@@ -762,7 +775,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withRangeValue">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#236-251" title="Go to source code">withRangeValue</a>( <span> <var>$lowerBound</var></span>, <span> <var>$upperBound</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#221-236" title="Go to source code">withRangeValue</a>( <span> <var>$lowerBound</var></span>, <span> <var>$upperBound</var></span> )</code>
 
 			<div class="description short">
 				<p>Adds the range index query information to the Command</p>
@@ -802,7 +815,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withContinuation">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#253-262" title="Go to source code">withContinuation</a>( <span>null|string <var>$continuation</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#238-247" title="Go to source code">withContinuation</a>( <span>null|string <var>$continuation</var></span> )</code>
 
 			<div class="description short">
 				
@@ -840,7 +853,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withMaxResults">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#264-273" title="Go to source code">withMaxResults</a>( <span>integer|null <var>$maxResults</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#249-258" title="Go to source code">withMaxResults</a>( <span>integer|null <var>$maxResults</var></span> )</code>
 
 			<div class="description short">
 				
@@ -878,7 +891,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withReturnTerms">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#275-284" title="Go to source code">withReturnTerms</a>( <span>boolean|null <var>$returnTerms</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#260-269" title="Go to source code">withReturnTerms</a>( <span>boolean|null <var>$returnTerms</var> = <span class="php-keyword1">true</span></span> )</code>
 
 			<div class="description short">
 				
@@ -916,7 +929,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withPaginationSort">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#286-295" title="Go to source code">withPaginationSort</a>( <span>boolean|null <var>$paginationSort</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#271-280" title="Go to source code">withPaginationSort</a>( <span>boolean|null <var>$paginationSort</var></span> )</code>
 
 			<div class="description short">
 				
@@ -954,7 +967,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withTermFilter">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#297-306" title="Go to source code">withTermFilter</a>( <span>null|string <var>$termFilter</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#282-291" title="Go to source code">withTermFilter</a>( <span>null|string <var>$termFilter</var></span> )</code>
 
 			<div class="description short">
 				
@@ -992,7 +1005,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withTimeout">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#308-317" title="Go to source code">withTimeout</a>( <span>integer|null <var>$timeout</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#293-302" title="Go to source code">withTimeout</a>( <span>integer|null <var>$timeout</var></span> )</code>
 
 			<div class="description short">
 				
@@ -1042,7 +1055,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#27-32" title="Go to source code"><var>$indexName</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#12-17" title="Go to source code"><var>$indexName</var></a>
 
 				<div class="description short">
 					<p>The name of the index to query.</p>
@@ -1067,7 +1080,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#34-39" title="Go to source code"><var>$match</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#19-24" title="Go to source code"><var>$match</var></a>
 
 				<div class="description short">
 					<p>The index match value for scalar queries.</p>
@@ -1092,7 +1105,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#41-46" title="Go to source code"><var>$lowerBound</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#26-31" title="Go to source code"><var>$lowerBound</var></a>
 
 				<div class="description short">
 					<p>The index lower bound value for range queries.</p>
@@ -1117,7 +1130,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#48-53" title="Go to source code"><var>$upperBound</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#33-38" title="Go to source code"><var>$upperBound</var></a>
 
 				<div class="description short">
 					<p>The index upper bound value for range queries.</p>
@@ -1142,7 +1155,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#55-61" title="Go to source code"><var>$continuation</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#40-46" title="Go to source code"><var>$continuation</var></a>
 
 				<div class="description short">
 					<p>The continuation string for this query.
@@ -1169,7 +1182,7 @@ Used to page results when combined with MaxResults.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#63-68" title="Go to source code"><var>$maxResults</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#48-53" title="Go to source code"><var>$maxResults</var></a>
 
 				<div class="description short">
 					<p>The maximum number of results returned by the query.</p>
@@ -1194,7 +1207,7 @@ Used to page results when combined with MaxResults.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#70-75" title="Go to source code"><var>$returnTerms</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#55-60" title="Go to source code"><var>$returnTerms</var></a>
 
 				<div class="description short">
 					<p>The option to return the index keys with the Riak object keys.</p>
@@ -1219,7 +1232,7 @@ Used to page results when combined with MaxResults.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#77-84" title="Go to source code"><var>$paginationSort</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#62-69" title="Go to source code"><var>$paginationSort</var></a>
 
 				<div class="description short">
 					<p>The option to sort, or not sort, the results of a non-paginated secondary index query.
@@ -1248,7 +1261,7 @@ By default results are sorted first by index value, then by key value.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#86-91" title="Go to source code"><var>$termFilter</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#71-76" title="Go to source code"><var>$termFilter</var></a>
 
 				<div class="description short">
 					<p>The option to filter result terms with a Regex.</p>
@@ -1273,7 +1286,7 @@ By default results are sorted first by index value, then by key value.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#92-96" title="Go to source code"><var>$timeout</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.IndexTrait.html#77-81" title="Go to source code"><var>$timeout</var></a>
 
 				<div class="description short">
 					
@@ -1306,7 +1319,7 @@ By default results are sorted first by index value, then by key value.</p>
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

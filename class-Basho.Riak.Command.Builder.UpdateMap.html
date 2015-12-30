@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Command\Builder\UpdateMap | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li class="active">
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -170,8 +180,11 @@
 				<li><a href="class-Basho.Riak.Command.Builder.FetchCounter.html">FetchCounter</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.FetchMap.html">FetchMap</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.FetchObject.html">FetchObject</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.FetchPreflist.html">FetchPreflist</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.FetchSet.html">FetchSet</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.FetchStats.html">FetchStats</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.IncrementCounter.html">IncrementCounter</a></li>
+				<li><a href="class-Basho.Riak.Command.Builder.Ping.html">Ping</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.QueryIndex.html">QueryIndex</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.SetBucketProperties.html">SetBucketProperties</a></li>
 				<li><a href="class-Basho.Riak.Command.Builder.StoreObject.html">StoreObject</a></li>
@@ -241,7 +254,7 @@
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#23-303" title="Go to source code">Riak/Command/Builder/UpdateMap.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#8-280" title="Go to source code">Riak/Command/Builder/UpdateMap.php</a>
 		<br>
 	</div>
 
@@ -250,37 +263,6 @@
 		<div class="panel panel-default">
 			<div class="panel-heading"><h2>Methods summary</h2></div>
 			<table class="summary table table-bordered table-striped methods" id="methods">
-		<tr data-order="__construct" id="___construct">
-
-			<td class="attributes"><code>
-				 public 
-				
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#64-69" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.html">Basho\Riak</a></code> <var>$riak</var></span> )</code>
-
-			<div class="description short">
-				
-			</div>
-
-			<div class="description detailed hidden">
-				
-
-
-
-
-
-
-					<h4>Overrides</h4>
-					<div class="list"><code><a href="class-Basho.Riak.Command.Builder.html#___construct">Basho\Riak\Command\Builder::__construct</a></code></div>
-
-			</div>
-			</div></td>
-		</tr>
 		<tr data-order="removeRegister" id="_removeRegister">
 
 			<td class="attributes"><code>
@@ -292,7 +274,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_removeRegister">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#71-76" title="Go to source code">removeRegister</a>( <span> <var>$key</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#49-54" title="Go to source code">removeRegister</a>( <span> <var>$key</var></span> )</code>
 
 			<div class="description short">
 				
@@ -321,7 +303,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_remove">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#78-81" title="Go to source code">remove</a>( <span> <var>$key</var></span>, <span> <var>$type</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#56-59" title="Go to source code">remove</a>( <span> <var>$key</var></span>, <span> <var>$type</var></span> )</code>
 
 			<div class="description short">
 				
@@ -350,7 +332,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_removeFlag">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#83-88" title="Go to source code">removeFlag</a>( <span> <var>$key</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#61-66" title="Go to source code">removeFlag</a>( <span> <var>$key</var></span> )</code>
 
 			<div class="description short">
 				
@@ -379,7 +361,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_removeCounter">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#90-95" title="Go to source code">removeCounter</a>( <span> <var>$key</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#68-73" title="Go to source code">removeCounter</a>( <span> <var>$key</var></span> )</code>
 
 			<div class="description short">
 				
@@ -408,7 +390,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_removeSet">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#97-102" title="Go to source code">removeSet</a>( <span> <var>$key</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#75-80" title="Go to source code">removeSet</a>( <span> <var>$key</var></span> )</code>
 
 			<div class="description short">
 				
@@ -437,7 +419,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_removeMap">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#104-109" title="Go to source code">removeMap</a>( <span> <var>$key</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#82-87" title="Go to source code">removeMap</a>( <span> <var>$key</var></span> )</code>
 
 			<div class="description short">
 				
@@ -466,7 +448,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_updateRegister">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#111-122" title="Go to source code">updateRegister</a>( <span> <var>$key</var></span>, <span> <var>$value</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#89-100" title="Go to source code">updateRegister</a>( <span> <var>$key</var></span>, <span> <var>$value</var></span> )</code>
 
 			<div class="description short">
 				
@@ -506,7 +488,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_update">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#124-128" title="Go to source code">update</a>( <span> <var>$key</var></span>, <span> <var>$type</var></span>, <span> <var>$value</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#102-106" title="Go to source code">update</a>( <span> <var>$key</var></span>, <span> <var>$type</var></span>, <span> <var>$value</var></span> )</code>
 
 			<div class="description short">
 				
@@ -535,7 +517,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_updateFlag">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#130-143" title="Go to source code">updateFlag</a>( <span> <var>$key</var></span>, <span>boolean <var>$state</var> = <span class="php-keyword1">TRUE</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#108-119" title="Go to source code">updateFlag</a>( <span> <var>$key</var></span>, <span>boolean <var>$state</var> = <span class="php-keyword1">TRUE</span></span> )</code>
 
 			<div class="description short">
 				
@@ -575,7 +557,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_updateCounter">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#145-156" title="Go to source code">updateCounter</a>( <span> <var>$key</var></span>, <span><code><a href="class-Basho.Riak.Command.Builder.IncrementCounter.html">Basho\Riak\Command\Builder\IncrementCounter</a></code> <var>$builder</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#121-132" title="Go to source code">updateCounter</a>( <span> <var>$key</var></span>, <span><code><a href="class-Basho.Riak.Command.Builder.IncrementCounter.html">Basho\Riak\Command\Builder\IncrementCounter</a></code> <var>$builder</var></span> )</code>
 
 			<div class="description short">
 				
@@ -615,7 +597,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_updateSet">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#158-169" title="Go to source code">updateSet</a>( <span> <var>$key</var></span>, <span><code><a href="class-Basho.Riak.Command.Builder.UpdateSet.html">Basho\Riak\Command\Builder\UpdateSet</a></code> <var>$builder</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#134-145" title="Go to source code">updateSet</a>( <span> <var>$key</var></span>, <span><code><a href="class-Basho.Riak.Command.Builder.UpdateSet.html">Basho\Riak\Command\Builder\UpdateSet</a></code> <var>$builder</var></span> )</code>
 
 			<div class="description short">
 				
@@ -655,7 +637,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_updateMap">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#171-182" title="Go to source code">updateMap</a>( <span> <var>$key</var></span>, <span><code><a href="class-Basho.Riak.Command.Builder.UpdateMap.html">Basho\Riak\Command\Builder\UpdateMap</a></code> <var>$builder</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#147-158" title="Go to source code">updateMap</a>( <span> <var>$key</var></span>, <span><code><a href="class-Basho.Riak.Command.Builder.UpdateMap.html">Basho\Riak\Command\Builder\UpdateMap</a></code> <var>$builder</var></span> )</code>
 
 			<div class="description short">
 				
@@ -695,7 +677,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withContext">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#184-194" title="Go to source code">withContext</a>( <span> <var>$context</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#160-170" title="Go to source code">withContext</a>( <span> <var>$context</var></span> )</code>
 
 			<div class="description short">
 				
@@ -733,7 +715,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_build">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#196-206" title="Go to source code">build</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#172-182" title="Go to source code">build</a>( )</code>
 
 			<div class="description short">
 				<p>Command build</p>
@@ -768,7 +750,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_validate">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#208-247" title="Go to source code">validate</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#184-224" title="Go to source code">validate</a>( )</code>
 
 			<div class="description short">
 				<p>Validate command</p>
@@ -807,7 +789,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getRemove">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#249-252" title="Go to source code">getRemove</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#226-229" title="Go to source code">getRemove</a>( )</code>
 
 			<div class="description short">
 				
@@ -836,7 +818,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getRegisters">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#254-260" title="Go to source code">getRegisters</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#231-237" title="Go to source code">getRegisters</a>( )</code>
 
 			<div class="description short">
 				
@@ -869,7 +851,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getFlags">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#262-268" title="Go to source code">getFlags</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#239-245" title="Go to source code">getFlags</a>( )</code>
 
 			<div class="description short">
 				
@@ -902,7 +884,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getCounters">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#270-276" title="Go to source code">getCounters</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#247-253" title="Go to source code">getCounters</a>( )</code>
 
 			<div class="description short">
 				
@@ -935,7 +917,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getSets">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#278-284" title="Go to source code">getSets</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#255-261" title="Go to source code">getSets</a>( )</code>
 
 			<div class="description short">
 				
@@ -968,7 +950,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getMaps">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#286-292" title="Go to source code">getMaps</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#263-269" title="Go to source code">getMaps</a>( )</code>
 
 			<div class="description short">
 				
@@ -1001,7 +983,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getContext">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#294-302" title="Go to source code">getContext</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#271-279" title="Go to source code">getContext</a>( )</code>
 
 			<div class="description short">
 				<p>getContext</p>
@@ -1029,13 +1011,11 @@
 		<div class="panel panel-default">
 	        <div class="panel-heading"><h3>Methods inherited from <a href="class-Basho.Riak.Command.Builder.html#methods">Basho\Riak\Command\Builder</a></h3></div>
 			<p class="elementList">
+				<code><a href="class-Basho.Riak.Command.Builder.html#___construct">__construct()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_getConnection">getConnection()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#_getHeaders">getHeaders()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_getParameters">getParameters()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_getVerbose">getVerbose()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_required">required()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#_withHeader">withHeader()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#_withHeaders">withHeaders()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_withParameter">withParameter()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_withParameters">withParameters()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_withVerboseMode">withVerboseMode()</a></code>
@@ -1050,14 +1030,6 @@
 				<code><a href="class-Basho.Riak.Command.Builder.LocationTrait.html#_getLocation">getLocation()</a></code>
 			</p>
 		</div>
-		<div class="panel panel-default">
-	        <div class="panel-heading"><h3>Methods used from <a href="class-Basho.Riak.Command.Builder.BucketTrait.html#methods">Basho\Riak\Command\Builder\BucketTrait</a></h3></div>
-			<p class="elementList">
-				<code><a href="class-Basho.Riak.Command.Builder.BucketTrait.html#_buildBucket">buildBucket()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.BucketTrait.html#_getBucket">getBucket()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.BucketTrait.html#_inBucket">inBucket()</a></code>
-			</p>
-		</div>
 
 
 
@@ -1068,13 +1040,6 @@
             <div class="panel-heading"><h2>Constants summary</h2></div>
 		</div>
 
-		<div class="panel panel-default">
-            <div class="panel-heading"><h3>Constants inherited from <a href="class-Basho.Riak.Command.Builder.html#constants">Basho\Riak\Command\Builder</a></h3></div>
-			<p class="elementList">
-				<code><a href="class-Basho.Riak.Command.Builder.html#CONTENT_TYPE_JSON"><b>CONTENT_TYPE_JSON</b></a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#CONTENT_TYPE_XML"><b>CONTENT_TYPE_XML</b></a></code>
-			</p>
-		</div>
 		<div class="panel panel-default">
             <div class="panel-heading"><h3>Constants inherited from <a href="class-Basho.Riak.Command.BuilderInterface.html#constants">Basho\Riak\Command\BuilderInterface</a></h3></div>
 			<p class="elementList">
@@ -1094,7 +1059,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#30" title="Go to source code"><var>$remove</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#15" title="Go to source code"><var>$remove</var></a>
 
 				<div class="description short">
 					
@@ -1119,7 +1084,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#32-35" title="Go to source code"><var>$registers</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#17-20" title="Go to source code"><var>$registers</var></a>
 
 				<div class="description short">
 					
@@ -1144,7 +1109,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#37-40" title="Go to source code"><var>$flags</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#22-25" title="Go to source code"><var>$flags</var></a>
 
 				<div class="description short">
 					
@@ -1169,7 +1134,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#42-45" title="Go to source code"><var>$counters</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#27-30" title="Go to source code"><var>$counters</var></a>
 
 				<div class="description short">
 					
@@ -1194,7 +1159,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#47-50" title="Go to source code"><var>$sets</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#32-35" title="Go to source code"><var>$sets</var></a>
 
 				<div class="description short">
 					
@@ -1219,7 +1184,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#52-55" title="Go to source code"><var>$maps</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#37-40" title="Go to source code"><var>$maps</var></a>
 
 				<div class="description short">
 					
@@ -1244,7 +1209,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#57-62" title="Go to source code"><var>$context</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.UpdateMap.html#42-47" title="Go to source code"><var>$context</var></a>
 
 				<div class="description short">
 					<p>Similar to Vector Clocks, the context allows us to determine the state of a CRDT Set</p>
@@ -1292,7 +1257,7 @@
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

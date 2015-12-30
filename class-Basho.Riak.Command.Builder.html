@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Command\Builder | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li class="active">
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -167,7 +177,9 @@
 			<ul>
 				<li class="active"><a href="class-Basho.Riak.Command.Builder.html">Builder</a></li>
 				<li><a href="class-Basho.Riak.Command.Object.html">Object</a></li>
+				<li><a href="class-Basho.Riak.Command.Ping.html">Ping</a></li>
 				<li><a href="class-Basho.Riak.Command.Response.html">Response</a></li>
+				<li><a href="class-Basho.Riak.Command.Stats.html">Stats</a></li>
 			</ul>
 
 			<h3>Interfaces</h3>
@@ -217,6 +229,9 @@ objects for interacting with your Riak data cluster.</p>
 		<p class="elementList">
 			<code><a href="class-Basho.Riak.Command.Builder.DeleteObject.html">Basho\Riak\Command\Builder\DeleteObject</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.FetchBucketProperties.html">Basho\Riak\Command\Builder\FetchBucketProperties</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.Ping.html">Basho\Riak\Command\Builder\Ping</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.QueryIndex.html">Basho\Riak\Command\Builder\QueryIndex</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.Search.DeleteIndex.html">Basho\Riak\Command\Builder\Search\DeleteIndex</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.Search.FetchIndex.html">Basho\Riak\Command\Builder\Search\FetchIndex</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.Search.FetchObjects.html">Basho\Riak\Command\Builder\Search\FetchObjects</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.Search.FetchSchema.html">Basho\Riak\Command\Builder\Search\FetchSchema</a></code>, 
@@ -224,16 +239,16 @@ objects for interacting with your Riak data cluster.</p>
 			<code><a href="class-Basho.Riak.Command.Builder.Search.StoreSchema.html">Basho\Riak\Command\Builder\Search\StoreSchema</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.SetBucketProperties.html">Basho\Riak\Command\Builder\SetBucketProperties</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.StoreObject.html">Basho\Riak\Command\Builder\StoreObject</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.FetchCounter.html">Basho\Riak\Command\Builder\FetchCounter</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.UpdateMap.html">Basho\Riak\Command\Builder\UpdateMap</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.UpdateSet.html">Basho\Riak\Command\Builder\UpdateSet</a></code>, 
-			<code><a href="class-Basho.Riak.Command.Builder.FetchCounter.html">Basho\Riak\Command\Builder\FetchCounter</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.FetchMap.html">Basho\Riak\Command\Builder\FetchMap</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.FetchObject.html">Basho\Riak\Command\Builder\FetchObject</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.FetchPreflist.html">Basho\Riak\Command\Builder\FetchPreflist</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.FetchSet.html">Basho\Riak\Command\Builder\FetchSet</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.FetchStats.html">Basho\Riak\Command\Builder\FetchStats</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.IncrementCounter.html">Basho\Riak\Command\Builder\IncrementCounter</a></code>, 
-			<code><a href="class-Basho.Riak.Command.Builder.MapReduce.FetchObjects.html">Basho\Riak\Command\Builder\MapReduce\FetchObjects</a></code>, 
-			<code><a href="class-Basho.Riak.Command.Builder.QueryIndex.html">Basho\Riak\Command\Builder\QueryIndex</a></code>, 
-			<code><a href="class-Basho.Riak.Command.Builder.Search.DeleteIndex.html">Basho\Riak\Command\Builder\Search\DeleteIndex</a></code>
+			<code><a href="class-Basho.Riak.Command.Builder.MapReduce.FetchObjects.html">Basho\Riak\Command\Builder\MapReduce\FetchObjects</a></code>
 		</p>
 	</div>
 
@@ -257,7 +272,7 @@ objects for interacting with your Riak data cluster.</p>
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.html#24-168" title="Go to source code">Riak/Command/Builder.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.html#9-131" title="Go to source code">Riak/Command/Builder.php</a>
 		<br>
 	</div>
 
@@ -277,7 +292,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#69-72" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.html">Basho\Riak</a></code> <var>$riak</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#51-54" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.html">Basho\Riak</a></code> <var>$riak</var></span> )</code>
 
 			<div class="description short">
 				
@@ -306,7 +321,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_build">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#74-79" title="Go to source code">build</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#56-61" title="Go to source code">build</a>( )</code>
 
 			<div class="description short">
 				<p>Command build</p>
@@ -337,7 +352,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withParameter">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#81-86" title="Go to source code">withParameter</a>( <span> <var>$key</var></span>, <span> <var>$value</var> = <span class="php-keyword1">true</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#63-68" title="Go to source code">withParameter</a>( <span> <var>$key</var></span>, <span> <var>$value</var> = <span class="php-keyword1">true</span></span> )</code>
 
 			<div class="description short">
 				
@@ -366,65 +381,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withParameters">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#88-93" title="Go to source code">withParameters</a>( <span> <var>$parameters</var> = []</span> )</code>
-
-			<div class="description short">
-				
-			</div>
-
-			<div class="description detailed hidden">
-				
-
-
-
-
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="withHeader" id="_withHeader">
-
-			<td class="attributes"><code>
-				 public 
-				
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_withHeader">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#95-100" title="Go to source code">withHeader</a>( <span> <var>$key</var></span>, <span> <var>$value</var> = <span class="php-keyword1">true</span></span> )</code>
-
-			<div class="description short">
-				
-			</div>
-
-			<div class="description detailed hidden">
-				
-
-
-
-
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="withHeaders" id="_withHeaders">
-
-			<td class="attributes"><code>
-				 public 
-				
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_withHeaders">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#102-107" title="Go to source code">withHeaders</a>( <span> <var>$headers</var> = []</span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#70-75" title="Go to source code">withParameters</a>( <span> <var>$parameters</var> = []</span> )</code>
 
 			<div class="description short">
 				
@@ -453,7 +410,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withVerboseMode">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#109-114" title="Go to source code">withVerboseMode</a>( <span> <var>$verbose</var> = <span class="php-keyword1">true</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#77-82" title="Go to source code">withVerboseMode</a>( <span> <var>$verbose</var> = <span class="php-keyword1">true</span></span> )</code>
 
 			<div class="description short">
 				
@@ -482,36 +439,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getParameters">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#116-119" title="Go to source code">getParameters</a>( )</code>
-
-			<div class="description short">
-				
-			</div>
-
-			<div class="description detailed hidden">
-				
-
-
-
-
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="getHeaders" id="_getHeaders">
-
-			<td class="attributes"><code>
-				 public 
-				
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_getHeaders">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#121-124" title="Go to source code">getHeaders</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#84-87" title="Go to source code">getParameters</a>( )</code>
 
 			<div class="description short">
 				
@@ -540,7 +468,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getConnection">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#126-129" title="Go to source code">getConnection</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#89-92" title="Go to source code">getConnection</a>( )</code>
 
 			<div class="description short">
 				
@@ -569,7 +497,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getVerbose">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#131-134" title="Go to source code">getVerbose</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#94-97" title="Go to source code">getVerbose</a>( )</code>
 
 			<div class="description short">
 				
@@ -598,7 +526,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_validate">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#136-147" title="Go to source code">validate</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#99-110" title="Go to source code">validate</a>( )</code>
 
 			<div class="description short">
 				<p>Validate command</p>
@@ -637,7 +565,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_required">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#149-167" title="Go to source code">required</a>( <span> <var>$objectName</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#112-130" title="Go to source code">required</a>( <span> <var>$objectName</var></span> )</code>
 
 			<div class="description short">
 				<p>Used to verify a property within the builder is not null and is instantiated</p>
@@ -674,60 +602,6 @@ objects for interacting with your Riak data cluster.</p>
 
 
 
-		<div class="panel panel-default">
-            <div class="panel-heading"><h2>Constants summary</h2></div>
-			<table class="summary table table-bordered table-striped constants" id="constants">
-			<tr data-order="CONTENT_TYPE_JSON" id="CONTENT_TYPE_JSON">
-
-				<td class="attributes"><code>string</code></td>
-				<td class="name">
-					<code>
-						<a href="source-class-Basho.Riak.Command.Builder.html#45" title="Go to source code"><b>CONTENT_TYPE_JSON</b></a>
-					</code>
-
-					<div class="description short">
-						
-					</div>
-
-					<div class="description detailed hidden">
-						
-
-					</div>
-				</td>
-				<td class="value">
-					<div>
-						<a href="#CONTENT_TYPE_JSON" class="anchor">#</a>
-						<code><span class="php-quote">'application/json'</span></code>
-					</div>
-				</td>
-			</tr>
-			<tr data-order="CONTENT_TYPE_XML" id="CONTENT_TYPE_XML">
-
-				<td class="attributes"><code>string</code></td>
-				<td class="name">
-					<code>
-						<a href="source-class-Basho.Riak.Command.Builder.html#46" title="Go to source code"><b>CONTENT_TYPE_XML</b></a>
-					</code>
-
-					<div class="description short">
-						
-					</div>
-
-					<div class="description detailed hidden">
-						
-
-					</div>
-				</td>
-				<td class="value">
-					<div>
-						<a href="#CONTENT_TYPE_XML" class="anchor">#</a>
-						<code><span class="php-quote">'application/xml'</span></code>
-					</div>
-				</td>
-			</tr>
-			</table>
-		</div>
-
 
 
 
@@ -741,7 +615,7 @@ objects for interacting with your Riak data cluster.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.html#48-51" title="Go to source code"><var>$riak</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.html#30-33" title="Go to source code"><var>$riak</var></a>
 
 				<div class="description short">
 					
@@ -766,7 +640,7 @@ objects for interacting with your Riak data cluster.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.html#53-58" title="Go to source code"><var>$parameters</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.html#35-40" title="Go to source code"><var>$parameters</var></a>
 
 				<div class="description short">
 					<p>Command parameters</p>
@@ -791,7 +665,7 @@ objects for interacting with your Riak data cluster.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.html#60-65" title="Go to source code"><var>$headers</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.html#42-47" title="Go to source code"><var>$headers</var></a>
 
 				<div class="description short">
 					<p>Command request headers</p>
@@ -816,7 +690,7 @@ objects for interacting with your Riak data cluster.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.html#67" title="Go to source code"><var>$verbose</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.html#49" title="Go to source code"><var>$verbose</var></a>
 
 				<div class="description short">
 					
@@ -849,7 +723,7 @@ objects for interacting with your Riak data cluster.</p>
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

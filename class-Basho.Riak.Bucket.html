@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Bucket | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -223,7 +233,7 @@
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Bucket.html#20-116" title="Go to source code">Riak/Bucket.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Bucket.html#5-101" title="Go to source code">Riak/Bucket.php</a>
 		<br>
 	</div>
 
@@ -243,7 +253,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Basho.Riak.Bucket.html#49-59" title="Go to source code">__construct</a>( <span> <var>$name</var></span>, <span>string <var>$type</var> = <code><a href="class-Basho.Riak.Bucket.html#DEFAULT_TYPE">Basho\Riak\Bucket::<b>DEFAULT_TYPE</b></a></code></span>, <span>array <var>$properties</var> = []</span> )</code>
+			<code><a href="source-class-Basho.Riak.Bucket.html#34-44" title="Go to source code">__construct</a>( <span> <var>$name</var></span>, <span>string <var>$type</var> = self::DEFAULT_TYPE</span>, <span>array <var>$properties</var> = []</span> )</code>
 
 			<div class="description short">
 				
@@ -281,7 +291,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___toString">#</a>
-			<code><a href="source-class-Basho.Riak.Bucket.html#61-64" title="Go to source code">__toString</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Bucket.html#46-49" title="Go to source code">__toString</a>( )</code>
 
 			<div class="description short">
 				
@@ -310,7 +320,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getNamespace">#</a>
-			<code><a href="source-class-Basho.Riak.Bucket.html#66-76" title="Go to source code">getNamespace</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Bucket.html#51-61" title="Go to source code">getNamespace</a>( )</code>
 
 			<div class="description short">
 				<p>Bucket namespace</p>
@@ -345,7 +355,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getName">#</a>
-			<code><a href="source-class-Basho.Riak.Bucket.html#78-84" title="Go to source code">getName</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Bucket.html#63-69" title="Go to source code">getName</a>( )</code>
 
 			<div class="description short">
 				
@@ -378,7 +388,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getProperty">#</a>
-			<code><a href="source-class-Basho.Riak.Bucket.html#86-99" title="Go to source code">getProperty</a>( <span> <var>$key</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Bucket.html#71-84" title="Go to source code">getProperty</a>( <span> <var>$key</var></span> )</code>
 
 			<div class="description short">
 				
@@ -416,7 +426,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getProperties">#</a>
-			<code><a href="source-class-Basho.Riak.Bucket.html#101-107" title="Go to source code">getProperties</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Bucket.html#86-92" title="Go to source code">getProperties</a>( )</code>
 
 			<div class="description short">
 				
@@ -449,7 +459,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getType">#</a>
-			<code><a href="source-class-Basho.Riak.Bucket.html#109-115" title="Go to source code">getType</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Bucket.html#94-100" title="Go to source code">getType</a>( )</code>
 
 			<div class="description short">
 				
@@ -489,7 +499,7 @@
 				<td class="attributes"><code>string</code></td>
 				<td class="name">
 					<code>
-						<a href="source-class-Basho.Riak.Bucket.html#27-30" title="Go to source code"><b>DEFAULT_TYPE</b></a>
+						<a href="source-class-Basho.Riak.Bucket.html#12-15" title="Go to source code"><b>DEFAULT_TYPE</b></a>
 					</code>
 
 					<div class="description short">
@@ -524,7 +534,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Bucket.html#32-37" title="Go to source code"><var>$properties</var></a>
+					<a href="source-class-Basho.Riak.Bucket.html#17-22" title="Go to source code"><var>$properties</var></a>
 
 				<div class="description short">
 					<p>Bucket properties</p>
@@ -549,7 +559,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Bucket.html#39-42" title="Go to source code"><var>$name</var></a>
+					<a href="source-class-Basho.Riak.Bucket.html#24-27" title="Go to source code"><var>$name</var></a>
 
 				<div class="description short">
 					<p>Name of bucket</p>
@@ -574,7 +584,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Bucket.html#44-47" title="Go to source code"><var>$type</var></a>
+					<a href="source-class-Basho.Riak.Bucket.html#29-32" title="Go to source code"><var>$type</var></a>
 
 				<div class="description short">
 					<p>Buckets are grouped by type, inheriting the properties defined on the type</p>
@@ -607,7 +617,7 @@
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

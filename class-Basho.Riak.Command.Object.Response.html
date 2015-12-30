@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Command\Object\Response | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li class="active">
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -167,6 +177,7 @@
 			<ul>
 				<li><a href="class-Basho.Riak.Command.Object.Delete.html">Delete</a></li>
 				<li><a href="class-Basho.Riak.Command.Object.Fetch.html">Fetch</a></li>
+				<li><a href="class-Basho.Riak.Command.Object.FetchPreflist.html">FetchPreflist</a></li>
 				<li class="active"><a href="class-Basho.Riak.Command.Object.Response.html">Response</a></li>
 				<li><a href="class-Basho.Riak.Command.Object.Store.html">Store</a></li>
 			</ul>
@@ -221,7 +232,7 @@
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Object.Response.html#23-210" title="Go to source code">Riak/Command/Object/Response.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Object.Response.html#8-66" title="Go to source code">Riak/Command/Object/Response.php</a>
 		<br>
 	</div>
 
@@ -241,7 +252,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#45-57" title="Go to source code">__construct</a>( <span> <var>$statusCode</var></span>, <span> <var>$headers</var> = []</span>, <span> <var>$body</var> = <span class="php-quote">''</span></span>, <span> <var>$decodeAsAssociative</var> = <span class="php-keyword1">false</span></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#22-28" title="Go to source code">__construct</a>( <span> <var>$success</var> = <span class="php-keyword1">true</span></span>, <span> <var>$code</var> = <span class="php-num">0</span></span>, <span> <var>$message</var> = <span class="php-quote">''</span></span>, <span> <var>$location</var> = <span class="php-keyword1">null</span></span>, <span> <var>$objects</var> = []</span> )</code>
 
 			<div class="description short">
 				
@@ -272,7 +283,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_hasSiblings">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#59-65" title="Go to source code">hasSiblings</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#30-36" title="Go to source code">hasSiblings</a>( )</code>
 
 			<div class="description short">
 				
@@ -294,43 +305,6 @@
 			</div>
 			</div></td>
 		</tr>
-		<tr data-order="getVclock" id="_getVclock">
-
-			<td class="attributes"><code>
-				 public 
-				string
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_getVclock">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#130-139" title="Go to source code">getVclock</a>( )</code>
-
-			<div class="description short">
-				<p>Retrieves the Vclock value from the response headers</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Retrieves the Vclock value from the response headers</p>
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						string
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-Basho.Riak.Command.Exception.html">Basho\Riak\Command\Exception</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
 		<tr data-order="getLocation" id="_getLocation">
 
 			<td class="attributes"><code>
@@ -342,7 +316,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getLocation">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#141-150" title="Go to source code">getLocation</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#38-47" title="Go to source code">getLocation</a>( )</code>
 
 			<div class="description short">
 				<p>Retrieves the Location value from the response headers</p>
@@ -379,7 +353,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getObject">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#152-158" title="Go to source code">getObject</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#49-55" title="Go to source code">getObject</a>( )</code>
 
 			<div class="description short">
 				
@@ -401,39 +375,6 @@
 			</div>
 			</div></td>
 		</tr>
-		<tr data-order="isNotFound" id="_isNotFound">
-
-			<td class="attributes"><code>
-				 public 
-				boolean
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_isNotFound">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#160-166" title="Go to source code">isNotFound</a>( )</code>
-
-			<div class="description short">
-				
-			</div>
-
-			<div class="description detailed hidden">
-				
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						boolean
-					</div>
-
-
-
-
-			</div>
-			</div></td>
-		</tr>
 		<tr data-order="getSiblings" id="_getSiblings">
 
 			<td class="attributes"><code>
@@ -445,7 +386,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getSiblings">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#168-176" title="Go to source code">getSiblings</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#57-65" title="Go to source code">getSiblings</a>( )</code>
 
 			<div class="description short">
 				<p>Fetches the sibling tags from the response</p>
@@ -467,127 +408,17 @@
 			</div>
 			</div></td>
 		</tr>
-		<tr data-order="getLastModified" id="_getLastModified">
-
-			<td class="attributes"><code>
-				 public 
-				string
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_getLastModified">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#178-187" title="Go to source code">getLastModified</a>( )</code>
-
-			<div class="description short">
-				<p>Retrieves the last modified time of the object</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Retrieves the last modified time of the object</p>
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						string
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-Basho.Riak.Command.Exception.html">Basho\Riak\Command\Exception</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="getETag" id="_getETag">
-
-			<td class="attributes"><code>
-				 public 
-				string
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_getETag">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#189-198" title="Go to source code">getETag</a>( )</code>
-
-			<div class="description short">
-				<p>Retrieves the etag of the object</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Retrieves the etag of the object</p>
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						string
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-Basho.Riak.Command.Exception.html">Basho\Riak\Command\Exception</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="getDate" id="_getDate">
-
-			<td class="attributes"><code>
-				 public 
-				string
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_getDate">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Object.Response.html#200-209" title="Go to source code">getDate</a>( )</code>
-
-			<div class="description short">
-				<p>Retrieves the date of the object's retrieval</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Retrieves the date of the object's retrieval</p>
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						string
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-Basho.Riak.Command.Exception.html">Basho\Riak\Command\Exception</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
 			</table>
 		</div>
 
 		<div class="panel panel-default">
 	        <div class="panel-heading"><h3>Methods inherited from <a href="class-Basho.Riak.Command.Response.html#methods">Basho\Riak\Command\Response</a></h3></div>
 			<p class="elementList">
-				<code><a href="class-Basho.Riak.Command.Response.html#_getBody">getBody()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Response.html#_getContentType">getContentType()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Response.html#_getHeader">getHeader()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Response.html#_getStatusCode">getStatusCode()</a></code>
+				<code><a href="class-Basho.Riak.Command.Response.html#_getCode">getCode()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Response.html#_getMessage">getMessage()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Response.html#_isNotFound">isNotFound()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Response.html#_isSuccess">isSuccess()</a></code>, 
+				<code><a href="class-Basho.Riak.Command.Response.html#_isUnauthorized">isUnauthorized()</a></code>
 			</p>
 		</div>
 
@@ -603,39 +434,14 @@
 		<div class="panel panel-default">
             <div class="panel-heading"><h2>Properties summary</h2></div>
 			<table class="summary table table-bordered table-striped properties" id="properties">
-		<tr data-order="object" id="$object">
-			<td class="attributes"><code>
-				protected  
-				<code><a href="class-Basho.Riak.Object.html">Basho\Riak\Object</a></code>|null
-			</code></td>
-
-			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Object.Response.html#30-33" title="Go to source code"><var>$object</var></a>
-
-				<div class="description short">
-					
-				</div>
-
-				<div class="description detailed hidden">
-					
-
-				</div>
-			</td>
-			<td class="value">
-				<div>
-					<a href="#$object" class="anchor">#</a>
-					<code><span class="php-keyword1">NULL</span></code>
-				</div>
-			</td>
-		</tr>
-		<tr data-order="siblings" id="$siblings">
+		<tr data-order="objects" id="$objects">
 			<td class="attributes"><code>
 				protected  
 				<code><a href="class-Basho.Riak.Object.html">Basho\Riak\Object</a>[]</code>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Object.Response.html#35-38" title="Go to source code"><var>$siblings</var></a>
+					<a href="source-class-Basho.Riak.Command.Object.Response.html#15-18" title="Go to source code"><var>$objects</var></a>
 
 				<div class="description short">
 					
@@ -648,8 +454,33 @@
 			</td>
 			<td class="value">
 				<div>
-					<a href="#$siblings" class="anchor">#</a>
+					<a href="#$objects" class="anchor">#</a>
 					<code>[]</code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="location" id="$location">
+			<td class="attributes"><code>
+				protected  
+				
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Basho.Riak.Command.Object.Response.html#20" title="Go to source code"><var>$location</var></a>
+
+				<div class="description short">
+					
+				</div>
+
+				<div class="description detailed hidden">
+					
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$location" class="anchor">#</a>
+					<code><span class="php-keyword1">null</span></code>
 				</div>
 			</td>
 		</tr>
@@ -659,9 +490,9 @@
 		<div class="panel panel-default">
             <div class="panel-heading"><h3>Properties inherited from <a href="class-Basho.Riak.Command.Response.html#properties">Basho\Riak\Command\Response</a></h3></div>
 			<p class="elementList">
-				<code><a href="class-Basho.Riak.Command.Response.html#$body"><var>$body</var></a></code>, 
-				<code><a href="class-Basho.Riak.Command.Response.html#$headers"><var>$headers</var></a></code>, 
-				<code><a href="class-Basho.Riak.Command.Response.html#$statusCode"><var>$statusCode</var></a></code>
+				<code><a href="class-Basho.Riak.Command.Response.html#$code"><var>$code</var></a></code>, 
+				<code><a href="class-Basho.Riak.Command.Response.html#$message"><var>$message</var></a></code>, 
+				<code><a href="class-Basho.Riak.Command.Response.html#$success"><var>$success</var></a></code>
 			</p>
 		</div>
 
@@ -676,7 +507,7 @@
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

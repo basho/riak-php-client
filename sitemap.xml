@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+	<loc>https://basho.github.io/riak-php-client/index.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Api.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Api.Http.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Api.Http.Translator.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Bucket.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Builder.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Builder.MapReduce.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Builder.Search.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.DataType.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.DataType.Counter.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.DataType.Map.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.DataType.Set.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Indexes.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.MapReduce.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Object.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Search.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Search.Index.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Search.Schema.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Stats.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.DataType.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Node.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Node.Builder.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Search.html</loc>
+</url>
+
+
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Api.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Api.Http.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Api.Http.Translator.ObjectResponse.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Api.Http.Translator.SecondaryIndex.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Bucket.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Bucket.Delete.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Bucket.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Bucket.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Bucket.Store.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.DeleteObject.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.FetchBucketProperties.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.FetchCounter.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.FetchMap.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.FetchObject.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.FetchPreflist.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.FetchSet.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.FetchStats.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.IncrementCounter.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.MapReduce.FetchObjects.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Ping.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.QueryIndex.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.AssociateIndex.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.DeleteIndex.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.DissociateIndex.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.FetchIndex.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.FetchObjects.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.FetchSchema.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.StoreIndex.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Search.StoreSchema.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.SetBucketProperties.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.StoreObject.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.UpdateMap.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.UpdateSet.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Counter.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Counter.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Counter.Store.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Map.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Map.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Map.Store.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Set.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Set.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.DataType.Set.Store.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Indexes.Query.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Indexes.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.MapReduce.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.MapReduce.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Object.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Object.Delete.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Object.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Object.FetchPreflist.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Object.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Object.Store.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Ping.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Index.Delete.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Index.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Index.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Index.Store.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Schema.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Schema.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Search.Schema.Store.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Stats.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Stats.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.DataType.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.DataType.Counter.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.DataType.Map.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.DataType.Set.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Location.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Node.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Node.Builder.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Node.Config.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Object.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Search.Doc.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.ApiInterface.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.BuilderInterface.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.CommandInterface.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.BucketTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.IndexTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.LocationTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.ObjectTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.HeadersTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Api.Exception.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.Exception.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Exception.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.DataType.Exception.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Exception.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Node.Builder.Exception.html</loc>
+</url>
+</urlset>

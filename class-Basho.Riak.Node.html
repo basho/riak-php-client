@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Node | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -223,7 +233,7 @@
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Node.html#23-222" title="Go to source code">Riak/Node.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Node.html#8-213" title="Go to source code">Riak/Node.php</a>
 		<br>
 	</div>
 
@@ -243,7 +253,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#57-61" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code> <var>$config</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#42-46" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.Node.Config.html">Basho\Riak\Node\Config</a></code> <var>$config</var></span> )</code>
 
 			<div class="description short">
 				
@@ -272,7 +282,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_isInactive">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#71-77" title="Go to source code">isInactive</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#56-62" title="Go to source code">isInactive</a>( )</code>
 
 			<div class="description short">
 				
@@ -305,7 +315,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setInactive">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#79-85" title="Go to source code">setInactive</a>( <span>boolean <var>$inactive</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#64-70" title="Go to source code">setInactive</a>( <span>boolean <var>$inactive</var></span> )</code>
 
 			<div class="description short">
 				
@@ -339,7 +349,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getSignature">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#87-93" title="Go to source code">getSignature</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#72-78" title="Go to source code">getSignature</a>( )</code>
 
 			<div class="description short">
 				
@@ -372,7 +382,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getHost">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#95-101" title="Go to source code">getHost</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#80-86" title="Go to source code">getHost</a>( )</code>
 
 			<div class="description short">
 				
@@ -405,7 +415,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getConfig">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#103-109" title="Go to source code">getConfig</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#88-94" title="Go to source code">getConfig</a>( )</code>
 
 			<div class="description short">
 				
@@ -438,7 +448,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getPort">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#111-117" title="Go to source code">getPort</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#96-102" title="Go to source code">getPort</a>( )</code>
 
 			<div class="description short">
 				
@@ -471,7 +481,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getUri">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#119-127" title="Go to source code">getUri</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#104-112" title="Go to source code">getUri</a>( )</code>
 
 			<div class="description short">
 				<p>Returns host:port for Node</p>
@@ -504,7 +514,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_useTls">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#129-137" title="Go to source code">useTls</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#114-122" title="Go to source code">useTls</a>( )</code>
 
 			<div class="description short">
 				<p>useTls</p>
@@ -537,7 +547,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getUserName">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#139-147" title="Go to source code">getUserName</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#124-132" title="Go to source code">getUserName</a>( )</code>
 
 			<div class="description short">
 				<p>getUserName</p>
@@ -570,7 +580,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getPassword">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#149-157" title="Go to source code">getPassword</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#134-142" title="Go to source code">getPassword</a>( )</code>
 
 			<div class="description short">
 				<p>getPassword</p>
@@ -603,7 +613,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getCaFile">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#159-162" title="Go to source code">getCaFile</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#144-147" title="Go to source code">getCaFile</a>( )</code>
 
 			<div class="description short">
 				
@@ -632,7 +642,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getCaDirectory">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#164-167" title="Go to source code">getCaDirectory</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#149-152" title="Go to source code">getCaDirectory</a>( )</code>
 
 			<div class="description short">
 				
@@ -661,7 +671,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getCertificate">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#169-177" title="Go to source code">getCertificate</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#154-162" title="Go to source code">getCertificate</a>( )</code>
 
 			<div class="description short">
 				<p>getCertificate</p>
@@ -694,7 +704,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getCertificatePassword">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#179-182" title="Go to source code">getCertificatePassword</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#164-167" title="Go to source code">getCertificatePassword</a>( )</code>
 
 			<div class="description short">
 				
@@ -723,7 +733,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getPrivateKey">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#184-192" title="Go to source code">getPrivateKey</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#169-177" title="Go to source code">getPrivateKey</a>( )</code>
 
 			<div class="description short">
 				<p>getPrivateKey</p>
@@ -756,7 +766,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getPrivateKeyPassword">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#194-202" title="Go to source code">getPrivateKeyPassword</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#179-187" title="Go to source code">getPrivateKeyPassword</a>( )</code>
 
 			<div class="description short">
 				<p>getPrivateKeyPassword</p>
@@ -778,6 +788,39 @@
 			</div>
 			</div></td>
 		</tr>
+		<tr data-order="getTimeout" id="_getTimeout">
+
+			<td class="attributes"><code>
+				 public 
+				integer
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getTimeout">#</a>
+			<code><a href="source-class-Basho.Riak.Node.html#189-195" title="Go to source code">getTimeout</a>( )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						integer
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
 		<tr data-order="execute" id="_execute">
 
 			<td class="attributes"><code>
@@ -789,7 +832,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_execute">#</a>
-			<code><a href="source-class-Basho.Riak.Node.html#204-221" title="Go to source code">execute</a>( <span><code><a href="class-Basho.Riak.Command.html">Basho\Riak\Command</a></code> <var>$command</var></span>, <span><code><a href="class-Basho.Riak.Api.html">Basho\Riak\Api</a></code> <var>$api</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Node.html#197-212" title="Go to source code">execute</a>( <span><code><a href="class-Basho.Riak.Command.html">Basho\Riak\Command</a></code> <var>$command</var></span>, <span><code><a href="class-Basho.Riak.Api.html">Basho\Riak\Api</a></code> <var>$api</var></span> )</code>
 
 			<div class="description short">
 				
@@ -845,7 +888,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Node.html#30-37" title="Go to source code"><var>$config</var></a>
+					<a href="source-class-Basho.Riak.Node.html#15-22" title="Go to source code"><var>$config</var></a>
 
 				<div class="description short">
 					<p>Configuration</p>
@@ -872,7 +915,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Node.html#39-46" title="Go to source code"><var>$inactive</var></a>
+					<a href="source-class-Basho.Riak.Node.html#24-31" title="Go to source code"><var>$inactive</var></a>
 
 				<div class="description short">
 					<p>Inactive node</p>
@@ -899,7 +942,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Node.html#48-55" title="Go to source code"><var>$signature</var></a>
+					<a href="source-class-Basho.Riak.Node.html#33-40" title="Go to source code"><var>$signature</var></a>
 
 				<div class="description short">
 					<p>Node signature</p>
@@ -934,7 +977,7 @@
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
 	<title>Class Basho\Riak\Command\Builder\Search\DeleteIndex | Official Riak Client for PHP</title>
 
 	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?a2b5efb503881470385230f40f9bcc3c94d665e7">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
 
 </head>
 
@@ -68,10 +68,15 @@
 						</a>
 							<ul>
 					<li>
-						<a href="namespace-Basho.Riak.Api.Translators.html">
-							Translators						</a>
+						<a href="namespace-Basho.Riak.Api.Http.html">
+							Http<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Api.Http.Translator.html">
+							Translator						</a>
 							</li>
-								</ul></li>
+								</ul></li></ul></li>
 					<li class="active">
 						<a href="namespace-Basho.Riak.Command.html">
 							Command<span></span>
@@ -138,7 +143,12 @@
 						<a href="namespace-Basho.Riak.Command.Search.Schema.html">
 							Schema						</a>
 							</li>
-								</ul></li></ul></li>
+								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Stats.html">
+							Stats						</a>
+							</li>
+								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -224,7 +234,7 @@
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#23-76" title="Go to source code">Riak/Command/Builder/Search/DeleteIndex.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#8-61" title="Go to source code">Riak/Command/Builder/Search/DeleteIndex.php</a>
 		<br>
 	</div>
 
@@ -244,7 +254,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#35-38" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.html">Basho\Riak</a></code> <var>$riak</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#20-23" title="Go to source code">__construct</a>( <span><code><a href="class-Basho.Riak.html">Basho\Riak</a></code> <var>$riak</var></span> )</code>
 
 			<div class="description short">
 				
@@ -275,7 +285,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_withName">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#40-50" title="Go to source code">withName</a>( <span> <var>$name</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#25-35" title="Go to source code">withName</a>( <span> <var>$name</var></span> )</code>
 
 			<div class="description short">
 				
@@ -313,7 +323,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getName">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#52-55" title="Go to source code">getName</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#37-40" title="Go to source code">getName</a>( )</code>
 
 			<div class="description short">
 				
@@ -342,7 +352,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_build">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#57-67" title="Go to source code">build</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#42-52" title="Go to source code">build</a>( )</code>
 
 			<div class="description short">
 				<p>Command build</p>
@@ -377,7 +387,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_validate">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#69-75" title="Go to source code">validate</a>( )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#54-60" title="Go to source code">validate</a>( )</code>
 
 			<div class="description short">
 				<p>Validate command</p>
@@ -412,12 +422,9 @@
 	        <div class="panel-heading"><h3>Methods inherited from <a href="class-Basho.Riak.Command.Builder.html#methods">Basho\Riak\Command\Builder</a></h3></div>
 			<p class="elementList">
 				<code><a href="class-Basho.Riak.Command.Builder.html#_getConnection">getConnection()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#_getHeaders">getHeaders()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_getParameters">getParameters()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_getVerbose">getVerbose()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_required">required()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#_withHeader">withHeader()</a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#_withHeaders">withHeaders()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_withParameter">withParameter()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_withParameters">withParameters()</a></code>, 
 				<code><a href="class-Basho.Riak.Command.Builder.html#_withVerboseMode">withVerboseMode()</a></code>
@@ -434,13 +441,6 @@
             <div class="panel-heading"><h2>Constants summary</h2></div>
 		</div>
 
-		<div class="panel panel-default">
-            <div class="panel-heading"><h3>Constants inherited from <a href="class-Basho.Riak.Command.Builder.html#constants">Basho\Riak\Command\Builder</a></h3></div>
-			<p class="elementList">
-				<code><a href="class-Basho.Riak.Command.Builder.html#CONTENT_TYPE_JSON"><b>CONTENT_TYPE_JSON</b></a></code>, 
-				<code><a href="class-Basho.Riak.Command.Builder.html#CONTENT_TYPE_XML"><b>CONTENT_TYPE_XML</b></a></code>
-			</p>
-		</div>
 		<div class="panel panel-default">
             <div class="panel-heading"><h3>Constants inherited from <a href="class-Basho.Riak.Command.BuilderInterface.html#constants">Basho\Riak\Command\BuilderInterface</a></h3></div>
 			<p class="elementList">
@@ -460,7 +460,7 @@
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#28-33" title="Go to source code"><var>$name</var></a>
+					<a href="source-class-Basho.Riak.Command.Builder.Search.DeleteIndex.html#13-18" title="Go to source code"><var>$name</var></a>
 
 				<div class="description short">
 					<p>Name of index to create</p>
@@ -502,7 +502,7 @@
 		Official Riak Client for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?92be0de5e5b5e00c5f5d0eb2f33e522041660320"></script>
+<script src="resources/combined.js"></script>
 <script src="elementlist.js?df193f73f65fed5868fb0b47546afa2a2dbd77d2"></script>
 </body>
 </html>
