@@ -67,6 +67,20 @@ class Riak
     protected $api = NULL;
 
     /**
+     * List of nodes marked inactive
+     *
+     * @var array
+     */
+    protected $inactiveNodes = [];
+
+    /**
+     * Connection attempts made that failed
+     *
+     * @var int
+     */
+    protected $attempts = 0;
+
+    /**
      * Construct a new Client object, defaults to port 8098.
      *
      * @param Node[] $nodes an array of Basho\Riak\Node objects
@@ -99,26 +113,14 @@ class Riak
      *
      * You can pick your friends, you can pick your node, but you can't pick your friend's node.  :)
      *
-     * @param int $attempts
      * @return int
      * @throws Exception
      */
-    protected function pickNode($attempts = 0)
+    protected function pickNode()
     {
         $nodes       = $this->getNodes();
-        $randomIndex = mt_rand(0, count($nodes) - 1);
-
-        // check if node has been marked inactive
-        if ($nodes[$randomIndex]->isInactive()) {
-            // if we have not reached max connection attempts, use recursion
-            if ($attempts < $this->getConfigValue('max_connect_attempts')) {
-                return $this->pickNode($attempts + 1);
-            } else {
-                throw new Exception('Unable to connect to an active node.');
-            }
-        }
-
-        return $randomIndex;
+        $index = mt_rand(0, count($nodes) - 1);
+        return array_keys($nodes)[$index];
     }
 
     /**
@@ -153,12 +155,23 @@ class Riak
      * Execute a Riak command
      *
      * @param Command $command
-     *
      * @return Command\Response
+     * @throws Exception
      */
     public function execute(Command $command)
     {
-        return $this->getActiveNode()->execute($command, $this->api);
+        $response = $this->getActiveNode()->execute($command, $this->api);
+
+        // if more than 1 node configured, lets try a different node up to max connection attempts
+        if (empty($response) && count($this->nodes) > 1 && $this->attempts < $this->getConfigValue('max_connect_attempts')) {
+            $response = $this->pickNewNode()->execute($command);
+        } elseif (empty($response) && $this->attempts >= $this->getConfigValue('max_connect_attempts')) {
+            throw new Exception('Nodes unreachable. Error Msg: ' . $this->api->getError());
+        } elseif ($response == false) {
+            throw new Exception('Command failed to execute against Riak. Error Msg: ' . $this->api->getError());
+        }
+
+        return $response;
     }
 
     /**
@@ -213,10 +226,15 @@ class Riak
      * @return $this
      * @throws Exception
      */
-    protected function pickNewNode()
+    public function pickNewNode()
     {
-        // mark current active node as inactive
+        // mark current active node as inactive and increment attempts
         $this->getActiveNode()->setInactive(true);
+        $this->attempts++;
+        $this->inactiveNodes[$this->getActiveNodeIndex()] = $this->getActiveNode();
+
+        // move active node to inactive nodes structure to prevent selecting again
+        unset($this->nodes[$this->getActiveNodeIndex()]);
         $this->setActiveNodeIndex($this->pickNode());
 
         return $this;

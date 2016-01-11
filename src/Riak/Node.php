@@ -205,7 +205,7 @@ class Node
     {
         $success = $api->prepare($command, $this)->send();
         if ($success === FALSE) {
-            throw new Exception('Command failed to execute against Riak. Error Msg: ' . $api->getError());
+            return false;
         }
 
         return $api->getResponse();

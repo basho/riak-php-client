@@ -2,6 +2,9 @@
 
 namespace Basho\Tests;
 
+use Basho\Riak;
+use Basho\Riak\Command;
+
 /**
  * Scenario tests for when Nodes become unreachable
  *
@@ -9,9 +12,63 @@ namespace Basho\Tests;
  */
 class NodeUnreachableTest extends TestCase
 {
-    public function testStoreNewWithKey()
+    /**
+     * @expectedException \Basho\Riak\Exception
+     */
+    public function testUnreachableNode()
     {
-        $this->assertTrue(TRUE);
+        $nodes = $this->getCluster();
+        $riak = new Riak([$nodes[0]]);
+        $response = (new Command\Builder\Ping($riak))
+            ->build()
+            ->execute();
+
+        $this->assertFalse($response);
     }
 
+    /**
+     * @expectedException \Basho\Riak\Exception
+     */
+    public function testUnreachableNodes()
+    {
+        $riak = new Riak($this->getCluster());
+        $response = (new Command\Builder\Ping($riak))
+            ->build()
+            ->execute();
+
+        $this->assertFalse($response);
+    }
+
+    /**
+     * @expectedException \Basho\Riak\Exception
+     */
+    public function testMaxConnections()
+    {
+        // grab three unreachable nodes
+        $nodes = $this->getCluster();
+
+        $riak = new Riak($nodes, ['max_connect_attempts' => 2]);
+        $response = (new Command\Builder\Ping($riak))
+            ->build()
+            ->execute();
+
+        $this->assertFalse($response);
+    }
+
+    public function testReachableNodeInCluster()
+    {
+        // grab three unreachable nodes
+        $nodes = $this->getCluster();
+
+        // replace third one with reachable node
+        $nodes[2] = $this->getLocalNode();
+
+        $riak = new Riak($nodes);
+        $response = (new Command\Builder\Ping($riak))
+            ->build()
+            ->execute();
+
+        $this->assertInstanceOf('Basho\Riak\Command\Response', $response);
+        $this->assertTrue($response->isSuccess());
+    }
 }
