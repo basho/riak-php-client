@@ -229,6 +229,10 @@ class SecondaryIndexOperationsTest extends TestCase
      */
     public function testTimeoutWorks()
     {
+        if (version_compare(PHP_VERSION, '7.0', '>=')) {
+            $this->markTestSkipped('Only run on PHP5.* as it is a weak test since it depends on local processing speed.');
+        }
+
         $builder = (new Command\Builder\QueryIndex(static::$riak))
             ->buildBucket('Students' . static::$bucket, static::LEVELDB_BUCKET_TYPE)
             ->withIndexName('lucky_numbers_int')
