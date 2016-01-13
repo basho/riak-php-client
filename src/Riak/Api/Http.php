@@ -528,6 +528,8 @@ class Http extends Api implements ApiInterface
         $this->success = curl_exec($this->getConnection());
         if ($this->success === false) {
             $this->error = curl_error($this->getConnection());
+        } elseif ($this->success === true) {
+            $this->error = '';
         }
 
         $this->request = curl_getinfo($this->getConnection(), CURLINFO_HEADER_OUT);
