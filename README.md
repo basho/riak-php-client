@@ -18,7 +18,7 @@ To see other clients available for use with Riak visit our [Documentation Site](
 
 ### Dependencies
 - PHP 5.4+
-- PHP Extensions: curl, json and openssh [required for security features]
+- PHP Extensions: curl, json and openssl [required for security features]
 - Riak 2.1+
 - [Composer PHP Dependency Manager](https://getcomposer.org/)
 
