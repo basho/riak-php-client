@@ -13,7 +13,7 @@ use Basho\Riak\Command;
  *   ->withIndex('users_name', 'Knuth')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  *
  * $index_results = $response->getIndexResults();
  * </code>

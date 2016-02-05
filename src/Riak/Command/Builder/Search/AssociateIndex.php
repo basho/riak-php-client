@@ -13,7 +13,7 @@ use Basho\Riak\Command;
  *   ->buildBucket('users')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  *
  * $user_location = $response->getLocation();
  * </code>

@@ -12,7 +12,7 @@ use Basho\Riak\Command;
  *   ->buildLocation($user_name, 'user_visit_count', 'visit_counters')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  *
  * $counter = $response->getCounter();
  * </code>

@@ -12,7 +12,7 @@ use Basho\Riak\Command;
  *   ->buildLocation($user_id, 'email_subscriptions', 'user_preferences')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  *
  * $set = $response->getSet();
  * </code>
