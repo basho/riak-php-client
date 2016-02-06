@@ -75,7 +75,7 @@ $command = (new Command\Builder\StoreObject($riak))
     ->build();
     
 // Receive a response object
-$response = $command->execute($command);
+$response = $command->execute();
 
 // Retrieve the Location of our newly stored object from the Response object
 $object_location = $response->getLocation();

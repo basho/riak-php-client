@@ -13,7 +13,7 @@ use Basho\Riak\Command;
  *   ->buildLocation($user_id, 'users', 'default')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  *
  * $user = $response->getObject();
  * </code>

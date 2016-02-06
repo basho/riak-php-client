@@ -12,7 +12,7 @@ use Basho\Riak\Command;
  *   ->buildLocation($order_id, 'online_orders', 'sales')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

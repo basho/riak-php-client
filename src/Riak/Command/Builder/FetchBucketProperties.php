@@ -12,7 +12,7 @@ use Basho\Riak\Command;
  *   ->buildLocation($order_id, 'online_orders', 'sales_maps')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  *
  * $map = $response->getMap();
  * </code>

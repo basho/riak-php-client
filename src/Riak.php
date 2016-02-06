@@ -23,7 +23,7 @@ use Basho\Riak\Node;
  *   ->buildLocation('username', 'users')
  *   ->build();
  *
- * $response = $command->execute($command);
+ * $response = $command->execute();
  *
  * $user = $response->getObject();
  * </code>
