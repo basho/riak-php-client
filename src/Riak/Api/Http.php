@@ -640,7 +640,7 @@ class Http extends Api implements ApiInterface
                 $bucket = null;
                 $modified = $this->getResponseHeader(static::LAST_MODIFIED_KEY, '');
                 $properties = json_decode($body, true);
-                if ($properties && $this->command->getBucket()) {
+                if (isset($properties['props']) && $this->command->getBucket()) {
                     $bucket = new Bucket($this->command->getBucket()->getName(), $this->command->getBucket()->getType(), $properties['props']);
                 }
                 $response = new Command\Bucket\Response($this->success, $this->statusCode, $this->error, $bucket, $modified);
