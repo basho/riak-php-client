@@ -53,4 +53,9 @@ class Doc
     {
         return $this->data->{$name};
     }
+
+    public function getData()
+    {
+        return (array)$this->data;
+    }
 }
