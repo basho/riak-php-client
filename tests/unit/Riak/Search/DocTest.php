@@ -46,4 +46,10 @@ class DocTest extends TestCase
         $this->assertEquals('bar', $result['foo']);
         $this->assertEquals(200, $result['_status']);
     }
+
+    public function testMagicGetter()
+    {
+        $this->assertEquals('bar', $this->doc->foo);
+        $this->assertEquals(200, $this->doc->_status);
+    }
 }
