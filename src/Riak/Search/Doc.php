@@ -45,7 +45,7 @@ class Doc
     }
 
     /**
-     * Returns bucket location
+     * Returns object location
      *
      * @return Location
      */
