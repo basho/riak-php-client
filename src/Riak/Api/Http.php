@@ -31,6 +31,7 @@ class Http extends Api implements ApiInterface
     const CONTENT_TYPE_JSON = 'application/json';
     const CONTENT_TYPE_XML = 'application/xml';
 
+    const TS_API_PREFIX = '/ts/v1/';
 
     /**
      * Request body to be sent
@@ -250,6 +251,20 @@ class Http extends Api implements ApiInterface
                 break;
             case 'Basho\Riak\Command\Object\FetchPreflist':
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s/preflist', $bucket->getType(), $bucket->getName(), $key);
+                break;
+            case 'Basho\Riak\Command\TimeSeries\FetchRow':
+            case 'Basho\Riak\Command\TimeSeries\DeleteRow':
+                /** @var $command Command\Builder\TimeSeries\FetchRow */
+                $command = $this->command;
+                $this->path = sprintf('%s/table/%s/%s', static::TS_API_PREFIX, $command->getTable(), implode("/", $command->getKey()));
+                break;
+            case 'Basho\Riak\Command\TimeSeries\StoreRows':
+                /** @var $command Command\Builder\TimeSeries\StoreRows */
+                $command = $this->command;
+                $this->path = sprintf('%s/table/%s', static::TS_API_PREFIX, $command->getTable());
+                break;
+            case 'Basho\Riak\Command\TimeSeries\Query':
+                $this->path = sprintf('%s/query', static::TS_API_PREFIX);
                 break;
             default:
                 $this->path = '';
@@ -752,6 +767,16 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Stats':
                 $response = new Command\Stats\Response($this->success, $this->statusCode, $this->error, json_decode($body, true));
                 break;
+            case 'Basho\Riak\Command\TimeSeries\Store':
+            case 'Basho\Riak\Command\TimeSeries\Fetch':
+                $rows = in_array($this->statusCode, ['200','201','204']) ? json_decode($body) : [];
+                $response = new Command\TimeSeries\Response($this->success, $this->statusCode, $this->error, $rows);
+                break;
+            case 'Basho\Riak\Command\TimeSeries\Query':
+                $results = in_array($this->statusCode, ['200','204']) ? json_decode($body) : [];
+                $response = new Command\TimeSeries\Response($this->success, $this->statusCode, $this->error, $results);
+                break;
+            case 'Basho\Riak\Command\TimeSeries\Delete':
             case 'Basho\Riak\Command\Object\Delete':
             case 'Basho\Riak\Command\Bucket\Delete':
             case 'Basho\Riak\Command\Search\Index\Delete':
