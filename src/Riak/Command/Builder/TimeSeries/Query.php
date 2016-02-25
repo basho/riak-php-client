@@ -11,6 +11,7 @@ use Basho\Riak\Command;
 class Query extends Command\Builder implements Command\BuilderInterface
 {
     protected $query = '';
+    protected $interps = [];
 
     /**
      * TimeSeries SQL'ish query
@@ -28,6 +29,14 @@ class Query extends Command\Builder implements Command\BuilderInterface
     public function getQuery()
     {
         return $this->query;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInterps()
+    {
+        return $this->interps;
     }
 
     /**

@@ -9,6 +9,12 @@ namespace Basho\Riak\TimeSeries;
  */
 class Cell
 {
+    const STRING_TYPE = 'varchar';
+    const INT_TYPE = 'sint64';
+    const DOUBLE_TYPE = 'double';
+    const BOOL_TYPE = 'boolean';
+    const TIMESTAMP_TYPE = 'timestamp';
+
     protected $name;
     protected $value = null;
     protected $type = null;
@@ -45,41 +51,87 @@ class Cell
     /**
      * @param string $value
      */
-    public function setValue($value)
+    public function setValue($value = null)
     {
+        $this->type = Cell::STRING_TYPE;
         $this->value = $value;
-        $this->type = "varchar";
+
+        return $this;
     }
 
     /**
      * @param int $value
      */
-    public function setIntValue($value)
+    public function setIntValue($value = null)
     {
-        $this->value = $value;
-        $this->type = "sint64";
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setTimestampValue($value)
-    {
-        $this->value = $value;
-        $this->type = "timestamp";
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setBooleanValue($value)
-    {
-        $this->type = "boolean";
-        if ($value) {
-            $this->value = true;
-        } else {
-            $this->value = false;
+        if ($value != null && !is_int($value)) {
+            throw new \InvalidArgumentException('Expected an integer value.');
         }
+
+        $this->type = Cell::INT_TYPE;
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setTimestampValue($value = null)
+    {
+        if ($value != null && !is_int($value)) {
+            throw new \InvalidArgumentException('Expected an integer value.');
+        }
+
+        $this->type = Cell::TIMESTAMP_TYPE;
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTime $value
+     */
+    public function setDateTimeValue($value = null)
+    {
+        if ($value != null && !$value instanceof \DateTime) {
+            throw new \InvalidArgumentException('Expected a \DateTime object.');
+        }
+
+        $this->type = Cell::TIMESTAMP_TYPE;
+        $this->value = $value->getTimestamp();
+
+        return $this;
+    }
+
+    /**
+     * @param bool $value
+     */
+    public function setBooleanValue($value = null)
+    {
+        if ($value != null && !is_bool($value)) {
+            throw new \InvalidArgumentException('Expected an boolean value.');
+        }
+
+        $this->type = Cell::BOOL_TYPE;
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param double $value
+     */
+    public function setDoubleValue($value = null)
+    {
+        if ($value != null && !is_double($value)) {
+            throw new \InvalidArgumentException('Expected an double value.');
+        }
+
+        $this->type = Cell::DOUBLE_TYPE;
+        $this->value = $value;
+
+        return $this;
     }
 
     /**
