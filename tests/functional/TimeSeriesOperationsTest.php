@@ -89,6 +89,17 @@ class TimeSeriesOperationsTest extends TestCase
         $this->assertEquals('404', $response->getCode(), $response->getMessage());
     }
 
+    public function testQueryNotFound()
+    {
+        $response = (new Command\Builder\TimeSeries\Query(static::$riak))
+            ->withQuery("select * from GeoCheckin where time > 0 and time < 10 and geohash = 'hash1' and user = 'user1'")
+            ->build()
+            ->execute();
+
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
+        $this->assertCount(0, $response->getResults());
+    }
+
     public function testStoreRow()
     {
         $response = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
@@ -132,28 +143,6 @@ class TimeSeriesOperationsTest extends TestCase
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
-    public function testDeleteRow()
-    {
-        $response = (new Command\Builder\TimeSeries\DeleteRow(static::$riak))
-            ->atKey(static::$key)
-            ->inTable(static::$table)
-            ->build()
-            ->execute();
-
-        $this->assertEquals('204', $response->getCode(), $response->getMessage());
-    }
-
-    public function testQueryNotFound()
-    {
-        $response = (new Command\Builder\TimeSeries\Query(static::$riak))
-            ->withQuery("select * from GeoCheckin where time > 0 and time < 10 and geohash = 'hash1' and user = 'user1'")
-            ->build()
-            ->execute();
-
-        $this->assertEquals('204', $response->getCode(), $response->getMessage());
-        $this->assertCount(0, $response->getResults());
-    }
-
     public function testQuery()
     {
         $upper_bound = static::$now->getTimestamp() + 1;
@@ -165,6 +154,19 @@ class TimeSeriesOperationsTest extends TestCase
             ->execute();
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
-        $this->assertCount(0, $response->getResults());
+        $this->assertCount(2, $response->getResults());
+        $this->assertCount(7, $response->getResults()[0]);
+        $this->assertEquals('hash1', $response->getResults()[0][0]->getValue());
+    }
+
+    public function testDeleteRow()
+    {
+        $response = (new Command\Builder\TimeSeries\DeleteRow(static::$riak))
+            ->atKey(static::$key)
+            ->inTable(static::$table)
+            ->build()
+            ->execute();
+
+        $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 }
