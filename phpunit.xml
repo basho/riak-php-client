@@ -8,9 +8,13 @@
         <testsuite name="Functional Tests">
             <directory>tests/functional</directory>
             <exclude>tests/functional/SecurityFeaturesTest.php</exclude>
+            <exclude>tests/functional/TimeSeriesOperationsTest.php</exclude>
         </testsuite>
         <testsuite name="Scenario Tests">
             <directory>tests/scenario</directory>
+        </testsuite>
+        <testsuite name="TimeSeries">
+            <file>tests/functional/TimeSeriesOperationsTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

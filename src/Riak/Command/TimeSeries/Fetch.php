@@ -6,7 +6,7 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Used to store data within a TS table
+ * Used to fetch data within a TS table
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
@@ -19,11 +19,21 @@ class Fetch extends Command implements CommandInterface
      */
     protected $table = NULL;
 
-    protected $key = null;
+    /**
+     * Stores the key
+     *
+     * @var \Basho\Riak\TimeSeries\Cell[]
+     */
+    protected $key = [];
+
+    public function getTable()
+    {
+        return $this->table;
+    }
 
     public function getData()
     {
-        return ["key" => $this->key];
+        return $this->key;
     }
 
     public function getEncodedData()

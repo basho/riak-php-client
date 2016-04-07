@@ -20,5 +20,7 @@ class DescribeTable extends Command\Builder\TimeSeries\Query implements Command\
         if ($table) {
             $this->query = "DESCRIBE {$table}";
         }
+
+        return $this;
     }
 }

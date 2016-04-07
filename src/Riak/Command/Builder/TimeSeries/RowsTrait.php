@@ -42,5 +42,7 @@ trait RowsTrait
     public function withRow(array $row)
     {
         $this->rows[] = $row;
+
+        return $this;
     }
 }

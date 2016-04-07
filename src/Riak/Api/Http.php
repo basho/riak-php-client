@@ -252,18 +252,18 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Object\FetchPreflist':
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s/preflist', $bucket->getType(), $bucket->getName(), $key);
                 break;
-            case 'Basho\Riak\Command\TimeSeries\FetchRow':
-            case 'Basho\Riak\Command\TimeSeries\DeleteRow':
-                /** @var $command Command\Builder\TimeSeries\FetchRow */
+            case 'Basho\Riak\Command\TimeSeries\Fetch':
+            case 'Basho\Riak\Command\TimeSeries\Delete':
+                /** @var $command Command\TimeSeries\Fetch */
                 $command = $this->command;
-                $this->path = sprintf('%s/table/%s/%s', static::TS_API_PREFIX, $command->getTable(), implode("/", $command->getKey()));
+                $this->path = sprintf('%s/table/%s/%s', static::TS_API_PREFIX, $command->getTable(), implode("/", $command->getData()));
                 break;
-            case 'Basho\Riak\Command\TimeSeries\StoreRows':
-                /** @var $command Command\Builder\TimeSeries\StoreRows */
+            case 'Basho\Riak\Command\TimeSeries\Store':
+                /** @var $command Command\TimeSeries\Store */
                 $command = $this->command;
                 $this->path = sprintf('%s/table/%s', static::TS_API_PREFIX, $command->getTable());
                 break;
-            case 'Basho\Riak\Command\TimeSeries\Query':
+            case 'Basho\Riak\Command\TimeSeries\Query\Fetch':
                 $this->path = sprintf('%s/query', static::TS_API_PREFIX);
                 break;
             default:

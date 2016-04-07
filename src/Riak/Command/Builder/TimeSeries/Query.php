@@ -13,6 +13,11 @@ class Query extends Command\Builder implements Command\BuilderInterface
     protected $query = '';
     protected $interps = [];
 
+    public function __construct(Riak $riak)
+    {
+        parent::__construct($riak);
+    }
+
     /**
      * TimeSeries SQL'ish query
      *
@@ -21,6 +26,8 @@ class Query extends Command\Builder implements Command\BuilderInterface
     public function withQuery($query)
     {
         $this->query = $query;
+
+        return $this;
     }
 
     /**

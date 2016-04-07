@@ -28,6 +28,11 @@ class Store extends Command implements CommandInterface
      */
     protected $rows = [];
 
+    public function getTable()
+    {
+        return $this->table;
+    }
+
     public function getData()
     {
         return $this->rows;

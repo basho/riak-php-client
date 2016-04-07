@@ -6,14 +6,12 @@ use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
 /**
- * Used to store data within a TS table
+ * Used to fetch data within a TS table
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Delete extends Command implements CommandInterface
 {
-    protected $method = 'DELETE';
-
     /**
      * Stores the table name
      *
@@ -22,20 +20,25 @@ class Delete extends Command implements CommandInterface
     protected $table = NULL;
 
     /**
-     * Stores the rows
+     * Stores the key
      *
-     * @var array $rows
+     * @var \Basho\Riak\TimeSeries\Cell[]
      */
-    protected $rows = [];
+    protected $key = [];
+
+    public function getTable()
+    {
+        return $this->table;
+    }
 
     public function getData()
     {
-        return $this->rows;
+        return $this->key;
     }
 
     public function getEncodedData()
     {
-        return $this->getData();
+        return json_encode($this->getData());
     }
 
     public function __construct(Command\Builder\TimeSeries\DeleteRow $builder)
@@ -43,6 +46,6 @@ class Delete extends Command implements CommandInterface
         parent::__construct($builder);
 
         $this->table = $builder->getTable();
-        $this->rows = $builder->getRows();
+        $this->key = $builder->getKey();
     }
 }
