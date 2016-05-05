@@ -137,7 +137,7 @@ foreach ($response->getRow() as $index => $column) {
 
 
 # query for data
-$response = (new Command\Builder\TimeSeries\Query(static::$riak))
+$response = (new Command\Builder\TimeSeries\Query($riak))
     ->withQuery("select * from GeoCheckins where family = 'family1' and series = 'myseries1' and (time > 1420113500 and time < 1420116000)")
     ->build()
     ->execute();
