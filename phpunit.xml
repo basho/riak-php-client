@@ -13,9 +13,6 @@
         <testsuite name="Scenario Tests">
             <directory>tests/scenario</directory>
         </testsuite>
-        <testsuite name="TimeSeries">
-            <file>tests/functional/TimeSeriesOperationsTest.php</file>
-        </testsuite>
     </testsuites>
     <filter>
         <whitelist>
