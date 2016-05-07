@@ -107,8 +107,7 @@ class TimeSeriesOperationsTest extends TestCase
             ->withRow(static::generateRow())
             ->build()
             ->execute();
-//var_dump(static::$riak->getApi(), static::$riak->getApi()->getCommand());
-//        var_dump(static::$riak->getApi()->getCommand()->getEncodedData());
+
         $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
     }
 
