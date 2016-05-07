@@ -36,7 +36,7 @@ class Fetch extends Command implements CommandInterface
     public function getEncodedData()
     {
         // plain text string
-        return json_encode($this->getData());
+        return $this->query;
     }
 
     public function __construct(Command\Builder\TimeSeries\Query $builder)

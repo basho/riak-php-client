@@ -141,6 +141,6 @@ class Cell
      */
     public function __toString()
     {
-        return $this->getName() . '/' . $this->getValue();
+        return rawurlencode($this->getName()) . '/' . rawurlencode($this->getValue());
     }
 }

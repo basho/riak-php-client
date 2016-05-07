@@ -40,7 +40,15 @@ class Store extends Command implements CommandInterface
 
     public function getEncodedData()
     {
-        return json_encode($this->getData());
+        $rows = [];
+        foreach ($this->getData() as $row) {
+            $cells = [];
+            foreach ($row as $cell) {
+                $cells[$cell->getName()] = $cell->getValue();
+            }
+            $rows[] = $cells;
+        }
+        return json_encode($rows);
     }
 
     public function __construct(Command\Builder\TimeSeries\StoreRows $builder)
