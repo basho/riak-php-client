@@ -127,5 +127,8 @@ abstract class Builder
         if (is_object($value) && $value instanceof $class === false) {
             throw new Builder\Exception("Expected instance of {$class}, received instance of " . get_class($value));
         }
+        if (is_array($value) && count($value) == 0) {
+            throw new Builder\Exception("Expected non-empty array value for {$objectName}");
+        }
     }
 }

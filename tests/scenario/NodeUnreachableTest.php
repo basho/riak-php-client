@@ -63,7 +63,7 @@ class NodeUnreachableTest extends TestCase
         // replace third one with reachable node
         $nodes[2] = $this->getLocalNode();
 
-        $riak = new Riak($nodes);
+        $riak = new Riak($nodes, ['max_connect_attempts' => 3], static::getApiBridgeClass());
         $response = (new Command\Builder\Ping($riak))
             ->build()
             ->execute();
