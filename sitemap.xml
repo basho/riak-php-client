@@ -34,6 +34,9 @@
 	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Builder.Search.html</loc>
 </url>
 <url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Builder.TimeSeries.html</loc>
+</url>
+<url>
 	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.DataType.html</loc>
 </url>
 <url>
@@ -67,6 +70,12 @@
 	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.Stats.html</loc>
 </url>
 <url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.TimeSeries.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Command.TimeSeries.Query.html</loc>
+</url>
+<url>
 	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.DataType.html</loc>
 </url>
 <url>
@@ -77,6 +86,9 @@
 </url>
 <url>
 	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.Search.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/namespace-Basho.Riak.TimeSeries.html</loc>
 </url>
 
 
@@ -183,6 +195,21 @@
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.StoreObject.html</loc>
 </url>
 <url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.DeleteRow.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.DescribeTable.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.FetchRow.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.Query.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.StoreRows.html</loc>
+</url>
+<url>
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.UpdateMap.html</loc>
 </url>
 <url>
@@ -285,6 +312,24 @@
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Stats.Response.html</loc>
 </url>
 <url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.TimeSeries.Delete.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.TimeSeries.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.TimeSeries.Query.Fetch.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.TimeSeries.Query.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.TimeSeries.Response.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.TimeSeries.Store.html</loc>
+</url>
+<url>
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.DataType.html</loc>
 </url>
 <url>
@@ -315,6 +360,9 @@
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Search.Doc.html</loc>
 </url>
 <url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.TimeSeries.Cell.html</loc>
+</url>
+<url>
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.ApiInterface.html</loc>
 </url>
 <url>
@@ -334,6 +382,15 @@
 </url>
 <url>
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.ObjectTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.KeyTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.RowsTrait.html</loc>
+</url>
+<url>
+	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.Command.Builder.TimeSeries.TableTrait.html</loc>
 </url>
 <url>
 	<loc>https://basho.github.io/riak-php-client/class-Basho.Riak.HeadersTrait.html</loc>

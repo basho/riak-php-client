@@ -99,6 +99,10 @@
 						<a href="namespace-Basho.Riak.Command.Builder.Search.html">
 							Search						</a>
 							</li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.Builder.TimeSeries.html">
+							TimeSeries						</a>
+							</li>
 								</ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.Command.DataType.html">
@@ -148,7 +152,16 @@
 						<a href="namespace-Basho.Riak.Command.Stats.html">
 							Stats						</a>
 							</li>
-								</ul></li>
+					<li>
+						<a href="namespace-Basho.Riak.Command.TimeSeries.html">
+							TimeSeries<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Basho.Riak.Command.TimeSeries.Query.html">
+							Query						</a>
+							</li>
+								</ul></li></ul></li>
 					<li>
 						<a href="namespace-Basho.Riak.DataType.html">
 							DataType						</a>
@@ -166,6 +179,10 @@
 					<li>
 						<a href="namespace-Basho.Riak.Search.html">
 							Search						</a>
+							</li>
+					<li>
+						<a href="namespace-Basho.Riak.TimeSeries.html">
+							TimeSeries						</a>
 							</li>
 								</ul></li></ul></li>
 			</ul>
@@ -240,6 +257,10 @@ objects for interacting with your Riak data cluster.</p>
 			<code><a href="class-Basho.Riak.Command.Builder.SetBucketProperties.html">Basho\Riak\Command\Builder\SetBucketProperties</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.StoreObject.html">Basho\Riak\Command\Builder\StoreObject</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.FetchCounter.html">Basho\Riak\Command\Builder\FetchCounter</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.TimeSeries.DeleteRow.html">Basho\Riak\Command\Builder\TimeSeries\DeleteRow</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.TimeSeries.FetchRow.html">Basho\Riak\Command\Builder\TimeSeries\FetchRow</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.TimeSeries.Query.html">Basho\Riak\Command\Builder\TimeSeries\Query</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.TimeSeries.StoreRows.html">Basho\Riak\Command\Builder\TimeSeries\StoreRows</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.UpdateMap.html">Basho\Riak\Command\Builder\UpdateMap</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.UpdateSet.html">Basho\Riak\Command\Builder\UpdateSet</a></code>, 
 			<code><a href="class-Basho.Riak.Command.Builder.FetchMap.html">Basho\Riak\Command\Builder\FetchMap</a></code>, 
@@ -256,7 +277,8 @@ objects for interacting with your Riak data cluster.</p>
 		<h3>Indirect known subclasses</h3>
 		<p class="elementList">
 			<code><a href="class-Basho.Riak.Command.Builder.Search.AssociateIndex.html">Basho\Riak\Command\Builder\Search\AssociateIndex</a></code>, 
-			<code><a href="class-Basho.Riak.Command.Builder.Search.DissociateIndex.html">Basho\Riak\Command\Builder\Search\DissociateIndex</a></code>
+			<code><a href="class-Basho.Riak.Command.Builder.Search.DissociateIndex.html">Basho\Riak\Command\Builder\Search\DissociateIndex</a></code>, 
+			<code><a href="class-Basho.Riak.Command.Builder.TimeSeries.DescribeTable.html">Basho\Riak\Command\Builder\TimeSeries\DescribeTable</a></code>
 		</p>
 	</div>
 
@@ -272,7 +294,7 @@ objects for interacting with your Riak data cluster.</p>
 
 				<b>Author:</b>
 				Christopher Mancini <cmancini at basho d0t com><br>
-			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.html#9-131" title="Go to source code">Riak/Command/Builder.php</a>
+			<b>Located at</b> <a href="source-class-Basho.Riak.Command.Builder.html#9-134" title="Go to source code">Riak/Command/Builder.php</a>
 		<br>
 	</div>
 
@@ -565,7 +587,7 @@ objects for interacting with your Riak data cluster.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_required">#</a>
-			<code><a href="source-class-Basho.Riak.Command.Builder.html#112-130" title="Go to source code">required</a>( <span> <var>$objectName</var></span> )</code>
+			<code><a href="source-class-Basho.Riak.Command.Builder.html#112-133" title="Go to source code">required</a>( <span> <var>$objectName</var></span> )</code>
 
 			<div class="description short">
 				<p>Used to verify a property within the builder is not null and is instantiated</p>
