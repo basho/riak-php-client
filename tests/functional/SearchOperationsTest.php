@@ -176,6 +176,24 @@ class SearchOperationsTest extends TestCase
     }
 
     /**
+     * @depends      testSearch
+     */
+    public function testSearchWithSort()
+    {
+        $command = (new Command\Builder\Search\FetchObjects(static::$riak))
+            ->withQuery('name_s:*Gi*')
+            ->withIndexName(static::INDEX)
+            ->withSortField("name_s asc")
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
+        $this->assertEquals(2, $response->getNumFound());
+        $this->assertEquals('B. Gionta', $response->getDocs()[0]->name_s);
+    }
+
+    /**
      * Tests handling of a badly formed query
      *
      * @depends      testAssociateIndex
