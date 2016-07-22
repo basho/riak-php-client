@@ -75,7 +75,7 @@ class TimeSeriesOperationsTest extends TestCase
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertNotEmpty($response->getResults());
         $this->assertCount(7, $response->getResults());
-        $this->assertCount(5, $response->getResult());
+        $this->assertGreaterThanOrEqual(5, $response->getResult());
     }
 
     public function testFetchRowNotFound()
