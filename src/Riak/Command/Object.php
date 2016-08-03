@@ -47,7 +47,7 @@ abstract class Object extends Command
             return json_encode($data);
         }
 
-        return rawurlencode($data);
+        return $data;
     }
 
     public function getDecodedData($data, $contentType)
@@ -61,7 +61,7 @@ abstract class Object extends Command
             return json_decode($data, $decodeAsAssociative);
         }
 
-        return rawurldecode($data);
+        return $data;
     }
 
     public function getData()
