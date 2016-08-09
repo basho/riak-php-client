@@ -650,6 +650,11 @@ class Http extends Api implements ApiInterface
             $location = Location::fromString($this->getResponseHeader('Location'));
         }
 
+        if ($this->statusCode == 500) {
+            $this->success = false;
+            $this->error = $body;
+        }
+
         switch (get_class($this->command)) {
             case 'Basho\Riak\Command\Bucket\Store':
             case 'Basho\Riak\Command\Bucket\Fetch':
