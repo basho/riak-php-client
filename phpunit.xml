@@ -12,7 +12,7 @@
         </testsuite>
         <testsuite name="Scenario Tests">
             <directory>tests/scenario</directory>
-            <exclude>tests/scenario/InternalServerError.php</exclude>
+            <exclude>tests/scenario/InternalServerErrorTest.php</exclude>
         </testsuite>
     </testsuites>
     <filter>
