@@ -22,6 +22,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const MAP_BUCKET_TYPE = 'phptest_maps';
     const SET_BUCKET_TYPE = 'phptest_sets';
     const LEVELDB_BUCKET_TYPE = 'phptest_leveldb';
+    const BITCASK_BUCKET_TYPE = 'bitcask';
 
     /**
      * @var \Basho\Riak|null
