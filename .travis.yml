@@ -5,9 +5,11 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  - hhvm
+  - 7.1
 
 sudo: required
+
+dist: trusty
 
 addons:
   hosts:
@@ -16,6 +18,22 @@ addons:
 before_script:
   - composer self-update
   - composer install --prefer-source
+  - curl -s https://packagecloud.io/install/repositories/basho/riak/script.deb.sh | sudo bash
+  - sudo apt-get install riak=2.1.4-1
+  - echo 'search = on' | sudo tee -a /etc/riak/riak.conf
+  - echo 'nodename = riak@127.0.0.1' | sudo tee -a /etc/riak/riak.conf
+  - echo 'storage_backend = multi' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.default = leveldb_backend' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.bitcask_backend.storage_backend = bitcask' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.bitcask_backend.bitcask.data_root = $(platform_data_dir)/bitcask' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.bitcask_backend.bitcask.io_mode = erlang' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.leveldb_backend.storage_backend = leveldb' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.leveldb_backend.leveldb.data_root = $(platform_data_dir)/leveldb' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.leveldb_backend.leveldb.maximum_memory.percent = 30' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.mem_backend.storage_backend = memory' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.mem_backend.memory_backend.ttl = 10s' | sudo tee -a /etc/riak/riak.conf
+  - echo 'multi_backend.mem_backend.memory_backend.max_memory_per_vnode = 4MB' | sudo tee -a /etc/riak/riak.conf
+  - sudo riak start
   - sudo riak-admin bucket-type create phptest_counters '{"props":{"datatype":"counter"}}'
   - sudo riak-admin bucket-type create phptest_maps '{"props":{"datatype":"map"}}'
   - sudo riak-admin bucket-type create phptest_sets '{"props":{"datatype":"set"}}'
@@ -33,5 +51,6 @@ notifications:
 
 script: "./vendor/bin/phpunit --coverage-text"
 
-services:
-  - riak
+matrix:
+  allow_failures:
+    - php: 7.1
