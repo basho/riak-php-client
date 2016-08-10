@@ -18,6 +18,9 @@ class EncodedDataTest extends TestCase
     const BINARY_KEY = "binary.png";
     const TEST_CONTENT_TYPE = "image/png";
 
+    /**
+     * Test storing and fetching an image represented in base64 encoding
+     */
     public function testBase64EncodedData() {
         $image = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . static::TEST_IMG);
 
@@ -46,6 +49,9 @@ class EncodedDataTest extends TestCase
         $this->assertEquals(md5($storeCommand->getEncodedData()), md5($response->getObject()->getData()));
     }
 
+    /**
+     * Test storing and fetching an image as a base64 embedded HTML img tag so it can be accessed via the browser
+     */
     public function testNoEncoding() {
         $image = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . static::TEST_IMG);
 
@@ -59,6 +65,7 @@ class EncodedDataTest extends TestCase
         $response = $storeCommand->execute();
 
         $this->assertEquals('204', $response->getCode());
+        $this->assertEquals(md5($object->getData()), md5($storeCommand->getEncodedData()));
 
         $fetchCommand = (new Command\Builder\FetchObject(static::$riak))
             ->buildLocation(static::BASE64_KEY . '.png', static::BUCKET)
@@ -71,6 +78,9 @@ class EncodedDataTest extends TestCase
         $this->assertEquals($object->getData(), $response->getObject()->getData());
     }
 
+    /**
+     * Test storing and fetching a Binary image
+     */
     public function testBinaryData() {
         $image = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . static::TEST_IMG);
         $md5 = md5($image);
@@ -96,6 +106,9 @@ class EncodedDataTest extends TestCase
         $this->assertEquals('200', $response->getCode());
         $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
         $this->assertEquals(static::TEST_CONTENT_TYPE, $response->getObject()->getContentType());
-        $this->assertEquals($md5, md5($response->getObject()->getData()));
+
+        // Since Riak doesn't return ContentEncoding used to store the object, we have to access
+        // the raw_data retrieved in the response to avoid data corruption from rawurldecode
+        $this->assertEquals($md5, md5($response->getObject()->getRawData()));
     }
 }
