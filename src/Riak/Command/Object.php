@@ -45,6 +45,8 @@ abstract class Object extends Command
 
         if (in_array($this->object->getContentType(), ['application/json', 'text/json'])) {
             return json_encode($data);
+        }elseif (in_array($this->object->getContentEncoding(), ['binary', 'base64'])) {
+            return $data;
         }
 
         return rawurlencode($data);
