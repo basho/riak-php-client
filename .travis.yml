@@ -1,37 +1,32 @@
 language: php
-
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-
+- 5.4
+- 5.5
+- 5.6
+- 7.0
+- hhvm
 sudo: required
-
 addons:
   hosts:
-    - riak-test
-
+  - riak-test
 before_script:
-  - composer self-update
-  - composer install --prefer-source
-  - sudo riak-admin bucket-type create phptest_counters '{"props":{"datatype":"counter"}}'
-  - sudo riak-admin bucket-type create phptest_maps '{"props":{"datatype":"map"}}'
-  - sudo riak-admin bucket-type create phptest_sets '{"props":{"datatype":"set"}}'
-  - sudo riak-admin bucket-type create phptest_search '{"props":{}}'
-  - sudo riak-admin bucket-type create phptest_leveldb '{"props":{"backend":"leveldb_backend"}}'
-  - sudo riak-admin bucket-type activate phptest_counters
-  - sudo riak-admin bucket-type activate phptest_maps
-  - sudo riak-admin bucket-type activate phptest_sets
-  - sudo riak-admin bucket-type activate phptest_search
-  - sudo riak-admin bucket-type activate phptest_leveldb
-
+- composer self-update
+- composer install --prefer-source
+- sudo riak-admin bucket-type create phptest_counters '{"props":{"datatype":"counter"}}'
+- sudo riak-admin bucket-type create phptest_maps '{"props":{"datatype":"map"}}'
+- sudo riak-admin bucket-type create phptest_sets '{"props":{"datatype":"set"}}'
+- sudo riak-admin bucket-type create phptest_search '{"props":{}}'
+- sudo riak-admin bucket-type create phptest_leveldb '{"props":{"backend":"leveldb_backend"}}'
+- sudo riak-admin bucket-type activate phptest_counters
+- sudo riak-admin bucket-type activate phptest_maps
+- sudo riak-admin bucket-type activate phptest_sets
+- sudo riak-admin bucket-type activate phptest_search
+- sudo riak-admin bucket-type activate phptest_leveldb
 notifications:
   webhooks: http://basho-engbot.herokuapp.com/travis?key=8d594c660ec46f616e37e24fd941c0ea1fc67963
   email: clients@basho.com
-
+  slack:
+    secure: 1i+11wGT6fqJvR+7dWCC449HrxnB+2UvEReZQe/PretyiqY0+qjNWXA9+7rc8tjPfkAJpD89lDzekcFYQwTrsouliNM4FK7Ibb5n4iNjHww4KTFn8lnB2Ywy5wwex7L55kDrNgYrNaqcSoJcXDDlFJpsXZKo/Yaq0/w4Wu8cyCU=
 script: "./vendor/bin/phpunit --coverage-text"
-
 services:
-  - riak
+- riak
