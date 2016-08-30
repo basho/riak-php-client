@@ -48,9 +48,12 @@ before_script:
 notifications:
   webhooks: http://basho-engbot.herokuapp.com/travis?key=8d594c660ec46f616e37e24fd941c0ea1fc67963
   email: clients@basho.com
+  slack:
+    secure: 1i+11wGT6fqJvR+7dWCC449HrxnB+2UvEReZQe/PretyiqY0+qjNWXA9+7rc8tjPfkAJpD89lDzekcFYQwTrsouliNM4FK7Ibb5n4iNjHww4KTFn8lnB2Ywy5wwex7L55kDrNgYrNaqcSoJcXDDlFJpsXZKo/Yaq0/w4Wu8cyCU=
 
 script: "./vendor/bin/phpunit --coverage-text"
 
 matrix:
   allow_failures:
     - php: 7.1
+
