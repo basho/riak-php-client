@@ -15,13 +15,13 @@ class Response extends \Basho\Riak\Command\Response
     /**
      * @var \Basho\Riak\DataType\Hll|null
      */
-    protected $set = null;
+    protected $hll = null;
 
-    public function __construct($success = true, $code = 0, $message = '', $location = null, $cardinality = 0, $date = '')
+    public function __construct($success = true, $code = 0, $message = '', $location = null, $hll = null, $date = '')
     {
         parent::__construct($success, $code, $message);
 
-        $this->cardinality = $cardinality;
+        $this->hll = $hll;
         $this->location = $location;
         $this->date = $date;
     }
@@ -38,11 +38,11 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return Cardinality|0
+     * @return Hll|null
      */
-    public function getCardinality()
+    public function getHll()
     {
-        return $this->cardinality;
+        return $this->hll;
     }
 
     /**

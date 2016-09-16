@@ -7,7 +7,7 @@ use Basho\Riak\DataType;
 /**
  * Class Hll
  *
- * Data structure for HyperLogLog crdt
+ * Data structure for HyperLogLog CRDT
  *
  * @author Luke Bakken <lbakken@basho.com>
  */
@@ -19,30 +19,18 @@ class Hll extends DataType
     const TYPE = 'hll';
 
     /**
-     * @var string
+     * @param integer $data
      */
-    private $context;
-
-    /**
-     * @param array $data
-     * @param $context
-     */
-    public function __construct(array $data, $context)
+    public function __construct($data)
     {
         $this->data = $data;
-        $this->context = $context;
     }
 
     /**
      * @return integer
      */
-    public function getCardinality()
+    public function getData()
     {
         return $this->data;
-    }
-
-    public function getContext()
-    {
-        return $this->context;
     }
 }

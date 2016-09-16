@@ -18,11 +18,6 @@ class UpdateHll extends Command\Builder implements Command\BuilderInterface
     protected $add_all = [];
 
     /**
-     * @var array
-     */
-    protected $remove_all = [];
-
-    /**
      * Similar to Vector Clocks, the context allows us to determine the state of a CRDT Hll
      *
      * @var string
@@ -43,32 +38,11 @@ class UpdateHll extends Command\Builder implements Command\BuilderInterface
     }
 
     /**
-     * @param mixed $element
-     *
-     * @return $this
-     */
-    public function remove($element)
-    {
-        settype($element, 'string');
-        $this->remove_all[] = $element;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getAddAll()
     {
         return $this->add_all;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRemoveAll()
-    {
-        return $this->remove_all;
     }
 
     /**
