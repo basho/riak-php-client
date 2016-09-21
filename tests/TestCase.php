@@ -21,6 +21,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const COUNTER_BUCKET_TYPE = 'phptest_counters';
     const MAP_BUCKET_TYPE = 'phptest_maps';
     const SET_BUCKET_TYPE = 'phptest_sets';
+    const HLL_BUCKET_TYPE = 'hlls';
     const LEVELDB_BUCKET_TYPE = 'phptest_leveldb';
 
     /**

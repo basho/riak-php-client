@@ -5,17 +5,17 @@ namespace Basho\Tests;
 use Basho\Riak\Command;
 
 /**
- * Class CounterTest
+ * Class BucketOperationsTest
  *
- * Functional tests related to Counter CRDTs
+ * Functional tests related to bucket operations
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
+ * @author Luke Bakken <lbakken@basho.com>
  */
 class BucketOperationsTest extends TestCase
 {
     public function testStore()
     {
-        // build an object
         $command = (new Command\Builder\SetBucketProperties(static::$riak))
             ->buildBucket('test')
             ->set('allow_mult', false)
@@ -23,13 +23,11 @@ class BucketOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        // expects 201 - Created
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
     public function testFetch()
     {
-        // build an object
         $command = (new Command\Builder\FetchBucketProperties(static::$riak))
             ->buildBucket('test')
             ->build();
@@ -45,7 +43,6 @@ class BucketOperationsTest extends TestCase
 
     public function testStore2()
     {
-        // build an object
         $command = (new Command\Builder\SetBucketProperties(static::$riak))
             ->buildBucket('test')
             ->set('allow_mult', true)
@@ -53,13 +50,11 @@ class BucketOperationsTest extends TestCase
 
         $response = $command->execute();
 
-        // expects 201 - Created
         $this->assertEquals('204', $response->getCode(), $response->getMessage());
     }
 
     public function testFetch2()
     {
-        // build an object
         $command = (new Command\Builder\FetchBucketProperties(static::$riak))
             ->buildBucket('test')
             ->build();
@@ -73,4 +68,28 @@ class BucketOperationsTest extends TestCase
         $this->assertTrue($bucket->getProperty('allow_mult'));
     }
 
+    public function testFetchAndStoreHllPrecision()
+    {
+        $command = (new Command\Builder\FetchBucketProperties(static::$riak))
+            ->buildBucket('test', static::HLL_BUCKET_TYPE)
+            ->build();
+
+        $response = $command->execute();
+
+        if ($response->getCode() == 200)
+        {
+            $bucket = $response->getBucket();
+            $this->assertNotEmpty($bucket->getProperties());
+            $this->assertEquals(14, $bucket->getProperty('hll_precision'));
+
+            $command = (new Command\Builder\SetBucketProperties(static::$riak))
+                ->buildBucket('test', static::HLL_BUCKET_TYPE)
+                ->set('hll_precision', 14)
+                ->build();
+
+            $response = $command->execute();
+
+            $this->assertEquals('204', $response->getCode(), $response->getMessage());
+        }
+    }
 }
