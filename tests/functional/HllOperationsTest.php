@@ -25,14 +25,21 @@ class HllTest extends TestCase
         // make completely random key based on time
         static::$key = md5(rand(0, 99) . time());
 
-        // Skip this suite if the "hlls" bucket type is not present
-        $command = (new Command\Builder\FetchBucketProperties(static::$riak))
-            ->buildBucket('test', static::HLL_BUCKET_TYPE)
-            ->build();
+        try
+        {
+            // Skip this suite if the "hlls" bucket type is not present
+            $command = (new Command\Builder\FetchBucketProperties(static::$riak))
+                ->buildBucket('test', static::HLL_BUCKET_TYPE)
+                ->build();
 
-        $response = $command->execute();
+            $response = $command->execute();
 
-        if (!$response->isSuccess())
+            if (!$response->isSuccess())
+            {
+                throw new \PHPUnit_Framework_SkippedTestSuiteError("hlls bucket type is not enabled and activated, skipping");
+            }
+        }
+        catch (\Exception $ex)
         {
             throw new \PHPUnit_Framework_SkippedTestSuiteError("hlls bucket type is not enabled and activated, skipping");
         }
