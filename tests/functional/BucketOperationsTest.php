@@ -33,7 +33,7 @@ class BucketOperationsTest extends TestCase
                 $hll_present = true;
             }
         }
-        catch (Exception $ex)
+        catch (\Exception $ex)
         {
             $hll_present = false;
         }
