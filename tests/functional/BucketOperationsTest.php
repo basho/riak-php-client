@@ -14,6 +14,31 @@ use Basho\Riak\Command;
  */
 class BucketOperationsTest extends TestCase
 {
+    private static $hll_present = false;
+
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        try
+        {
+            $command = (new Command\Builder\FetchBucketProperties(static::$riak))
+                ->buildBucket('test', static::HLL_BUCKET_TYPE)
+                ->build();
+
+            $response = $command->execute();
+
+            if ($response->isSuccess())
+            {
+                $hll_present = true;
+            }
+        }
+        catch (Exception $ex)
+        {
+            $hll_present = false;
+        }
+    }
+
     public function testStore()
     {
         $command = (new Command\Builder\SetBucketProperties(static::$riak))
@@ -70,13 +95,7 @@ class BucketOperationsTest extends TestCase
 
     public function testFetchAndStoreHllPrecision()
     {
-        $command = (new Command\Builder\FetchBucketProperties(static::$riak))
-            ->buildBucket('test', static::HLL_BUCKET_TYPE)
-            ->build();
-
-        $response = $command->execute();
-
-        if ($response->getCode() == 200)
+        if (static::$hll_present)
         {
             $bucket = $response->getBucket();
             $this->assertNotEmpty($bucket->getProperties());
@@ -90,6 +109,10 @@ class BucketOperationsTest extends TestCase
             $response = $command->execute();
 
             $this->assertEquals('204', $response->getCode(), $response->getMessage());
+        }
+        else
+        {
+            throw new \PHPUnit_Framework_SkippedTestError("hlls bucket type is not enabled and activated, skipping");
         }
     }
 }
