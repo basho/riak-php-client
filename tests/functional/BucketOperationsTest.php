@@ -28,7 +28,7 @@ class BucketOperationsTest extends TestCase
 
             $response = $command->execute();
 
-            if ($response->isSuccess())
+            if ($response->isSuccess() || $response->getCode() == 200)
             {
                 $hll_present = true;
             }

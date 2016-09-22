@@ -34,7 +34,7 @@ class HllTest extends TestCase
 
             $response = $command->execute();
 
-            if (!$response->isSuccess())
+            if (!$response->isSuccess() || $response->getCode() != 200)
             {
                 throw new \PHPUnit_Framework_SkippedTestSuiteError("hlls bucket type is not enabled and activated, skipping");
             }
