@@ -17,12 +17,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const TEST_NODE_HTTP_PORT = 8098;
     const TEST_NODE_SECURE_PORT = 10011;
 
-    const SEARCH_BUCKET_TYPE = 'phptest_search';
-    const COUNTER_BUCKET_TYPE = 'phptest_counters';
-    const MAP_BUCKET_TYPE = 'phptest_maps';
-    const SET_BUCKET_TYPE = 'phptest_sets';
+    const SEARCH_BUCKET_TYPE = 'yokozuna';
+    const COUNTER_BUCKET_TYPE = 'counters';
+    const MAP_BUCKET_TYPE = 'maps';
+    const SET_BUCKET_TYPE = 'sets';
     const HLL_BUCKET_TYPE = 'hlls';
-    const LEVELDB_BUCKET_TYPE = 'phptest_leveldb';
+    const LEVELDB_BUCKET_TYPE = 'plain';
 
     /**
      * @var \Basho\Riak|null
