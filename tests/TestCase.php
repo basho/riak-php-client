@@ -60,12 +60,17 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return $host ?: static::TEST_NODE_HOST;
     }
 
+    public static function getTestHttpPort()
+    {
+        return getenv('RIAK_HTTP_PORT') ? getenv('RIAK_HTTP_PORT') : static::TEST_NODE_HTTP_PORT;
+    }
+
     public static function getTestPort()
     {
         if (getenv('PB_INTERFACE')) {
             $port = getenv('RIAK_PORT') ? getenv('RIAK_PORT') : static::TEST_NODE_PORT;
         } else {
-            $port = getenv('RIAK_HTTP_PORT') ? getenv('RIAK_HTTP_PORT') : static::TEST_NODE_HTTP_PORT;
+            $port = static::getTestHttpPort();
         }
 
         return $port;
