@@ -23,6 +23,3 @@ notifications:
   slack:
     secure: ZtgcjTxhTxrzWW6MIHLRtucW/BMm42RKS3nGRtSfgER9rx7oJ0Y9gOYkh1FM0GsM7Z11Q/iDhWs/8WTccAV0PrMZ6KHaq54wGmfYyqwPM4YreUwQ87PnOW4wZbl0TJTeWutasEwZvnVJ8VEyyQcS2PHt0zlsENn0XWvobvaZ+FM=
 script: "./vendor/bin/phpunit --coverage-text"
-matrix:
-  allow_failures:
-    - php: 7.1
