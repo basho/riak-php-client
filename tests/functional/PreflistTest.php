@@ -28,16 +28,19 @@ class PreflistTest extends TestCase
             ->atLocation($location)
             ->build();
 
-        $response = $command->execute();
-
-        if ($response->getCode() == 400) {
+        try {
+            $response = $command->execute();
+            if ($response->getCode() == 400) {
+                $this->markTestSkipped('preflists are not supported');
+            } else {
+                $this->assertEquals(200, $response->getCode());
+                $this->assertNotEmpty($response->getObject()->getData()->preflist);
+                $this->assertObjectHasAttribute("partition", $response->getObject()->getData()->preflist[0]);
+                $this->assertObjectHasAttribute("node", $response->getObject()->getData()->preflist[0]);
+                $this->assertObjectHasAttribute("primary", $response->getObject()->getData()->preflist[0]);
+            }
+        } catch (\Basho\Riak\Exception $e) {
             $this->markTestSkipped('preflists are not supported');
-        } else {
-            $this->assertEquals(200, $response->getCode());
-            $this->assertNotEmpty($response->getObject()->getData()->preflist);
-            $this->assertObjectHasAttribute("partition", $response->getObject()->getData()->preflist[0]);
-            $this->assertObjectHasAttribute("node", $response->getObject()->getData()->preflist[0]);
-            $this->assertObjectHasAttribute("primary", $response->getObject()->getData()->preflist[0]);
         }
     }
 }
