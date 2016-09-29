@@ -172,7 +172,11 @@ class SearchOperationsTest extends TestCase
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertEquals(2, $response->getNumFound());
-        $this->assertEquals('B. Gionta', $response->getDocs()[1]->name_s);
+
+        $docs = $response->getDocs();
+        foreach ($docs as $d) {
+            $this->assertTrue('B. Gionta' == $d->name_s || 'Z. Girgensons' == $d->name_s);
+        }
     }
 
     /**

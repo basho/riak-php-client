@@ -9,18 +9,21 @@ sudo: required
 dist: trusty
 addons:
   hosts:
-  - riak-test
+    - riak-test
+env:
+  - RIAK_DOWNLOAD_URL=http://s3.amazonaws.com/downloads.basho.com/riak/2.0/2.0.7/ubuntu/trusty/riak_2.0.7-1_amd64.deb
+  - RIAK_DOWNLOAD_URL=http://s3.amazonaws.com/downloads.basho.com/riak/2.1/2.1.4/ubuntu/trusty/riak_2.1.4-1_amd64.deb
 before_script:
-- phpenv config-rm xdebug.ini
-- composer self-update
-- composer install --prefer-source
-- sudo ./tools/travis-ci/riak-install
-- sudo ./tools/devrel/riak-cluster-config "$(which riak-admin)" 8098 false false
-- riak version
+  - phpenv config-rm xdebug.ini
+  - composer self-update
+  - composer install --prefer-source
+  - sudo ./tools/travis-ci/riak-install -d "$RIAK_DOWNLOAD_URL"
+  - sudo ./tools/devrel/riak-cluster-config "$(which riak-admin)" 8098 false false
+  - riak version
 notifications:
   slack:
     secure: ZtgcjTxhTxrzWW6MIHLRtucW/BMm42RKS3nGRtSfgER9rx7oJ0Y9gOYkh1FM0GsM7Z11Q/iDhWs/8WTccAV0PrMZ6KHaq54wGmfYyqwPM4YreUwQ87PnOW4wZbl0TJTeWutasEwZvnVJ8VEyyQcS2PHt0zlsENn0XWvobvaZ+FM=
 script: "./vendor/bin/phpunit --coverage-text"
 matrix:
   allow_failures:
-  - php: 7.1
+    - php: 7.1
