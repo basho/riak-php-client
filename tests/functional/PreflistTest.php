@@ -30,10 +30,14 @@ class PreflistTest extends TestCase
 
         $response = $command->execute();
 
-        $this->assertEquals('200', $response->getCode());
-        $this->assertNotEmpty($response->getObject()->getData()->preflist);
-        $this->assertObjectHasAttribute("partition", $response->getObject()->getData()->preflist[0]);
-        $this->assertObjectHasAttribute("node", $response->getObject()->getData()->preflist[0]);
-        $this->assertObjectHasAttribute("primary", $response->getObject()->getData()->preflist[0]);
+        if ($response->getCode() == 400) {
+            $this->markTestSkipped('preflists are not supported');
+        } else {
+            $this->assertEquals(200, $response->getCode());
+            $this->assertNotEmpty($response->getObject()->getData()->preflist);
+            $this->assertObjectHasAttribute("partition", $response->getObject()->getData()->preflist[0]);
+            $this->assertObjectHasAttribute("node", $response->getObject()->getData()->preflist[0]);
+            $this->assertObjectHasAttribute("primary", $response->getObject()->getData()->preflist[0]);
+        }
     }
 }
