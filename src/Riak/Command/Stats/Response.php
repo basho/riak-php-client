@@ -3,7 +3,6 @@
 namespace Basho\Riak\Command\Stats;
 
 use Basho\Riak\Location;
-use Basho\Riak\Object;
 
 /**
  * Container for a response related to an operation on an object

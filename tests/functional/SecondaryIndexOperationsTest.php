@@ -3,7 +3,7 @@
 namespace Basho\Tests;
 
 use Basho\Riak\Command;
-use Basho\Riak\Object;
+use Basho\Riak\Object as RObject;
 
 /**
  * Functional tests related to secondary indexes
@@ -36,7 +36,7 @@ class SecondaryIndexOperationsTest extends TestCase
 
     public function testStoreObjectWithIndexes()
     {
-        $object = new Object('person');
+        $object = new RObject('person');
         $object->addValueToIndex('lucky_numbers_int', 42);
         $object->addValueToIndex('lucky_numbers_int', 64);
         $object->addValueToIndex('lastname_bin', 'Knuth');
@@ -111,7 +111,7 @@ class SecondaryIndexOperationsTest extends TestCase
     public function testSetupIndexObjects()
     {
         for($x = 0; $x <= 1000; $x++) {
-            $object = (new Object('student'.$x))
+            $object = (new RObject('student'.$x))
                         ->addValueToIndex('lucky_numbers_int', $x) // 0,1,2...
                         ->addValueToIndex('group_int', $x % 2)     // 0,0,1,1,2,2,3,3,...
                         ->addValueToIndex('grade_bin', chr(65 + ($x % 6))) // A,B,C,D,E,F,A...
