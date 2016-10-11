@@ -4,7 +4,7 @@ namespace Basho\Riak\Api\Http\Translator;
 
 use Basho\Riak\Api\Http;
 use Basho\Riak\Command;
-use Basho\Riak\Object;
+use Basho\Riak\Object as RObject;
 
 class ObjectResponse
 {
@@ -24,7 +24,7 @@ class ObjectResponse
     /**
      * @param $response
      * @param array $headers
-     * @return Object[]
+     * @return \Basho\Riak\Object[]
      */
     public function parseResponse($response, $headers = [])
     {
@@ -90,6 +90,6 @@ class ObjectResponse
         $contentType = !empty($headers[Http::CONTENT_TYPE_KEY]) ? $headers[Http::CONTENT_TYPE_KEY] : '';
         $data = $this->command->getDecodedData($response, $contentType);
 
-        return (new Object($data, $headers))->setRawData($response);
+        return (new RObject($data, $headers))->setRawData($response);
     }
 }

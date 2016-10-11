@@ -3,7 +3,7 @@
 namespace Basho\Riak\Command\Builder;
 
 use Basho\Riak\Api\Http;
-use Basho\Riak\Object;
+use Basho\Riak\Object as RObject;
 
 /**
  * Allows easy code sharing for Object getters / setters within the Command Builders
@@ -35,7 +35,7 @@ trait ObjectTrait
      */
     public function buildObject($data = NULL, $headers = NULL)
     {
-        $this->object = new Object($data, $headers);
+        $this->object = new RObject($data, $headers);
 
         return $this;
     }
@@ -47,7 +47,7 @@ trait ObjectTrait
      *
      * @return $this
      */
-    public function withObject(Object $object)
+    public function withObject(RObject $object)
     {
         $this->object = $object;
 
@@ -63,7 +63,7 @@ trait ObjectTrait
      */
     public function buildJsonObject($data)
     {
-        $this->object = new Object();
+        $this->object = new RObject();
         $this->object->setData($data);
         $this->object->setContentType(Http::CONTENT_TYPE_JSON);
 

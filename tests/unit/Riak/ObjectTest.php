@@ -2,7 +2,7 @@
 
 namespace Basho\Tests\Riak;
 
-use Basho\Riak\Object;
+use Basho\Riak\Object as RObject;
 use Basho\Tests\TestCase;
 
 /**
@@ -15,13 +15,13 @@ class ObjectTest extends TestCase
     public function testConstruct()
     {
         // simple new object
-        $object = new Object();
+        $object = new RObject();
         $this->assertEmpty($object->getData());
 
         // more complex object
         $data = new \StdClass();
         $data->woot = 'sauce';
-        $object = new Object($data, ['Content-Type' => 'text/plain']);
+        $object = new RObject($data, ['Content-Type' => 'text/plain']);
         $this->assertEquals('sauce', $object->getData()->woot);
         $this->assertEquals('text/plain', $object->getContentType());
     }
@@ -32,13 +32,13 @@ class ObjectTest extends TestCase
         $data = new \StdClass();
         $data->woot = 'sauce';
 
-        $object = new Object($data);
+        $object = new RObject($data);
         $this->assertEmpty($object->getIndexes());
         $this->assertEquals(NULL, $object->getIndex("foo_bin"));
 
         // 2i headers will result in indexes
         $headers = ['My-Header' => 'cats', 'x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
-        $object = new Object($data, $headers);
+        $object = new RObject($data, $headers);
 
         $indexes = $object->getIndexes();
         $this->assertNotEmpty($indexes);
@@ -53,7 +53,7 @@ class ObjectTest extends TestCase
         $data->woot = 'sauce';
 
         $headers = ['x-riak-index-foo_bin' => 'bar', 'x-riak-index-foo_int' => '42'];
-        $object = new Object($data, $headers);
+        $object = new RObject($data, $headers);
 
         $object->addValueToIndex("foo_int", 50);
         $object->addValueToIndex("foo_bin", 'baz');
@@ -71,7 +71,7 @@ class ObjectTest extends TestCase
         $data->woot = 'sauce';
 
         $headers = ['x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
-        $object = new Object($data, $headers);
+        $object = new RObject($data, $headers);
 
         $object->removeValueFromIndex("foo_int", 50);
         $object->removeValueFromIndex("foo_bin", 'baz');
@@ -89,7 +89,7 @@ class ObjectTest extends TestCase
         $data->woot = 'sauce';
 
         $headers = ['x-riak-index-foo_bin' => 'bar, baz', 'x-riak-index-foo_int' => '42, 50'];
-        $object = new Object($data, $headers);
+        $object = new RObject($data, $headers);
 
         $index = $object->getIndex('foo_bin');
         $this->assertNotNull($index);
@@ -103,7 +103,7 @@ class ObjectTest extends TestCase
     {
         $data = new \StdClass();
         $data->woot = 'sauce';
-        $object = new Object($data);
+        $object = new RObject($data);
 
         $object->addValueToIndex('foo_bar', 42);
     }
@@ -115,7 +115,7 @@ class ObjectTest extends TestCase
     {
         $data = new \StdClass();
         $data->woot = 'sauce';
-        $object = new Object($data);
+        $object = new RObject($data);
 
         $object->addValueToIndex('foo_bin', 42);
     }
@@ -127,7 +127,7 @@ class ObjectTest extends TestCase
     {
         $data = new \StdClass();
         $data->woot = 'sauce';
-        $object = new Object($data);
+        $object = new RObject($data);
 
         $object->addValueToIndex('foo_int', 'bar');
     }
