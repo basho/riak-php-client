@@ -9,6 +9,7 @@ use Basho\Riak\Command;
 use Basho\Riak\DataType\Counter;
 use Basho\Riak\DataType\Map;
 use Basho\Riak\DataType\Set;
+use Basho\Riak\DataType\Hll;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
 use Basho\Riak\Object;
@@ -215,10 +216,12 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\DataType\Set\Store':
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\DataType\Map\Store':
+            case 'Basho\Riak\Command\DataType\Hll\Store':
                 $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
             case 'Basho\Riak\Command\DataType\Counter\Fetch':
             case 'Basho\Riak\Command\DataType\Set\Fetch':
             case 'Basho\Riak\Command\DataType\Map\Fetch':
+            case 'Basho\Riak\Command\DataType\Hll\Fetch':
                 $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
@@ -713,6 +716,18 @@ class Http extends Api implements ApiInterface
                 }
                 $response = new Command\DataType\Map\Response(
                     $this->success, $this->statusCode, $this->error, $location, $map, $this->getResponseHeader('Date')
+                );
+                break;
+
+            case 'Basho\Riak\Command\DataType\Hll\Store':
+            case 'Basho\Riak\Command\DataType\Hll\Fetch':
+                $hll = null;
+                $json_object = json_decode($body);
+                if ($json_object && isset($json_object->value)) {
+                    $hll = new Hll($json_object->value);
+                }
+                $response = new Command\DataType\Hll\Response(
+                    $this->success, $this->statusCode, $this->error, $location, $hll, $this->getResponseHeader('Date')
                 );
                 break;
 

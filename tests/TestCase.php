@@ -17,12 +17,13 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const TEST_NODE_HTTP_PORT = 8098;
     const TEST_NODE_SECURE_PORT = 10011;
 
-    const SEARCH_BUCKET_TYPE = 'phptest_search';
-    const COUNTER_BUCKET_TYPE = 'phptest_counters';
-    const MAP_BUCKET_TYPE = 'phptest_maps';
-    const SET_BUCKET_TYPE = 'phptest_sets';
-    const LEVELDB_BUCKET_TYPE = 'phptest_leveldb';
     const BITCASK_BUCKET_TYPE = 'bitcask';
+    const COUNTER_BUCKET_TYPE = 'phptest_counters';
+    const HLL_BUCKET_TYPE = 'hlls';
+    const LEVELDB_BUCKET_TYPE = 'phptest_leveldb';
+    const MAP_BUCKET_TYPE = 'phptest_maps';
+    const SEARCH_BUCKET_TYPE = 'phptest_search';
+    const SET_BUCKET_TYPE = 'phptest_sets';
 
     /**
      * @var \Basho\Riak|null
@@ -60,12 +61,17 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return $host ?: static::TEST_NODE_HOST;
     }
 
+    public static function getTestHttpPort()
+    {
+        return getenv('RIAK_HTTP_PORT') ? getenv('RIAK_HTTP_PORT') : static::TEST_NODE_HTTP_PORT;
+    }
+
     public static function getTestPort()
     {
         if (getenv('PB_INTERFACE')) {
             $port = getenv('RIAK_PORT') ? getenv('RIAK_PORT') : static::TEST_NODE_PORT;
         } else {
-            $port = getenv('RIAK_HTTP_PORT') ? getenv('RIAK_HTTP_PORT') : static::TEST_NODE_HTTP_PORT;
+            $port = static::getTestHttpPort();
         }
 
         return $port;

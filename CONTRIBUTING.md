@@ -25,7 +25,7 @@ The most immediately helpful way you can benefit this project is by forking the 
 
 ### Pull Request Process
 
-Here’s how to get started:
+Here's how to get started:
 
 * Fork the appropriate sub-projects that are affected by your change. 
 * Create a topic branch for your change and checkout that branch.
@@ -33,7 +33,7 @@ Here’s how to get started:
 * Make your changes and run the test suite if one is provided. (see below)
 * Commit your changes and push them to your fork.
 * Open pull requests for the appropriate projects.
-* Contributors will review your pull request, suggest changes, and merge it when it’s ready and/or offer feedback.
+* Contributors will review your pull request, suggest changes, and merge it when it's ready and/or offer feedback.
 
 ### Coding Standards
 Here are the standards we expect to see when considering pull requests
@@ -100,17 +100,15 @@ You can execute code coverage analysis along side the test run by appending ` --
 Please note, that the Functional and Scenario tests require a live Riak instance to test against. Also, the following bucket types to be created and activated on the Riak instance. If using the [riak-clients-vagrant](https://github.com/basho-labs/riak-clients-vagrant) project, the `integration_testing` role creates these bucket types for you.
 
 ```bash
-riak-admin bucket-type create phptest_counters '{"props":{"datatype":"counter"}}'
-riak-admin bucket-type create phptest_sets '{"props":{"datatype":"set"}}'
-riak-admin bucket-type create phptest_maps '{"props":{"datatype":"map"}}'
-riak-admin bucket-type create phptest_search '{"props":{}}'
-riak-admin bucket-type create phptest_leveldb '{"props":{}}'
+riak-admin bucket-type create counters '{"props":{"datatype":"counter"}}'
+riak-admin bucket-type create sets '{"props":{"datatype":"set"}}'
+riak-admin bucket-type create maps '{"props":{"datatype":"map"}}'
+riak-admin bucket-type create yokozuna '{"props":{}}'
 
-riak-admin bucket-type activate phptest_counters
-riak-admin bucket-type activate phptest_sets
-riak-admin bucket-type activate phptest_maps
-riak-admin bucket-type activate phptest_search
-riak-admin bucket-type activate phptest_leveldb
+riak-admin bucket-type activate counters
+riak-admin bucket-type activate sets
+riak-admin bucket-type activate maps
+riak-admin bucket-type activate yokozuna
 ```
 
 ## Thank You

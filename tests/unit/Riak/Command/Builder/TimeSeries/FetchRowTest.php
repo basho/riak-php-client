@@ -39,13 +39,13 @@ class FetchRowTest extends TestCase
         $this->assertInstanceOf('Basho\Riak\Command\TimeSeries\Fetch', $command);
         $this->assertEquals(static::$table, $command->getTable());
         $this->assertEquals(static::$key, $command->getData());
-        $this->assertEquals("region/South%20Atlantic/state/South%20Carolina/time/1443806900", implode("/", $command->getData()));
+        $this->assertEquals("region/South%20Atlantic/state/South%20Carolina/time/1443816900", implode("/", $command->getData()));
 
         // change the key and reuse builder to create new command
         $key = static::$key;
-        $key[2]->setTimestampValue(1443806901);
+        $key[2]->setTimestampValue(1443816901);
         $command = $builder->atKey($key)->build();
 
-        $this->assertEquals("region/South%20Atlantic/state/South%20Carolina/time/1443806901", implode("/", $command->getData()));
+        $this->assertEquals("region/South%20Atlantic/state/South%20Carolina/time/1443816901", implode("/", $command->getData()));
     }
 }

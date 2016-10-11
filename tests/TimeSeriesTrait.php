@@ -35,7 +35,7 @@ trait TimeSeriesTrait
 
     protected static function populateKey()
     {
-        static::$now = new \DateTime("@1443806900");
+        static::$now = new \DateTime("@1443816900");
 
         static::$key = [
             (new Cell("region"))->setValue("South Atlantic"),
