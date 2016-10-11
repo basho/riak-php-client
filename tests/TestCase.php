@@ -18,12 +18,12 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const TEST_NODE_SECURE_PORT = 10011;
 
     const BITCASK_BUCKET_TYPE = 'bitcask';
-    const COUNTER_BUCKET_TYPE = 'phptest_counters';
+    const COUNTER_BUCKET_TYPE = 'counters';
     const HLL_BUCKET_TYPE = 'hlls';
-    const LEVELDB_BUCKET_TYPE = 'phptest_leveldb';
-    const MAP_BUCKET_TYPE = 'phptest_maps';
-    const SEARCH_BUCKET_TYPE = 'phptest_search';
-    const SET_BUCKET_TYPE = 'phptest_sets';
+    const LEVELDB_BUCKET_TYPE = 'plain';
+    const MAP_BUCKET_TYPE = 'maps';
+    const SEARCH_BUCKET_TYPE = 'yokozuna';
+    const SET_BUCKET_TYPE = 'sets';
 
     /**
      * @var \Basho\Riak|null
