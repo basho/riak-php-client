@@ -90,6 +90,6 @@ class ObjectResponse
         $contentType = !empty($headers[Http::CONTENT_TYPE_KEY]) ? $headers[Http::CONTENT_TYPE_KEY] : '';
         $data = $this->command->getDecodedData($response, $contentType);
 
-        return new Object($data, $headers);
+        return (new Object($data, $headers))->setRawData($response);
     }
 }

@@ -8,6 +8,9 @@ use Basho\Riak\Api\Http\Translator\SecondaryIndex;
 /**
  * Main class for data objects in Riak
  *
+ * When working with base64 encoded or binary data over HTTP, you need to make use of the setContentEncoding() to
+ * bypass rawurlencode when storing data and getRawData() to bypass
+ *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Object
@@ -18,6 +21,13 @@ class Object
      * @var mixed|null
      */
     protected $data = null;
+
+    /**
+     * Stores raw non-decoded response data
+     *
+     * @var mixed|null
+     */
+    protected $raw_data = null;
 
     protected $indexes = [];
 
@@ -87,6 +97,11 @@ class Object
     }
 
     /**
+     * Used to identify the mime-type of the object data
+     *
+     * If set to `application/json` or `text/json` the object data will automatically be json_encoded upon transfer to
+     * Riak.
+     *
      * @param string $content_type
      * @return $this
      */
@@ -105,6 +120,11 @@ class Object
     }
 
     /**
+     * Used to identify the encoding of the object data
+     *
+     * If set to `base64`, object data will be automatically encoded to base64 upon transfer to Riak.
+     * If set to `binary` or `none`, object data will NOT be rawurlencoded upon transfer to Riak.
+     *
      * @param string $content_encoding
      * @return $this
      */
@@ -235,5 +255,27 @@ class Object
     public function getMetaData()
     {
         return $this->metadata;
+    }
+
+    /**
+     * Getter for raw non-decoded response data [HTTP ONLY]
+     *
+     * @return mixed|null
+     */
+    public function getRawData()
+    {
+        return $this->raw_data;
+    }
+
+    /**
+     *
+     * @param mixed|null $raw_data
+     * @return $this
+     */
+    public function setRawData($raw_data)
+    {
+        $this->raw_data = $raw_data;
+
+        return $this;
     }
 }
