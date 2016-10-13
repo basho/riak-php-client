@@ -1,5 +1,7 @@
 # Riak Client for PHP
 
+[![Packagist](https://img.shields.io/packagist/v/basho/riak.svg?maxAge=2592000)](https://packagist.org/packages/basho/riak)
+
 **Riak PHP Client** is a library which makes it easy to communicate with [Riak](http://basho.com/riak/), an open source, distributed database that focuses on high availability, horizontal scalability, and *predictable*
 latency. This library communicates with Riak's HTTP interface using the cURL extension. If you want to communicate with Riak using the Protocol Buffers interface, use the [Official PHP PB Client](https://github.com/basho/riak-phppb-client). Both Riak and this library are maintained by [Basho Technologies](http://www.basho.com/). 
 
