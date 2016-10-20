@@ -87,6 +87,14 @@ class ObjectOperationsTest extends TestCase
         $this->assertEquals('some_data', $response->getObject()->getData());
         $this->assertNotEmpty($response->getObject()->getVclock());
 
+        // confirm we are using the HTTP api bridge
+        if (static::$riak->getApi() instanceof \Basho\Riak\Api\Http) {
+            $headers = static::$riak->getApi()->getResponseHeaders();
+            $this->assertNotEmpty($headers);
+            $this->assertNotEmpty($headers["Last-Modified"]);
+            $this->assertNotEmpty(new \DateTime($headers["Last-Modified"]));
+        }
+
         static::$object = $response->getObject();
     }
 
