@@ -89,25 +89,25 @@ class BucketOperationsTest extends TestCase
         $this->assertTrue($bucket->getProperty('allow_mult'));
     }
 
-    public function testStoreAndFetchHllPrecision()
+    public function testFetchAndStoreHllPrecision()
     {
         if (static::$hll_present) {
-            $command = (new Command\Builder\SetBucketProperties(static::$riak))
-                ->buildBucket('test', static::HLL_BUCKET_TYPE)
-                ->set('hll_precision', 14)
-                ->build();
-
-            $response = $command->execute();
-
-            $this->assertEquals('204', $response->getCode(), $response->getMessage());
-
             $command = (new Command\Builder\FetchBucketProperties(static::$riak))
-                ->buildBucket('test', static::HLL_BUCKET_TYPE)
+                ->buildBucket('test' + md5(rand(0, 99) . time()), static::HLL_BUCKET_TYPE)
                 ->build();
 
             $bucket = $command->execute()->getBucket();
             $this->assertNotEmpty($bucket->getProperties());
             $this->assertEquals(14, $bucket->getProperty('hll_precision'));
+
+            $command = (new Command\Builder\SetBucketProperties(static::$riak))
+                ->buildBucket('test', static::HLL_BUCKET_TYPE)
+                ->set('hll_precision', 12)
+                ->build();
+
+            $response = $command->execute();
+
+            $this->assertEquals('204', $response->getCode(), $response->getMessage());
         } else {
             throw new \PHPUnit_Framework_SkippedTestError("hlls bucket type is not enabled and activated, skipping");
         }
