@@ -607,7 +607,7 @@ class Http extends Api implements ApiInterface
     public function responseHeaderCallback($ch, $header)
     {
         if (strpos($header, ':')) {
-            list ($key, $value) = explode(':', $header);
+            list ($key, $value) = explode(':', $header, 2);
 
             $value = trim($value);
 
