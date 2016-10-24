@@ -12,20 +12,6 @@ use Basho\Riak\Command;
  */
 class SecurityFeaturesTest extends TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-
-        shell_exec('sudo riak-admin security enable');
-    }
-
-    public static function tearDownAfterClass()
-    {
-        shell_exec('sudo riak-admin security disable');
-
-        parent::tearDownAfterClass();
-    }
-
     public function testUnauthorized()
     {
         $nodes = [
@@ -33,7 +19,7 @@ class SecurityFeaturesTest extends TestCase
                 ->atHost(static::getTestHost())
                 ->onPort(static::getTestSecurePort())
                 ->usingPasswordAuthentication('unauthorizeduser', 'hispassword')
-                ->withCertificateAuthorityFile(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem')
+                ->withCertificateAuthorityFile(getcwd() . '/tools/test-ca/certs/cacert.pem')
                 ->build()
         ];
 
@@ -58,7 +44,7 @@ class SecurityFeaturesTest extends TestCase
                 ->atHost(static::getTestHost())
                 ->onPort(static::getTestSecurePort())
                 ->usingPasswordAuthentication('riakpass', 'Test1234')
-                ->withCertificateAuthorityFile(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem')
+                ->withCertificateAuthorityFile(getcwd() . '/tools/test-ca/certs/cacert.pem')
                 ->build()
         ];
 
