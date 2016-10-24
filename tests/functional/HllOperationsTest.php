@@ -9,7 +9,7 @@ use Basho\Riak\Command;
  *
  * @author Luke Bakken <lbakken@basho.com>
  */
-class HllTest extends TestCase
+class HllOperationsTest extends TestCase
 {
     /**
      * Key to be used for tests
@@ -34,8 +34,7 @@ class HllTest extends TestCase
 
             $response = $command->execute();
 
-            if (!$response->isSuccess() || $response->getCode() != 200)
-            {
+            if (!$response->isSuccess() || $response->getCode() != 200) {
                 throw new \PHPUnit_Framework_SkippedTestSuiteError("hlls bucket type is not enabled and activated, skipping");
             }
         }
