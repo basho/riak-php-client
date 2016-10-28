@@ -208,6 +208,15 @@ class Builder
     }
 
     /**
+     * Client side socket read/write timeout for requests
+     *
+     * @param $timeout
+     */
+    public function withStreamTimeout($timeout) {
+        $this->config->setStreamTimeout($timeout);
+    }
+
+    /**
      * @return Config|null
      */
     public function getConfig()
