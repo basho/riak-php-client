@@ -2,15 +2,18 @@
 
 <phpunit colors="true">
     <testsuites>
-        <testsuite name="Unit Tests">
+        <testsuite name="unit-tests">
             <directory>tests/unit</directory>
         </testsuite>
-        <testsuite name="Functional Tests">
+        <testsuite name="functional-tests">
             <directory>tests/functional</directory>
             <exclude>tests/functional/SecurityFeaturesTest.php</exclude>
             <exclude>tests/functional/TimeSeriesOperationsTest.php</exclude>
         </testsuite>
-        <testsuite name="Scenario Tests">
+        <testsuite name="security-tests">
+            <file>tests/functional/SecurityFeaturesTest.php</file>
+        </testsuite>
+        <testsuite name="scenario-tests">
             <directory>tests/scenario</directory>
             <exclude>tests/scenario/InternalServerErrorTest.php</exclude>
         </testsuite>

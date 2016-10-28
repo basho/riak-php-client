@@ -85,14 +85,14 @@ class BuilderTest extends TestCase
             ->atHost(static::getTestHost())
             ->onPort(static::getTestSecurePort())
             ->usingPasswordAuthentication('unauthorizeduser', 'hispassword')
-            ->withCertificateAuthorityFile(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem')
+            ->withCertificateAuthorityFile(getcwd() . '/tools/test-ca/certs/cacert.pem')
             ->build();
 
         $riak = new Riak([$node]);
 
         $this->assertEquals('unauthorizeduser', $node->getUserName());
         $this->assertEquals('hispassword', $node->getPassword());
-        $this->assertEquals(getcwd() . '/vendor/basho/tools/test-ca/certs/cacert.pem', $node->getCaFile());
+        $this->assertEquals(getcwd() . '/tools/test-ca/certs/cacert.pem', $node->getCaFile());
         $this->assertInstanceOf('Basho\Riak', $riak);
     }
 }

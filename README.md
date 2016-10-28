@@ -104,5 +104,6 @@ Thank you for being part of the community! We love you for it.
 
 * Author: Christopher Mancini (https://github.com/christophermancini)
 * Author: Alex Moore (https://github.com/alexmoore)
+* Author: Luke Bakken (https://github.com/lukebakken)
 
 Copyright (c) 2015 Basho Technologies, Inc. Licensed under the Apache License, Version 2.0 (the "License"). For more details, see [License](License).

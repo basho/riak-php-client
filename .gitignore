@@ -23,10 +23,9 @@ vendor
 composer.lock
 
 # ignore mac files
-.DS_Store
+.DS_Store/
 
-# ignore generated docs
 docs
 
-# ignore composer.phar file
+composer
 composer.phar

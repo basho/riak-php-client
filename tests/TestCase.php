@@ -15,7 +15,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const TEST_NODE_HOST = 'riak-test';
     const TEST_NODE_PORT = 8087;
     const TEST_NODE_HTTP_PORT = 8098;
-    const TEST_NODE_SECURE_PORT = 10011;
+    const TEST_NODE_SECURE_PORT = 8498;
 
     const BITCASK_BUCKET_TYPE = 'bitcask';
     const COUNTER_BUCKET_TYPE = 'counters';
