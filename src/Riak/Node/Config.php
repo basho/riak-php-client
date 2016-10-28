@@ -86,6 +86,12 @@ class Config
      */
     protected $connection_timeout = 10;
 
+    /**
+     * Client side stream (socket read/write) timeout
+     *
+     * @var int
+     */
+    protected $stream_timeout = 5;
 
     /**
      * @return int
@@ -101,6 +107,22 @@ class Config
     public function setConnectionTimeout($connection_timeout)
     {
         $this->connection_timeout = $connection_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStreamTimeout()
+    {
+        return $this->stream_timeout;
+    }
+
+    /**
+     * @param int $stream_timeout
+     */
+    public function setStreamTimeout($stream_timeout)
+    {
+        $this->stream_timeout = $stream_timeout;
     }
 
     /**

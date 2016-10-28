@@ -195,6 +195,15 @@ class Node
     }
 
     /**
+     * @return int
+     */
+    public function getStreamTimeout()
+    {
+        // NB: value represents seconds
+        return $this->config->getStreamTimeout();
+    }
+
+    /**
      * @param Command $command
      * @param Api $api
      *
