@@ -86,6 +86,13 @@ class Config
      */
     protected $connection_timeout = 10;
 
+    /**
+     * Client side stream (socket read/write) timeout. Default is 60
+     * seconds as that is the default operation timeout in Riak
+     *
+     * @var int
+     */
+    protected $stream_timeout = 60;
 
     /**
      * @return int
@@ -101,6 +108,22 @@ class Config
     public function setConnectionTimeout($connection_timeout)
     {
         $this->connection_timeout = $connection_timeout;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStreamTimeout()
+    {
+        return $this->stream_timeout;
+    }
+
+    /**
+     * @param int $stream_timeout
+     */
+    public function setStreamTimeout($stream_timeout)
+    {
+        $this->stream_timeout = $stream_timeout;
     }
 
     /**
