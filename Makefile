@@ -1,5 +1,6 @@
 .PHONY: all unit-test integration-test security-test
 .PHONY: install-composer install-deps help
+.PHONY: release
 
 all: test
 
@@ -22,6 +23,18 @@ install-composer:
 	@php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 	@php ./composer-setup.php --filename=composer
 	@rm -f ./composer-setup.php
+
+release:
+ifeq ($(VERSION),)
+	$(error VERSION must be set to deploy this code)
+endif
+ifeq ($(RELEASE_GPG_KEYNAME),)
+	$(error RELEASE_GPG_KEYNAME must be set to deploy this code)
+endif
+	@./tools/build/publish $(VERSION) master validate
+	@git tag --sign -a "$(VERSION)" -m "riak-php-client $(VERSION)" --local-user "$(RELEASE_GPG_KEYNAME)"
+	@git push --tags
+	@./tools/build/publish $(VERSION) master 'Riak PHP Client' 'riak-php-client'
 
 help:
 	@echo ''
