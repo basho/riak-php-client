@@ -4,7 +4,7 @@
 
 all: test
 
-test: unit-test integration-test
+test: unit-test integration-test scenario-test
 
 unit-test:
 	@php ./vendor/bin/phpunit --testsuite=unit-tests
@@ -14,6 +14,9 @@ integration-test:
 
 security-test:
 	@php ./vendor/bin/phpunit  --testsuite=security-tests
+
+scenario-test:
+	@php ./vendor/bin/phpunit  --testsuite=scenario-tests
 
 install-deps:
 	@./composer install
