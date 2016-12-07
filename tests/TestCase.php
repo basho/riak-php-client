@@ -25,6 +25,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const SEARCH_BUCKET_TYPE = 'yokozuna';
     const SET_BUCKET_TYPE = 'sets';
 
+    const TEST_IMG = "Basho_Man_Super.png";
+
     /**
      * @var \Basho\Riak|null
      */
