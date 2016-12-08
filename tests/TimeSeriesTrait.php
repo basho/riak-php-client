@@ -27,6 +27,7 @@ trait TimeSeriesTrait
                 temperature double,
                 uv_index sint64,
                 observed boolean not null,
+                blob_field blob,
                 PRIMARY KEY((region, state, quantum(time, 15, 'm')), region, state, time)
             )";
 
@@ -57,6 +58,7 @@ trait TimeSeriesTrait
                 (new Cell("temperature"))->setDoubleValue(19.8),
                 (new Cell("uv_index"))->setIntValue(10),
                 (new Cell("observed"))->setBooleanValue(true),
+                (new Cell("blob_field"))->setBlobValue(null),
             ],
             [
                 $row[0],
@@ -66,19 +68,27 @@ trait TimeSeriesTrait
                 (new Cell("temperature"))->setDoubleValue(19.1),
                 (new Cell("uv_index"))->setIntValue(15),
                 (new Cell("observed"))->setBooleanValue(false),
+                (new Cell("blob_field"))->setBlobValue(null),
             ],
         ];
 
         return $rows;
     }
 
-    public static function generateRow()
+    public static function generateRow($blob = false)
     {
         $row = static::$key;
         $row[] = (new Cell("weather"))->setValue("hot");
         $row[] = (new Cell("temperature"))->setDoubleValue(23.5);
         $row[] = (new Cell("uv_index"))->setIntValue(10);
         $row[] = (new Cell("observed"))->setBooleanValue(true);
+
+        if ($blob) {
+            $image = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . static::TEST_IMG);
+        } else {
+            $image = null;
+        }
+        $row[] = (new Cell("blob_field"))->setBlobValue($image);
 
         return $row;
     }
@@ -91,5 +101,10 @@ trait TimeSeriesTrait
     public static function twoHoursAgo()
     {
         return static::$now->getTimestamp() - 60 * 60 * 2;
+    }
+
+    public static function threeHoursAgo()
+    {
+        return static::$now->getTimestamp() - 60 * 60 * 3;
     }
 }

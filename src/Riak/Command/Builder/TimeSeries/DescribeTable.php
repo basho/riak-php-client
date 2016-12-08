@@ -14,6 +14,8 @@ class DescribeTable extends Command\Builder\TimeSeries\Query implements Command\
      * Which table do you want to describe?
      *
      * @param $table
+     *
+     * @return $this
      */
     public function withTable($table)
     {

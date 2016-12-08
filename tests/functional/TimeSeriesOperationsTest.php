@@ -74,7 +74,7 @@ class TimeSeriesOperationsTest extends TestCase
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertNotEmpty($response->getResults());
-        $this->assertCount(7, $response->getResults());
+        $this->assertCount(8, $response->getResults());
         $this->assertGreaterThanOrEqual(5, $response->getResult());
     }
 
@@ -111,6 +111,34 @@ class TimeSeriesOperationsTest extends TestCase
         $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
     }
 
+    public function testStoreBlobRow()
+    {
+        $row = static::generateRow(true);
+        $row[2] = (new Riak\TimeSeries\Cell("time"))->setTimestampValue(static::threeHoursAgo());
+        $md5 = md5($row[7]);
+
+        $response = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
+            ->inTable(static::$table)
+            ->withRow($row)
+            ->build()
+            ->execute();
+
+        $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
+
+        /** @var Command\TimeSeries\Response $response */
+        $response = (new Command\Builder\TimeSeries\FetchRow(static::$riak))
+            ->atKey([$row[0],$row[1],$row[2]])
+            ->inTable(static::$table)
+            ->build()
+            ->execute();
+
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
+        $this->assertCount(8, $response->getRow());
+
+        $this->assertEquals("blob", $response->getRow()[7]->getType());
+        $this->assertEquals($md5, $response->getRow()[7]->getValue());
+    }
+
     public function testFetchRow()
     {
         /** @var Command\TimeSeries\Response $response */
@@ -121,7 +149,7 @@ class TimeSeriesOperationsTest extends TestCase
             ->execute();
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
-        $this->assertCount(7, $response->getRow());
+        $this->assertCount(8, $response->getRow());
 
         if (static::$riak->getApi() instanceof Riak\Api\Pb) {
             $this->assertEquals("region", $response->getRow()[0]->getName());
