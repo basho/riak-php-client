@@ -18,6 +18,9 @@ security-test:
 scenario-test:
 	@php ./vendor/bin/phpunit  --testsuite=scenario-tests
 
+timeseries-test:
+	@php ./vendor/bin/phpunit -v TimeSeriesOperationsTest tests/functional/TimeSeriesOperationsTest.php
+
 install-deps:
 	@./composer install
 
