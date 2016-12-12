@@ -20,13 +20,14 @@ class TimeSeriesOperationsTest extends TestCase
 
         static::populateKey();
 
-        try {
-            $response = (new Command\Builder\TimeSeries\DescribeTable(static::$riak))
-                ->withTable(static::$table)
-                ->build()
-                ->execute();
-        } catch (\Basho\Riak\Exception $e) {
-            $command = (new Command\Builder\TimeSeries\Query(static::$riak))
+        $response = (new Command\Builder\TimeSeries\DescribeTable(static::$riak))
+            ->withTable(static::$table)
+            ->build()
+            ->execute();
+
+
+        if ($response->getCode() == '404') {
+            (new Command\Builder\TimeSeries\Query(static::$riak))
                 ->withQuery(static::tableDefinition())
                 ->build()
                 ->execute();
