@@ -54,12 +54,12 @@ class TimeSeriesOperationsTest extends TestCase
     public function testCreateTable()
     {
         $command = (new Command\Builder\TimeSeries\Query(static::$riak))
-            ->withQuery(static::tableDefinition(static::$table . rand(0,1000)))
+            ->withQuery(static::tableDefinition(static::$table . rand(0, 1000)))
             ->build();
 
         $response = $command->execute();
 
-        $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
     }
 
     public function testFetchTableDescription()
@@ -96,7 +96,7 @@ class TimeSeriesOperationsTest extends TestCase
             ->build()
             ->execute();
 
-        $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
         $this->assertCount(0, $response->getResults());
     }
 
@@ -108,7 +108,7 @@ class TimeSeriesOperationsTest extends TestCase
             ->build()
             ->execute();
 
-        $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
     }
 
     public function testStoreBlobRow()
@@ -117,17 +117,19 @@ class TimeSeriesOperationsTest extends TestCase
         $row[2] = (new Riak\TimeSeries\Cell("time"))->setTimestampValue(static::threeHoursAgo());
         $md5 = md5($row[7]);
 
-        $response = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
+        $command = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
             ->inTable(static::$table)
             ->withRow($row)
-            ->build()
-            ->execute();
+            ->withVerboseMode()
+            ->build();
 
-        $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
+        $response = $command->execute();
+
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
 
         /** @var Command\TimeSeries\Response $response */
         $response = (new Command\Builder\TimeSeries\FetchRow(static::$riak))
-            ->atKey([$row[0],$row[1],$row[2]])
+            ->atKey([$row[0], $row[1], $row[2]])
             ->inTable(static::$table)
             ->build()
             ->execute();
@@ -173,7 +175,7 @@ class TimeSeriesOperationsTest extends TestCase
             ->build()
             ->execute();
 
-        $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
     }
 
     /**
@@ -185,13 +187,13 @@ class TimeSeriesOperationsTest extends TestCase
         $lower_bound = static::oneHourAgo() - 1;
 
         $response = (new Command\Builder\TimeSeries\Query(static::$riak))
-            ->withQuery("select * from "  . static::$table . " where region = 'South Atlantic' and state = 'South Carolina' and (time > {$lower_bound} and time < {$upper_bound})")
+            ->withQuery("select * from " . static::$table . " where region = 'South Atlantic' and state = 'South Carolina' and (time > {$lower_bound} and time < {$upper_bound})")
             ->build()
             ->execute();
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertCount(2, $response->getResults());
-        $this->assertCount(7, $response->getResult());
+        $this->assertCount(8, $response->getResult());
         if (static::$riak->getApi() instanceof Riak\Api\Pb) {
             $this->assertEquals('South Atlantic', $response->getResults()[0][0]->getValue());
         } else {
@@ -210,6 +212,6 @@ class TimeSeriesOperationsTest extends TestCase
             ->build()
             ->execute();
 
-        $this->assertContains($response->getCode(), ['200','204'], $response->getMessage());
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
     }
 }
