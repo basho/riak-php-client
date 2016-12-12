@@ -115,12 +115,11 @@ class TimeSeriesOperationsTest extends TestCase
     {
         $row = static::generateRow(true);
         $row[2] = (new Riak\TimeSeries\Cell("time"))->setTimestampValue(static::threeHoursAgo());
-        $md5 = md5($row[7]);
+        $b64 = base64_encode($row[7]->getValue());
 
         $command = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
             ->inTable(static::$table)
             ->withRow($row)
-            ->withVerboseMode()
             ->build();
 
         $response = $command->execute();
@@ -137,8 +136,7 @@ class TimeSeriesOperationsTest extends TestCase
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertCount(8, $response->getRow());
 
-        $this->assertEquals("blob", $response->getRow()[7]->getType());
-        $this->assertEquals($md5, $response->getRow()[7]->getValue());
+        $this->assertEquals($b64, $response->getRow()['blob_field']);
     }
 
     public function testFetchRow()
