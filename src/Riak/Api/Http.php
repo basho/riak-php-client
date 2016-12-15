@@ -331,6 +331,10 @@ class Http extends Api implements ApiInterface
         // record outgoing headers
         $this->options[CURLINFO_HEADER_OUT] = 1;
 
+        if ($this->command->getConnectionTimeout()) {
+            $this->options[CURLOPT_TIMEOUT] = $this->command->getConnectionTimeout();
+        }
+
         if ($this->node->useTls()) {
             // CA File
             if ($this->node->getCaFile()) {

@@ -48,6 +48,8 @@ abstract class Builder
 
     protected $verbose = false;
 
+    protected $connectionTimeout = 0;
+
     public function __construct(Riak $riak)
     {
         $this->riak = $riak;
@@ -81,6 +83,13 @@ abstract class Builder
         return $this;
     }
 
+    public function withConnectionTimeout($seconds = 60)
+    {
+        $this->connectionTimeout = $seconds;
+
+        return $this;
+    }
+
     public function getParameters()
     {
         return $this->parameters;
@@ -94,6 +103,14 @@ abstract class Builder
     public function getVerbose()
     {
         return $this->verbose;
+    }
+
+    /**
+     * @return int
+     */
+    public function getConnectionTimeout()
+    {
+        return $this->connectionTimeout;
     }
 
     /**
