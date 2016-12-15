@@ -4,6 +4,7 @@ namespace Basho\Tests;
 
 use Basho\Riak;
 use Basho\Riak\Command;
+use Basho\Riak\TimeSeries\Cell;
 
 /**
  * Functional tests related to TimeSeries operations
@@ -13,6 +14,8 @@ use Basho\Riak\Command;
 class TimeSeriesOperationsTest extends TestCase
 {
     use TimeSeriesTrait;
+
+    protected static $ts15 = false;
 
     public static function setUpBeforeClass()
     {
@@ -25,12 +28,20 @@ class TimeSeriesOperationsTest extends TestCase
             ->build()
             ->execute();
 
-
         if ($response->getCode() == '404') {
             (new Command\Builder\TimeSeries\Query(static::$riak))
                 ->withQuery(static::tableDefinition())
                 ->build()
                 ->execute();
+        }
+
+        $response = (new Command\Builder\TimeSeries\DescribeTable(static::$riak))
+            ->withTable(static::$tableBlob)
+            ->build()
+            ->execute();
+
+        if ($response->getCode() != '404') {
+            static::$ts15 = true;
         }
     }
 
@@ -75,7 +86,7 @@ class TimeSeriesOperationsTest extends TestCase
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertNotEmpty($response->getResults());
-        $this->assertCount(8, $response->getResults());
+        $this->assertCount(7, $response->getResults());
         $this->assertGreaterThanOrEqual(5, $response->getResult());
     }
 
@@ -112,38 +123,6 @@ class TimeSeriesOperationsTest extends TestCase
         $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
     }
 
-    public function testStoreBlobRow()
-    {
-        $row = static::generateRow(true);
-        $row[2] = (new Riak\TimeSeries\Cell("time"))->setTimestampValue(static::threeHoursAgo());
-
-        $command = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
-            ->inTable(static::$table)
-            ->withRow($row)
-            ->build();
-
-        $response = $command->execute();
-
-        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
-
-        /** @var Command\TimeSeries\Response $response */
-        $response = (new Command\Builder\TimeSeries\FetchRow(static::$riak))
-            ->atKey([$row[0], $row[1], $row[2]])
-            ->inTable(static::$table)
-            ->build()
-            ->execute();
-
-        $this->assertEquals('200', $response->getCode(), $response->getMessage());
-        $this->assertCount(8, $response->getRow());
-
-        if (getenv('PB_INTERFACE')) {
-            $this->assertEquals($row[7]->getValue(), $response->getRow()[7]->getValue());
-        } else {
-            $b64 = base64_encode($row[7]->getValue());
-            $this->assertEquals($b64, $response->getRow()['blob_field']);
-        }
-    }
-
     public function testFetchRow()
     {
         /** @var Command\TimeSeries\Response $response */
@@ -154,7 +133,7 @@ class TimeSeriesOperationsTest extends TestCase
             ->execute();
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
-        $this->assertCount(8, $response->getRow());
+        $this->assertCount(7, $response->getRow());
 
         if (static::$riak->getApi() instanceof Riak\Api\Pb) {
             $this->assertEquals("region", $response->getRow()[0]->getName());
@@ -196,7 +175,7 @@ class TimeSeriesOperationsTest extends TestCase
 
         $this->assertEquals('200', $response->getCode(), $response->getMessage());
         $this->assertCount(2, $response->getResults());
-        $this->assertCount(8, $response->getResult());
+        $this->assertCount(7, $response->getResult());
         if (static::$riak->getApi() instanceof Riak\Api\Pb) {
             $this->assertEquals('South Atlantic', $response->getResults()[0][0]->getValue());
         } else {
@@ -216,5 +195,97 @@ class TimeSeriesOperationsTest extends TestCase
             ->execute();
 
         $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
+    }
+
+    public function testStoreBlobRow()
+    {
+        if (!static::$ts15) {
+            $this->markTestSkipped('BLOB storage is not supported in Riak TS <1.5.');
+        }
+
+        $key = [
+            (new Cell("geohash"))->setValue("hash1"),
+            (new Cell("user"))->setValue("user1"),
+            (new Cell("time"))->setTimestampValue(static::$now->getTimestamp()),
+        ];
+
+        $row = $key;
+        $row[] = (new Cell("weather"))->setValue("cloudy");
+        $row[] = (new Cell("temperature"))->setDoubleValue(19.1);
+        $row[] = (new Cell("uv_index"))->setIntValue(15);
+        $row[] = (new Cell("observed"))->setBooleanValue(false);
+        $row[] = (new Cell("sensor_data"))->setBlobValue(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . static::TEST_IMG));
+
+        $command = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
+            ->inTable(static::$tableBlob)
+            ->withRow($row)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
+
+        /** @var Command\TimeSeries\Response $response */
+        $response = (new Command\Builder\TimeSeries\FetchRow(static::$riak))
+            ->atKey($key)
+            ->inTable(static::$tableBlob)
+            ->build()
+            ->execute();
+
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
+        $this->assertCount(8, $response->getRow());
+
+        if (getenv('PB_INTERFACE')) {
+            $this->assertEquals($row[7]->getValue(), $response->getRow()[7]->getValue());
+        } else {
+            $b64 = base64_encode($row[7]->getValue());
+            $this->assertEquals($b64, $response->getRow()['sensor_data']);
+        }
+    }
+
+    public function testStoreNullBlob()
+    {
+        if (!static::$ts15) {
+            $this->markTestSkipped('BLOB storage is not supported in Riak TS <1.5.');
+        }
+
+        $key = [
+            (new Cell("geohash"))->setValue("hash1"),
+            (new Cell("user"))->setValue("user1"),
+            (new Cell("time"))->setTimestampValue(static::oneHourAgo()),
+        ];
+
+        $row = $key;
+        $row[] = (new Cell("weather"))->setValue("cloudy");
+        $row[] = (new Cell("temperature"))->setDoubleValue(19.1);
+        $row[] = (new Cell("uv_index"))->setIntValue(15);
+        $row[] = (new Cell("observed"))->setBooleanValue(false);
+        $row[] = (new Cell("sensor_data"))->setBlobValue(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . static::TEST_IMG));
+
+        $command = (new Command\Builder\TimeSeries\StoreRows(static::$riak))
+            ->inTable(static::$tableBlob)
+            ->withRow($row)
+            ->build();
+
+        $response = $command->execute();
+
+        $this->assertContains($response->getCode(), ['200', '204'], $response->getMessage());
+
+        /** @var Command\TimeSeries\Response $response */
+        $response = (new Command\Builder\TimeSeries\FetchRow(static::$riak))
+            ->atKey($key)
+            ->inTable(static::$tableBlob)
+            ->build()
+            ->execute();
+
+        $this->assertEquals('200', $response->getCode(), $response->getMessage());
+        $this->assertCount(8, $response->getRow());
+
+        if (getenv('PB_INTERFACE')) {
+            $this->assertEquals($row[7]->getValue(), $response->getRow()[7]->getValue());
+        } else {
+            $b64 = base64_encode($row[7]->getValue());
+            $this->assertEquals($b64, $response->getRow()['sensor_data']);
+        }
     }
 }

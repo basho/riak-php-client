@@ -13,6 +13,7 @@ use Basho\Riak\TimeSeries\Cell;
 trait TimeSeriesTrait
 {
     protected static $table = "WeatherByRegion";
+    protected static $tableBlob = "GeoCheckin_Wide_1_5";
     protected static $key = [];
     protected static $now;
 
@@ -27,7 +28,6 @@ trait TimeSeriesTrait
                 temperature double,
                 uv_index sint64,
                 observed boolean not null,
-                blob_field blob,
                 PRIMARY KEY((region, state, quantum(time, 15, 'm')), region, state, time)
             )";
 
@@ -58,7 +58,6 @@ trait TimeSeriesTrait
                 (new Cell("temperature"))->setDoubleValue(19.8),
                 (new Cell("uv_index"))->setIntValue(10),
                 (new Cell("observed"))->setBooleanValue(true),
-                (new Cell("blob_field"))->setBlobValue(null),
             ],
             [
                 $row[0],
@@ -68,27 +67,19 @@ trait TimeSeriesTrait
                 (new Cell("temperature"))->setDoubleValue(19.1),
                 (new Cell("uv_index"))->setIntValue(15),
                 (new Cell("observed"))->setBooleanValue(false),
-                (new Cell("blob_field"))->setBlobValue(null),
             ],
         ];
 
         return $rows;
     }
 
-    public static function generateRow($blob = false)
+    public static function generateRow()
     {
         $row = static::$key;
         $row[] = (new Cell("weather"))->setValue("hot");
         $row[] = (new Cell("temperature"))->setDoubleValue(23.5);
         $row[] = (new Cell("uv_index"))->setIntValue(10);
         $row[] = (new Cell("observed"))->setBooleanValue(true);
-
-        if ($blob) {
-            $image = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . static::TEST_IMG);
-        } else {
-            $image = null;
-        }
-        $row[] = (new Cell("blob_field"))->setBlobValue($image);
 
         return $row;
     }
