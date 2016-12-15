@@ -14,6 +14,7 @@ class Cell
     const DOUBLE_TYPE = 'double';
     const BOOL_TYPE = 'boolean';
     const TIMESTAMP_TYPE = 'timestamp';
+    const BLOB_TYPE = 'blob';
 
     protected $name;
     protected $value = null;
@@ -50,6 +51,8 @@ class Cell
 
     /**
      * @param string $value
+     *
+     * @return $this
      */
     public function setValue($value = null)
     {
@@ -60,7 +63,22 @@ class Cell
     }
 
     /**
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setBlobValue($value = null)
+    {
+        $this->type = Cell::BLOB_TYPE;
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
      * @param int $value
+     *
+     * @return $this
      */
     public function setIntValue($value = null)
     {
@@ -76,6 +94,8 @@ class Cell
 
     /**
      * @param int $value
+     *
+     * @return $this
      */
     public function setTimestampValue($value = null)
     {
@@ -91,6 +111,8 @@ class Cell
 
     /**
      * @param \DateTime $value
+     *
+     * @return $this
      */
     public function setDateTimeValue($value = null)
     {
@@ -106,6 +128,8 @@ class Cell
 
     /**
      * @param bool $value
+     *
+     * @return $this
      */
     public function setBooleanValue($value = null)
     {
@@ -121,6 +145,8 @@ class Cell
 
     /**
      * @param double $value
+     *
+     * @return $this
      */
     public function setDoubleValue($value = null)
     {

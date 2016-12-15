@@ -13,6 +13,7 @@ use Basho\Riak\TimeSeries\Cell;
 trait TimeSeriesTrait
 {
     protected static $table = "WeatherByRegion";
+    protected static $tableBlob = "GeoCheckin_Wide_1_5";
     protected static $key = [];
     protected static $now;
 
@@ -91,5 +92,10 @@ trait TimeSeriesTrait
     public static function twoHoursAgo()
     {
         return static::$now->getTimestamp() - 60 * 60 * 2;
+    }
+
+    public static function threeHoursAgo()
+    {
+        return static::$now->getTimestamp() - 60 * 60 * 3;
     }
 }

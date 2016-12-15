@@ -2,6 +2,7 @@
 
 namespace Basho\Riak\Command\TimeSeries;
 
+use Basho\Riak;
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
 
@@ -44,7 +45,12 @@ class Store extends Command implements CommandInterface
         foreach ($this->getData() as $row) {
             $cells = [];
             foreach ($row as $cell) {
-                $cells[$cell->getName()] = $cell->getValue();
+                /** @var $cell Riak\TimeSeries\Cell */
+                if ($cell->getType() == Riak\TimeSeries\Cell::BLOB_TYPE) {
+                    $cells[$cell->getName()] = base64_encode($cell->getValue());
+                } else {
+                    $cells[$cell->getName()] = $cell->getValue();
+                }
             }
             $rows[] = $cells;
         }

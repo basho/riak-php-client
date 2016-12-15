@@ -12,7 +12,6 @@ use Basho\Riak\Command;
  */
 class EncodedDataTest extends TestCase
 {
-    const TEST_IMG = "Basho_Man_Super.png";
     const BUCKET = "encodeddata";
     const BASE64_KEY = "base64";
     const BINARY_KEY = "binary.png";

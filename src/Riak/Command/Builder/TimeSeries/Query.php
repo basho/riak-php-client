@@ -22,6 +22,8 @@ class Query extends Command\Builder implements Command\BuilderInterface
      * TimeSeries SQL'ish query
      *
      * @param $query
+     *
+     * @return $this
      */
     public function withQuery($query)
     {

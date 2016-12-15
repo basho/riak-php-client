@@ -46,11 +46,14 @@ abstract class Command
 
     protected $verbose = false;
 
+    protected $connectionTimeout = 0;
+
     public function __construct(Builder $builder)
     {
         $this->riak = $builder->getConnection();
         $this->parameters = $builder->getParameters();
         $this->verbose = $builder->getVerbose();
+        $this->connectionTimeout = $builder->getConnectionTimeout();
     }
 
     public function isVerbose()
@@ -139,6 +142,14 @@ abstract class Command
     public function getObject()
     {
         return null;
+    }
+
+    /**
+     * @return int
+     */
+    public function getConnectionTimeout()
+    {
+        return $this->connectionTimeout;
     }
 
     abstract public function getData();

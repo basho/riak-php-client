@@ -43,6 +43,13 @@ class Http extends Api implements ApiInterface
     protected $requestBody = '';
 
     /**
+     * Request url the request is being sent to
+     *
+     * @var string
+     */
+    protected $requestURL = '';
+
+    /**
      * Response headers returned from request
      *
      * @var array
@@ -164,6 +171,7 @@ class Http extends Api implements ApiInterface
         $this->path = '';
         $this->query = '';
         $this->requestBody = '';
+        $this->requestURL = '';
         $this->responseHeaders = [];
         $this->responseBody = '';
 
@@ -323,6 +331,10 @@ class Http extends Api implements ApiInterface
         // record outgoing headers
         $this->options[CURLINFO_HEADER_OUT] = 1;
 
+        if ($this->command->getConnectionTimeout()) {
+            $this->options[CURLOPT_TIMEOUT] = $this->command->getConnectionTimeout();
+        }
+
         if ($this->node->useTls()) {
             // CA File
             if ($this->node->getCaFile()) {
@@ -404,10 +416,10 @@ class Http extends Api implements ApiInterface
     protected function prepareRequestUrl()
     {
         $protocol = $this->node->useTls() ? 'https' : 'http';
-        $url = sprintf('%s://%s%s?%s', $protocol, $this->node->getUri(), $this->path, $this->query);
+        $this->requestURL = sprintf('%s://%s%s?%s', $protocol, $this->node->getUri(), $this->path, $this->query);
 
         // set the built request URL on the connection
-        $this->options[CURLOPT_URL] = $url;
+        $this->options[CURLOPT_URL] = $this->requestURL;
 
         return $this;
     }
@@ -529,7 +541,6 @@ class Http extends Api implements ApiInterface
         // set the response header and body callback functions
         $this->options[CURLOPT_HEADERFUNCTION] = [$this, 'responseHeaderCallback'];
         $this->options[CURLOPT_WRITEFUNCTION] = [$this, 'responseBodyCallback'];
-
         if ($this->command->isVerbose()) {
             // set curls output to be the output buffer stream
             $this->options[CURLOPT_STDERR] = fopen('php://stdout', 'w+');
@@ -538,6 +549,8 @@ class Http extends Api implements ApiInterface
             // there is a bug when verbose is enabled, header out causes no output
             // @see https://bugs.php.net/bug.php?id=65348
             unset($this->options[CURLINFO_HEADER_OUT]);
+
+            echo "cURL Command:\n\tcurl -X{$this->command->getMethod()} {$this->requestURL} --data \"{$this->requestBody}\"\n";
         }
 
         // set all options on the resource
@@ -640,7 +653,6 @@ class Http extends Api implements ApiInterface
     public function responseBodyCallback($ch, $body)
     {
         $this->responseBody .= $body;
-
         return strlen($body);
     }
 

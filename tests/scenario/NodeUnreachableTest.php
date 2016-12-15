@@ -20,6 +20,7 @@ class NodeUnreachableTest extends TestCase
         $nodes = $this->getCluster();
         $riak = new Riak([$nodes[0]]);
         $response = (new Command\Builder\Ping($riak))
+            ->withConnectionTimeout(1)
             ->build()
             ->execute();
 
@@ -33,6 +34,7 @@ class NodeUnreachableTest extends TestCase
     {
         $riak = new Riak($this->getCluster());
         $response = (new Command\Builder\Ping($riak))
+            ->withConnectionTimeout(1)
             ->build()
             ->execute();
 
@@ -49,6 +51,7 @@ class NodeUnreachableTest extends TestCase
 
         $riak = new Riak($nodes, ['max_connect_attempts' => 2]);
         $response = (new Command\Builder\Ping($riak))
+            ->withConnectionTimeout(1)
             ->build()
             ->execute();
 
@@ -65,6 +68,7 @@ class NodeUnreachableTest extends TestCase
 
         $riak = new Riak($nodes, ['max_connect_attempts' => 3], static::getApiBridgeClass());
         $response = (new Command\Builder\Ping($riak))
+            ->withConnectionTimeout(1)
             ->build()
             ->execute();
 
