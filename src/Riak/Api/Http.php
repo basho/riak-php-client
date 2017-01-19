@@ -8,7 +8,6 @@ use Basho\Riak\Bucket;
 use Basho\Riak\Command;
 use Basho\Riak\DataType\Counter;
 use Basho\Riak\DataType\Map;
-use Basho\Riak\DataType\GSet;
 use Basho\Riak\DataType\Set;
 use Basho\Riak\DataType\Hll;
 use Basho\Riak\Location;
