@@ -200,18 +200,12 @@ class Http extends Api implements ApiInterface
             $key = $location->getKey();
         }
         switch (get_class($this->command)) {
-            case 'Basho\Riak\Command\Bucket\List':
-                $this->path = sprintf('/types/%s/buckets/%s', $bucket->getType(), $bucket->getName());
-                break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Bucket\Store':
                 $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
             case 'Basho\Riak\Command\Bucket\Fetch':
             case 'Basho\Riak\Command\Bucket\Delete':
                 $this->path = sprintf('/types/%s/buckets/%s/props', $bucket->getType(), $bucket->getName());
-                break;
-            case 'Basho\Riak\Command\Bucket\Keys':
-                $this->path = sprintf('/types/%s/buckets/%s/keys', $bucket->getType(), $bucket->getName());
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Object\Fetch':
