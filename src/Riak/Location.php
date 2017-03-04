@@ -40,9 +40,13 @@ class Location
      */
     public static function fromString($location_string)
     {
-        preg_match('/^\/types\/([^\/]+)\/buckets\/([^\/]+)\/keys\/([^\/]+)$/', $location_string, $matches);
+        if (preg_match('/^\/types\/([^\/]+)\/buckets\/([^\/]+)\/keys\/([^\/]+)$/', $location_string, $matches)) {
+            return new self($matches[3], new Bucket($matches[2], $matches[1]));
+        }
 
-        return new self($matches[3], new Bucket($matches[2], $matches[1]));
+        if (preg_match('/^\/buckets\/([^\/]+)\/keys\/([^\/]+)$/', $location_string, $matches)) {
+            return new self($matches[2], new Bucket($matches[1]));
+        }
     }
 
     public function __toString()

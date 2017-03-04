@@ -17,11 +17,11 @@ use Basho\Riak\Search\Doc;
 use Basho\Riak\TimeSeries\Cell;
 
 /**
- * Handles communications between end user app & Riak via Riak HTTP API using cURL
+ * Handles communications between end user app & Riak 1.4.x via Riak HTTP API using cURL
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Http extends Api implements ApiInterface
+class Http1 extends Api implements ApiInterface
 {
     // Header keys
     const VCLOCK_KEY = 'X-Riak-Vclock';
@@ -205,30 +205,34 @@ class Http extends Api implements ApiInterface
                 $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
             case 'Basho\Riak\Command\Bucket\Fetch':
             case 'Basho\Riak\Command\Bucket\Delete':
-                $this->path = sprintf('/types/%s/buckets/%s/props', $bucket->getType(), $bucket->getName());
+                $this->path = sprintf('/buckets/%s/props', $bucket->getName());
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Object\Fetch':
                 $this->headers['Accept'] = '*/*, multipart/mixed';
             case 'Basho\Riak\Command\Object\Store':
             case 'Basho\Riak\Command\Object\Delete':
-                $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
+                $this->path = sprintf('/buckets/%s/keys/%s', $bucket->getName(), $key);
                 break;
             case 'Basho\Riak\Command\Object\Keys':
                 $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
-                $this->path = sprintf('/types/%s/buckets/%s/keys', $bucket->getType(), $bucket->getName());
+                $this->path = sprintf('/buckets/%s/keys', $bucket->getName());
                 break;
-            case 'Basho\Riak\Command\DataType\Counter\Store':
-            case 'Basho\Riak\Command\DataType\Set\Store':
             /** @noinspection PhpMissingBreakStatementInspection */
+            case 'Basho\Riak\Command\DataType\Set\Store':
             case 'Basho\Riak\Command\DataType\Map\Store':
             case 'Basho\Riak\Command\DataType\Hll\Store':
+                throw new Api\Exception(get_class($this->command) . " not supported.");
+            /** @noinspection PhpMissingBreakStatementInspection */
+            case 'Basho\Riak\Command\DataType\Counter\Store':
                 $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
-            case 'Basho\Riak\Command\DataType\Counter\Fetch':
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\DataType\Set\Fetch':
             case 'Basho\Riak\Command\DataType\Map\Fetch':
             case 'Basho\Riak\Command\DataType\Hll\Fetch':
-                $this->path = sprintf('/types/%s/buckets/%s/datatypes/%s', $bucket->getType(), $bucket->getName(), $key);
+                throw new Api\Exception(get_class($this->command) . " not supported.");
+            case 'Basho\Riak\Command\DataType\Counter\Fetch':
+                $this->path = sprintf('/buckets/%s/counters/%s', $bucket->getName(), $key);
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\Search\Index\Store':
@@ -260,7 +264,7 @@ class Http extends Api implements ApiInterface
                 $this->path = '/stats';
                 break;
             case 'Basho\Riak\Command\Object\FetchPreflist':
-                $this->path = sprintf('/types/%s/buckets/%s/keys/%s/preflist', $bucket->getType(), $bucket->getName(), $key);
+                throw new Api\Exception(get_class($this->command) . " not supported.");
                 break;
             case 'Basho\Riak\Command\TimeSeries\Fetch':
             case 'Basho\Riak\Command\TimeSeries\Delete':
@@ -296,13 +300,13 @@ class Http extends Api implements ApiInterface
         $command = $this->command;
 
         if($command->isMatchQuery()) {
-            $path =  sprintf('/types/%s/buckets/%s/index/%s/%s', $bucket->getType(),
+            $path =  sprintf('/buckets/%s/index/%s/%s',
                         $bucket->getName(),
                         $command->getIndexName(),
                         $command->getMatchValue());
         }
         elseif($command->isRangeQuery()) {
-            $path =  sprintf('/types/%s/buckets/%s/index/%s/%s/%s', $bucket->getType(),
+            $path =  sprintf('/buckets/%s/index/%s/%s/%s',
                         $bucket->getName(),
                         $command->getIndexName(),
                         $command->getLowerBound(),
