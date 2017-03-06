@@ -214,6 +214,10 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Object\Delete':
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
+            case 'Basho\Riak\Command\Object\Keys':
+                $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
+                $this->path = sprintf('/types/%s/buckets/%s/keys', $bucket->getType(), $bucket->getName());
+                break;
             case 'Basho\Riak\Command\DataType\Counter\Store':
             case 'Basho\Riak\Command\DataType\Set\Store':
             /** @noinspection PhpMissingBreakStatementInspection */
@@ -686,6 +690,7 @@ class Http extends Api implements ApiInterface
                 break;
 
             case 'Basho\Riak\Command\Object\FetchPreflist':
+            case 'Basho\Riak\Command\Object\Keys':
                 $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, [new Object(json_decode($body))]);
                 break;
 
