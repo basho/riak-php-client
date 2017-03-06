@@ -8,14 +8,18 @@ use Basho\Riak\Command;
 /**
  * Used to list KV objects in Riak
  *
+ * Not recommended for production use.
+ * This command traverses all the keys stored in the cluster and should not be used in production.
+ *
  * <code>
- * $command = (new Command\Builder\ListObjecst($riak))
+ * $command = (new Command\Builder\ListObjects($riak))
  *   ->buildBucket('users', 'default')
  *   ->build();
  *
  * $response = $command->execute();
  *
- * $key = $response->getObject();
+ * $data = $response->getObject()->getData();
+ * $keys = $data->keys;
  * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
