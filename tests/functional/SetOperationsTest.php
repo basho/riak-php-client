@@ -103,7 +103,7 @@ class SetTest extends TestCase
     /**
      * @depends      testAddNewWithKey
      */
-    public function testAddExisting()
+    public function testAddAnotherNew()
     {
         // add without context
         $command = (new Command\Builder\UpdateSet(static::$riak))

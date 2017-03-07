@@ -215,6 +215,7 @@ class Http extends Api implements ApiInterface
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
             case 'Basho\Riak\Command\DataType\Counter\Store':
+            case 'Basho\Riak\Command\DataType\GSet\Store':
             case 'Basho\Riak\Command\DataType\Set\Store':
             /** @noinspection PhpMissingBreakStatementInspection */
             case 'Basho\Riak\Command\DataType\Map\Store':
@@ -701,12 +702,17 @@ class Http extends Api implements ApiInterface
                 );
                 break;
 
+            case 'Basho\Riak\Command\DataType\GSet\Store':
             case 'Basho\Riak\Command\DataType\Set\Store':
             case 'Basho\Riak\Command\DataType\Set\Fetch':
                 $set = null;
                 $json_object = json_decode($body);
                 if ($json_object && isset($json_object->value)) {
-                    $set = new Set($json_object->value, $json_object->context);
+                    $context = '';
+                    if (isset($json_object->context)) {
+                        $context = $json_object->context;
+                    }
+                    $set = new Set($json_object->value, $context);
                 }
                 $response = new Command\DataType\Set\Response(
                     $this->success, $this->statusCode, $this->error, $location, $set, $this->getResponseHeader('Date')

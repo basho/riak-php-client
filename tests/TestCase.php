@@ -24,6 +24,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     const MAP_BUCKET_TYPE = 'maps';
     const SEARCH_BUCKET_TYPE = 'yokozuna';
     const SET_BUCKET_TYPE = 'sets';
+    const GSET_BUCKET_TYPE = 'gsets';
 
     const TEST_IMG = "Basho_Man_Super.png";
 
