@@ -149,16 +149,6 @@ class ObjectOperationsTest extends TestCase
         //$this->assertNotEmpty($response->getVclock());
     }
 
-    /**
-     * @expectedException \Basho\Riak\Command\Builder\Exception
-     */
-    public function testListKeysFailsWithoutAcknowledgingRisk()
-    {
-        $response = (new Command\Builder\ListObjects(static::$riak))
-            ->buildBucket('list-keys-php')
-            ->build();
-    }
-
     public function testListKeys()
     {
         $bucket = 'list-keys-php';

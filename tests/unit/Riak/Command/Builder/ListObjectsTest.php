@@ -13,13 +13,24 @@ use Basho\Tests\TestCase;
 class ListObjectsTest extends TestCase
 {
     /**
+     * @expectedException \Basho\Riak\Command\Builder\Exception
+     */
+    public function testListKeysFailsWithoutAcknowledgingRisk()
+    {
+        $response = (new Command\Builder\ListObjects(static::$riak))
+            ->buildBucket('list-keys-php')
+            ->build();
+    }
+
+    /**
      * Test command builder construct
      */
     public function testList()
     {
         // build an object
-        $builder = new Command\Builder\ListObjects(static::$riak);
-        $builder->buildBucket('some_bucket');
+        $builder = (new Command\Builder\ListObjects(static::$riak))
+            ->buildBucket('some_bucket')
+            ->acknowledgeRisk(true);
         $command = $builder->build();
 
         $this->assertInstanceOf('Basho\Riak\Command\Object\Keys\Fetch', $command);
