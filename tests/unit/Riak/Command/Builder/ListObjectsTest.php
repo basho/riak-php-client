@@ -22,7 +22,7 @@ class ListObjectsTest extends TestCase
         $builder->buildBucket('some_bucket');
         $command = $builder->build();
 
-        $this->assertInstanceOf('Basho\Riak\Command\Object\Keys', $command);
+        $this->assertInstanceOf('Basho\Riak\Command\Object\Keys\Fetch', $command);
         $this->assertInstanceOf('Basho\Riak\Bucket', $command->getBucket());
         $this->assertEquals('some_bucket', $command->getBucket()->getName());
         $this->assertEquals('default', $command->getBucket()->getType());

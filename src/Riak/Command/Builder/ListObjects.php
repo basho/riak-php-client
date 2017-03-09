@@ -14,12 +14,12 @@ use Basho\Riak\Command;
  * <code>
  * $command = (new Command\Builder\ListObjects($riak))
  *   ->buildBucket('users', 'default')
+ *   ->acknowledgeRisk(true)
  *   ->build();
  *
  * $response = $command->execute();
  *
- * $data = $response->getObject()->getData();
- * $keys = $data->keys;
+ * $data = $response->getKeys();
  * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
@@ -33,6 +33,7 @@ class ListObjects extends Command\Builder implements Command\BuilderInterface
      * @var bool
      */
     protected $decodeAsAssociative = false;
+    protected $acknowledgedRisk = null;
 
     public function __construct(Riak $riak)
     {
@@ -48,7 +49,21 @@ class ListObjects extends Command\Builder implements Command\BuilderInterface
     {
         $this->validate();
 
-        return new Command\Object\Keys($this);
+        return new Command\Object\Keys\Fetch($this);
+    }
+
+    /**
+     * ListKeys operations are dangerous in production environments and are highly discouraged.
+     * This method is required in order to complete the operation.
+     *
+     * @return $this
+     */
+    public function acknowledgeRisk($acknowledgedRisk = false)
+    {
+        if ($acknowledgedRisk) {
+            $this->acknowledgedRisk = $acknowledgedRisk;
+        }
+        return $this;
     }
 
     /**
@@ -74,10 +89,21 @@ class ListObjects extends Command\Builder implements Command\BuilderInterface
     }
 
     /**
+     * Fetch the setting for acknowledgedRisk.
+     *
+     * @return bool
+     */
+    public function getAcknowledgedRisk()
+    {
+        return $this->acknowledgedRisk;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function validate()
     {
         $this->required('Bucket');
+        $this->required('AcknowledgedRisk');
     }
 }
