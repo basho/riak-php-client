@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\Object\Keys;
 
 use Basho\Riak\Command;
 use Basho\Riak\CommandInterface;
@@ -10,7 +10,7 @@ use Basho\Riak\CommandInterface;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Keys extends Command\Object implements CommandInterface
+class Fetch extends Command\Object implements CommandInterface
 {
     public function __construct(Command\Builder\ListObjects $builder)
     {

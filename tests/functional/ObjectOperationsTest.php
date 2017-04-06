@@ -149,6 +149,36 @@ class ObjectOperationsTest extends TestCase
         //$this->assertNotEmpty($response->getVclock());
     }
 
+    public function testListKeys()
+    {
+        $bucket = 'list-keys-php';
+        $keys = ['key1','key2','key3','key4','key5'];
+
+        $builder = (new Command\Builder\StoreObject(static::$riak))
+            ->buildObject(true);
+
+        foreach($keys as $key) {
+            $builder->buildLocation($key, $bucket)->build()->execute();
+        }
+
+        $response = (new Command\Builder\ListObjects(static::$riak))
+            ->buildBucket($bucket)
+            ->acknowledgeRisk(true)
+            ->build()
+            ->execute();
+
+        $this->assertTrue($response->getKeys() >= count($keys));
+
+        $found = [];
+        foreach ($response->getKeys() as $location) {
+            if (in_array($location->getKey(), $keys)) {
+                $found[$location->getKey()] = 1;
+            }
+        }
+
+        $this->assertEquals(count($found), count($keys));
+    }
+
     public function testFetchAssociativeArray()
     {
         $data = ['myData' => 42];
