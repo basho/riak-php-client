@@ -23,7 +23,7 @@ use Basho\Riak\Exception,
     Basho\Riak\Link,
     Basho\Riak\Link\Phase as LinkPhase,
     Basho\Riak\MapReduce\Phase as MapReducePhase,
-    Basho\Riak\Object,
+    Basho\Riak\DataObject,
     Basho\Riak\Utils;
 
 /**
@@ -67,7 +67,7 @@ class MapReduce
     public function add($arg1, $arg2 = null, $arg3 = null)
     {
         if (func_num_args() == 1) {
-            if ($arg1 instanceof Object) {
+            if ($arg1 instanceof DataObject) {
                 return $this->add_object($arg1);
             } else {
                 return $this->add_bucket($arg1);
