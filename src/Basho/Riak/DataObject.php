@@ -28,7 +28,7 @@ use Basho\Riak\MapReduce;
  * @category   Basho
  * @author     Riak team (https://github.com/basho/riak-php-client/contributors)
  */
-class Object
+class DataObject
 {
     /**
      * @var mixed
@@ -42,30 +42,30 @@ class Object
 
     /**
      * @var array Meta data store
-     * @see \Basho\Riak\Object::setMeta()
-     * @see \Basho\Riak\Object::getMeta()
-     * @see \Basho\Riak\Object::getAllMeta()
-     * @see \Basho\Riak\Object::removeMeta()
-     * @see \Basho\Riak\Object::removeAllMeta()
+     * @see \Basho\Riak\DataObject::setMeta()
+     * @see \Basho\Riak\DataObject::getMeta()
+     * @see \Basho\Riak\DataObject::getAllMeta()
+     * @see \Basho\Riak\DataObject::removeMeta()
+     * @see \Basho\Riak\DataObject::removeAllMeta()
      */
     protected $meta = array();
 
     /**
      * @var array Array of indexes
-     * @see \Basho\Riak\Object::addIndex()
-     * @see \Basho\Riak\Object::setIndex()
-     * @see \Basho\Riak\Object::getIndex()
-     * @see \Basho\Riak\Object::removeIndex()
-     * @see \Basho\Riak\Object::removeAllIndexes()
+     * @see \Basho\Riak\DataObject::addIndex()
+     * @see \Basho\Riak\DataObject::setIndex()
+     * @see \Basho\Riak\DataObject::getIndex()
+     * @see \Basho\Riak\DataObject::removeIndex()
+     * @see \Basho\Riak\DataObject::removeAllIndexes()
      */
     protected $indexes = array();
 
     /**
      * @var array Array of automatic indexes
-     * @see \Basho\Riak\Object::addAutoIndex()
-     * @see \Basho\Riak\Object::hasAutoIndex()
-     * @see \Basho\Riak\Object::removeAutoIndex()
-     * @see \Basho\Riak\Object::removeAllAutoIndexes()
+     * @see \Basho\Riak\DataObject::addAutoIndex()
+     * @see \Basho\Riak\DataObject::hasAutoIndex()
+     * @see \Basho\Riak\DataObject::removeAutoIndex()
+     * @see \Basho\Riak\DataObject::removeAllAutoIndexes()
      */
     protected $autoIndexes = array();
 
@@ -980,7 +980,7 @@ class Object
         $response = Utils::httpRequest('GET', $url);
 
         # Respond with a new object...
-        $obj = new Object($this->client, $this->bucket, $this->key);
+        $obj = new DataObject($this->client, $this->bucket, $this->key);
         $obj->jsonize = $this->jsonize;
         $obj->populate($response, array(200));
 

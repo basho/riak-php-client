@@ -170,7 +170,7 @@ class Bucket
      */
     public function newObject($key = null, $data = null)
     {
-        $obj = new Object($this->client, $this, $key);
+        $obj = new DataObject($this->client, $this, $key);
         $obj->setData($data);
         $obj->setContentType('application/json');
         $obj->jsonize = true;
@@ -189,7 +189,7 @@ class Bucket
      */
     public function newBinary($key = null, $data, $content_type = 'application/json')
     {
-        $obj = new Object($this->client, $this, $key);
+        $obj = new DataObject($this->client, $this, $key);
         $obj->setData($data);
         $obj->setContentType($content_type);
         $obj->jsonize = false;
@@ -207,7 +207,7 @@ class Bucket
      */
     public function get($key, $r = null)
     {
-        $obj = new Object($this->client, $this, $key);
+        $obj = new DataObject($this->client, $this, $key);
         $obj->jsonize = true;
 
         return $obj->reload($r);
@@ -223,7 +223,7 @@ class Bucket
      */
     public function getBinary($key, $r = null)
     {
-        $obj = new Object($this->client, $this, $key);
+        $obj = new DataObject($this->client, $this, $key);
         $obj->jsonize = false;
 
         return $obj->reload($r);
@@ -363,7 +363,7 @@ class Bucket
         $response = Utils::httpRequest('GET', $url);
 
         # Use a Object to interpret the response, we are just interested in the value.
-        $obj = new Object($this->client, $this, null);
+        $obj = new DataObject($this->client, $this, null);
         $obj->populate($response, array(200));
         if (!$obj->exists()) {
             throw new Exception("Error getting bucket properties.");
@@ -390,7 +390,7 @@ class Bucket
         $response = Utils::httpRequest('GET', $url);
 
         # Use a Object to interpret the response, we are just interested in the value.
-        $obj = new Object($this->client, $this, null);
+        $obj = new DataObject($this->client, $this, null);
         $obj->populate($response, array(200));
         if (!$obj->exists()) {
             throw new Exception("Error getting bucket properties.");
@@ -419,7 +419,7 @@ class Bucket
         $url = Utils::buildIndexPath($this->client, $this, "{$indexName}_{$indexType}", $startOrExact, $end, null);
         $response = Utils::httpRequest('GET', $url);
 
-        $obj = new Object($this->client, $this, null);
+        $obj = new DataObject($this->client, $this, null);
 
         $obj->populate($response, array(200));
         if (!$obj->exists()) {
