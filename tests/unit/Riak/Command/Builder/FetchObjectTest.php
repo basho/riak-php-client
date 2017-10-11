@@ -22,7 +22,7 @@ class FetchObjectTest extends TestCase
         $builder->buildLocation('some_key', 'some_bucket');
         $command = $builder->build();
 
-        $this->assertInstanceOf('Basho\Riak\Command\Object\Fetch', $command);
+        $this->assertInstanceOf('Basho\Riak\Command\KVObject\Fetch', $command);
         $this->assertInstanceOf('Basho\Riak\Bucket', $command->getBucket());
         $this->assertInstanceOf('Basho\Riak\Location', $command->getLocation());
         $this->assertEquals('some_bucket', $command->getBucket()->getName());

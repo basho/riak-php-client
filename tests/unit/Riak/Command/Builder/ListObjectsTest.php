@@ -33,7 +33,7 @@ class ListObjectsTest extends TestCase
             ->acknowledgeRisk(true);
         $command = $builder->build();
 
-        $this->assertInstanceOf('Basho\Riak\Command\Object\Keys\Fetch', $command);
+        $this->assertInstanceOf('Basho\Riak\Command\KVObject\Keys\Fetch', $command);
         $this->assertInstanceOf('Basho\Riak\Bucket', $command->getBucket());
         $this->assertEquals('some_bucket', $command->getBucket()->getName());
         $this->assertEquals('default', $command->getBucket()->getType());
