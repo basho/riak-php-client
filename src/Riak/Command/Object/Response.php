@@ -12,7 +12,7 @@ use Basho\Riak\Location;
 class Response extends \Basho\Riak\Command\Response
 {
     /**
-     * @var \Basho\Riak\Object[]
+     * @var \Basho\Riak\DataObject[]
      */
     protected $objects = [];
 
@@ -46,7 +46,7 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return \Basho\Riak\Object|null
+     * @return \Basho\Riak\DataObject|null
      */
     public function getObject()
     {

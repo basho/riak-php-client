@@ -12,7 +12,7 @@ use Basho\Riak\DataType\Set;
 use Basho\Riak\DataType\Hll;
 use Basho\Riak\Location;
 use Basho\Riak\Node;
-use Basho\Riak\Object;
+use Basho\Riak\DataObject;
 use Basho\Riak\Search\Doc;
 use Basho\Riak\TimeSeries\Cell;
 
@@ -683,7 +683,7 @@ class Http extends Api implements ApiInterface
 
             case 'Basho\Riak\Command\Object\Fetch':
             case 'Basho\Riak\Command\Object\Store':
-                /** @var Command\Object $command */
+                /** @var Command\KVObject $command */
                 $command = $this->command;
                 $objects = (new Api\Http\Translator\ObjectResponse($command, $this->statusCode))
                     ->parseResponse($body, $this->responseHeaders);
@@ -691,7 +691,7 @@ class Http extends Api implements ApiInterface
                 break;
 
             case 'Basho\Riak\Command\Object\FetchPreflist':
-                $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, [new Object(json_decode($body))]);
+                $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, [new DataObject(json_decode($body))]);
                 break;
 
             case 'Basho\Riak\Command\Object\Keys\Fetch':

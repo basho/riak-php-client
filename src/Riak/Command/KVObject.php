@@ -10,7 +10,7 @@ use Basho\Riak\Location;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class Object extends Command
+abstract class KVObject extends Command
 {
     /**
      * @var Object\Response|null
@@ -18,7 +18,7 @@ abstract class Object extends Command
     protected $response = NULL;
 
     /**
-     * @var \Basho\Riak\Object|null
+     * @var \Basho\Riak\DataObject|null
      */
     protected $object = NULL;
 

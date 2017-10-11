@@ -14,7 +14,7 @@ class ObjectOperationsTest extends TestCase
     private static $key = '';
 
     /**
-     * @var \Basho\Riak\Object|null
+     * @var \Basho\Riak\DataObject|null
      */
     private static $object = NULL;
 
@@ -83,7 +83,7 @@ class ObjectOperationsTest extends TestCase
         $response = $command->execute();
 
         $this->assertEquals('200', $response->getCode());
-        $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
+        $this->assertInstanceOf('Basho\Riak\DataObject', $response->getObject());
         $this->assertEquals('some_data', $response->getObject()->getData());
         $this->assertNotEmpty($response->getObject()->getVclock());
 

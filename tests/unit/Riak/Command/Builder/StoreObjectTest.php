@@ -25,7 +25,7 @@ class StoreObjectTest extends TestCase
         $command = $builder->build();
 
         $this->assertInstanceOf('Basho\Riak\Command\Object\Store', $command);
-        $this->assertInstanceOf('Basho\Riak\Object', $command->getObject());
+        $this->assertInstanceOf('Basho\Riak\DataObject', $command->getObject());
         $this->assertInstanceOf('Basho\Riak\Bucket', $command->getBucket());
         $this->assertInstanceOf('Basho\Riak\Location', $command->getLocation());
         $this->assertEquals('some_bucket', $command->getBucket()->getName());

@@ -4,18 +4,18 @@ namespace Basho\Riak\Api\Http\Translator;
 
 use Basho\Riak\Api\Http;
 use Basho\Riak\Command;
-use Basho\Riak\Object as RObject;
+use Basho\Riak\DataObject as RObject;
 
 class ObjectResponse
 {
     /**
-     * @var Command\Object
+     * @var Command\KVObject
      */
     protected $command;
 
     protected $code;
 
-    public function __construct(Command\Object $command, $code)
+    public function __construct(Command\KVObject $command, $code)
     {
         $this->command = $command;
         $this->code = $code;
@@ -24,7 +24,7 @@ class ObjectResponse
     /**
      * @param $response
      * @param array $headers
-     * @return \Basho\Riak\Object[]
+     * @return \Basho\Riak\DataObject[]
      */
     public function parseResponse($response, $headers = [])
     {

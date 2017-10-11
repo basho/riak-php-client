@@ -11,7 +11,7 @@ use Basho\Riak\CommandInterface;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command\Object implements CommandInterface
+class Store extends Command\KVObject implements CommandInterface
 {
     /**
      * Type of operation

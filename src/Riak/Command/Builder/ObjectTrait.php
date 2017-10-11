@@ -3,7 +3,7 @@
 namespace Basho\Riak\Command\Builder;
 
 use Basho\Riak\Api\Http;
-use Basho\Riak\Object as RObject;
+use Basho\Riak\DataObject as RObject;
 
 /**
  * Allows easy code sharing for Object getters / setters within the Command Builders
@@ -13,7 +13,7 @@ use Basho\Riak\Object as RObject;
 trait ObjectTrait
 {
     /**
-     * @var \Basho\Riak\Object|null
+     * @var \Basho\Riak\DataObject|null
      */
     protected $object = NULL;
 
@@ -43,7 +43,7 @@ trait ObjectTrait
     /**
      * Attach an already instantiated Object to the Command
      *
-     * @param \Basho\Riak\Object $object
+     * @param \Basho\Riak\DataObject $object
      *
      * @return $this
      */
