@@ -1,20 +1,19 @@
 <?php
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\KVObject;
 
 use Basho\Riak\Command;
+
 use Basho\Riak\CommandInterface;
 
 /**
- * Used to remove an object from Riak
+ * Fetches the Preflist for a Riak Kv Object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Delete extends Command\Object implements CommandInterface
+class FetchPreflist extends Command\KVObject implements CommandInterface
 {
-    protected $method = 'DELETE';
-
-    public function __construct(Command\Builder\DeleteObject $builder)
+    public function __construct(Command\Builder\FetchPreflist $builder)
     {
         parent::__construct($builder);
 

@@ -38,13 +38,13 @@ class FetchObject extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Object\Fetch;
+     * @return Command\KVObject\Fetch;
      */
     public function build()
     {
         $this->validate();
 
-        return new Command\Object\Fetch($this);
+        return new Command\KVObject\Fetch($this);
     }
 
     /**

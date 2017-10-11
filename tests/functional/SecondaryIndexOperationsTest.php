@@ -3,7 +3,7 @@
 namespace Basho\Tests;
 
 use Basho\Riak\Command;
-use Basho\Riak\Object as RObject;
+use Basho\Riak\DataObject as RObject;
 
 /**
  * Functional tests related to secondary indexes
@@ -16,7 +16,7 @@ class SecondaryIndexOperationsTest extends TestCase
     private static $bucket = '';
 
     /**
-     * @var \Basho\Riak\Object|null
+     * @var \Basho\Riak\DataObject|null
      */
     private static $object = NULL;
 
@@ -63,7 +63,7 @@ class SecondaryIndexOperationsTest extends TestCase
         $response = $command->execute();
 
         $this->assertEquals('200', $response->getCode());
-        $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
+        $this->assertInstanceOf('Basho\Riak\DataObject', $response->getObject());
         $this->assertEquals('person', $response->getObject()->getData());
         $this->assertNotEmpty($response->getObject()->getVClock());
         $indexes = $response->getObject()->getIndexes();
@@ -102,7 +102,7 @@ class SecondaryIndexOperationsTest extends TestCase
         $response = $command->execute();
 
         $this->assertEquals('200', $response->getCode());
-        $this->assertInstanceOf('Basho\Riak\Object', $response->getObject());
+        $this->assertInstanceOf('Basho\Riak\DataObject', $response->getObject());
         $this->assertEquals('person', $response->getObject()->getData());
         $indexes = $response->getObject()->getIndexes();
         $this->assertEquals($indexes['lucky_numbers_int'], [42]);

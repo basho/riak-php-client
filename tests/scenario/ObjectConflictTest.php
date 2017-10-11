@@ -60,7 +60,7 @@ class ObjectConflictTest extends TestCase
      */
     public function testResolveConflict()
     {
-        $object = new Riak\Object('some_resolved_data');
+        $object = new Riak\DataObject('some_resolved_data');
         $object->setVclock(static::$vclock);
 
         $command = (new Command\Builder\StoreObject(static::$riak))
