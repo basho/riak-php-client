@@ -71,6 +71,6 @@ class StoreObject extends Command\Builder implements Command\BuilderInterface
     public function validate()
     {
         $this->required('Bucket');
-        $this->required('Object');
+        $this->required('DataObject');
     }
 }
