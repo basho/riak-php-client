@@ -24,7 +24,7 @@ class Store extends Command\KVObject implements CommandInterface
     {
         parent::__construct($builder);
 
-        $this->object = $builder->getObject();
+        $this->object = $builder->getDataObject();
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
         $this->decodeAsAssociative = $builder->getDecodeAsAssociative();
