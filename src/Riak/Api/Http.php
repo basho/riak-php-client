@@ -208,13 +208,13 @@ class Http extends Api implements ApiInterface
                 $this->path = sprintf('/types/%s/buckets/%s/props', $bucket->getType(), $bucket->getName());
                 break;
             /** @noinspection PhpMissingBreakStatementInspection */
-            case 'Basho\Riak\Command\Object\Fetch':
+            case 'Basho\Riak\Command\KVObject\Fetch':
                 $this->headers['Accept'] = '*/*, multipart/mixed';
-            case 'Basho\Riak\Command\Object\Store':
-            case 'Basho\Riak\Command\Object\Delete':
+            case 'Basho\Riak\Command\KVObject\Store':
+            case 'Basho\Riak\Command\KVObject\Delete':
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s', $bucket->getType(), $bucket->getName(), $key);
                 break;
-            case 'Basho\Riak\Command\Object\Keys\Fetch':
+            case 'Basho\Riak\Command\KVObject\Keys\Fetch':
                 $this->headers[static::CONTENT_TYPE_KEY] = static::CONTENT_TYPE_JSON;
                 $this->path = sprintf('/types/%s/buckets/%s/keys', $bucket->getType(), $bucket->getName());
                 break;
@@ -260,7 +260,7 @@ class Http extends Api implements ApiInterface
             case 'Basho\Riak\Command\Stats':
                 $this->path = '/stats';
                 break;
-            case 'Basho\Riak\Command\Object\FetchPreflist':
+            case 'Basho\Riak\Command\KVObject\FetchPreflist':
                 $this->path = sprintf('/types/%s/buckets/%s/keys/%s/preflist', $bucket->getType(), $bucket->getName(), $key);
                 break;
             case 'Basho\Riak\Command\TimeSeries\Fetch':
@@ -681,8 +681,8 @@ class Http extends Api implements ApiInterface
                 $response = new Command\Bucket\Response($this->success, $this->statusCode, $this->error, $bucket, $modified);
                 break;
 
-            case 'Basho\Riak\Command\Object\Fetch':
-            case 'Basho\Riak\Command\Object\Store':
+            case 'Basho\Riak\Command\KVObject\Fetch':
+            case 'Basho\Riak\Command\KVObject\Store':
                 /** @var Command\KVObject $command */
                 $command = $this->command;
                 $objects = (new Api\Http\Translator\ObjectResponse($command, $this->statusCode))
@@ -690,11 +690,11 @@ class Http extends Api implements ApiInterface
                 $response = new Command\KVObject\Response($this->success, $this->statusCode, $this->error, $location, $objects);
                 break;
 
-            case 'Basho\Riak\Command\Object\FetchPreflist':
+            case 'Basho\Riak\Command\KVObject\FetchPreflist':
                 $response = new Command\KVObject\Response($this->success, $this->statusCode, $this->error, $location, [new DataObject(json_decode($body))]);
                 break;
 
-            case 'Basho\Riak\Command\Object\Keys\Fetch':
+            case 'Basho\Riak\Command\KVObject\Keys\Fetch':
                 $data = json_decode($body);
                 $keys = [];
                 foreach ($data->keys as $key) {
@@ -833,7 +833,7 @@ class Http extends Api implements ApiInterface
                 break;
             case 'Basho\Riak\Command\TimeSeries\Store':
             case 'Basho\Riak\Command\TimeSeries\Delete':
-            case 'Basho\Riak\Command\Object\Delete':
+            case 'Basho\Riak\Command\KVObject\Delete':
             case 'Basho\Riak\Command\Bucket\Delete':
             case 'Basho\Riak\Command\Search\Index\Delete':
             case 'Basho\Riak\Command\Ping':

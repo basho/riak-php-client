@@ -43,7 +43,7 @@ class ListObjects extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\KVObject\Keys
+     * @return Command\KVObject\Keys\Fetch
      */
     public function build()
     {
