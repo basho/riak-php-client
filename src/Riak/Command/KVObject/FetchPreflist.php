@@ -1,23 +1,23 @@
 <?php
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\KVObject;
 
 use Basho\Riak\Command;
+
 use Basho\Riak\CommandInterface;
 
 /**
- * Fetches a Riak Kv Object
+ * Fetches the Preflist for a Riak Kv Object
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Fetch extends Command\KVObject implements CommandInterface
+class FetchPreflist extends Command\KVObject implements CommandInterface
 {
-    public function __construct(Command\Builder\FetchObject $builder)
+    public function __construct(Command\Builder\FetchPreflist $builder)
     {
         parent::__construct($builder);
 
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
-        $this->decodeAsAssociative = $builder->getDecodeAsAssociative();
     }
 }

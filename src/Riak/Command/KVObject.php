@@ -13,7 +13,7 @@ use Basho\Riak\Location;
 abstract class KVObject extends Command
 {
     /**
-     * @var Object\Response|null
+     * @var KVObject\Response|null
      */
     protected $response = NULL;
 
@@ -74,7 +74,7 @@ abstract class KVObject extends Command
     }
 
     /**
-     * @return Command\Object\Response
+     * @return Command\KVObject\Response
      */
     public function execute()
     {

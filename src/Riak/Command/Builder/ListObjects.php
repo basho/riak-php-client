@@ -43,13 +43,13 @@ class ListObjects extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Object\Keys
+     * @return Command\KVObject\Keys
      */
     public function build()
     {
         $this->validate();
 
-        return new Command\Object\Keys\Fetch($this);
+        return new Command\KVObject\Keys\Fetch($this);
     }
 
     /**

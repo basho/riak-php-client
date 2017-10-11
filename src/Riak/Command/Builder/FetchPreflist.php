@@ -24,13 +24,13 @@ class FetchPreflist extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Object\FetchPreflist;
+     * @return Command\KVObject\FetchPreflist;
      */
     public function build()
     {
         $this->validate();
 
-        return new Command\Object\FetchPreflist($this);
+        return new Command\KVObject\FetchPreflist($this);
     }
 
     /**

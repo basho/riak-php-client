@@ -687,11 +687,11 @@ class Http extends Api implements ApiInterface
                 $command = $this->command;
                 $objects = (new Api\Http\Translator\ObjectResponse($command, $this->statusCode))
                     ->parseResponse($body, $this->responseHeaders);
-                $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, $objects);
+                $response = new Command\KVObject\Response($this->success, $this->statusCode, $this->error, $location, $objects);
                 break;
 
             case 'Basho\Riak\Command\Object\FetchPreflist':
-                $response = new Command\Object\Response($this->success, $this->statusCode, $this->error, $location, [new DataObject(json_decode($body))]);
+                $response = new Command\KVObject\Response($this->success, $this->statusCode, $this->error, $location, [new DataObject(json_decode($body))]);
                 break;
 
             case 'Basho\Riak\Command\Object\Keys\Fetch':
@@ -700,7 +700,7 @@ class Http extends Api implements ApiInterface
                 foreach ($data->keys as $key) {
                     $keys[] = new Location($key, $this->command->getBucket());
                 }
-                $response = new Command\Object\Keys\Response($this->success, $this->statusCode, $this->error, $keys);
+                $response = new Command\KVObject\Keys\Response($this->success, $this->statusCode, $this->error, $keys);
                 break;
 
             case 'Basho\Riak\Command\DataType\Counter\Store':

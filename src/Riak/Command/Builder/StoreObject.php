@@ -56,13 +56,13 @@ class StoreObject extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Object\Store
+     * @return Command\KVObject\Store
      */
     public function build()
     {
         $this->validate();
 
-        return new Command\Object\Store($this);
+        return new Command\KVObject\Store($this);
     }
 
     /**
