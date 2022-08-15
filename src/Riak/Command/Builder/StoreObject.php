@@ -4,6 +4,7 @@ namespace Basho\Riak\Command\Builder;
 
 use Basho\Riak;
 use Basho\Riak\Command;
+use Basho\Riak\Command\RObject\Store;
 
 /**
  * Used to increment counter objects in Riak by the provided positive / negative integer
@@ -56,13 +57,13 @@ class StoreObject extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Object\Store
+     * @return Command\RObject\Store
      */
     public function build()
     {
         $this->validate();
 
-        return new Command\Object\Store($this);
+        return new Store($this);
     }
 
     /**
@@ -71,6 +72,6 @@ class StoreObject extends Command\Builder implements Command\BuilderInterface
     public function validate()
     {
         $this->required('Bucket');
-        $this->required('Object');
+        $this->required('RObject');
     }
 }

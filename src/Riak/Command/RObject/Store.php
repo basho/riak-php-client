@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\RObject;
 
 use Basho\Riak\Api\Http\Translators\SecondaryIndexHeaderTranslator;
 use Basho\Riak\Command;
@@ -11,7 +11,7 @@ use Basho\Riak\CommandInterface;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Store extends Command\Object implements CommandInterface
+class Store extends Command\RObject implements CommandInterface
 {
     /**
      * Type of operation
@@ -24,7 +24,7 @@ class Store extends Command\Object implements CommandInterface
     {
         parent::__construct($builder);
 
-        $this->object = $builder->getObject();
+        $this->object = $builder->getRObject();
         $this->bucket = $builder->getBucket();
         $this->location = $builder->getLocation();
         $this->decodeAsAssociative = $builder->getDecodeAsAssociative();

@@ -25,13 +25,13 @@ class DeleteObject extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Object\Delete;
+     * @return Command\RObject\Delete;
      */
     public function build()
     {
         $this->validate();
 
-        return new Command\Object\Delete($this);
+        return new Command\RObject\Delete($this);
     }
 
     /**

@@ -18,7 +18,7 @@ use Basho\Riak\DataType;
  * $bucket = new Bucket('users');
  *
  * $command = (new Command\Builder(Command::STORE_OBJECT))
- *      ->withObject(new Object('test_data'))
+ *      ->withObject(new RObject('test_data'))
  *      ->atLocation(new Location('test_key', $bucket))
  *      ->build();
  * </code>

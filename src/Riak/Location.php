@@ -3,14 +3,14 @@
 namespace Basho\Riak;
 
 /**
- * Immutable data structure storing the location of an Object or DataType
+ * Immutable data structure storing the location of an RObject or DataType
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 class Location
 {
     /**
-     * Kv Object / CRDT key
+     * Kv RObject / CRDT key
      *
      * @var string
      */

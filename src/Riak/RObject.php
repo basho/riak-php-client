@@ -13,7 +13,7 @@ use Basho\Riak\Api\Http\Translator\SecondaryIndex;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Object
+class RObject
 {
     /**
      * Stored data or object
