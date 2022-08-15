@@ -139,7 +139,7 @@ abstract class Command
     /**
      * @return Object|null
      */
-    public function getObject()
+    public function getRObject()
     {
         return null;
     }

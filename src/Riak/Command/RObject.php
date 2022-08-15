@@ -10,7 +10,7 @@ use Basho\Riak\Location;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-abstract class Object extends Command
+abstract class RObject extends Command
 {
     /**
      * @var Object\Response|null
@@ -18,7 +18,7 @@ abstract class Object extends Command
     protected $response = NULL;
 
     /**
-     * @var \Basho\Riak\Object|null
+     * @var \Basho\Riak\RObject|null
      */
     protected $object = NULL;
 
@@ -29,7 +29,7 @@ abstract class Object extends Command
 
     protected $decodeAsAssociative = false;
 
-    public function getObject()
+    public function getRObject()
     {
         return $this->object;
     }
@@ -74,7 +74,7 @@ abstract class Object extends Command
     }
 
     /**
-     * @return Command\Object\Response
+     * @return Command\RObject\Response
      */
     public function execute()
     {

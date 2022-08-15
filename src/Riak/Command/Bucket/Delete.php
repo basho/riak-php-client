@@ -10,7 +10,7 @@ use Basho\Riak\CommandInterface;
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
-class Delete extends Command\Object implements CommandInterface
+class Delete extends Command\RObject implements CommandInterface
 {
     protected $method = 'DELETE';
 

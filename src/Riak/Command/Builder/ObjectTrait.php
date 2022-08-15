@@ -3,30 +3,30 @@
 namespace Basho\Riak\Command\Builder;
 
 use Basho\Riak\Api\Http;
-use Basho\Riak\Object as RObject;
+use Basho\Riak\RObject as RObject;
 
 /**
- * Allows easy code sharing for Object getters / setters within the Command Builders
+ * Allows easy code sharing for RObject getters / setters within the Command Builders
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
 trait ObjectTrait
 {
     /**
-     * @var \Basho\Riak\Object|null
+     * @var \Basho\Riak\RObject|null
      */
     protected $object = NULL;
 
     /**
      * @return Object|null
      */
-    public function getObject()
+    public function getRObject()
     {
         return $this->object;
     }
 
     /**
-     * Mint a new Object instance with supplied params and attach it to the Command
+     * Mint a new RObject instance with supplied params and attach it to the Command
      *
      * @param string $data
      * @param array $headers
@@ -41,9 +41,9 @@ trait ObjectTrait
     }
 
     /**
-     * Attach an already instantiated Object to the Command
+     * Attach an already instantiated RObject to the Command
      *
-     * @param \Basho\Riak\Object $object
+     * @param \Basho\Riak\RObject $object
      *
      * @return $this
      */
@@ -55,7 +55,7 @@ trait ObjectTrait
     }
 
     /**
-     * Mint a new Object instance with a json encoded string
+     * Mint a new RObject instance with a json encoded string
      *
      * @param mixed $data
      *

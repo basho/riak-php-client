@@ -1,6 +1,6 @@
 <?php
 
-namespace Basho\Riak\Command\Object;
+namespace Basho\Riak\Command\RObject;
 
 use Basho\Riak\Location;
 
@@ -12,7 +12,7 @@ use Basho\Riak\Location;
 class Response extends \Basho\Riak\Command\Response
 {
     /**
-     * @var \Basho\Riak\Object[]
+     * @var \Basho\Riak\RObject[]
      */
     protected $objects = [];
 
@@ -46,9 +46,9 @@ class Response extends \Basho\Riak\Command\Response
     }
 
     /**
-     * @return \Basho\Riak\Object|null
+     * @return \Basho\Riak\RObject|null
      */
-    public function getObject()
+    public function getRObject()
     {
         return !empty($this->objects[0]) ? $this->objects[0] : null;
     }

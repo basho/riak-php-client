@@ -89,7 +89,7 @@ class SecondaryIndexOperationsTest extends TestCase
             ->buildLocation(static::$key, 'Users', static::LEVELDB_BUCKET_TYPE)
             ->build();
 
-        // TODO: internalize Vclock to Riak\Object.
+        // TODO: internalize Vclock to Riak\RObject.
 
         $response = $command->execute();
 

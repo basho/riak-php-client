@@ -36,7 +36,7 @@ class FetchObjectTest extends TestCase
     }
 
     /**
-     * Tests validate properly verifies the Object is not there
+     * Tests validate properly verifies the RObject is not there
      *
      * @expectedException \Basho\Riak\Command\Builder\Exception
      */

@@ -15,7 +15,7 @@ use Basho\Riak\Command;
  *
  * $response = $command->execute();
  *
- * $user = $response->getObject();
+ * $user = $response->getRObject();
  * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>

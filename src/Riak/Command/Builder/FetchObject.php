@@ -15,7 +15,7 @@ use Basho\Riak\Command;
  *
  * $response = $command->execute();
  *
- * $user = $response->getObject();
+ * $user = $response->getRObject();
  * </code>
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
@@ -38,13 +38,13 @@ class FetchObject extends Command\Builder implements Command\BuilderInterface
     /**
      * {@inheritdoc}
      *
-     * @return Command\Object\Fetch;
+     * @return Command\RObject\Fetch;
      */
     public function build()
     {
         $this->validate();
 
-        return new Command\Object\Fetch($this);
+        return new Command\RObject\Fetch($this);
     }
 
     /**

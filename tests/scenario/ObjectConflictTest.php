@@ -6,7 +6,7 @@ use Basho\Riak;
 use Basho\Riak\Command;
 
 /**
- * Scenario tests for when Kv Object changes result in a conflict
+ * Scenario tests for when Kv RObject changes result in a conflict
  *
  * @author Christopher Mancini <cmancini at basho d0t com>
  */
